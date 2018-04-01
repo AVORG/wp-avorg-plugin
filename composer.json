@@ -3,6 +3,12 @@
         "phpunit/phpunit": "^7"
     },
 	"scripts": {
-	    "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php test/*"
+	    "test": "./vendor/bin/phpunit --configuration phpunit.xml"
+	},
+    "require": {
+        "twig/twig": "~2.0"
+    },
+  	"autoload": {
+	    "psr-4": { "avorg\\": "class/" }
 	}
 }
