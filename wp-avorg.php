@@ -13,6 +13,8 @@ if ( !\defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+include_once( dirname(__FILE__) .  "/vendor/autoload.php" );
+
 \register_activation_hook( __FILE__, "plugin_activate" );
 \register_deactivation_hook( __FILE__, "plugin_deactivate" );
 \add_action( "admin_menu", "avorg\\register_admin_panel" );
@@ -25,5 +27,7 @@ function register_admin_panel() {
 }
 
 function render_settings_page() {
-	echo "Hello world";
+	$twig = new Twig();
+	
+	echo $twig->render( "admin.twig" );
 }

@@ -6,11 +6,12 @@ final class TwigTest extends TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		define( "ABSPATH", dirname(dirname(__FILE__)) . '/' );
+		define( "ABSPATH", "/" );
 	}
 	
-	public function testExists()
+	public function testHasRenderFunction()
 	{
-		$this->assertTrue( class_exists( "avorg\\Twig" ) );
+		$t = new avorg\Twig;
+		$this->assertTrue( method_exists( $t, "render" ) );
 	}
 }
