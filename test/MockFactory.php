@@ -2,11 +2,13 @@
 // Based on
 // https://github.com/hafriedlander/phockito/blob/master/Phockito.php#L170
 
+namespace Avorg;
+
 class MockFactory
 {
 	public function buildMock( $class )
 	{
-		$reflection = new \ReflectionClass( $class );
+		$reflection = new \ReflectionClass( __NAMESPACE__ . "\\" . $class );
 		$mockedShortName = $reflection->getShortName();
 		$mockShortName = "Mock$mockedShortName";
 		$mockClass = "\\$mockShortName";
@@ -54,7 +56,12 @@ EOT;
 				else if ( $parameterClass = $parameter->getClass() ) $type = '\\' . $parameterClass->getName() . ' ';
 				else $type = '';
 				$default = ( $parameter->isOptional() ) ? "= null" : "";
-				$params[] = "$type \${$parameter->getName()} $default";
+				
+				if ( $parameter->isVariadic() ) {
+					$params[] = "...\${$parameter->getName()}";
+				} else {
+					$params[] = "$type \${$parameter->getName()} $default";
+				}
 			}
 			$paramString = implode( ',', $params );
 			$valueField = $methodName . "ReturnValue";

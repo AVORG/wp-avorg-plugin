@@ -9,9 +9,7 @@ Author URI: http://NathanArthur.com/
 
 namespace Avorg;
 
-if ( !\defined( 'ABSPATH' ) ) {
-	exit;
-}
+if ( !\defined( 'ABSPATH' ) ) exit;
 
 include_once( dirname(__FILE__) .  "/vendor/autoload.php" );
 
