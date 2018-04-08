@@ -1,6 +1,6 @@
 <?php
 
-namespace avorg;
+namespace Avorg;
 
 require_once(dirname(__FILE__) . '/MockFactory.php');
 

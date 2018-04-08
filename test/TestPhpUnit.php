@@ -1,6 +1,6 @@
 <?php
 
-final class TestPhpUnit extends avorg\TestCase
+final class TestPhpUnit extends Avorg\TestCase
 {
 	public function testTestRunner()
 	{

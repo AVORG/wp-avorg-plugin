@@ -1,10 +1,10 @@
 <?php
 
-final class TestTwig extends avorg\TestCase
+final class TestTwig extends Avorg\TestCase
 {
 	public function testHasRenderFunction()
 	{
-		$t = new avorg\Twig;
+		$t = new Avorg\Twig;
 		$this->assertTrue( method_exists( $t, "render" ) );
 	}
 }

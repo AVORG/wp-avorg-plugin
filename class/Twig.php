@@ -1,10 +1,8 @@
 <?php
 
-namespace avorg;
+namespace Avorg;
 
-if ( !\defined( 'ABSPATH' ) ) {
-	exit;
-}
+if ( !\defined( 'ABSPATH' ) ) exit;
 
 class Twig {
 	private $loader = null;
