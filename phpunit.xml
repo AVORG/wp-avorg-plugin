@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpunit>
 	<testsuite name='Tests'>
-		<directory>./test</directory>
+		<directory prefix="Test" suffix=".php">./test</directory>
 	</testsuite>
 </phpunit>

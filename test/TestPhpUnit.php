@@ -1,7 +1,6 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
-final class PhpUnitTest extends TestCase
+final class TestPhpUnit extends avorg\TestCase
 {
 	public function testTestRunner()
 	{
