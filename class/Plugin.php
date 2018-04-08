@@ -13,12 +13,15 @@ class Plugin {
 	}
 	
 	public function activate() {
-		$this->wp->call("wp_insert_post", array(
-			"ID" => 100,
-			"post_content" => "Media Detail",
-			"post_title" => "Media Detail",
-			"post_status" => "publish",
-			"post_type" => "page"
-		));
+		$mediaPage = $this->wp->call( "get_page_by_title", "Media Detail" );
+		
+		if ( !$mediaPage ) {
+			$this->wp->call("wp_insert_post", array(
+				"post_content" => "Media Detail",
+				"post_title" => "Media Detail",
+				"post_status" => "publish",
+				"post_type" => "page"
+			), true);
+		}
 	}
 }

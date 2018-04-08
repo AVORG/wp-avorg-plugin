@@ -1,3 +1,13 @@
 <h1>AVORG</h1>
 
+{% if _POST["reactivate"] %}
+	<div class="notice notice-success"><p>Plugin reactivated</p></div>
+{% endif %}
+
 <p>Hello, world. This is rendered using Twig.</p>
+
+<form method="post">
+	<input type="submit" name="reactivate" value="Reactivate" />
+</form>
+
+{{ dump() }}

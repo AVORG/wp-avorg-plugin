@@ -7,10 +7,19 @@ require_once(dirname(__FILE__) . '/MockFactory.php');
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/* Mock Objects */
 	
+	/** @var Plugin $mockPlugin */
+	protected $mockPlugin;
+	
+	/** @var Twig $mockTwig */
+	protected $mockTwig;
+	
 	/** @var WordPress $mockWordPress */
 	protected $mockWordPress;
 	
 	/* Mocked Objects */
+	
+	/** @var AdminPanel $mockedAdminPanel */
+	protected $mockedAdminPanel;
 	
 	/** @var Plugin $mockedPlugin */
 	protected $mockedPlugin;
@@ -23,6 +32,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	protected function setUp()
 	{
 		define( "ABSPATH", "/" );
+		
+		$_POST = array();
+		$_GET  = array();
 		
 		$this->objectMocker = new MockFactory();
 		
@@ -106,16 +118,49 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	protected function assertCalledWith( $mock, $method, ...$arguments ) {
 		$calls = $mock->getCalls( $method );
 		$mockName = get_class( $mock );
+		
+		$this->assertMethodExists( $mockName, $method, $calls );
+		
+		$error = $this->makeHaystackError( $mockName, $method, $arguments, $calls, "was" );
+		
+		$this->assertTrue( in_array( $arguments, $calls, TRUE ), $error );
+	}
+	
+	protected function assertNotCalledWith( $mock, $method, ...$arguments ) {
+		$calls = $mock->getCalls( $method );
+		$mockName = get_class( $mock );
+		
+		$this->assertMethodExists( $mockName, $method, $calls );
+		
+		$error = $this->makeHaystackError( $mockName, $method, $arguments, $calls, "was not" );
+		
+		$this->assertFalse( in_array( $arguments, $calls, TRUE ), $error );
+	}
+	
+	private function assertMethodExists( $mockName, $method, $calls ) {
 		$nullError = "$mockName->$method() does not exist.";
 		$this->assertNotNull( $calls, $nullError );
-		$errorLines = [
-			"Failed asserting that $mockName->$method() was called with specified args.",
-			"Needle:",
-			var_export( $arguments, TRUE ),
-			"Haystack:",
-			var_export( $calls, TRUE )
-		];
-		$error = implode( "\r\n\r\n", $errorLines );
-		$this->assertTrue( in_array( $arguments, $calls, TRUE ), $error );
+	}
+	
+	private function makeHaystackError( $mockName, $method, $arguments, $calls, $wasOrWasNot ) {
+		$failureMessage = "Failed asserting that $mockName->$method() $wasOrWasNot called with specified args.";
+		
+		try {
+			$errorLines = [
+				$failureMessage,
+				"Needle:",
+				var_export( $arguments, TRUE ),
+				"Haystack:",
+				var_export( $calls, TRUE )
+			];
+		} catch ( \Exception $e ) {
+			$errorLines = [
+				$failureMessage,
+				"Failed to export needle and haystack:",
+				$e->getMessage()
+			];
+		}
+		
+		return implode( "\r\n\r\n", $errorLines );
 	}
 }

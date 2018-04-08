@@ -15,14 +15,20 @@ class Twig {
 		$this->loader = new \Twig_Loader_Filesystem( $pluginDirectory . "/view" );
 		$this->twig = new \Twig_Environment( $this->loader, array(
 			"cache" => $pluginDirectory . "/cache",
-			"auto_reload" => WP_DEBUG
+			"debug" => WP_DEBUG
 		) );
+		
+		if (WP_DEBUG) {
+			$this->twig->addExtension(new \Twig_Extension_Debug());
+		}
 	}
 	
 	public function render( $templateFile )
 	{
 		$template = $this->twig->load( $templateFile );
 		
-		return $template->render( array() );
+		echo $template->render( array(
+			"_POST" => $_POST
+		) );
 	}
 }

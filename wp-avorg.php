@@ -13,19 +13,12 @@ if ( !\defined( 'ABSPATH' ) ) exit;
 
 include_once( dirname(__FILE__) .  "/vendor/autoload.php" );
 
-\register_activation_hook( __FILE__, "plugin_activate" );
+$factory = new Factory();
+$plugin  = $factory->makePlugin();
+$adminPanel = $factory->makeAdminPanel();
+
+\register_activation_hook( __FILE__, array( $plugin, "activate" ) );
 \register_deactivation_hook( __FILE__, "plugin_deactivate" );
-\add_action( "admin_menu", "Avorg\\register_admin_panel" );
+\add_action( "admin_menu", array( $adminPanel, "register" ) );
 
-function plugin_activate() {}
 function plugin_deactivate() {}
-
-function register_admin_panel() {
-	\add_menu_page( "AVORG", "AVORG", "manage_options", "avorg", "Avorg\\render_settings_page" );
-}
-
-function render_settings_page() {
-	$twig = new Twig();
-	
-	echo $twig->render( "admin.twig" );
-}
