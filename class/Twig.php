@@ -23,12 +23,17 @@ class Twig {
 		}
 	}
 	
-	public function render( $templateFile )
+	public function render( $templateFile, $shouldReturn = false )
 	{
 		$template = $this->twig->load( $templateFile );
-		
-		echo $template->render( array(
+		$output = $template->render( array(
 			"_POST" => $_POST
 		) );
+		
+		if ( $shouldReturn ) {
+			return $output;
+		} else {
+			echo $output;
+		}
 	}
 }

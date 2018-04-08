@@ -17,9 +17,10 @@ class Factory
 	
 	public function makePlugin()
 	{
+		$twig = $this->makeTwig();
 		$wp = $this->makeWordPress();
 		
-		return new Plugin($wp);
+		return new Plugin($twig, $wp);
 	}
 	
 	public function makeTwig()

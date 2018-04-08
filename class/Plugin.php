@@ -5,10 +5,14 @@ namespace Avorg;
 if ( !\defined( 'ABSPATH' ) ) exit;
 
 class Plugin {
+	/** @var Twig $twig */
+	private $twig;
+	
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct( WordPress $WordPress ) {
+	public function __construct( Twig $twig, WordPress $WordPress ) {
+		$this->twig = $twig;
 		$this->wp = $WordPress;
 	}
 	
@@ -23,5 +27,17 @@ class Plugin {
 				"post_type" => "page"
 			), true);
 		}
+	}
+	
+	public function addMediaPageUI( $content ) {
+		$pageTitle = $this->wp->call( "get_the_title" );
+		
+		if ( $pageTitle === "Media Detail" ) {
+			$ui = $this->twig->render( "mediaPageUI.twig", true );
+			
+			return $ui . $content;
+		}
+		
+		return $content;
 	}
 }

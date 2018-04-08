@@ -20,5 +20,6 @@ $adminPanel = $factory->makeAdminPanel();
 \register_activation_hook( __FILE__, array( $plugin, "activate" ) );
 \register_deactivation_hook( __FILE__, "plugin_deactivate" );
 \add_action( "admin_menu", array( $adminPanel, "register" ) );
+\add_filter( 'the_content', array( $plugin, "addMediaPageUI" ) );
 
 function plugin_deactivate() {}
