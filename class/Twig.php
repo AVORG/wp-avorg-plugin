@@ -17,7 +17,7 @@ class Twig {
 		$this->loader = new \Twig_Loader_Filesystem( $pluginDirectory . "/view" );
 		$this->twig = new \Twig_Environment( $this->loader, array(
 			"cache" => $pluginDirectory . "/cache",
-			"auto_reload" => true
+			"auto_reload" => WP_DEBUG
 		) );
 	}
 	
