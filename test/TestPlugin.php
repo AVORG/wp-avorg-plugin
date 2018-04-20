@@ -53,7 +53,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockedPlugin->addMediaPageUI("content");
 		
-		$this->assertCalledWith($this->mockTwig, "render", "mediaPageUI.twig", true);
+		$this->assertCalledWith($this->mockTwig, "render", "mediaPageUI.twig", ["presentation" => null], true);
 	}
 	
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
@@ -64,5 +64,26 @@ final class TestPlugin extends Avorg\TestCase
 		$haystack = $this->mockedPlugin->addMediaPageUI("content");
 		
 		$this->assertNotContains("playerUI", $haystack);
+	}
+	
+	public function testGetsPresentation()
+	{
+		$_GET = ["presentation_id" => "12345"];
+		
+		$this->mockedPlugin->addMediaPageUI("content");
+		
+		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", "12345");
+	}
+	
+	public function testPassesPresentationToTwig()
+	{
+		$_GET = ["presentation_id" => "12345"];
+		
+		$this->mockWordPress->setReturnValue("call", "Media Detail");
+		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
+		
+		$this->mockedPlugin->addMediaPageUI("content");
+		
+		$this->assertCalledWith($this->mockTwig, "render", "mediaPageUI.twig", ["presentation" => "presentation"], true);
 	}
 }

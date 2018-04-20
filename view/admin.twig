@@ -4,10 +4,20 @@
 	<div class="notice notice-success"><p>Plugin reactivated</p></div>
 {% endif %}
 
-<p>Hello, world. This is rendered using Twig.</p>
+{% if _POST["save-api-credentials"] %}
+	<div class="notice notice-success"><p>API credentials saved</p></div>
+{% endif %}
 
 <form method="post">
-	<input type="submit" name="reactivate" value="Reactivate" />
+	<h3>API Credentials</h3>
+	<input type="text" required name="api-user" autocomplete="username" placeholder="User" value="{{ apiUser }}" />
+	<input type="password" required name="api-pass" autocomplete="current-password" placeholder="Password" value="{{ apiPass }}" />
+	<input type="submit" name="save-api-credentials" value="Save credentials" />
 </form>
 
-{{ dump() }}
+<h3>Etc</h3>
+<form method="post">
+	<input type="submit" name="reactivate" value="Reactivate plugin" />
+</form>
+
+<br>{{ dump() }}

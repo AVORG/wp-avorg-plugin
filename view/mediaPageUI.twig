@@ -1,5 +1,7 @@
-<img src="//picsum.photos/200" alt="speaker" width="100">
+<img src="{{ presentation.presenters[0].photo86 }}" alt="speaker">
 
-<h1>The Value of Dirt</h1>
+<h1>{{ presentation.title }}</h1>
 
-<a href="#">Randy Skeete</a>
+{% for presenter in presentation.presenters %}
+	{% if not loop.first %}, {% endif %}<a href="#">{{ presenter.givenName }} {{ presenter.surname }} {{ presenter.suffix }}</a>
+{% endfor %}

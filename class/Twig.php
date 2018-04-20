@@ -23,17 +23,20 @@ class Twig {
 		}
 	}
 	
-	public function render( $templateFile, $shouldReturn = false )
+	public function render( $templateFile, $data = [], $shouldReturn = false )
 	{
-		$template = $this->twig->load( $templateFile );
-		$output = $template->render( array(
-			"_POST" => $_POST
-		) );
-		
-		if ( $shouldReturn ) {
-			return $output;
-		} else {
-			echo $output;
+		try {
+			$template = $this->twig->load( $templateFile );
+			$data = array_merge( [ "_GET" => $_GET, "_POST" => $_POST ], $data );
+			$output = $template->render( $data );
+		} catch ( \Exception $e ) {
+			$output = "Oops! Something went wrong while rendering this page.";
+		} finally {
+			if ( $shouldReturn ) {
+				return $output;
+			} else {
+				echo $output;
+			}
 		}
 	}
 }

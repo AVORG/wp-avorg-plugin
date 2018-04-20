@@ -17,10 +17,16 @@ class Factory
 	
 	public function makePlugin()
 	{
+		$avorgApi = $this->makeAvorgApi();
 		$twig = $this->makeTwig();
 		$wp = $this->makeWordPress();
 		
-		return new Plugin($twig, $wp);
+		return new Plugin($avorgApi, $twig, $wp);
+	}
+	
+	public function makeAvorgApi()
+	{
+		return new AvorgApi();
 	}
 	
 	public function makeTwig()

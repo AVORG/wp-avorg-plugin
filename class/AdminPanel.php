@@ -36,10 +36,27 @@ class AdminPanel
 	
 	public function render()
 	{
-		if ( isset( $_POST["reactivate"] ) ) {
+		$this->reactivatePlugin();
+		$this->saveApiCredentials();
+		
+		$user = $this->wp->call("get_option", "avorgApiUser");
+		$pass = $this->wp->call("get_option", "avorgApiPass");
+		
+		$this->twig->render("admin.twig", ["apiUser" => $user, "apiPass" => $pass]);
+	}
+	
+	public function reactivatePlugin()
+	{
+		if (isset($_POST["reactivate"])) {
 			$this->plugin->activate();
 		}
-		
-		$this->twig->render("admin.twig");
+	}
+	
+	public function saveApiCredentials()
+	{
+		if (isset($_POST["save-api-credentials"])) {
+			$this->wp->call("update_option", "avorgApiUser", $_POST["api-user"]);
+			$this->wp->call("update_option", "avorgApiPass", $_POST["api-pass"]);
+		}
 	}
 }

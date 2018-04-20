@@ -7,6 +7,9 @@ require_once(dirname(__FILE__) . '/MockFactory.php');
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/* Mock Objects */
 	
+	/** @var AvorgApi $mockAvorgApi */
+	protected $mockAvorgApi;
+	
 	/** @var Plugin $mockPlugin */
 	protected $mockPlugin;
 	
@@ -20,6 +23,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	/** @var AdminPanel $mockedAdminPanel */
 	protected $mockedAdminPanel;
+	
+	/** @var AvorgApi $mockedAvorgApi */
+	protected $mockedAvorgApi;
+	
+	/** @var Factory $mockedFactory */
+	protected $mockedFactory;
 	
 	/** @var Plugin $mockedPlugin */
 	protected $mockedPlugin;
