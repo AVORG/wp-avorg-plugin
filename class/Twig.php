@@ -27,7 +27,7 @@ class Twig {
 	{
 		try {
 			$template = $this->twig->load( $templateFile );
-			$data = array_merge( [ "_GET" => $_GET, "_POST" => $_POST ], $data );
+			$data = [ "_GET" => $_GET, "_POST" => $_POST, "avorg" => $data ];
 			$output = $template->render( $data );
 		} catch ( \Exception $e ) {
 			$output = "Oops! Something went wrong while rendering this page.";

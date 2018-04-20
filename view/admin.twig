@@ -10,8 +10,8 @@
 
 <form method="post">
 	<h3>API Credentials</h3>
-	<input type="text" required name="api-user" autocomplete="username" placeholder="User" value="{{ apiUser }}" />
-	<input type="password" required name="api-pass" autocomplete="current-password" placeholder="Password" value="{{ apiPass }}" />
+	<input type="text" required name="api-user" autocomplete="username" placeholder="User" value="{{ avorg.apiUser }}" />
+	<input type="password" required name="api-pass" autocomplete="current-password" placeholder="Password" value="{{ avorg.apiPass }}" />
 	<input type="submit" name="save-api-credentials" value="Save credentials" />
 </form>
 
@@ -20,4 +20,4 @@
 	<input type="submit" name="reactivate" value="Reactivate plugin" />
 </form>
 
-<br>{{ dump() }}
+<br>{{ dump()|raw }}

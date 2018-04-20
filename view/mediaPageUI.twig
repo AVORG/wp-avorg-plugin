@@ -1,7 +1,7 @@
-<img src="{{ presentation.presenters[0].photo86 }}" alt="speaker">
+<img src="{{ avorg.presentation.presenters[0].photo86 }}" alt="speaker">
 
-<h1>{{ presentation.title }}</h1>
+<h1>{{ avorg.presentation.title }}</h1>
 
-{% for presenter in presentation.presenters %}
+{% for presenter in avorg.presentation.presenters %}
 	{% if not loop.first %}, {% endif %}<a href="#">{{ presenter.givenName }} {{ presenter.surname }} {{ presenter.suffix }}</a>
 {% endfor %}
