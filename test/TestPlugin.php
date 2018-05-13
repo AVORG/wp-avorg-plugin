@@ -66,24 +66,62 @@ final class TestPlugin extends Avorg\TestCase
 		$this->assertNotContains("playerUI", $haystack);
 	}
 	
-	public function testGetsPresentation()
-	{
-		$_GET = ["presentation_id" => "12345"];
-		
-		$this->mockedPlugin->addMediaPageUI("content");
-		
-		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", "12345");
-	}
-	
 	public function testPassesPresentationToTwig()
 	{
-		$_GET = ["presentation_id" => "12345"];
-		
 		$this->mockWordPress->setReturnValue("call", "Media Detail");
 		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
 		
 		$this->mockedPlugin->addMediaPageUI("content");
 		
 		$this->assertCalledWith($this->mockTwig, "render", "mediaPageUI.twig", ["presentation" => "presentation"], true);
+	}
+	
+	public function testGetsQueryVar()
+	{
+		$this->mockedPlugin->addMediaPageUI("content");
+		
+		$this->assertCalledWith($this->mockWordPress, "call", "get_query_var", "presentation_id");
+	}
+	
+	public function testGetsPresentation()
+	{
+		$this->mockWordPress->setReturnValues("call", ["Media Detail", "54321"]);
+		
+		$this->mockedPlugin->addMediaPageUI("content");
+		
+		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", "54321");
+	}
+	
+	public function testInsertsMediaDetailsPageOnInit()
+	{
+		$this->mockWordPress->setReturnValue("call", null);
+		
+		$this->mockedPlugin->init();
+		
+		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
+	}
+	
+	public function testRegistersRewriteRuleWhenCreatesMediaPage()
+	{
+		$this->mockWordPress->setReturnValues("call", [ null, 7 ]);
+		
+		$this->mockedPlugin->createMediaPage();
+		
+		$this->assertCalledWith($this->mockRouter, "activate");
+	}
+	
+	public function testSavesMediaPageId()
+	{
+		$this->mockWordPress->setReturnValues("call", [ null, 7 ]);
+		
+		$this->mockedPlugin->createMediaPage();
+		
+		$this->assertCalledWith(
+			$this->mockWordPress,
+			"call",
+			"update_option",
+			"avorgMediaPageId",
+			7
+		);
 	}
 }

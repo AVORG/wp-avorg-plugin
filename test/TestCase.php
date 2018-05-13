@@ -13,6 +13,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var Plugin $mockPlugin */
 	protected $mockPlugin;
 	
+	/** @var Router $mockRouter */
+	protected $mockRouter;
+	
 	/** @var Twig $mockTwig */
 	protected $mockTwig;
 	
@@ -32,6 +35,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	/** @var Plugin $mockedPlugin */
 	protected $mockedPlugin;
+	
+	/** @var Router $mockedRouter */
+	protected $mockedRouter;
 	
 	/* Helper Fields */
 	
