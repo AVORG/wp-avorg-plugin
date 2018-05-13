@@ -17,7 +17,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testInsertsMediaDetailsPage()
 	{
-		$this->mockWordPress->setReturnValue("call", null);
+		$this->mockWordPress->setReturnValue("call", false);
 		
 		$this->mockedPlugin->activate();
 		
@@ -94,7 +94,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testInsertsMediaDetailsPageOnInit()
 	{
-		$this->mockWordPress->setReturnValue("call", null);
+		$this->mockWordPress->setReturnValue("call", false);
 		
 		$this->mockedPlugin->init();
 		
@@ -103,7 +103,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testRegistersRewriteRuleWhenCreatesMediaPage()
 	{
-		$this->mockWordPress->setReturnValues("call", [ null, 7 ]);
+		$this->mockWordPress->setReturnValues("call", [false, false, 7]);
 		
 		$this->mockedPlugin->createMediaPage();
 		
@@ -112,7 +112,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testSavesMediaPageId()
 	{
-		$this->mockWordPress->setReturnValues("call", [ null, 7 ]);
+		$this->mockWordPress->setReturnValues("call", [false, false, 7]);
 		
 		$this->mockedPlugin->createMediaPage();
 		
@@ -123,5 +123,39 @@ final class TestPlugin extends Avorg\TestCase
 			"avorgMediaPageId",
 			7
 		);
+	}
+	
+	public function testGetsMediaPageId()
+	{
+		$this->mockedPlugin->createMediaPage();
+		
+		$this->assertCalledWith($this->mockWordPress, "call", "get_option", "avorgMediaPageId");
+	}
+	
+	public function testCreatesPageIfNoPageStatus()
+	{
+		$this->mockWordPress->setReturnValues("call", [7, false]);
+		
+		$this->mockedPlugin->createMediaPage();
+		
+		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
+	}
+	
+	public function testChecksPostStatus()
+	{
+		$this->mockWordPress->setReturnValue("call", 7);
+		
+		$this->mockedPlugin->createMediaPage();
+		
+		$this->assertCalledWith($this->mockWordPress, "call", "get_post_status", 7);
+	}
+	
+	public function testUntrashesMediaPage()
+	{
+		$this->mockWordPress->setReturnValues("call", [7, "trash"]);
+		
+		$this->mockedPlugin->createMediaPage();
+		
+		$this->assertCalledWith($this->mockWordPress, "call", "wp_publish_post", 7);
 	}
 }
