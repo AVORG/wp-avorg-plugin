@@ -29,6 +29,7 @@ class Plugin
 	public function activate()
 	{
 		$this->createMediaPage();
+		$this->router->activate();
 	}
 	
 	public function init()
@@ -66,7 +67,6 @@ class Plugin
 			), true);
 			
 			$this->wp->call("update_option", "avorgMediaPageId", $id);
-			$this->router->activate();
 		}
 		
 		if ($postStatus === "trash") {

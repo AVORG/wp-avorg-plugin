@@ -50,12 +50,21 @@ final class TestRouter extends Avorg\TestCase
 		[
 			"english/sermons/recordings/17833/single-and-satisfied.html/",
 			"index.php?page_id=10&presentation_id=17833"
+		],
+		[
+			"espanol/sermones/grabaciones/17283/saludismo.html",
+			"index.php?page_id=10&presentation_id=17283"
+		],
+		[
+			"francais/predications/enregistrements/3839/jesus-sur-le-mont-des-oliviers.html",
+			"index.php?page_id=10&presentation_id=3839"
 		]
 	];
 	
-	private function getAddRewriteCall() {
+	private function getAddRewriteCalls()
+	{
 		$calls = $this->mockWordPress->getCalls("call");
-		return $calls[2];
+		return array_slice($calls, 2);
 	}
 	
 	public function testCallsWordPress()
@@ -65,69 +74,65 @@ final class TestRouter extends Avorg\TestCase
 		$this->assertCalled($this->mockWordPress, "call");
 	}
 	
-	public function testRewriteRuleMatchesTestUrls()
-	{
-		$this->mockWordPress->setReturnValue( "call", 10 );
-		
-		$this->mockedRouter->activate();
-		
-		$addRewriteCall = $this->getAddRewriteCall();
-		$regex = $addRewriteCall[1];
-		
-		foreach ($this->testCases as $case) {
-			//$this->assertEquals(1, preg_match("/$regex/", $case[0]), $case[0]);
-			$this->assertRegExp( "/$regex/", $case[0] );
-		}
-	}
-	
 	public function testAssignsHighPriority()
 	{
 		$this->mockedRouter->activate();
 		
-		$addRewriteCall = $this->getAddRewriteCall();
-		$priority = $addRewriteCall[3];
+		$addRewriteCalls = $this->getAddRewriteCalls();
+		$priority = $addRewriteCalls[0][3];
 		
 		$this->assertEquals("top", $priority);
 	}
 	
 	public function testRewriteRuleRewritesCorrectly()
 	{
-		$this->mockWordPress->setReturnValue( "call", 10 );
+		$this->mockWordPress->setReturnValue("call", 10);
 		
 		$this->mockedRouter->activate();
 		
-		$addRewriteCall = $this->getAddRewriteCall();
-		$regex = $addRewriteCall[1];
-		$redirect = $addRewriteCall[2];
+		$addRewriteCalls = $this->getAddRewriteCalls();
 		
 		foreach ($this->testCases as $case) {
-			preg_match("/$regex/", $case[0], $matches);
-			$result = eval( "return \"$redirect\";" );
+			$inputUrl = $case[0];
+			$outputUrl = $case[1];
 			
-			$this->assertEquals( $case[1], $result );
+			$doesMatch = array_reduce($addRewriteCalls, function ($carry, $call) use ($inputUrl, $outputUrl) {
+				$regex = $call[1];
+				$redirect = $call[2];
+				
+				preg_match("/$regex/", $inputUrl, $matches);
+				$result = eval("return \"$redirect\";");
+				
+				return $carry || $outputUrl === $result;
+			}, false);
+			
+			$this->assertTrue($doesMatch, $inputUrl);
 		}
 	}
 	
-	public function testFlushesRewireRules() {
+	public function testFlushesRewireRules()
+	{
 		$this->mockedRouter->activate();
 		
-		$this->assertCalledWith( $this->mockWordPress, "call", "flush_rewrite_rules" );
+		$this->assertCalledWith($this->mockWordPress, "call", "flush_rewrite_rules");
 	}
 	
-	public function testRegistersPresParam() {
+	public function testRegistersPresParam()
+	{
 		$this->mockedRouter->activate();
 		
-		$this->assertCalledWith( $this->mockWordPress, "call", "add_rewrite_tag", "%presentation_id%", "(\d+)" );
+		$this->assertCalledWith($this->mockWordPress, "call", "add_rewrite_tag", "%presentation_id%", "(\d+)");
 	}
 	
-	public function testUsesSavedMedaPageId() {
-		$this->mockWordPress->setReturnValue( "call", 3 );
-
+	public function testUsesSavedMedaPageId()
+	{
+		$this->mockWordPress->setReturnValue("call", 3);
+		
 		$this->mockedRouter->activate();
 		
-		$addRewriteCall = $this->getAddRewriteCall();
-		$redirect = $addRewriteCall[2];
+		$addRewriteCalls = $this->getAddRewriteCalls();
+		$redirect = $addRewriteCalls[0][2];
 		
-		$this->assertContains( "page_id=3", $redirect );
+		$this->assertContains("page_id=3", $redirect);
 	}
 }

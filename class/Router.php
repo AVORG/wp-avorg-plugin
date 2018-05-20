@@ -16,19 +16,49 @@ class Router
 	
 	public function activate()
 	{
-		$this->addRewriteRule();
+		echo "Activating!";
+		$this->addRewriteRules();
 		$this->wp->call("flush_rewrite_rules");
 	}
 	
-	public function addRewriteRule()
+	public function addRewriteRules()
 	{
-		$mediaPageId = $this->wp->call( "get_option", "avorgMediaPageId" );
+		$mediaPageId = $this->wp->call("get_option", "avorgMediaPageId");
+		$this->wp->call("add_rewrite_tag", "%presentation_id%", "(\d+)");
 		
-		$match = "^english\/sermons\/recordings\/(\d+)\/[\w-\.]+\/?";
+		$this->addLocalizedRewriteRule(
+			$mediaPageId,
+			"english",
+			"sermons",
+			"recordings"
+		);
+		
+		$this->addLocalizedRewriteRule(
+			$mediaPageId,
+			"espanol",
+			"sermones",
+			"grabaciones"
+		);
+		
+		$this->addLocalizedRewriteRule(
+			$mediaPageId,
+			"francais",
+			"predications",
+			"enregistrements"
+		);
+	}
+	
+	public function addLocalizedRewriteRule($mediaPageId, $languageTrans, $sermonsTrans, $recordingsTrans)
+	{
+		$regex = "^$languageTrans\/$sermonsTrans\/$recordingsTrans\/(\d+)\/[\w-\.]+\/?";
+		$this->addRewriteRule($mediaPageId, $regex);
+	}
+	
+	public function addRewriteRule($mediaPageId, $regex)
+	{
 		$redirect = "index.php?page_id=$mediaPageId&presentation_id=\$matches[1]";
 		$priority = "top";
 		
-		$this->wp->call("add_rewrite_tag", "%presentation_id%", "(\d+)");
-		$this->wp->call("add_rewrite_rule", $match, $redirect, $priority);
+		$this->wp->call("add_rewrite_rule", $regex, $redirect, $priority);
 	}
 }

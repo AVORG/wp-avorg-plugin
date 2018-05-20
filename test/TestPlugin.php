@@ -101,11 +101,9 @@ final class TestPlugin extends Avorg\TestCase
 		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
 	}
 	
-	public function testRegistersRewriteRuleWhenCreatesMediaPage()
+	public function testActivatesRouterOnPluginActivate()
 	{
-		$this->mockWordPress->setReturnValues("call", [false, false, 7]);
-		
-		$this->mockedPlugin->createMediaPage();
+		$this->mockedPlugin->activate();
 		
 		$this->assertCalledWith($this->mockRouter, "activate");
 	}
