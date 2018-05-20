@@ -18,11 +18,19 @@ class Factory
 	public function makePlugin()
 	{
 		$avorgApi = $this->makeAvorgApi();
+		$contentBits = $this->makeContentBits();
 		$router = $this->makeRouter();
 		$twig = $this->makeTwig();
 		$wp = $this->makeWordPress();
 		
-		return new Plugin($avorgApi, $router, $twig, $wp);
+		return new Plugin($avorgApi, $contentBits, $router, $twig, $wp);
+	}
+	
+	public function makeContentBits()
+	{
+		$wp = $this->makeWordPress();
+		
+		return new ContentBits($wp);
 	}
 	
 	public function makeRouter()

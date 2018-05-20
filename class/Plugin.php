@@ -9,6 +9,9 @@ class Plugin
 	/** @var AvorgApi $avorgApi */
 	private $avorgApi;
 	
+	/** @var ContentBits $contentBits */
+	private $contentBits;
+	
 	/** @var Router $router */
 	private $router;
 	
@@ -18,9 +21,10 @@ class Plugin
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(AvorgApi $avorgAPI, Router $router, Twig $twig, WordPress $WordPress)
+	public function __construct(AvorgApi $avorgAPI, ContentBits $contentBits, Router $router, Twig $twig, WordPress $WordPress)
 	{
 		$this->avorgApi = $avorgAPI;
+		$this->contentBits = $contentBits;
 		$this->router = $router;
 		$this->twig = $twig;
 		$this->wp = $WordPress;
@@ -35,6 +39,7 @@ class Plugin
 	public function init()
 	{
 		$this->createMediaPage();
+		$this->contentBits->init();
 	}
 	
 	public function addMediaPageUI($content)

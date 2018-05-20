@@ -10,6 +10,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var AvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
 	
+	/** @var ContentBits $mockContentBits */
+	protected $mockContentBits;
+	
 	/** @var Plugin $mockPlugin */
 	protected $mockPlugin;
 	
@@ -29,6 +32,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	/** @var AvorgApi $mockedAvorgApi */
 	protected $mockedAvorgApi;
+	
+	/** @var ContentBits $mockedContentBits */
+	protected $mockedContentBits;
 	
 	/** @var Factory $mockedFactory */
 	protected $mockedFactory;

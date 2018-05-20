@@ -171,4 +171,11 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->assertPlayerUiInjected();
 	}
+	
+	public function testInitInitsContentBits()
+	{
+		$this->mockedPlugin->init();
+		
+		$this->assertCalled( $this->mockContentBits, "init" );
+	}
 }
