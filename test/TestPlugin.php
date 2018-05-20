@@ -9,6 +9,20 @@ final class TestPlugin extends Avorg\TestCase
 		"post_type" => "page"
 	), true);
 	
+	private function assertPlayerUiInjected()
+	{
+		$haystack = $this->makePlayerUiHaystack();
+		
+		$this->assertContains("playerUI", $haystack);
+	}
+	
+	private function makePlayerUiHaystack()
+	{
+		$this->mockTwig->setReturnValue("render", "playerUI");
+		
+		return $this->mockedPlugin->addMediaPageUI("");
+	}
+	
 	protected function setUp()
 	{
 		parent::setUp();
@@ -35,11 +49,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testAddsMediaPageUI()
 	{
-		$this->mockTwig->setReturnValue("render", "playerUI");
-		
-		$haystack = $this->mockedPlugin->addMediaPageUI("");
-		
-		$this->assertContains("playerUI", $haystack);
+		$this->assertPlayerUiInjected();
 	}
 	
 	public function testPassesPageContent()
@@ -59,9 +69,8 @@ final class TestPlugin extends Avorg\TestCase
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
 	{
 		$this->mockWordPress->setReturnValues("call", [1, 10]);
-		$this->mockTwig->setReturnValue("render", "playerUI");
 		
-		$haystack = $this->mockedPlugin->addMediaPageUI("content");
+		$haystack = $this->makePlayerUiHaystack();
 		
 		$this->assertNotContains("playerUI", $haystack);
 	}
@@ -159,10 +168,7 @@ final class TestPlugin extends Avorg\TestCase
 	public function testConvertsMediaPageIdStringToNumber()
 	{
 		$this->mockWordPress->setReturnValues("call", ["5", 5]);
-		$this->mockTwig->setReturnValue("render", "playerUI");
 		
-		$haystack = $this->mockedPlugin->addMediaPageUI("");
-		
-		$this->assertContains("playerUI", $haystack);
+		$this->assertPlayerUiInjected();
 	}
 }
