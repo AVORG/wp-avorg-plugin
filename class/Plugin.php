@@ -39,6 +39,7 @@ class Plugin
 	public function init()
 	{
 		$this->createMediaPage();
+		$this->router->addRewriteRules();
 		$this->contentBits->init();
 	}
 	

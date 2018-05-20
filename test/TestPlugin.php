@@ -178,4 +178,11 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->assertCalled( $this->mockContentBits, "init" );
 	}
+	
+	public function testInitInitsRouter()
+	{
+		$this->mockedPlugin->init();
+		
+		$this->assertCalled( $this->mockRouter, "addRewriteRules" );
+	}
 }
