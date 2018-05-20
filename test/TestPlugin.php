@@ -12,7 +12,7 @@ final class TestPlugin extends Avorg\TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->mockWordPress->setReturnValue("call", "Media Detail");
+		$this->mockWordPress->setReturnValue("call", 5);
 	}
 	
 	public function testInsertsMediaDetailsPage()
@@ -58,7 +58,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
 	{
-		$this->mockWordPress->setReturnValue("call", "NOT THE MEDIA PAGE");
+		$this->mockWordPress->setReturnValues("call", [1, 10]);
 		$this->mockTwig->setReturnValue("render", "playerUI");
 		
 		$haystack = $this->mockedPlugin->addMediaPageUI("content");
@@ -68,7 +68,6 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testPassesPresentationToTwig()
 	{
-		$this->mockWordPress->setReturnValue("call", "Media Detail");
 		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
 		
 		$this->mockedPlugin->addMediaPageUI("content");
@@ -85,7 +84,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testGetsPresentation()
 	{
-		$this->mockWordPress->setReturnValues("call", ["Media Detail", "54321"]);
+		$this->mockWordPress->setReturnValues("call", [7, 7, "54321"]);
 		
 		$this->mockedPlugin->addMediaPageUI("content");
 		
@@ -155,5 +154,15 @@ final class TestPlugin extends Avorg\TestCase
 		$this->mockedPlugin->createMediaPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "wp_publish_post", 7);
+	}
+	
+	public function testConvertsMediaPageIdStringToNumber()
+	{
+		$this->mockWordPress->setReturnValues("call", ["5", 5]);
+		$this->mockTwig->setReturnValue("render", "playerUI");
+		
+		$haystack = $this->mockedPlugin->addMediaPageUI("");
+		
+		$this->assertContains("playerUI", $haystack);
 	}
 }

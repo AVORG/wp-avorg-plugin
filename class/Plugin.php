@@ -39,9 +39,7 @@ class Plugin
 	
 	public function addMediaPageUI($content)
 	{
-		$pageTitle = $this->wp->call("get_the_title");
-		
-		if ($pageTitle === "Media Detail") {
+		if ($this->isMediaPage()) {
 			$presentationId = $this->wp->call("get_query_var", "presentation_id");
 			$presentation = $this->avorgApi->getPresentation($presentationId);
 			
@@ -56,7 +54,7 @@ class Plugin
 	public function createMediaPage()
 	{
 		$mediaPageId = $this->wp->call("get_option", "avorgMediaPageId");
-		$postStatus = $this->wp->call( "get_post_status", $mediaPageId );
+		$postStatus = $this->wp->call("get_post_status", $mediaPageId);
 		
 		if ($mediaPageId === false || $postStatus === false) {
 			$id = $this->wp->call("wp_insert_post", array(
@@ -70,7 +68,15 @@ class Plugin
 		}
 		
 		if ($postStatus === "trash") {
-			$this->wp->call( "wp_publish_post", $mediaPageId );
+			$this->wp->call("wp_publish_post", $mediaPageId);
 		}
+	}
+	
+	public function isMediaPage()
+	{
+		$mediaPageId = intval($this->wp->call("get_option", "avorgMediaPageId"), 10);
+		$thisPageId = $this->wp->call("get_the_ID");
+		
+		return $mediaPageId === $thisPageId;
 	}
 }
