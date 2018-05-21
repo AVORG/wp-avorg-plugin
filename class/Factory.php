@@ -28,9 +28,10 @@ class Factory
 	
 	public function makeContentBits()
 	{
+		$twig = $this->makeTwig();
 		$wp = $this->makeWordPress();
 		
-		return new ContentBits($wp);
+		return new ContentBits($twig, $wp);
 	}
 	
 	public function makeRouter()

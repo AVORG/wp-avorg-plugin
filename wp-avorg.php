@@ -16,12 +16,15 @@ include_once( dirname(__FILE__) .  "/vendor/autoload.php" );
 $factory = new Factory();
 $plugin  = $factory->makePlugin();
 $adminPanel = $factory->makeAdminPanel();
+$contentBits = $factory->makeContentBits();
 
 \register_activation_hook( __FILE__, array( $plugin, "activate" ) );
 \register_deactivation_hook( __FILE__, "plugin_deactivate" );
 
 \add_action( "admin_menu", array( $adminPanel, "register" ) );
 \add_action( 'init', array( $plugin, "init" ) );
+\add_action( "add_meta_boxes", array( $contentBits, "addIdentifierMetaBox" ) );
+\add_action( 'save_post', array( $contentBits, "saveIdentifierMetaBox" ) );
 
 \add_filter( 'the_content', array( $plugin, "addMediaPageUI" ) );
 

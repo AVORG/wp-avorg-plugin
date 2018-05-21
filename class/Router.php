@@ -16,7 +16,6 @@ class Router
 	
 	public function activate()
 	{
-		echo "Activating!";
 		$this->addRewriteRules();
 		$this->wp->call("flush_rewrite_rules");
 	}
