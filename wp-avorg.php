@@ -25,6 +25,7 @@ $contentBits = $factory->makeContentBits();
 \add_action( 'init', array( $plugin, "init" ) );
 \add_action( "add_meta_boxes", array( $contentBits, "addIdentifierMetaBox" ) );
 \add_action( 'save_post', array( $contentBits, "saveIdentifierMetaBox" ) );
+\add_action( "wp_enqueue_scripts", array( $plugin, "enqueueScripts" ) );
 
 \add_filter( 'the_content', array( $plugin, "addMediaPageUI" ) );
 

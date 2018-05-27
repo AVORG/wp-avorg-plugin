@@ -85,4 +85,10 @@ class Plugin
 		
 		return $mediaPageId === $thisPageId;
 	}
+	
+	public function enqueueScripts()
+	{
+		$url = $this->wp->call( "plugins_url", "style.css", dirname(__FILE__) );
+		$this->wp->call( "wp_enqueue_style", "avorgStyle", $url  );
+	}
 }

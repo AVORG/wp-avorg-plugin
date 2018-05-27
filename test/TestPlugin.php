@@ -176,13 +176,36 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockedPlugin->init();
 		
-		$this->assertCalled( $this->mockContentBits, "init" );
+		$this->assertCalled($this->mockContentBits, "init");
 	}
 	
 	public function testInitInitsRouter()
 	{
 		$this->mockedPlugin->init();
 		
-		$this->assertCalled( $this->mockRouter, "addRewriteRules" );
+		$this->assertCalled($this->mockRouter, "addRewriteRules");
+	}
+	
+	public function testEnqueueScripts()
+	{
+		$this->mockedPlugin->enqueueScripts();
+		
+		$this->assertWordPressFunctionCalled( "wp_enqueue_style" );
+	}
+	
+	public function testEnqueueScriptsGetsStylesheetUrl()
+	{
+		$this->mockedPlugin->enqueueScripts();
+		
+		$this->assertWordPressFunctionCalled( "plugins_url" );
+	}
+	
+	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
+	{
+		$this->mockWordPress->setReturnValue( "call", "path" );
+		
+		$this->mockedPlugin->enqueueScripts();
+		
+		$this->assertCalledWith( $this->mockWordPress, "call", "wp_enqueue_style", "avorgStyle", "path" );
 	}
 }
