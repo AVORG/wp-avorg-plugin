@@ -13,6 +13,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var ContentBits $mockContentBits */
 	protected $mockContentBits;
 	
+	/** @var Php $mockPhp */
+	protected $mockPhp;
+	
 	/** @var Plugin $mockPlugin */
 	protected $mockPlugin;
 	
@@ -183,5 +186,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		}
 		
 		return implode( "\r\n\r\n", $errorLines );
+	}
+	
+	protected function assertAnyCallMatches( $mock, $method, $callback ) {
+		$calls = $mock->getCalls( $method );
+		
+		$result = array_reduce( $calls, $callback, FALSE );
+		
+		$this->assertTrue( $result );
 	}
 }

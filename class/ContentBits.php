@@ -6,14 +6,18 @@ if (!\defined('ABSPATH')) exit;
 
 class ContentBits
 {
+	/** @var Php $php */
+	private $php;
+	
 	/** @var Twig $twig */
 	private $twig;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(Twig $twig, WordPress $wp)
+	public function __construct(Php $php, Twig $twig, WordPress $wp)
 	{
+		$this->php = $php;
 		$this->twig = $twig;
 		$this->wp = $wp;
 	}
@@ -161,8 +165,37 @@ class ContentBits
 		$this->wp->call("add_shortcode", "avorg-bits", [$this, "renderShortcode"]);
 	}
 	
-	public function renderShortcode()
+	public function renderShortcode($attributes)
 	{
+		$presentationId = $this->wp->call('get_query_var', 'presentation_id');
+		$posts = $this->getBits($attributes['id'], $presentationId)
+			?: $this->getBits($attributes['id']);
+		$postIndex = $this->php->array_rand($posts);
+		$post = $posts[$postIndex];
+		
+		return $post->post_content;
+	}
 	
+	private function getBits($identifier, $presentationId = null)
+	{
+		$taxQuery = ($presentationId) ? [
+			'tax_query' => [
+				[
+					'taxonomy' => 'avorgMediaIds',
+					'field' => 'slug',
+					'terms' => $presentationId
+				]
+			]
+		] : [];
+		
+		return $this->wp->call("get_posts", [
+			'posts_per_page' => -1,
+			'post_type' => 'avorgContentBits',
+			'meta_query' => [
+				[
+					'key' => '_avorgBitIdentifier',
+					'value' => $identifier
+				]
+			]] + $taxQuery);
 	}
 }
