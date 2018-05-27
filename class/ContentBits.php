@@ -22,9 +22,10 @@ class ContentBits
 	{
 		$this->addCustomPostType();
 		$this->addMediaIdTaxonomy();
+		$this->addShortcode();
 	}
 	
-	public function addCustomPostType()
+	private function addCustomPostType()
 	{
 		$labels = array(
 			'name' => 'Content Bits',
@@ -81,7 +82,7 @@ class ContentBits
 		$this->wp->call("register_post_type", "avorgContentBits", $args);
 	}
 	
-	public function addMediaIdTaxonomy()
+	private function addMediaIdTaxonomy()
 	{
 		$labels = array(
 			'name' => 'Media IDs',
@@ -153,5 +154,15 @@ class ContentBits
 			"_avorgBitIdentifier",
 			$_POST["avorgBitIdentifier"]
 		);
+	}
+	
+	private function addShortcode()
+	{
+		$this->wp->call("add_shortcode", "avorg-bits", [$this, "renderShortcode"]);
+	}
+	
+	public function renderShortcode()
+	{
+	
 	}
 }

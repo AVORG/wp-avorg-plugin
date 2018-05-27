@@ -84,4 +84,17 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->assertNotCalled($this->mockWordPress, "call");
 	}
+	
+	public function testAddsShortcode()
+	{
+		$this->mockedContentBits->init();
+		
+		$this->assertCalledWith($this->mockWordPress, "call",
+			"add_shortcode", "avorg-bits", [$this->mockedContentBits, "renderShortcode"]);
+	}
+	
+	public function testRenderShortcodeMethodExists()
+	{
+		$this->assertTrue( method_exists( $this->mockedContentBits, "renderShortcode" ) );
+	}
 }
