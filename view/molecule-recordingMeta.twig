@@ -1,0 +1,21 @@
+<div class="avorg-molecule-recordingMeta">
+	<img class="avorg-molecule-recordingMeta__photo" src="{{ presentation.presenters[0].photo86 }}" alt="speaker">
+	
+	<div class="avorg-molecule-recordingMeta__text">
+		<h1 class="avorg-molecule-recordingMeta__title">{{ presentation.title }}</h1>
+		
+		<ul class="avorg-molecule-recordingMeta__presenters">
+			{% for presenter in presentation.presenters %}
+				<li>
+					<a href="#">{{ presenter.givenName }} {{ presenter.surname }} {{ presenter.suffix }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+		
+		{% if additionalInfo %}
+		<div class="avorg-molecule-recordingMeta__additionalInfo">
+			{{ additionalInfo }}
+		</div>
+		{% endif %}
+	</div>
+</div>

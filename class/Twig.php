@@ -31,6 +31,7 @@ class Twig {
 			$output = $template->render( $data );
 		} catch ( \Exception $e ) {
 			$output = "Oops! Something went wrong while rendering this page.";
+			if (WP_DEBUG) $output .= "<br>" . $e->getMessage();
 		} finally {
 			if ( $shouldReturn ) {
 				return $output;

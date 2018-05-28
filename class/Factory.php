@@ -19,11 +19,21 @@ class Factory
 	{
 		$avorgApi = $this->makeAvorgApi();
 		$contentBits = $this->makeContentBits();
+		$listShortcode = $this->makeListShortcode();
 		$router = $this->makeRouter();
 		$twig = $this->makeTwig();
 		$wp = $this->makeWordPress();
 		
-		return new Plugin($avorgApi, $contentBits, $router, $twig, $wp);
+		return new Plugin($avorgApi, $contentBits, $listShortcode, $router, $twig, $wp);
+	}
+	
+	public function makeListShortcode()
+	{
+		$api = $this->makeAvorgApi();
+		$twig = $this->makeTwig();
+		$wp = $this->makeWordPress();
+		
+		return new ListShortcode($api, $twig, $wp);
 	}
 	
 	public function makeContentBits()

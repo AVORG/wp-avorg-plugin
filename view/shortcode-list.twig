@@ -1,0 +1,11 @@
+<ul class="avorg-shortcode-list">
+	{% for recording in avorg.recordings %}
+		<li>
+			{% set days = date("now").diff(date(recording.publishDate)).days %}
+			{% include "molecule-recordingMeta.twig" with {
+				presentation: recording,
+				additionalInfo: ( days == 1 ) ? days~" day ago" : days~" days ago"
+			} only %}
+		</li>
+	{% endfor %}
+</ul>

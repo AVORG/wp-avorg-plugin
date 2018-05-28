@@ -1,7 +1,7 @@
 .avorg-molecule-recordingMeta {
 	display: flex;
 	align-items: center;
-	margin-bottom: 3rem;
+	margin-bottom: 1rem;
 }
 
 .avorg-molecule-recordingMeta__photo {
@@ -21,6 +21,7 @@
 
 .avorg-molecule-recordingMeta__presenters {
 	margin-bottom: 0;
+	display: inline-block;
 }
 
 .avorg-molecule-recordingMeta__presenters li {
@@ -39,4 +40,21 @@
 
 .avorg-molecule-recordingMeta__presenters li a {
 	box-shadow: none;
+}
+
+.avorg-molecule-recordingMeta__additionalInfo {
+	display: inline-block;
+	opacity: .7;
+}
+
+.avorg-molecule-recordingMeta__additionalInfo:before {
+	content: "| ";
+}
+
+.avorg-organism-recording .avorg-molecule-recordingMeta {
+	margin-bottom: 3rem;
+}
+
+.avorg-shortcode-list li {
+	list-style-type: none;
 }

@@ -2,25 +2,47 @@
 
 namespace Avorg;
 
-if ( !\defined( 'ABSPATH' ) ) exit;
+if (!\defined('ABSPATH')) exit;
 
-class AvorgApi {
-	public function getPresentation( $id ) {
-		if (! is_numeric( $id )) return false;
+class AvorgApi
+{
+	private $apiUser;
+	private $apiPass;
+	
+	public function __construct()
+	{
+		$this->apiUser = \get_option("avorgApiUser");
+		$this->apiPass = \get_option("avorgApiPass");
+	}
+	
+	public function getPresentation($id)
+	{
+		if (!is_numeric($id)) return false;
 		
-		$user = \get_option("avorgApiUser");
-		$pass = \get_option("avorgApiPass");
+		$url = "https://api2.audioverse.org/recordings/{$id}";
+		$response = $this->getResponse($url);
 		
+		return json_decode($response)->result[0]->recordings;
+	}
+	
+	public function getPresentations()
+	{
+		$url = "https://api2.audioverse.org/recordings";
+		$response = $this->getResponse($url);
+
+		return json_decode($response)->result;
+	}
+	
+	private function getResponse($url)
+	{
 		$opts = array('http' =>
 			array(
-				'header'  => "Content-Type: text/xml\r\n".
-					"Authorization: Basic ".base64_encode("$user:$pass")."\r\n"
+				'header' => "Content-Type: text/xml\r\n" .
+					"Authorization: Basic " . base64_encode("$this->apiUser:$this->apiPass") . "\r\n"
 			)
 		);
+		$context = stream_context_create($opts);
 		
-		$context  = stream_context_create($opts);
-		$url = "https://api2.audioverse.org/recordings/{$id}";
-		$result = file_get_contents($url, false, $context);
-		return json_decode($result)->result[0]->recordings;
+		return file_get_contents($url, false, $context);
 	}
 }

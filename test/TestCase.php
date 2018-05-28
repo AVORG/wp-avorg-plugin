@@ -13,6 +13,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var ContentBits $mockContentBits */
 	protected $mockContentBits;
 	
+	/** @var ListShortcode $mockListShortcode */
+	protected $mockListShortcode;
+	
 	/** @var Php $mockPhp */
 	protected $mockPhp;
 	
@@ -33,14 +36,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var AdminPanel $mockedAdminPanel */
 	protected $mockedAdminPanel;
 	
-	/** @var AvorgApi $mockedAvorgApi */
-	protected $mockedAvorgApi;
-	
 	/** @var ContentBits $mockedContentBits */
 	protected $mockedContentBits;
 	
 	/** @var Factory $mockedFactory */
 	protected $mockedFactory;
+	
+	/** @var ListShortcode $mockedListShortcode */
+	protected $mockedListShortcode;
 	
 	/** @var Plugin $mockedPlugin */
 	protected $mockedPlugin;
@@ -196,7 +199,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue( $result );
 	}
 	
-	public function assertWordPressFunctionCalled($function)
+	protected function assertWordPressFunctionCalled($function)
 	{
 		$calls = $this->mockWordPress->getCalls("call");
 		
@@ -205,5 +208,17 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		}, false);
 		
 		$this->assertTrue($wasCalled, "Failed to assert $function was called using the WordPress wrapper");
+	}
+	
+	protected function assertWordPressFunctionCalledWith($function, ...$arguments)
+	{
+		$needle = array_merge( [$function], $arguments );
+		$calls = $this->mockWordPress->getCalls("call");
+		
+		$wasCalled = array_reduce($calls, function ($carry, $call) use ($needle) {
+			return $carry || $call === $needle;
+		}, false);
+		
+		$this->assertTrue($wasCalled, "Failed to assert $function was called using specified arguments");
 	}
 }

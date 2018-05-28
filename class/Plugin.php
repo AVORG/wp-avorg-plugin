@@ -12,6 +12,9 @@ class Plugin
 	/** @var ContentBits $contentBits */
 	private $contentBits;
 	
+	/** @var ListShortcode $listShortcode */
+	private $listShortcode;
+	
 	/** @var Router $router */
 	private $router;
 	
@@ -21,10 +24,18 @@ class Plugin
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(AvorgApi $avorgAPI, ContentBits $contentBits, Router $router, Twig $twig, WordPress $WordPress)
+	public function __construct(
+		AvorgApi $avorgAPI,
+		ContentBits $contentBits,
+		ListShortcode $listShortcode,
+		Router $router,
+		Twig $twig,
+		WordPress $WordPress
+	)
 	{
 		$this->avorgApi = $avorgAPI;
 		$this->contentBits = $contentBits;
+		$this->listShortcode = $listShortcode;
 		$this->router = $router;
 		$this->twig = $twig;
 		$this->wp = $WordPress;
@@ -41,6 +52,7 @@ class Plugin
 		$this->createMediaPage();
 		$this->router->addRewriteRules();
 		$this->contentBits->init();
+		$this->listShortcode->addShortcode();
 	}
 	
 	public function addMediaPageUI($content)
@@ -49,7 +61,7 @@ class Plugin
 			$presentationId = $this->wp->call("get_query_var", "presentation_id");
 			$presentation = $this->avorgApi->getPresentation($presentationId);
 			
-			$ui = $this->twig->render("mediaPageUI.twig", ["presentation" => $presentation], true);
+			$ui = $this->twig->render("organism/organism-recording.twig", ["presentation" => $presentation], true);
 			
 			return $ui . $content;
 		}
@@ -88,7 +100,7 @@ class Plugin
 	
 	public function enqueueScripts()
 	{
-		$url = $this->wp->call( "plugins_url", "style.css", dirname(__FILE__) );
-		$this->wp->call( "wp_enqueue_style", "avorgStyle", $url  );
+		$url = $this->wp->call("plugins_url", "style.css", dirname(__FILE__));
+		$this->wp->call("wp_enqueue_style", "avorgStyle", $url);
 	}
 }

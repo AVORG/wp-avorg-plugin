@@ -2,11 +2,6 @@
 
 final class TestContentBits extends Avorg\TestCase
 {
-	public function testExists()
-	{
-		$this->assertTrue(is_object($this->mockedContentBits));
-	}
-	
 	public function testInitMethodRegistersPostType()
 	{
 		$this->mockedContentBits->init();
