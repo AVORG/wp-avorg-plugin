@@ -2,7 +2,9 @@
 	<img class="avorg-molecule-recordingMeta__photo" src="{{ presentation.presenters[0].photo86 }}" alt="speaker">
 	
 	<div class="avorg-molecule-recordingMeta__text">
-		<h1 class="avorg-molecule-recordingMeta__title">{{ presentation.title }}</h1>
+		{% if shouldLinkTitle %}<a href="{{ presentation.shareUrl }}">{% endif %}
+			<h1 class="avorg-molecule-recordingMeta__title">{{ presentation.title }}</h1>
+		{% if shouldLinkTitle %}</a>{% endif %}
 		
 		<ul class="avorg-molecule-recordingMeta__presenters">
 			{% for presenter in presentation.presenters %}
