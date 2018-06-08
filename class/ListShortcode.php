@@ -27,14 +27,17 @@ class ListShortcode
 		$this->wp->call("add_shortcode", "avorg-list", [$this, "renderShortcode"]);
 	}
 	
-	public function renderShortcode()
+	public function renderShortcode($attributes)
 	{
-		$result = $this->api->getPresentations() ?: [];
+		$validListTypes = ["featured","popular"];
+		$shouldUseListAttribute = isset($attributes["list"]) && in_array($attributes["list"], $validListTypes);
+		$list = ($shouldUseListAttribute) ? $attributes["list"] : null;
+		$result = $this->api->getPresentations($list) ?: [];
 		
-		$recordings = array_reduce( $result, function($carry, $item) {
+		$recordings = array_reduce($result, function ($carry, $item) {
 			$carry[] = $item->recordings;
 			return $carry;
-		}, [] );
+		}, []);
 		
 		return $this->twig->render(
 			"shortcode-list.twig",
