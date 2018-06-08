@@ -1,0 +1,24 @@
+<video
+		id="my-player"
+		class="avorg-molecule-player video-js vjs-fluid"
+		controls
+		preload="auto"
+		poster="https://s.audioverse.org/images/template/player-bg4.jpg"
+		data-setup='{}'>
+	{% for file in avorg.presentation.videoFiles %}
+		<source src="{{ file.hlsURL }}" type="application/x-mpegURL"></source>
+	{% endfor %}
+	{#{% for file in avorg.presentation.mediaFiles %}#}
+		{#{% set ext = file.filename|split(".")|last %}#}
+		{#<source src="{{ file.streamURL }}" type="audio/{{ ext }}"></source>#}
+	{#{% endfor %}#}
+	<p class="vjs-no-js">
+		To view this media please enable JavaScript, and consider upgrading to a
+		web browser that
+		<a href="http://videojs.com/html5-video-support/" target="_blank">
+			supports HTML5 video
+		</a>
+	</p>
+</video>
+
+{{ dump(avorg.presentation) }}
