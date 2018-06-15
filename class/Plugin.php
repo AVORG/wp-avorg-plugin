@@ -61,7 +61,7 @@ class Plugin
 			$presentationId = $this->wp->call("get_query_var", "presentation_id");
 			$presentation = $this->avorgApi->getPresentation($presentationId);
 			
-			$ui = $this->twig->render("organism/organism-recording.twig", ["presentation" => $presentation], true);
+			$ui = $this->twig->render("organism-recording.twig", ["presentation" => $presentation], true);
 			
 			return $ui . $content;
 		}

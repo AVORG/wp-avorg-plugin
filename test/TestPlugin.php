@@ -63,7 +63,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockedPlugin->addMediaPageUI("content");
 		
-		$this->assertCalledWith($this->mockTwig, "render", "organism/organism-recording.twig", ["presentation" => null], true);
+		$this->assertCalledWith($this->mockTwig, "render", "organism-recording.twig", ["presentation" => null], true);
 	}
 	
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
@@ -81,7 +81,7 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->mockedPlugin->addMediaPageUI("content");
 		
-		$this->assertCalledWith($this->mockTwig, "render", "organism/organism-recording.twig", ["presentation" => "presentation"], true);
+		$this->assertCalledWith($this->mockTwig, "render", "organism-recording.twig", ["presentation" => "presentation"], true);
 	}
 	
 	public function testGetsQueryVar()
