@@ -4,11 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita09604e21b02940b6bafec24e2fbec0b
+class ComposerStaticInit577af4de92784c29a85f077623373e5a
 {
     public static $files = array (
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -43,8 +43,8 @@ class ComposerStaticInita09604e21b02940b6bafec24e2fbec0b
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -615,10 +615,10 @@ class ComposerStaticInita09604e21b02940b6bafec24e2fbec0b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita09604e21b02940b6bafec24e2fbec0b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita09604e21b02940b6bafec24e2fbec0b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInita09604e21b02940b6bafec24e2fbec0b::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInita09604e21b02940b6bafec24e2fbec0b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit577af4de92784c29a85f077623373e5a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit577af4de92784c29a85f077623373e5a::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit577af4de92784c29a85f077623373e5a::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit577af4de92784c29a85f077623373e5a::$classMap;
 
         }, null, ClassLoader::class);
     }
