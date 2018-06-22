@@ -63,7 +63,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockedPlugin->addMediaPageUI("content");
 		
-		$this->assertCalledWith($this->mockTwig, "render", "organism/organism-recording.twig", ["presentation" => null], true);
+		$this->assertCalledWith($this->mockTwig, "render", "organism-recording.twig", ["presentation" => null], true);
 	}
 	
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
@@ -81,7 +81,7 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->mockedPlugin->addMediaPageUI("content");
 		
-		$this->assertCalledWith($this->mockTwig, "render", "organism/organism-recording.twig", ["presentation" => "presentation"], true);
+		$this->assertCalledWith($this->mockTwig, "render", "organism-recording.twig", ["presentation" => "presentation"], true);
 	}
 	
 	public function testGetsQueryVar()
@@ -190,23 +190,23 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockedPlugin->enqueueScripts();
 		
-		$this->assertWordPressFunctionCalled( "wp_enqueue_style" );
+		$this->assertWordPressFunctionCalled("wp_enqueue_style");
 	}
 	
 	public function testEnqueueScriptsGetsStylesheetUrl()
 	{
 		$this->mockedPlugin->enqueueScripts();
 		
-		$this->assertWordPressFunctionCalled( "plugins_url" );
+		$this->assertWordPressFunctionCalled("plugins_url");
 	}
 	
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
-		$this->mockWordPress->setReturnValue( "call", "path" );
+		$this->mockWordPress->setReturnValue("call", "path");
 		
 		$this->mockedPlugin->enqueueScripts();
 		
-		$this->assertCalledWith( $this->mockWordPress, "call", "wp_enqueue_style", "avorgStyle", "path" );
+		$this->assertCalledWith($this->mockWordPress, "call", "wp_enqueue_style", "avorgStyle", "path");
 	}
 	
 	public function testInitsListShortcode()
@@ -214,5 +214,38 @@ final class TestPlugin extends Avorg\TestCase
 		$this->mockedPlugin->init();
 		
 		$this->assertCalled($this->mockListShortcode, "addShortcode");
+	}
+	
+	public function testEnqueuesVideoJsStyles()
+	{
+		$this->mockedPlugin->enqueueScripts();
+		
+		$this->assertWordPressFunctionCalledWith(
+			"wp_enqueue_style",
+			"avorgVideoJsStyle",
+			"//vjs.zencdn.net/7.0/video-js.min.css"
+		);
+	}
+	
+	public function testEnqueuesVideoJsScript()
+	{
+		$this->mockedPlugin->enqueueScripts();
+		
+		$this->assertWordPressFunctionCalledWith(
+			"wp_enqueue_script",
+			"avorgVideoJsScript",
+			"//vjs.zencdn.net/7.0/video.min.js"
+		);
+	}
+	
+	public function testEnqueuesVideoJsHlsScript()
+	{
+		$this->mockedPlugin->enqueueScripts();
+		
+		$this->assertWordPressFunctionCalledWith(
+			"wp_enqueue_script",
+			"avorgVideoJsHlsScript",
+			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
+		);
 	}
 }

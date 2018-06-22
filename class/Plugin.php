@@ -61,7 +61,7 @@ class Plugin
 			$presentationId = $this->wp->call("get_query_var", "presentation_id");
 			$presentation = $this->avorgApi->getPresentation($presentationId);
 			
-			$ui = $this->twig->render("organism/organism-recording.twig", ["presentation" => $presentation], true);
+			$ui = $this->twig->render("organism-recording.twig", ["presentation" => $presentation], true);
 			
 			return $ui . $content;
 		}
@@ -100,7 +100,32 @@ class Plugin
 	
 	public function enqueueScripts()
 	{
+		$this->enqueuePluginStyles();
+		$this->enqueueVideoJsAssets();
+	}
+	
+	private function enqueuePluginStyles()
+	{
 		$url = $this->wp->call("plugins_url", "style.css", dirname(__FILE__));
 		$this->wp->call("wp_enqueue_style", "avorgStyle", $url);
+	}
+	
+	private function enqueueVideoJsAssets()
+	{
+		$this->wp->call(
+			"wp_enqueue_style",
+			"avorgVideoJsStyle",
+			"//vjs.zencdn.net/7.0/video-js.min.css"
+		);
+		$this->wp->call(
+			"wp_enqueue_script",
+			"avorgVideoJsScript",
+			"//vjs.zencdn.net/7.0/video.min.js"
+		);
+		$this->wp->call(
+			"wp_enqueue_script",
+			"avorgVideoJsHlsScript",
+			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
+		);
 	}
 }
