@@ -1,38 +1,86 @@
-{% set logUrl = null %}
-
-<video
-		id="my-player"
-		class="avorg-molecule-player video-js vjs-fluid"
-		controls
-		preload="auto"
-		poster="https://s.audioverse.org/images/template/player-bg4.jpg"
-		data-setup='{}'
->
+<div class="avorg-molecule-player">
+	<div class="avorg-audio-sources">
+		{% for file in avorg.presentation.mediaFiles %}
+			{% set ext = file.filename|split(".")|last %}
+			<source src="{{ file.streamURL }}" type="audio/{{ ext }}">
+		{% endfor %}
+	</div>
 	
-	{% for file in avorg.presentation.videoFiles if file.container == "m3u8_ios" %}
-		<source src="{{ file.downloadURL }}" type="application/x-mpegURL">
-		{% set logUrl = file.logURL %}
-	{% endfor %}
+	<div class="avorg-video-sources">
+		{% set logUrl = null %}
+		{% set hasVideo = false %}
+		{% for file in avorg.presentation.videoFiles if file.container == "m3u8_ios" %}
+			<source src="{{ file.downloadURL }}" type="application/x-mpegURL">
+			{% set logUrl = file.logURL %}
+			{% set hasVideo = true %}
+		{% endfor %}
+	</div>
 	
-	{% for file in avorg.presentation.mediaFiles %}
-		{% set ext = file.filename|split(".")|last %}
-		<source src="{{ file.streamURL }}" type="audio/{{ ext }}"></source>
-	{% endfor %}
+	<div class="avorg-molecule-player__wrapper">
+		<video id="#player_id#" class="avorg-prototype-player video-js vjs-fluid" controls preload="auto"
+			   poster="https://s.audioverse.org/images/template/player-bg4.jpg">
+			#player_sources#
+			
+			<p class="vjs-no-js">
+				To view this media please enable JavaScript, and consider upgrading to a web browser that
+				<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+			</p>
+		</video>
+		
+		{% if hasVideo %}
+			<button id="avorg-source-toggle" class="avorg-molecule-player__toggle">Toggle Source</button>{% endif %}
+	</div>
 	
-	<p class="vjs-no-js">
-		To view this media please enable JavaScript, and consider upgrading to a
-		web browser that
-		<a href="http://videojs.com/html5-video-support/" target="_blank">
-			supports HTML5 video
-		</a>
-	</p>
-	
-</video>
-
-{% if logUrl %}
 	<script>
+		window.addEventListener("load", function () {
+			var buildPlayerMarkup = function (id, mediaSources) {
+				return playerPrototype.replace(/#player_id#/g, id).replace(/#player_sources#/g, mediaSources);
+			};
+			
+			var loadPlayer = function (playerId, playerHtml) {
+				var fragment = document.createRange().createContextualFragment(playerHtml);
+				videoWrapper.insertBefore(fragment, toggle);
+				player = videojs(playerId);
+			};
+			
+			var togglePlayer = function () {
+				var playerId = (showVideoNext) ? videoPlayerId : audioPlayerId,
+					playerHtml = (showVideoNext) ? videoPlayerHtml : audioPlayerHtml,
+					wasPaused = (player) ? player.paused() : true,
+					initTime = (player) ? player.currentTime() - 5 : 0;
+				
+				if (player) player.dispose();
+				
+				loadPlayer(playerId, playerHtml);
+				
+				player.currentTime(initTime);
+				if (!wasPaused) player.play();
+				showVideoNext = !showVideoNext;
+				toggle.innerText = (showVideoNext) ? "Video Only" : "Audio Only";
+			};
+			
+			var playerPrototype = document.querySelector('.avorg-prototype-player').outerHTML,
+				hasVideo = {{ hasVideo ? "true" : "false" }},
+				videoWrapper = document.querySelector(".avorg-molecule-player__wrapper"),
+				audioSources = document.querySelector('.avorg-audio-sources').innerHTML,
+				videoSources = document.querySelector('.avorg-video-sources').innerHTML,
+				videoPlayerId = "avorg-video-player",
+				audioPlayerId = "avorg-audio-player",
+				videoPlayerHtml = buildPlayerMarkup(videoPlayerId, videoSources),
+				audioPlayerHtml = buildPlayerMarkup(audioPlayerId, audioSources),
+				toggle = document.getElementById("avorg-source-toggle"),
+				player = null,
+				showVideoNext = hasVideo;
+			
+			togglePlayer();
+			
+			toggle.addEventListener("click", togglePlayer);
+		});
+		
+		{% if logUrl %}
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', "{{ logUrl }}", true);
 		xhr.send();
+		{% endif %}
 	</script>
-{% endif %}
+</div>
