@@ -2,6 +2,9 @@
 
 final class TestPlugin extends Avorg\TestCase
 {
+	/** @var \Avorg\Plugin $plugin */
+	protected $plugin;
+	
 	private $mediaPageInsertCall = array("wp_insert_post", array(
 		"post_content" => "Media Detail",
 		"post_title" => "Media Detail",
@@ -20,20 +23,22 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockTwig->setReturnValue("render", "playerUI");
 		
-		return $this->mockedPlugin->addMediaPageUI("");
+		return $this->plugin->addMediaPageUI("");
 	}
 	
 	protected function setUp()
 	{
 		parent::setUp();
+		
 		$this->mockWordPress->setReturnValue("call", 5);
+		$this->plugin = $this->factory->getPlugin();
 	}
 	
 	public function testInsertsMediaDetailsPage()
 	{
 		$this->mockWordPress->setReturnValue("call", false);
 		
-		$this->mockedPlugin->activate();
+		$this->plugin->activate();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
 	}
@@ -42,7 +47,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", ["post"]);
 		
-		$this->mockedPlugin->activate();
+		$this->plugin->activate();
 		
 		$this->assertNotCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
 	}
@@ -54,14 +59,14 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testPassesPageContent()
 	{
-		$haystack = $this->mockedPlugin->addMediaPageUI("content");
+		$haystack = $this->plugin->addMediaPageUI("content");
 		
 		$this->assertContains("content", $haystack);
 	}
 	
 	public function testUsesTwig()
 	{
-		$this->mockedPlugin->addMediaPageUI("content");
+		$this->plugin->addMediaPageUI("content");
 		
 		$this->assertCalledWith($this->mockTwig, "render", "organism-recording.twig", ["presentation" => null], true);
 	}
@@ -79,14 +84,14 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
 		
-		$this->mockedPlugin->addMediaPageUI("content");
+		$this->plugin->addMediaPageUI("content");
 		
 		$this->assertCalledWith($this->mockTwig, "render", "organism-recording.twig", ["presentation" => "presentation"], true);
 	}
 	
 	public function testGetsQueryVar()
 	{
-		$this->mockedPlugin->addMediaPageUI("content");
+		$this->plugin->addMediaPageUI("content");
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "get_query_var", "presentation_id");
 	}
@@ -95,7 +100,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", [7, 7, "54321"]);
 		
-		$this->mockedPlugin->addMediaPageUI("content");
+		$this->plugin->addMediaPageUI("content");
 		
 		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", "54321");
 	}
@@ -104,23 +109,25 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", false);
 		
-		$this->mockedPlugin->init();
+		$this->plugin->init();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
 	}
 	
 	public function testActivatesRouterOnPluginActivate()
 	{
-		$this->mockedPlugin->activate();
+		$plugin = $this->factory->getPlugin();
 		
-		$this->assertCalledWith($this->mockRouter, "activate");
+		$plugin->activate();
+		
+		$this->assertWordPressFunctionCalled("flush_rewrite_rules");
 	}
 	
 	public function testSavesMediaPageId()
 	{
 		$this->mockWordPress->setReturnValues("call", [false, false, 7]);
 		
-		$this->mockedPlugin->createMediaPage();
+		$this->plugin->createMediaPage();
 		
 		$this->assertCalledWith(
 			$this->mockWordPress,
@@ -133,7 +140,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testGetsMediaPageId()
 	{
-		$this->mockedPlugin->createMediaPage();
+		$this->plugin->createMediaPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "get_option", "avorgMediaPageId");
 	}
@@ -142,7 +149,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", [7, false]);
 		
-		$this->mockedPlugin->createMediaPage();
+		$this->plugin->createMediaPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
 	}
@@ -151,7 +158,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", 7);
 		
-		$this->mockedPlugin->createMediaPage();
+		$this->plugin->createMediaPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "get_post_status", 7);
 	}
@@ -160,7 +167,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", [7, "trash"]);
 		
-		$this->mockedPlugin->createMediaPage();
+		$this->plugin->createMediaPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "wp_publish_post", 7);
 	}
@@ -172,30 +179,35 @@ final class TestPlugin extends Avorg\TestCase
 		$this->assertPlayerUiInjected();
 	}
 	
-	public function testInitInitsContentBits()
+	public function testInitInitsContentBits() ######
 	{
-		$this->mockedPlugin->init();
+		$plugin = $this->factory->getPlugin();
+		$contentBits = $this->factory->getContentBits();
 		
-		$this->assertCalled($this->mockContentBits, "init");
+		$plugin->init();
+
+		$this->assertWordPressFunctionCalledWith("add_shortcode", "avorg-bits", [$contentBits, "renderShortcode"]);
 	}
 	
 	public function testInitInitsRouter()
 	{
-		$this->mockedPlugin->init();
+		$plugin = $this->factory->getPlugin();
 		
-		$this->assertCalled($this->mockRouter, "addRewriteRules");
+		$plugin->init();
+		
+		$this->assertWordPressFunctionCalled("add_rewrite_rule");
 	}
 	
 	public function testEnqueueScripts()
 	{
-		$this->mockedPlugin->enqueueScripts();
+		$this->plugin->enqueueScripts();
 		
 		$this->assertWordPressFunctionCalled("wp_enqueue_style");
 	}
 	
 	public function testEnqueueScriptsGetsStylesheetUrl()
 	{
-		$this->mockedPlugin->enqueueScripts();
+		$this->plugin->enqueueScripts();
 		
 		$this->assertWordPressFunctionCalled("plugins_url");
 	}
@@ -204,21 +216,24 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", "path");
 		
-		$this->mockedPlugin->enqueueScripts();
+		$this->plugin->enqueueScripts();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "wp_enqueue_style", "avorgStyle", "path");
 	}
 	
 	public function testInitsListShortcode()
 	{
-		$this->mockedPlugin->init();
+		$plugin = $this->factory->getPlugin();
+		$listShortcode = $this->factory->getListShortcode();
 		
-		$this->assertCalled($this->mockListShortcode, "addShortcode");
+		$plugin->init();
+		
+		$this->assertWordPressFunctionCalledWith("add_shortcode", "avorg-list", [$listShortcode, "renderShortcode"]);
 	}
 	
 	public function testEnqueuesVideoJsStyles()
 	{
-		$this->mockedPlugin->enqueueScripts();
+		$this->plugin->enqueueScripts();
 		
 		$this->assertWordPressFunctionCalledWith(
 			"wp_enqueue_style",
@@ -229,7 +244,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testEnqueuesVideoJsScript()
 	{
-		$this->mockedPlugin->enqueueScripts();
+		$this->plugin->enqueueScripts();
 		
 		$this->assertWordPressFunctionCalledWith(
 			"wp_enqueue_script",
@@ -240,7 +255,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testEnqueuesVideoJsHlsScript()
 	{
-		$this->mockedPlugin->enqueueScripts();
+		$this->plugin->enqueueScripts();
 		
 		$this->assertWordPressFunctionCalledWith(
 			"wp_enqueue_script",

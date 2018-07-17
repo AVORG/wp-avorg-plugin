@@ -14,9 +14,9 @@ if ( !\defined( 'ABSPATH' ) ) exit;
 include_once( dirname(__FILE__) .  "/vendor/autoload.php" );
 
 $factory = new Factory();
-$plugin  = $factory->makePlugin();
-$adminPanel = $factory->makeAdminPanel();
-$contentBits = $factory->makeContentBits();
+$plugin  = $factory->getPlugin();
+$adminPanel = $factory->getAdminPanel();
+$contentBits = $factory->getContentBits();
 
 \register_activation_hook( __FILE__, array( $plugin, "activate" ) );
 \register_deactivation_hook( __FILE__, "plugin_deactivate" );

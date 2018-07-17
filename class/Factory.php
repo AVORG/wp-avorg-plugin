@@ -4,66 +4,149 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
+/**
+ * Class Factory
+ * @package Avorg
+ */
 class Factory
 {
-	public function makeAdminPanel()
+	/** @var AvorgApi $avorgApi */
+	private $avorgApi;
+	
+	/** @var Php $php */
+	private $php;
+	
+	/** @var Twig $twig */
+	private $twig;
+	
+	/** @var WordPress $wp */
+	private $wordPress;
+	
+	/**
+	 * Factory constructor.
+	 * @param AvorgApi|null $avorgApi
+	 * @param Php|null $php
+	 * @param Twig|null $twig
+	 * @param WordPress|null $wordPress
+	 */
+	public function __construct(
+		AvorgApi $avorgApi = null,
+		Php $php = null,
+		Twig $twig = null,
+		WordPress $wordPress = null
+	)
 	{
-		$plugin = $this->makePlugin();
-		$twig = $this->makeTwig();
-		$wp = $this->makeWordPress();
+		$this->avorgApi = $avorgApi;
+		$this->php = $php;
+		$this->twig = $twig;
+		$this->wordPress = $wordPress;
+	}
+	
+	/**
+	 * @return AdminPanel
+	 */
+	public function getAdminPanel()
+	{
+		$plugin = $this->getPlugin();
+		$twig = $this->getTwig();
+		$wp = $this->getWordPress();
 		
-		return new AdminPanel($plugin, $twig, $wp);
+		return $this->getObject("AdminPanel", $plugin, $twig, $wp);
 	}
 	
-	public function makePlugin()
+	/**
+	 * @return Plugin
+	 */
+	public function getPlugin()
 	{
-		$avorgApi = $this->makeAvorgApi();
-		$contentBits = $this->makeContentBits();
-		$listShortcode = $this->makeListShortcode();
-		$router = $this->makeRouter();
-		$twig = $this->makeTwig();
-		$wp = $this->makeWordPress();
+		$avorgApi = $this->getAvorgApi();
+		$contentBits = $this->getContentBits();
+		$listShortcode = $this->getListShortcode();
+		$router = $this->getRouter();
+		$twig = $this->getTwig();
+		$wp = $this->getWordPress();
 		
-		return new Plugin($avorgApi, $contentBits, $listShortcode, $router, $twig, $wp);
+		return $this->getObject("Plugin", $avorgApi, $contentBits, $listShortcode, $router, $twig, $wp);
 	}
 	
-	public function makeListShortcode()
+	/**
+	 * @return ListShortcode
+	 */
+	public function getListShortcode()
 	{
-		$api = $this->makeAvorgApi();
-		$twig = $this->makeTwig();
-		$wp = $this->makeWordPress();
+		$api = $this->getAvorgApi();
+		$twig = $this->getTwig();
+		$wp = $this->getWordPress();
 		
-		return new ListShortcode($api, $twig, $wp);
+		return $this->getObject("ListShortcode", $api, $twig, $wp);
 	}
 	
-	public function makeContentBits()
+	/**
+	 * @return ContentBits
+	 */
+	public function getContentBits()
 	{
-		$php = new Php;
-		$twig = $this->makeTwig();
-		$wp = $this->makeWordPress();
+		$php = $this->getPhp();
+		$twig = $this->getTwig();
+		$wp = $this->getWordPress();
 		
-		return new ContentBits($php, $twig, $wp);
+		return $this->getObject("ContentBits", $php, $twig, $wp);
 	}
 	
-	public function makeRouter()
+	/**
+	 * @return Router
+	 */
+	public function getRouter()
 	{
-		$wp = $this->makeWordPress();
+		$wp = $this->getWordPress();
 		
-		return new Router($wp);
+		return $this->getObject("Router", $wp);
 	}
 	
-	public function makeAvorgApi()
+	/**
+	 * @return AvorgApi
+	 */
+	public function getAvorgApi()
 	{
-		return new AvorgApi();
+		return $this->getObject("AvorgApi");
 	}
 	
-	public function makeTwig()
+	/**
+	 * @return Php
+	 */
+	public function getPhp()
 	{
-		return new Twig();
+		return $this->getObject("Php");
 	}
 	
-	public function makeWordPress()
+	/**
+	 * @return Twig
+	 */
+	public function getTwig()
 	{
-		return new WordPress();
+		return $this->getObject("Twig");
+	}
+	
+	/**
+	 * @return WordPress
+	 */
+	public function getWordPress()
+	{
+		return $this->getObject("WordPress");
+	}
+	
+	/**
+	 * @param string $class
+	 * @param array ...$dependencies
+	 * @return mixed
+	 */
+	private function getObject($class, ...$dependencies)
+	{
+		$fullClassName = "\\Avorg\\$class";
+		$propertyName = lcfirst($class);
+		
+		if (!$this->$propertyName) $this->$propertyName = new $fullClassName(...$dependencies);
+		
+		return $this->$propertyName;
 	}
 }

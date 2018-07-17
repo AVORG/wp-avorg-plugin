@@ -10,20 +10,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var AvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
 	
-	/** @var ContentBits $mockContentBits */
-	protected $mockContentBits;
-	
-	/** @var ListShortcode $mockListShortcode */
-	protected $mockListShortcode;
-	
 	/** @var Php $mockPhp */
 	protected $mockPhp;
-	
-	/** @var Plugin $mockPlugin */
-	protected $mockPlugin;
-	
-	/** @var Router $mockRouter */
-	protected $mockRouter;
 	
 	/** @var Twig $mockTwig */
 	protected $mockTwig;
@@ -31,30 +19,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var WordPress $mockWordPress */
 	protected $mockWordPress;
 	
-	/* Mocked Objects */
-	
-	/** @var AdminPanel $mockedAdminPanel */
-	protected $mockedAdminPanel;
-	
-	/** @var ContentBits $mockedContentBits */
-	protected $mockedContentBits;
-	
-	/** @var Factory $mockedFactory */
-	protected $mockedFactory;
-	
-	/** @var ListShortcode $mockedListShortcode */
-	protected $mockedListShortcode;
-	
-	/** @var Plugin $mockedPlugin */
-	protected $mockedPlugin;
-	
-	/** @var Router $mockedRouter */
-	protected $mockedRouter;
-	
 	/* Helper Fields */
 	
 	/** @var MockFactory $objectMocker */
 	protected $objectMocker;
+	
+	/** @var Factory $factory */
+	protected $factory;
 	
 	protected function setUp()
 	{
@@ -66,63 +37,20 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		$this->objectMocker = new MockFactory();
 		
 		$this->resetMocks();
-		$this->resetMockedObjects();
+		
+		$this->factory = new Factory(
+			$this->mockAvorgApi,
+			$this->mockPhp,
+			$this->mockTwig,
+			$this->mockWordPress
+		);
 	}
 	
 	private function resetMocks() {
-		$fieldNames = $this->getFilteredFieldNames( [ $this, 'isMockField' ] );
-		foreach ($fieldNames as $fieldName) {
-			$className = substr( $fieldName, 4 );
-			$this->$fieldName = $this->objectMocker->buildMock( "$className" );
-		}
-	}
-	
-	private function isMockField( $key ) {
-		return strpos( $key, 'mock' ) !== false && strpos( $key, 'mocked' ) === false;
-	}
-	
-	private function resetMockedObjects() {
-		$fieldNames = $this->getFilteredFieldNames( [ $this, "isMockedField" ] );
-		foreach ($fieldNames as $fieldName) {
-			$this->resetMockedObject( $fieldName );
-		}
-	}
-	
-	private function isMockedField( $key ) {
-		return strpos( $key, "mocked" ) !== false;
-	}
-	
-	private function getFilteredFieldNames( $callback )
-	{
-		return array_keys( array_filter( get_object_vars( $this ), $callback, ARRAY_FILTER_USE_KEY ) );
-	}
-	
-	private function resetMockedObject( $fieldName )
-	{
-		$className = __NAMESPACE__ . "\\" . substr( $fieldName, 6 );
-		$params = $this->getConstructorParameters( $className );
-		$mocks = $this->getMocksForParams( $params );
-		$this->$fieldName = new $className( ...$mocks );
-	}
-	
-	private function getConstructorParameters( $fullClassName )
-	{
-		$reflectionClass = new \ReflectionClass( $fullClassName );
-		$constructor = $reflectionClass->getConstructor();
-		return ( $constructor ) ? $constructor->getParameters() : [];
-	}
-	
-	private function getMocksForParams( $params )
-	{
-		return array_map( [ $this, "getMockForParam" ], $params );
-	}
-	
-	private function getMockForParam( $param ) {
-		$class = $param->getClass()->name;
-		$reflect = new \ReflectionClass( "\\$class" );
-		$shortName = $reflect->getShortName();
-		$mockName = 'mock' . $shortName;
-		return $this->$mockName;
+		$this->mockAvorgApi = $this->objectMocker->buildMock("AvorgApi");
+		$this->mockPhp = $this->objectMocker->buildMock("Php");
+		$this->mockTwig = $this->objectMocker->buildMock("Twig");
+		$this->mockWordPress = $this->objectMocker->buildMock("WordPress");
 	}
 	
 	protected function output( $data ) {

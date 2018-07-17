@@ -2,23 +2,33 @@
 
 final class TestContentBits extends Avorg\TestCase
 {
+	/** @var \Avorg\ContentBits $contentBits */
+	protected $contentBits;
+	
+	public function setUp()
+	{
+		parent::setUp();
+		
+		$this->contentBits = $this->factory->getContentBits();
+	}
+	
 	public function testInitMethodRegistersPostType()
 	{
-		$this->mockedContentBits->init();
+		$this->contentBits->init();
 		
 		$this->assertWordPressFunctionCalled("register_post_type");
 	}
 	
 	public function testInitRegistersTaxonomy()
 	{
-		$this->mockedContentBits->init();
+		$this->contentBits->init();
 		
 		$this->assertWordPressFunctionCalled("register_taxonomy");
 	}
 	
 	public function testAddMetaBoxMethod()
 	{
-		$this->mockedContentBits->addIdentifierMetaBox();
+		$this->contentBits->addIdentifierMetaBox();
 		
 		$this->assertWordPressFunctionCalled("add_meta_box");
 	}
@@ -27,7 +37,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", 7);
 		
-		$this->mockedContentBits->renderIdentifierMetaBox();
+		$this->contentBits->renderIdentifierMetaBox();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "get_post_meta", 7, "_avorgBitIdentifier", true);
 	}
@@ -36,7 +46,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", "saved_value");
 		
-		$this->mockedContentBits->renderIdentifierMetaBox();
+		$this->contentBits->renderIdentifierMetaBox();
 		
 		$this->assertCalledWith($this->mockTwig, "render", "identifierMetaBox.twig", ["savedIdentifier" => "saved_value"]);
 	}
@@ -47,7 +57,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->mockWordPress->setReturnValue("call", 7);
 		
-		$this->mockedContentBits->saveIdentifierMetaBox();
+		$this->contentBits->saveIdentifierMetaBox();
 		
 		$this->assertCalledWith(
 			$this->mockWordPress,
@@ -64,34 +74,34 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->mockWordPress->setReturnValue("call", 7);
 		
-		$this->mockedContentBits->saveIdentifierMetaBox();
+		$this->contentBits->saveIdentifierMetaBox();
 		
 		$this->assertNotCalled($this->mockWordPress, "call");
 	}
 	
 	public function testAddsShortcode()
 	{
-		$this->mockedContentBits->init();
+		$this->contentBits->init();
 		
 		$this->assertCalledWith($this->mockWordPress, "call",
-			"add_shortcode", "avorg-bits", [$this->mockedContentBits, "renderShortcode"]);
+			"add_shortcode", "avorg-bits", [$this->contentBits, "renderShortcode"]);
 	}
 	
 	public function testRenderShortcodeMethodExists()
 	{
-		$this->assertTrue(method_exists($this->mockedContentBits, "renderShortcode"));
+		$this->assertTrue(method_exists($this->contentBits, "renderShortcode"));
 	}
 	
 	public function testRenderShortcodeGetsPosts()
 	{
-		$this->mockedContentBits->renderShortcode([]);
+		$this->contentBits->renderShortcode([]);
 		
 		$this->assertWordPressFunctionCalled("get_posts");
 	}
 	
 	public function testRenderShortcodeUsesIdAttribute()
 	{
-		$this->mockedContentBits->renderShortcode(['id' => 'passedId']);
+		$this->contentBits->renderShortcode(['id' => 'passedId']);
 		
 		$this->assertAnyCallMatches($this->mockWordPress, "call", function ($carry, $call) {
 			if (!isset($call[1]['meta_query'][0]['value'])) return $carry;
@@ -105,7 +115,7 @@ final class TestContentBits extends Avorg\TestCase
 		$posts = ['item 1', 'item 2', 'item 3'];
 		$this->mockWordPress->setReturnValue("call", $posts);
 		
-		$this->mockedContentBits->renderShortcode([]);
+		$this->contentBits->renderShortcode([]);
 		
 		$this->assertCalledWith($this->mockPhp, "array_rand", $posts);
 	}
@@ -118,7 +128,7 @@ final class TestContentBits extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("call", [$post]);
 		$this->mockPhp->setReturnValue("array_rand", 0);
 		
-		$result = $this->mockedContentBits->renderShortcode([]);
+		$result = $this->contentBits->renderShortcode([]);
 		
 		$this->assertEquals("hello world", $result);
 	}
@@ -127,7 +137,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", '111');
 		
-		$this->mockedContentBits->renderShortcode([]);
+		$this->contentBits->renderShortcode([]);
 		
 		$this->assertAnyCallMatches($this->mockWordPress, "call", function ($carry, $call) {
 			if (!isset($call[1]['tax_query'][0]['terms'])) return $carry;
@@ -143,7 +153,7 @@ final class TestContentBits extends Avorg\TestCase
 		$posts = [$post];
 		$this->mockWordPress->setReturnValues("call", ['111', [], $posts]);
 		
-		$this->mockedContentBits->renderShortcode([]);
+		$this->contentBits->renderShortcode([]);
 		
 		$this->assertCalledWith($this->mockPhp, "array_rand", $posts);
 	}
@@ -156,7 +166,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->mockWordPress->setReturnValues("call", ['111', [], $posts]);
 		
-		$this->mockedContentBits->renderShortcode([]);
+		$this->contentBits->renderShortcode([]);
 		
 		$calls = $this->mockWordPress->getCalls("call");
 		

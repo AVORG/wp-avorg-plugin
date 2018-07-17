@@ -2,11 +2,21 @@
 
 final class TestListShortcode extends Avorg\TestCase
 {
+	/** @var \Avorg\ListShortcode $listShortcode */
+	protected $listShortcode;
+	
+	public function setUp()
+	{
+		parent::setUp();
+		
+		$this->listShortcode = $this->factory->getListShortcode();
+	}
+	
 	// helper functions
 	
 	private function assertSupportsListType($listType)
 	{
-		$this->mockedListShortcode->renderShortcode(["list" => $listType]);
+		$this->listShortcode->renderShortcode(["list" => $listType]);
 		
 		$this->assertCalledWith($this->mockAvorgApi, "getPresentations", $listType);
 	}
@@ -15,17 +25,17 @@ final class TestListShortcode extends Avorg\TestCase
 	
 	public function testExists()
 	{
-		$this->assertTrue(is_object($this->mockedListShortcode));
+		$this->assertTrue(is_object($this->listShortcode));
 	}
 	
 	public function testAddsShortcode()
 	{
-		$this->mockedListShortcode->addShortcode();
+		$this->listShortcode->addShortcode();
 		
 		$this->assertWordPressFunctionCalledWith(
 			"add_shortcode",
 			"avorg-list",
-			[$this->mockedListShortcode, "renderShortcode"]
+			[$this->listShortcode, "renderShortcode"]
 		);
 	}
 	
@@ -35,7 +45,7 @@ final class TestListShortcode extends Avorg\TestCase
 		$entry->recordings = "item";
 		$this->mockAvorgApi->setReturnValue("getPresentations", [$entry, $entry, $entry]);
 		
-		$this->mockedListShortcode->renderShortcode("");
+		$this->listShortcode->renderShortcode("");
 		
 		$this->assertCalledWith(
 			$this->mockTwig,
@@ -50,14 +60,14 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->mockTwig->setReturnValue("render", "output");
 		
-		$result = $this->mockedListShortcode->renderShortcode("");
+		$result = $this->listShortcode->renderShortcode("");
 		
 		$this->assertEquals("output", $result);
 	}
 	
 	public function testRenderFunctionDoesNotPassAlongNonsenseListName()
 	{
-		$this->mockedListShortcode->renderShortcode( [ "list" => "nonsense" ] );
+		$this->listShortcode->renderShortcode( [ "list" => "nonsense" ] );
 		
 		$this->assertCalledWith( $this->mockAvorgApi, "getPresentations", null );
 	}

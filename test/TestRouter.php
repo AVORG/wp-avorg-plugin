@@ -61,6 +61,16 @@ final class TestRouter extends Avorg\TestCase
 		]
 	];
 	
+	/** @var \Avorg\Router $router */
+	protected $router;
+	
+	public function setUp()
+	{
+		parent::setUp();
+		
+		$this->router = $this->factory->getRouter();
+	}
+	
 	private function getAddRewriteCalls()
 	{
 		$calls = $this->mockWordPress->getCalls("call");
@@ -69,14 +79,14 @@ final class TestRouter extends Avorg\TestCase
 	
 	public function testCallsWordPress()
 	{
-		$this->mockedRouter->activate();
+		$this->router->activate();
 		
 		$this->assertCalled($this->mockWordPress, "call");
 	}
 	
 	public function testAssignsHighPriority()
 	{
-		$this->mockedRouter->activate();
+		$this->router->activate();
 		
 		$addRewriteCalls = $this->getAddRewriteCalls();
 		$priority = $addRewriteCalls[0][3];
@@ -88,7 +98,7 @@ final class TestRouter extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", 10);
 		
-		$this->mockedRouter->activate();
+		$this->router->activate();
 		
 		$addRewriteCalls = $this->getAddRewriteCalls();
 		
@@ -112,14 +122,14 @@ final class TestRouter extends Avorg\TestCase
 	
 	public function testFlushesRewireRules()
 	{
-		$this->mockedRouter->activate();
+		$this->router->activate();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "flush_rewrite_rules");
 	}
 	
 	public function testRegistersPresParam()
 	{
-		$this->mockedRouter->activate();
+		$this->router->activate();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "add_rewrite_tag", "%presentation_id%", "(\d+)");
 	}
@@ -128,7 +138,7 @@ final class TestRouter extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", 3);
 		
-		$this->mockedRouter->activate();
+		$this->router->activate();
 		
 		$addRewriteCalls = $this->getAddRewriteCalls();
 		$redirect = $addRewriteCalls[0][2];
