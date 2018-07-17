@@ -10,11 +10,26 @@ if (!\defined('ABSPATH')) exit;
  */
 class Factory
 {
+	/** @var AdminPanel $adminPanel */
+	private $adminPanel;
+	
 	/** @var AvorgApi $avorgApi */
 	private $avorgApi;
 	
+	/** @var ContentBits $contentBits */
+	private $contentBits;
+	
+	/** @var ListShortcode $listShortcode */
+	private $listShortcode;
+	
 	/** @var Php $php */
 	private $php;
+	
+	/** @var Plugin $plugin */
+	private $plugin;
+	
+	/** @var Router $router */
+	private $router;
 	
 	/** @var Twig $twig */
 	private $twig;
