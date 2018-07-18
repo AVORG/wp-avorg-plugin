@@ -41,7 +41,7 @@ Bits page in the admin interface that specify the previously-used id in the "Ide
 
 ### List Shortcode
 
-Place the following usages in the content of a page or a post to retrieve a list of rent, featured, or popular 
+Place the following usages in the content of a page or a post to retrieve a list of recent, featured, or popular 
 presentations.
 
 Usage                        | Result

@@ -34,7 +34,7 @@ class Factory
 	/** @var Twig $twig */
 	private $twig;
 	
-	/** @var WordPress $wp */
+	/** @var WordPress $wordPress */
 	private $wordPress;
 	
 	/**
