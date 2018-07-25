@@ -1,10 +1,13 @@
 <ul class="avorg-shortcode-list">
+	{{ dump(avorg) }}
 	{% for recording in avorg.recordings %}
 		<li>
 			{% set days = date("now").diff(date(recording.publishDate)).days %}
+			{% set singularPhrase = avorg.i__("day ago") %}
+			{% set pluralPhrase = avorg.i__("days ago") %}
 			{% include "molecule-recordingMeta.twig" with {
 				presentation: recording,
-				additionalInfo: ( days == 1 ) ? days~" day ago" : days~" days ago",
+				additionalInfo: ( days == 1 ) ? days~" "~singularPhrase : days~" "~pluralPhrase,
 				shouldLinkTitle: true
 			} only %}
 		</li>

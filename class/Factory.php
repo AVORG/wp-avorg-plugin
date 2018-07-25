@@ -74,14 +74,14 @@ class Factory
 	 */
 	public function getPlugin()
 	{
-		$avorgApi = $this->getAvorgApi();
-		$contentBits = $this->getContentBits();
-		$listShortcode = $this->getListShortcode();
-		$router = $this->getRouter();
-		$twig = $this->getTwig();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("Plugin", $avorgApi, $contentBits, $listShortcode, $router, $twig, $wp);
+		return $this->getObject(
+			"Plugin",
+			$this->getContentBits(),
+			$this->getListShortcode(),
+			$this->getMediaPage(),
+			$this->getRouter(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -116,6 +116,30 @@ class Factory
 		$wp = $this->getWordPress();
 		
 		return $this->getObject("Router", $wp);
+	}
+	
+	/**
+	 * @return TwigGlobal
+	 */
+	public function getTwigGlobal()
+	{
+		$twig = $this->getTwig();
+		$wp = $this->getWordPress();
+		
+		return $this->getObject("TwigGlobal", $twig, $wp);
+	}
+	
+	/**
+	 * @return MediaPage
+	 */
+	public function getMediaPage()
+	{
+		return $this->getObject(
+			"MediaPage",
+			$this->getAvorgApi(),
+			$this->getTwig(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
