@@ -19,6 +19,9 @@ class Factory
 	/** @var ContentBits $contentBits */
 	private $contentBits;
 	
+	/** @var Filesystem $filesystem */
+	private $filesystem;
+	
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
 	
@@ -127,6 +130,7 @@ class Factory
 	{
 		return $this->getObject(
 			"Router",
+			$this->getFilesystem(),
 			$this->getWordPress()
 		);
 	}
@@ -197,6 +201,14 @@ class Factory
 	public function getWordPress()
 	{
 		return $this->getObject("WordPress");
+	}
+	
+	/**
+	 * @return Filesystem
+	 */
+	public function getFilesystem()
+	{
+		return $this->getObject("Filesystem");
 	}
 	
 	/**

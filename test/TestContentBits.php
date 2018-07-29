@@ -72,7 +72,6 @@ final class TestContentBits extends Avorg\TestCase
 	
 	public function testDoesntSaveIfValueNotPassed()
 	{
-		
 		$this->mockWordPress->setReturnValue("call", 7);
 		
 		$this->contentBits->saveIdentifierMetaBox();

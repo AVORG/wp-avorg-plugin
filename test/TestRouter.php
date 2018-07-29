@@ -134,7 +134,7 @@ final class TestRouter extends Avorg\TestCase
 		$this->assertCalledWith($this->mockWordPress, "call", "add_rewrite_tag", "%presentation_id%", "(\d+)");
 	}
 	
-	public function testUsesSavedMedaPageId()
+	public function testUsesSavedMediaPageId()
 	{
 		$this->mockWordPress->setReturnValue("call", 3);
 		
@@ -144,5 +144,29 @@ final class TestRouter extends Avorg\TestCase
 		$redirect = $addRewriteCalls[0][2];
 		
 		$this->assertContains("page_id=3", $redirect);
+	}
+	
+	public function testSetLocaleFunctionExists()
+	{
+		$this->assertTrue(method_exists($this->router, "setLocale"));
+	}
+	
+	public function testSetLocaleFunctionReturnsPreviousLang()
+	{
+		$this->assertEquals("lang", $this->router->setLocale("lang"));
+	}
+	
+	public function testSetsSpanishLocale()
+	{
+		$_SERVER["REQUEST_URI"] = "/espanol";
+		
+		$this->assertEquals("es_ES", $this->router->setLocale("lang"));
+	}
+	
+	public function testUsesLanguageFile()
+	{
+		$_SERVER["REQUEST_URI"] = "/deutsch";
+		
+		$this->assertEquals("de_DE", $this->router->setLocale("lang"));
 	}
 }

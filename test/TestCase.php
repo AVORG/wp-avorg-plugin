@@ -31,9 +31,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	{
 		define( "ABSPATH", "/" );
 		
-		$_POST = array();
-		$_GET  = array();
-		
 		$this->objectMocker = new MockFactory();
 		
 		$this->resetMocks();
