@@ -65,13 +65,14 @@ final class TestTwigGlobal extends Avorg\TestCase
 		
 		$this->assertTrue(isset($global->foo));
 	}
+	
 	public function test_nFunction()
 	{
 		$global = $this->factory->getTwigGlobal();
 		
-		$global->_n("string");
+		$global->_n("single", "plural", 5);
 		
-		$this->assertWordPressFunctionCalledWith("_n", "string");
+		$this->assertWordPressFunctionCalledWith("_n", "single", "plural", 5);
 	}
 	
 	public function test_nFunctionReturnsValue()
@@ -80,7 +81,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 		
 		$this->mockWordPress->setReturnValue("call", "translation");
 		
-		$result = $global->_n("string");
+		$result = $global->_n("single", "plural", 5);
 		
 		$this->assertEquals("translation", $result);
 	}

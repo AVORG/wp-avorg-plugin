@@ -22,6 +22,9 @@ class Factory
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
 	
+	/** @var MediaPage $mediaPage */
+	private $mediaPage;
+	
 	/** @var Php $php */
 	private $php;
 	
@@ -36,6 +39,9 @@ class Factory
 	
 	/** @var Twig $twig */
 	private $twig;
+	
+	/** @var TwigGlobal $twigGlobal */
+	private $twigGlobal;
 	
 	/** @var WordPress $wordPress */
 	private $wordPress;

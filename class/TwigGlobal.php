@@ -29,9 +29,9 @@ class TwigGlobal
 		return $this->wp->call("__", $string);
 	}
 	
-	public function _n($string)
+	public function _n($single, $plural, $number)
 	{
-		return $this->wp->call("_n", $string);
+		return $this->wp->call("_n", $single, $plural, $number);
 	}
 	
 	public function loadData($data)
