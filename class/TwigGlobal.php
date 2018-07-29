@@ -14,7 +14,12 @@ class TwigGlobal
 		$this->wp = $wordPress;
 	}
 	
-	public function __call($name, $arguments)
+	public function __isset($name)
+	{
+		return array_key_exists($name, $this->data);
+	}
+	
+	public function __get($name)
 	{
 		return $this->data[$name];
 	}

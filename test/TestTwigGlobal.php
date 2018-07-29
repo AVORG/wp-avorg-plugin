@@ -28,7 +28,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 		
 		$global->loadData(["foo" => "bar"]);
 		
-		$result = $global->foo();
+		$result = $global->foo;
 		
 		$this->assertEquals("bar", $result);
 	}
@@ -40,7 +40,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 		$global->loadData(["foo" => "bar"]);
 		$global->loadData(["foo" => "baz"]);
 		
-		$result = $global->foo();
+		$result = $global->foo;
 		
 		$this->assertEquals("baz", $result);
 	}
@@ -52,8 +52,17 @@ final class TestTwigGlobal extends Avorg\TestCase
 		$global->loadData(["foo" => "bar"]);
 		$global->loadData(["wibble" => "wobble"]);
 		
-		$result = $global->foo();
+		$result = $global->foo;
 		
 		$this->assertEquals("bar", $result);
+	}
+	
+	public function testCanCheckIfLoadedDataIsset()
+	{
+		$global = $this->factory->getTwigGlobal();
+		
+		$global->loadData(["foo" => "bar"]);
+		
+		$this->assertTrue(isset($global->foo));
 	}
 }

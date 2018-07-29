@@ -159,9 +159,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		
 		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template, $data) {
 			$callTemplate = $call[0];
-			$callData = $call[1]["avorg"];
+			$callGlobal = $call[1]["avorg"];
 			
-			return $carry || ($callTemplate === $template && $callData === $data);
+			$hasData = array_reduce(array_keys($data), function($carry, $key) use($callGlobal, $data) {
+				return $carry && $callGlobal->$key === $data[$key];
+			}, true);
+			
+			return $carry || ($callTemplate === $template && $hasData);
 		}, $message);
 	}
 	

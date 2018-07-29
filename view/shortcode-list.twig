@@ -1,5 +1,4 @@
 <ul class="avorg-shortcode-list">
-	{{ dump(avorg) }}
 	{% for recording in avorg.recordings %}
 		<li>
 			{% set days = date("now").diff(date(recording.publishDate)).days %}

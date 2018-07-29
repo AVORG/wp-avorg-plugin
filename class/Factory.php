@@ -172,7 +172,8 @@ class Factory
 	{
 		return $this->getObject(
 			"Renderer",
-			$this->getTwig()
+			$this->getTwig(),
+			$this->getTwigGlobal()
 		);
 	}
 	

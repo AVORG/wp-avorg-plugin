@@ -2,17 +2,32 @@
 
 final class TestRenderer extends Avorg\TestCase
 {
-	public function testHasRenderFunction()
+	/** @var \Avorg\Renderer $renderer */
+	protected $renderer;
+	
+	protected function setUp()
 	{
-		$t = $this->factory->getRenderer();
-		$this->assertTrue( method_exists( $t, "render" ) );
+		parent::setUp();
+		
+		$this->renderer = $this->factory->getRenderer();
 	}
 	
 	public function testUsesTwigToRender()
 	{
-		$t = $this->factory->getRenderer();
-		$t->render("admin.twig");
+		$this->renderer->render("admin.twig");
 		
 		$this->assertTwigTemplateRendered("admin.twig");
+	}
+	
+	public function testRenderFunctionPassesAvorgGlobalObject()
+	{
+		$this->renderer->render("admin.twig");
+		
+		$calls = $this->mockTwig->getCalls("render");
+		$call = $calls[0];
+		$arguments = $call[1];
+		$avorg = $arguments["avorg"];
+		
+		$this->assertInstanceOf("\Avorg\TwigGlobal", $avorg);
 	}
 }
