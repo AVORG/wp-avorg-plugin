@@ -9,7 +9,7 @@ class TwigGlobal
 	private $wp;
 	private $data = [];
 	
-	public function __construct(Renderer $twig, WordPress $wordPress)
+	public function __construct(WordPress $wordPress)
 	{
 		$this->wp = $wordPress;
 	}

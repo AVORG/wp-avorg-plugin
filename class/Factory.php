@@ -65,11 +65,12 @@ class Factory
 	 */
 	public function getAdminPanel()
 	{
-		$plugin = $this->getPlugin();
-		$renderer = $this->getRenderer();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("AdminPanel", $plugin, $renderer, $wp);
+		return $this->getObject(
+			"AdminPanel",
+			$this->getPlugin(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -92,11 +93,12 @@ class Factory
 	 */
 	public function getListShortcode()
 	{
-		$api = $this->getAvorgApi();
-		$twig = $this->getRenderer();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("ListShortcode", $api, $twig, $wp);
+		return $this->getObject(
+			"ListShortcode",
+			$this->getAvorgApi(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -104,11 +106,12 @@ class Factory
 	 */
 	public function getContentBits()
 	{
-		$php = $this->getPhp();
-		$twig = $this->getRenderer();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("ContentBits", $php, $twig, $wp);
+		return $this->getObject(
+			"ContentBits",
+			$this->getPhp(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -116,9 +119,10 @@ class Factory
 	 */
 	public function getRouter()
 	{
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("Router", $wp);
+		return $this->getObject(
+			"Router",
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -126,10 +130,10 @@ class Factory
 	 */
 	public function getTwigGlobal()
 	{
-		$twig = $this->getRenderer();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("TwigGlobal", $twig, $wp);
+		return $this->getObject(
+			"TwigGlobal",
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -166,9 +170,10 @@ class Factory
 	 */
 	public function getRenderer()
 	{
-		$twig = $this->getTwig();
-		
-		return $this->getObject("Renderer", $twig);
+		return $this->getObject(
+			"Renderer",
+			$this->getTwig()
+		);
 	}
 	
 	/**
