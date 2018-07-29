@@ -2,13 +2,6 @@
 
 final class TestTwigGlobal extends Avorg\TestCase
 {
-	public function testRegistersGlobal()
-	{
-		$global = $this->factory->getTwigGlobal();
-		
-		$this->assertCalledWith($this->mockTwig, "registerGlobal", "avorg", $global);
-	}
-	
 	public function test__Function()
 	{
 		$global = $this->factory->getTwigGlobal();

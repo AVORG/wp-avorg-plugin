@@ -119,14 +119,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		return implode( "\r\n\r\n", $errorLines );
 	}
 	
-	protected function assertAnyCallMatches( $mock, $method, $callback ) {
-		$calls = $mock->getCalls( $method );
-		
-		$result = array_reduce( $calls, $callback, FALSE );
-		
-		$this->assertTrue( $result );
-	}
-	
 	protected function assertWordPressFunctionCalled($function)
 	{
 		$calls = $this->mockWordPress->getCalls("call");
@@ -148,5 +140,36 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		}, false);
 		
 		$this->assertTrue($wasCalled, "Failed to assert $function was called using specified arguments");
+	}
+	
+	protected function assertTwigTemplateRendered($template)
+	{
+		$message = "Failed to assert that $template was rendered";
+		
+		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template) {
+			$callTemplate = $call[0];
+			
+			return $carry || $callTemplate === $template;
+		}, $message);
+	}
+	
+	protected function assertTwigTemplateRenderedWithData($template, $data)
+	{
+		$message = "Failed to assert that $template was rendered with specified data";
+		
+		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template, $data) {
+			$callTemplate = $call[0];
+			$callData = $call[1]["avorg"];
+			
+			return $carry || ($callTemplate === $template && $callData === $data);
+		}, $message);
+	}
+	
+	protected function assertAnyCallMatches($mock, $method, $callback, $errorMessage = null ) {
+		$calls = $mock->getCalls( $method );
+		
+		$result = array_reduce( $calls, $callback, FALSE );
+		
+		$this->assertTrue( $result );
 	}
 }

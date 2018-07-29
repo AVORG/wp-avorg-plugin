@@ -9,16 +9,16 @@ class AdminPanel
 	/** @var Plugin $plugin */
 	private $plugin;
 	
-	/** @var Twig $twig */
-	private $twig;
+	/** @var Renderer $renderer */
+	private $renderer;
 	
 	/** $var WordPress $wp */
 	private $wp;
 	
-	public function __construct(Plugin $plugin, Twig $twig, WordPress $wp)
+	public function __construct(Plugin $plugin, Renderer $renderer, WordPress $wp)
 	{
 		$this->plugin = $plugin;
-		$this->twig = $twig;
+		$this->renderer = $renderer;
 		$this->wp = $wp;
 	}
 	
@@ -42,7 +42,7 @@ class AdminPanel
 		$user = $this->wp->call("get_option", "avorgApiUser");
 		$pass = $this->wp->call("get_option", "avorgApiPass");
 		
-		$this->twig->render("admin.twig", ["apiUser" => $user, "apiPass" => $pass]);
+		$this->renderer->render("admin.twig", ["apiUser" => $user, "apiPass" => $pass]);
 	}
 	
 	public function reactivatePlugin()

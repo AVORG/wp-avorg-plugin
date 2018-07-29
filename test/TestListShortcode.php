@@ -47,12 +47,9 @@ final class TestListShortcode extends Avorg\TestCase
 		
 		$this->listShortcode->renderShortcode("");
 		
-		$this->assertCalledWith(
-			$this->mockTwig,
-			"render",
+		$this->assertTwigTemplateRenderedWithData(
 			"shortcode-list.twig",
-			["recordings" => ["item", "item", "item"]],
-			TRUE
+			["recordings" => ["item", "item", "item"]]
 		);
 	}
 	

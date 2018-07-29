@@ -28,6 +28,9 @@ class Factory
 	/** @var Plugin $plugin */
 	private $plugin;
 	
+	/** @var Renderer $renderer */
+	private $renderer;
+	
 	/** @var Router $router */
 	private $router;
 	
@@ -63,10 +66,10 @@ class Factory
 	public function getAdminPanel()
 	{
 		$plugin = $this->getPlugin();
-		$twig = $this->getTwig();
+		$renderer = $this->getRenderer();
 		$wp = $this->getWordPress();
 		
-		return $this->getObject("AdminPanel", $plugin, $twig, $wp);
+		return $this->getObject("AdminPanel", $plugin, $renderer, $wp);
 	}
 	
 	/**
@@ -90,7 +93,7 @@ class Factory
 	public function getListShortcode()
 	{
 		$api = $this->getAvorgApi();
-		$twig = $this->getTwig();
+		$twig = $this->getRenderer();
 		$wp = $this->getWordPress();
 		
 		return $this->getObject("ListShortcode", $api, $twig, $wp);
@@ -102,7 +105,7 @@ class Factory
 	public function getContentBits()
 	{
 		$php = $this->getPhp();
-		$twig = $this->getTwig();
+		$twig = $this->getRenderer();
 		$wp = $this->getWordPress();
 		
 		return $this->getObject("ContentBits", $php, $twig, $wp);
@@ -123,7 +126,7 @@ class Factory
 	 */
 	public function getTwigGlobal()
 	{
-		$twig = $this->getTwig();
+		$twig = $this->getRenderer();
 		$wp = $this->getWordPress();
 		
 		return $this->getObject("TwigGlobal", $twig, $wp);
@@ -137,7 +140,7 @@ class Factory
 		return $this->getObject(
 			"MediaPage",
 			$this->getAvorgApi(),
-			$this->getTwig(),
+			$this->getRenderer(),
 			$this->getWordPress()
 		);
 	}
@@ -156,6 +159,16 @@ class Factory
 	public function getPhp()
 	{
 		return $this->getObject("Php");
+	}
+	
+	/**
+	 * @return Renderer
+	 */
+	public function getRenderer()
+	{
+		$twig = $this->getTwig();
+		
+		return $this->getObject("Renderer", $twig);
 	}
 	
 	/**

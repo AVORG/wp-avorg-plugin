@@ -9,13 +9,13 @@ class ContentBits
 	/** @var Php $php */
 	private $php;
 	
-	/** @var Twig $twig */
+	/** @var Renderer $twig */
 	private $twig;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(Php $php, Twig $twig, WordPress $wp)
+	public function __construct(Php $php, Renderer $twig, WordPress $wp)
 	{
 		$this->php = $php;
 		$this->twig = $twig;

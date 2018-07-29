@@ -24,7 +24,7 @@ final class TestAdminPanel extends Avorg\TestCase
 		
 		$this->adminPanel->render();
 		
-		$this->assertCalledWith($this->mockTwig, "render", "admin.twig", ["apiUser" => "username", "apiPass" => "password"]);
+		$this->assertTwigTemplateRenderedWithData("admin.twig", ["apiUser" => "username", "apiPass" => "password"]);
 	}
 	
 	public function testRegistersPage()

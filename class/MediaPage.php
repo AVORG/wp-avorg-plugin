@@ -9,13 +9,13 @@ class MediaPage
 	/** @var AvorgApi $avorgApi */
 	private $avorgApi;
 	
-	/** @var Twig $twig */
+	/** @var Renderer $twig */
 	private $twig;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(AvorgApi $avorgApi, Twig $twig, WordPress $wordPress)
+	public function __construct(AvorgApi $avorgApi, Renderer $twig, WordPress $wordPress)
 	{
 		$this->avorgApi = $avorgApi;
 		$this->twig = $twig;

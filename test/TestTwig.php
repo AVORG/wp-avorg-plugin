@@ -2,9 +2,11 @@
 
 final class TestTwig extends Avorg\TestCase
 {
-	public function testHasRenderFunction()
+	public function testRender()
 	{
 		$t = new Avorg\Twig;
-		$this->assertTrue( method_exists( $t, "render" ) );
+		$result = $t->render("admin.twig");
+		
+		$this->assertTrue(is_string($result));
 	}
 }

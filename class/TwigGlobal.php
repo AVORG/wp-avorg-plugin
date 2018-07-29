@@ -9,11 +9,9 @@ class TwigGlobal
 	private $wp;
 	private $data = [];
 	
-	public function __construct(Twig $twig, WordPress $wordPress)
+	public function __construct(Renderer $twig, WordPress $wordPress)
 	{
 		$this->wp = $wordPress;
-		
-		$twig->registerGlobal("avorg", $this);
 	}
 	
 	public function __call($name, $arguments)
