@@ -2,9 +2,10 @@
 	{% for recording in avorg.recordings %}
 		<li>
 			{% set days = date("now").diff(date(recording.publishDate)).days %}
+			{% set agePhrase = avorg._n("%d day ago", "%d days ago", days)|format(days) %}
 			{% include "molecule-recordingMeta.twig" with {
 				presentation: recording,
-				additionalInfo: ( days == 1 ) ? days~" day ago" : days~" days ago",
+				additionalInfo: agePhrase,
 				shouldLinkTitle: true
 			} only %}
 		</li>

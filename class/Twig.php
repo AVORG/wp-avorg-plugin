@@ -2,42 +2,31 @@
 
 namespace Avorg;
 
-if ( !\defined( 'ABSPATH' ) ) exit;
+if (!\defined('ABSPATH')) exit;
 
-class Twig {
-	private $loader = null;
-	private $twig = null;
+class Twig
+{
+	private $twig;
 	
 	public function __construct()
 	{
-		$pluginDirectory = dirname( dirname( __FILE__ ) );
+		$pluginDirectory = dirname(dirname(__FILE__));
+		$loader = new \Twig_Loader_Filesystem($pluginDirectory . "/view");
 		
-		$this->loader = new \Twig_Loader_Filesystem( $pluginDirectory . "/view" );
-		$this->twig = new \Twig_Environment( $this->loader, array(
+		$this->twig = new \Twig_Environment($loader, array(
 			"cache" => $pluginDirectory . "/cache",
 			"debug" => WP_DEBUG
-		) );
+		));
 		
 		if (WP_DEBUG) {
 			$this->twig->addExtension(new \Twig_Extension_Debug());
 		}
 	}
 	
-	public function render( $templateFile, $data = [], $shouldReturn = false )
+	public function render($templateFile, $data = [])
 	{
-		try {
-			$template = $this->twig->load( $templateFile );
-			$data = [ "_GET" => $_GET, "_POST" => $_POST, "avorg" => $data ];
-			$output = $template->render( $data );
-		} catch ( \Exception $e ) {
-			$output = "Oops! Something went wrong while rendering this page.";
-			if (WP_DEBUG) $output .= "<br>" . $e->getMessage();
-		} finally {
-			if ( $shouldReturn ) {
-				return $output;
-			} else {
-				echo $output;
-			}
-		}
+		$template = $this->twig->load($templateFile);
+		
+		return $template->render($data);
 	}
 }

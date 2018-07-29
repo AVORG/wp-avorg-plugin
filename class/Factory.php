@@ -19,8 +19,14 @@ class Factory
 	/** @var ContentBits $contentBits */
 	private $contentBits;
 	
+	/** @var Filesystem $filesystem */
+	private $filesystem;
+	
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
+	
+	/** @var MediaPage $mediaPage */
+	private $mediaPage;
 	
 	/** @var Php $php */
 	private $php;
@@ -28,11 +34,17 @@ class Factory
 	/** @var Plugin $plugin */
 	private $plugin;
 	
+	/** @var Renderer $renderer */
+	private $renderer;
+	
 	/** @var Router $router */
 	private $router;
 	
 	/** @var Twig $twig */
 	private $twig;
+	
+	/** @var TwigGlobal $twigGlobal */
+	private $twigGlobal;
 	
 	/** @var WordPress $wordPress */
 	private $wordPress;
@@ -62,11 +74,12 @@ class Factory
 	 */
 	public function getAdminPanel()
 	{
-		$plugin = $this->getPlugin();
-		$twig = $this->getTwig();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("AdminPanel", $plugin, $twig, $wp);
+		return $this->getObject(
+			"AdminPanel",
+			$this->getPlugin(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -74,14 +87,14 @@ class Factory
 	 */
 	public function getPlugin()
 	{
-		$avorgApi = $this->getAvorgApi();
-		$contentBits = $this->getContentBits();
-		$listShortcode = $this->getListShortcode();
-		$router = $this->getRouter();
-		$twig = $this->getTwig();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("Plugin", $avorgApi, $contentBits, $listShortcode, $router, $twig, $wp);
+		return $this->getObject(
+			"Plugin",
+			$this->getContentBits(),
+			$this->getListShortcode(),
+			$this->getMediaPage(),
+			$this->getRouter(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -89,11 +102,12 @@ class Factory
 	 */
 	public function getListShortcode()
 	{
-		$api = $this->getAvorgApi();
-		$twig = $this->getTwig();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("ListShortcode", $api, $twig, $wp);
+		return $this->getObject(
+			"ListShortcode",
+			$this->getAvorgApi(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -101,11 +115,12 @@ class Factory
 	 */
 	public function getContentBits()
 	{
-		$php = $this->getPhp();
-		$twig = $this->getTwig();
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("ContentBits", $php, $twig, $wp);
+		return $this->getObject(
+			"ContentBits",
+			$this->getPhp(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -113,9 +128,35 @@ class Factory
 	 */
 	public function getRouter()
 	{
-		$wp = $this->getWordPress();
-		
-		return $this->getObject("Router", $wp);
+		return $this->getObject(
+			"Router",
+			$this->getFilesystem(),
+			$this->getWordPress()
+		);
+	}
+	
+	/**
+	 * @return TwigGlobal
+	 */
+	public function getTwigGlobal()
+	{
+		return $this->getObject(
+			"TwigGlobal",
+			$this->getWordPress()
+		);
+	}
+	
+	/**
+	 * @return MediaPage
+	 */
+	public function getMediaPage()
+	{
+		return $this->getObject(
+			"MediaPage",
+			$this->getAvorgApi(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
 	}
 	
 	/**
@@ -135,6 +176,18 @@ class Factory
 	}
 	
 	/**
+	 * @return Renderer
+	 */
+	public function getRenderer()
+	{
+		return $this->getObject(
+			"Renderer",
+			$this->getTwig(),
+			$this->getTwigGlobal()
+		);
+	}
+	
+	/**
 	 * @return Twig
 	 */
 	public function getTwig()
@@ -148,6 +201,14 @@ class Factory
 	public function getWordPress()
 	{
 		return $this->getObject("WordPress");
+	}
+	
+	/**
+	 * @return Filesystem
+	 */
+	public function getFilesystem()
+	{
+		return $this->getObject("Filesystem");
 	}
 	
 	/**

@@ -1,0 +1,12 @@
+[
+  {
+	"language": "Spanish",
+	"baseRoute": "/espanol",
+	"wpLanguageCode": "es_ES"
+  },
+  {
+	"language": "German",
+	"baseRoute": "/deutsch",
+	"wpLanguageCode": "de_DE"
+  }
+]

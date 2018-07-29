@@ -9,13 +9,13 @@ class ListShortcode
 	/** @var AvorgApi $api */
 	private $api;
 	
-	/** @var Twig $twig */
+	/** @var Renderer $twig */
 	private $twig;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(AvorgApi $api, Twig $twig, WordPress $wp)
+	public function __construct(AvorgApi $api, Renderer $twig, WordPress $wp)
 	{
 		$this->api = $api;
 		$this->twig = $twig;

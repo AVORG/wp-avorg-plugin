@@ -31,9 +31,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	{
 		define( "ABSPATH", "/" );
 		
-		$_POST = array();
-		$_GET  = array();
-		
 		$this->objectMocker = new MockFactory();
 		
 		$this->resetMocks();
@@ -119,14 +116,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		return implode( "\r\n\r\n", $errorLines );
 	}
 	
-	protected function assertAnyCallMatches( $mock, $method, $callback ) {
-		$calls = $mock->getCalls( $method );
-		
-		$result = array_reduce( $calls, $callback, FALSE );
-		
-		$this->assertTrue( $result );
-	}
-	
 	protected function assertWordPressFunctionCalled($function)
 	{
 		$calls = $this->mockWordPress->getCalls("call");
@@ -148,5 +137,40 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		}, false);
 		
 		$this->assertTrue($wasCalled, "Failed to assert $function was called using specified arguments");
+	}
+	
+	protected function assertTwigTemplateRendered($template)
+	{
+		$message = "Failed to assert that $template was rendered";
+		
+		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template) {
+			$callTemplate = $call[0];
+			
+			return $carry || $callTemplate === $template;
+		}, $message);
+	}
+	
+	protected function assertTwigTemplateRenderedWithData($template, $data)
+	{
+		$message = "Failed to assert that $template was rendered with specified data";
+		
+		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template, $data) {
+			$callTemplate = $call[0];
+			$callGlobal = $call[1]["avorg"];
+			
+			$hasData = array_reduce(array_keys($data), function($carry, $key) use($callGlobal, $data) {
+				return $carry && $callGlobal->$key === $data[$key];
+			}, true);
+			
+			return $carry || ($callTemplate === $template && $hasData);
+		}, $message);
+	}
+	
+	protected function assertAnyCallMatches($mock, $method, $callback, $errorMessage = null ) {
+		$calls = $mock->getCalls( $method );
+		
+		$result = array_reduce( $calls, $callback, FALSE );
+		
+		$this->assertTrue( $result );
 	}
 }

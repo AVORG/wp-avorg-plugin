@@ -48,7 +48,8 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->renderIdentifierMetaBox();
 		
-		$this->assertCalledWith($this->mockTwig, "render", "identifierMetaBox.twig", ["savedIdentifier" => "saved_value"]);
+		$this->assertTwigTemplateRenderedWithData("identifierMetaBox.twig", ["savedIdentifier" => "saved_value"]);
+		
 	}
 	
 	public function testSavesIdentifier()
@@ -71,7 +72,6 @@ final class TestContentBits extends Avorg\TestCase
 	
 	public function testDoesntSaveIfValueNotPassed()
 	{
-		
 		$this->mockWordPress->setReturnValue("call", 7);
 		
 		$this->contentBits->saveIdentifierMetaBox();
