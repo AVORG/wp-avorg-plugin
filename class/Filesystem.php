@@ -8,7 +8,6 @@ class Filesystem
 {
 	public function getFile($path)
 	{
-		var_dump($path);
 		return file_get_contents($path);
 	}
 }
