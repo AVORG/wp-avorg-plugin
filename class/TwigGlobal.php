@@ -29,6 +29,11 @@ class TwigGlobal
 		return $this->wp->call("__", $string);
 	}
 	
+	public function _n($string)
+	{
+		return $this->wp->call("_n", $string);
+	}
+	
 	public function loadData($data)
 	{
 		$this->data = array_merge($this->data, $data);

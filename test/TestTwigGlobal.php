@@ -65,4 +65,23 @@ final class TestTwigGlobal extends Avorg\TestCase
 		
 		$this->assertTrue(isset($global->foo));
 	}
+	public function test_nFunction()
+	{
+		$global = $this->factory->getTwigGlobal();
+		
+		$global->_n("string");
+		
+		$this->assertWordPressFunctionCalledWith("_n", "string");
+	}
+	
+	public function test_nFunctionReturnsValue()
+	{
+		$global = $this->factory->getTwigGlobal();
+		
+		$this->mockWordPress->setReturnValue("call", "translation");
+		
+		$result = $global->_n("string");
+		
+		$this->assertEquals("translation", $result);
+	}
 }
