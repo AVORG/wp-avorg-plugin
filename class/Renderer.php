@@ -29,9 +29,4 @@ class Renderer
 			}
 		}
 	}
-	
-	public function registerGlobal($name, $value)
-	{
-		$this->twig->addGlobal($name, $value);
-	}
 }
