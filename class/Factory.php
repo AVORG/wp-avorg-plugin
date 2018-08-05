@@ -10,41 +10,14 @@ if (!\defined('ABSPATH')) exit;
  */
 class Factory
 {
-	/** @var AdminPanel $adminPanel */
-	private $adminPanel;
-	
 	/** @var AvorgApi $avorgApi */
 	private $avorgApi;
-	
-	/** @var ContentBits $contentBits */
-	private $contentBits;
-	
-	/** @var Filesystem $filesystem */
-	private $filesystem;
-	
-	/** @var ListShortcode $listShortcode */
-	private $listShortcode;
-	
-	/** @var MediaPage $mediaPage */
-	private $mediaPage;
 	
 	/** @var Php $php */
 	private $php;
 	
-	/** @var Plugin $plugin */
-	private $plugin;
-	
-	/** @var Renderer $renderer */
-	private $renderer;
-	
-	/** @var Router $router */
-	private $router;
-	
 	/** @var Twig $twig */
 	private $twig;
-	
-	/** @var TwigGlobal $twigGlobal */
-	private $twigGlobal;
 	
 	/** @var WordPress $wordPress */
 	private $wordPress;
@@ -221,7 +194,7 @@ class Factory
 		$fullClassName = "\\Avorg\\$class";
 		$propertyName = lcfirst($class);
 		
-		if (!$this->$propertyName) $this->$propertyName = new $fullClassName(...$dependencies);
+		if (! isset($this->$propertyName)) $this->$propertyName = new $fullClassName(...$dependencies);
 		
 		return $this->$propertyName;
 	}
