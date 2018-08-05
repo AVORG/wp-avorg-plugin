@@ -1,3 +1,3 @@
 {% set message = (message is defined) ? message : avorg.message %}
 
-<div class="notice notice-error"><p>{{ message }}</p></div>
+{% include "molecule-notice.twig" with { type: "error", message: message } only %}

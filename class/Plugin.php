@@ -15,6 +15,9 @@ class Plugin
 	/** @var MediaPage $mediaPage */
 	private $mediaPage;
 	
+	/** @var Renderer $renderer */
+	private $renderer;
+	
 	/** @var Router $router */
 	private $router;
 	
@@ -25,6 +28,7 @@ class Plugin
 		ContentBits $contentBits,
 		ListShortcode $listShortcode,
 		MediaPage $mediaPage,
+		Renderer $renderer,
 		Router $router,
 		WordPress $WordPress
 	)
@@ -32,6 +36,7 @@ class Plugin
 		$this->contentBits = $contentBits;
 		$this->listShortcode = $listShortcode;
 		$this->mediaPage = $mediaPage;
+		$this->renderer = $renderer;
 		$this->router = $router;
 		$this->wp = $WordPress;
 		
@@ -61,6 +66,10 @@ class Plugin
 	public function renderAdminNotices()
 	{
 		$this->wp->call("settings_errors");
+		
+		if (! $this->wp->call("get_option", "permalink_structure")) {
+			$this->renderer->renderNotice("error", "AVORG Warning: Permalinks turned off!");
+		}
 	}
 	
 	private function enqueuePluginStyles()

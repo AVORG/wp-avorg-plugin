@@ -30,4 +30,17 @@ final class TestRenderer extends Avorg\TestCase
 		
 		$this->assertInstanceOf("\Avorg\TwigGlobal", $avorg);
 	}
+	
+	public function testRenderNotice()
+	{
+		$this->renderer->renderNotice("error", "message");
+		
+		$this->assertTwigTemplateRenderedWithData(
+			"molecule-notice.twig",
+			[
+				"message" => "message",
+				"type" => "error"
+			]
+		);
+	}
 }

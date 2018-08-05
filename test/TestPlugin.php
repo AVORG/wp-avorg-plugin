@@ -170,4 +170,23 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->assertWordPressFunctionCalled("settings_errors");
 	}
+	
+	public function testErrorNoticePostedWhenPermalinksTurnedOff()
+	{
+		$this->mockWordPress->setReturnValue("call", false);
+		
+		$this->plugin->renderAdminNotices();
+		
+		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", [
+			"type" => "error",
+			"message" => "AVORG Warning: Permalinks turned off!"
+		]);
+	}
+	
+	public function testChecksPermalinkStructure()
+	{
+		$this->plugin->renderAdminNotices();
+		
+		$this->assertWordPressFunctionCalledWith("get_option", "permalink_structure");
+	}
 }

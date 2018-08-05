@@ -124,7 +124,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 			return $carry || $call[0] === $function;
 		}, false);
 		
-		$this->assertTrue($wasCalled, "Failed to assert $function was called using the WordPress wrapper");
+		$error = "Failed to assert $function was called using the WordPress wrapper\r\n\r\n" . json_encode($calls);
+		
+		$this->assertTrue($wasCalled, $error);
 	}
 	
 	protected function assertWordPressFunctionCalledWith($function, ...$arguments)

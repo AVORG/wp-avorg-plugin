@@ -65,6 +65,7 @@ class Factory
 			$this->getContentBits(),
 			$this->getListShortcode(),
 			$this->getMediaPage(),
+			$this->getRenderer(),
 			$this->getRouter(),
 			$this->getWordPress()
 		);

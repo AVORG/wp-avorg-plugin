@@ -15,12 +15,17 @@ class Renderer
 		$this->twigGlobal = $twigGlobal;
 	}
 	
-	public function render($templateFile, $data = [], $shouldReturn = false)
+	public function renderNotice($type, $message)
+	{
+		$this->render("molecule-notice.twig", ["type" => $type, "message" => $message]);
+	}
+	
+	public function render($template, $data = [], $shouldReturn = false)
 	{
 		try {
 			$this->twigGlobal->loadData($data);
 			$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $this->twigGlobal];
-			$output = $this->twig->render($templateFile, $data);
+			$output = $this->twig->render($template, $data);
 		} catch (\Exception $e) {
 			$output = "Oops! Something went wrong while rendering this page.";
 			if (WP_DEBUG) $output .= "<br>" . $e->getMessage();
