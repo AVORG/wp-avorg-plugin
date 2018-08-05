@@ -141,6 +141,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		$this->assertTrue($wasCalled, "Failed to assert $function was called using specified arguments");
 	}
 	
+	protected function assertErrorRenderedWithMessage($message)
+	{
+		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", [
+			"type" => "error",
+			"message" => $message
+		]);
+	}
+	
 	protected function assertTwigTemplateRendered($template)
 	{
 		$message = "Failed to assert that $template was rendered";
@@ -159,20 +167,25 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template, $data) {
 			$callTemplate = $call[0];
 			$callGlobal = $call[1]["avorg"];
+			$hasData = $this->doesGlobalContainData($callGlobal, $data);
+			$callMatches = $callTemplate === $template && $hasData;
 			
-			$hasData = array_reduce(array_keys($data), function($carry, $key) use($callGlobal, $data) {
-				return $carry && $callGlobal->$key === $data[$key];
-			}, true);
-			
-			return $carry || ($callTemplate === $template && $hasData);
+			return $carry || $callMatches;
 		}, $message);
 	}
 	
-	protected function assertAnyCallMatches($mock, $method, $callback, $errorMessage = null ) {
+	private function doesGlobalContainData($global, $data)
+	{
+		return array_reduce(array_keys($data), function ($carry, $key) use ($global, $data) {
+			return $carry && $global->$key === $data[$key];
+		}, true);
+	}
+	
+	protected function assertAnyCallMatches($mock, $method, $callback, $errorMessage = "" ) {
 		$calls = $mock->getCalls( $method );
 		
 		$result = array_reduce( $calls, $callback, FALSE );
 		
-		$this->assertTrue( $result );
+		$this->assertTrue( $result, $errorMessage );
 	}
 }

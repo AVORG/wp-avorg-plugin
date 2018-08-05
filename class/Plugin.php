@@ -67,9 +67,9 @@ class Plugin
 	{
 		$this->wp->call("settings_errors");
 		
-		if (! $this->wp->call("get_option", "permalink_structure")) {
-			$this->renderer->renderNotice("error", "AVORG Warning: Permalinks turned off!");
-		}
+		$this->outputPermalinkError();
+		$this->outputApiUsernameError();
+		$this->outputApiPasswordError();
 	}
 	
 	private function enqueuePluginStyles()
@@ -95,5 +95,26 @@ class Plugin
 			"avorgVideoJsHlsScript",
 			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
 		);
+	}
+	
+	protected function outputPermalinkError()
+	{
+		if ($this->wp->call("get_option", "permalink_structure")) return;
+		
+		$this->renderer->renderNotice("error", "AVORG Warning: Permalinks turned off!");
+	}
+	
+	protected function outputApiUsernameError()
+	{
+		if ($this->wp->call("get_option", "avorgApiUser")) return;
+		
+		$this->renderer->renderNotice("error", "AVORG Warning: Missing API username!");
+	}
+	
+	protected function outputApiPasswordError()
+	{
+		if ($this->wp->call("get_option", "avorgApiPass")) return;
+		
+		$this->renderer->renderNotice("error", "AVORG Warning: Missing API password!");
 	}
 }

@@ -56,7 +56,7 @@ final class TestPlugin extends Avorg\TestCase
 		$this->assertWordPressFunctionCalled("flush_rewrite_rules");
 	}
 	
-	public function testInitInitsContentBits() ######
+	public function testInitInitsContentBits()
 	{
 		$plugin = $this->factory->getPlugin();
 		$contentBits = $this->factory->getContentBits();
@@ -177,10 +177,7 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->renderAdminNotices();
 		
-		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", [
-			"type" => "error",
-			"message" => "AVORG Warning: Permalinks turned off!"
-		]);
+		$this->assertErrorRenderedWithMessage("AVORG Warning: Permalinks turned off!");
 	}
 	
 	public function testChecksPermalinkStructure()
@@ -188,5 +185,37 @@ final class TestPlugin extends Avorg\TestCase
 		$this->plugin->renderAdminNotices();
 		
 		$this->assertWordPressFunctionCalledWith("get_option", "permalink_structure");
+	}
+	
+	public function testGetsAvorgApiUser()
+	{
+		$this->plugin->renderAdminNotices();
+		
+		$this->assertWordPressFunctionCalledWith("get_option", "avorgApiUser");
+	}
+	
+	public function testGetsAvorgApiPass()
+	{
+		$this->plugin->renderAdminNotices();
+		
+		$this->assertWordPressFunctionCalledWith("get_option", "avorgApiPass");
+	}
+	
+	public function testErrorNoticePostedWhenNoAvorgApiUser()
+	{
+		$this->mockWordPress->setReturnValue("call", false);
+		
+		$this->plugin->renderAdminNotices();
+		
+		$this->assertErrorRenderedWithMessage("AVORG Warning: Missing API username!");
+	}
+	
+	public function testErrorNoticePostedWhenNoAvorgApiPass()
+	{
+		$this->mockWordPress->setReturnValue("call", false);
+		
+		$this->plugin->renderAdminNotices();
+		
+		$this->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!");
 	}
 }

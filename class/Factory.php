@@ -114,7 +114,7 @@ class Factory
 	 */
 	public function getTwigGlobal()
 	{
-		return $this->getObject(
+		return $this->makeObject(
 			"TwigGlobal",
 			$this->getWordPress()
 		);
@@ -156,8 +156,8 @@ class Factory
 	{
 		return $this->getObject(
 			"Renderer",
-			$this->getTwig(),
-			$this->getTwigGlobal()
+			$this->getFactory(),
+			$this->getTwig()
 		);
 	}
 	
@@ -186,6 +186,14 @@ class Factory
 	}
 	
 	/**
+	 * @return Factory
+	 */
+	public function getFactory()
+	{
+		return $this;
+	}
+	
+	/**
 	 * @param string $class
 	 * @param array ...$dependencies
 	 * @return mixed
@@ -198,5 +206,19 @@ class Factory
 		if (! isset($this->$propertyName)) $this->$propertyName = new $fullClassName(...$dependencies);
 		
 		return $this->$propertyName;
+	}
+	
+	/**
+	 * @param string $class
+	 * @param array ...$dependencies
+	 * @return mixed
+	 */
+	private function makeObject($class, ...$dependencies)
+	{
+		$fullClassName = "\\Avorg\\$class";
+		$propertyName = lcfirst($class);
+		$shouldUseProperty = property_exists($this, $propertyName) && isset($this->$propertyName);
+		
+		return $shouldUseProperty ? $this->$propertyName : new $fullClassName(...$dependencies);
 	}
 }

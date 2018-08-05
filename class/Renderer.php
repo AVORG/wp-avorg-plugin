@@ -6,13 +6,13 @@ if (!\defined('ABSPATH')) exit;
 
 class Renderer
 {
+	private $factory;
 	private $twig;
-	private $twigGlobal;
 	
-	public function __construct(Twig $twig, TwigGlobal $twigGlobal)
+	public function __construct(Factory $factory, Twig $twig)
 	{
+		$this->factory = $factory;
 		$this->twig = $twig;
-		$this->twigGlobal = $twigGlobal;
 	}
 	
 	public function renderNotice($type, $message)
@@ -23,8 +23,9 @@ class Renderer
 	public function render($template, $data = [], $shouldReturn = false)
 	{
 		try {
-			$this->twigGlobal->loadData($data);
-			$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $this->twigGlobal];
+			$twigGlobal = $this->factory->getTwigGlobal();
+			$twigGlobal->loadData($data);
+			$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $twigGlobal];
 			$output = $this->twig->render($template, $data);
 		} catch (\Exception $e) {
 			$output = "Oops! Something went wrong while rendering this page.";
