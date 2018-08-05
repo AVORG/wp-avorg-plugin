@@ -1,11 +1,11 @@
 <h1>AVORG</h1>
 
 {% if _POST["reactivate"] %}
-	<div class="notice notice-success"><p>Plugin reactivated</p></div>
+	{% include "molecule-noticeSuccess.html" with { message: "Plugin reactivated" } only %}
 {% endif %}
 
 {% if _POST["save-api-credentials"] %}
-	<div class="notice notice-success"><p>API credentials saved</p></div>
+	{% include "molecule-noticeSuccess.html" with { message: "API credentials saved" } only %}
 {% endif %}
 
 <form method="post">
