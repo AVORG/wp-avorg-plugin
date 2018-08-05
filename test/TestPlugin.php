@@ -63,7 +63,11 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$plugin->init();
 
-		$this->assertWordPressFunctionCalledWith("add_shortcode", "avorg-bits", [$contentBits, "renderShortcode"]);
+		$this->assertWordPressFunctionCalledWith(
+			"add_shortcode",
+			"avorg-bits",
+			[$contentBits, "renderShortcode"]
+		);
 	}
 	
 	public function testInitInitsRouter()
@@ -95,7 +99,13 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->enqueueScripts();
 		
-		$this->assertCalledWith($this->mockWordPress, "call", "wp_enqueue_style", "avorgStyle", "path");
+		$this->assertCalledWith(
+			$this->mockWordPress,
+			"call",
+			"wp_enqueue_style",
+			"avorgStyle",
+			"path"
+		);
 	}
 	
 	public function testInitsListShortcode()
@@ -105,7 +115,11 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$plugin->init();
 		
-		$this->assertWordPressFunctionCalledWith("add_shortcode", "avorg-list", [$listShortcode, "renderShortcode"]);
+		$this->assertWordPressFunctionCalledWith(
+			"add_shortcode",
+			"avorg-list",
+			[$listShortcode, "renderShortcode"]
+		);
 	}
 	
 	public function testEnqueuesVideoJsStyles()
