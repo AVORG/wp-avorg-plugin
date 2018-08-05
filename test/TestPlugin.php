@@ -154,4 +154,20 @@ final class TestPlugin extends Avorg\TestCase
 			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
 		);
 	}
+	
+	public function testSubscribesToAdminNoticeActionUsingAppropriateCallBackMethod()
+	{
+		$this->assertWordPressFunctionCalledWith(
+			"add_action",
+			"admin_notices",
+			[$this->plugin, "renderAdminNotices"]
+		);
+	}
+	
+	public function testRenderAdminNoticesOutputsDefaultNotices()
+	{
+		$this->plugin->renderAdminNotices();
+		
+		$this->assertWordPressFunctionCalled("settings_errors");
+	}
 }

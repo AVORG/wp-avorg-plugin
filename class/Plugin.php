@@ -34,6 +34,8 @@ class Plugin
 		$this->mediaPage = $mediaPage;
 		$this->router = $router;
 		$this->wp = $WordPress;
+		
+		$this->wp->call("add_action", "admin_notices", [$this, "renderAdminNotices"]);
 	}
 	
 	public function activate()
@@ -54,6 +56,11 @@ class Plugin
 	{
 		$this->enqueuePluginStyles();
 		$this->enqueueVideoJsAssets();
+	}
+	
+	public function renderAdminNotices()
+	{
+		$this->wp->call("settings_errors");
 	}
 	
 	private function enqueuePluginStyles()
