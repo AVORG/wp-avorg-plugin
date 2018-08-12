@@ -116,6 +116,7 @@ class Factory
 	{
 		return $this->makeObject(
 			"TwigGlobal",
+			$this->getLocalization(),
 			$this->getWordPress()
 		);
 	}
@@ -129,6 +130,17 @@ class Factory
 			"MediaPage",
 			$this->getAvorgApi(),
 			$this->getRenderer(),
+			$this->getWordPress()
+		);
+	}
+	
+	/**
+	 * @return Localization
+	 */
+	public function getLocalization()
+	{
+		return $this->getObject(
+			"Localization",
 			$this->getWordPress()
 		);
 	}

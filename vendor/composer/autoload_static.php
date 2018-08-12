@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit577af4de92784c29a85f077623373e5a
 {
     public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -43,8 +43,8 @@ class ComposerStaticInit577af4de92784c29a85f077623373e5a
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -70,6 +70,7 @@ class ComposerStaticInit577af4de92784c29a85f077623373e5a
         array (
             0 => __DIR__ . '/../..' . '/class',
             1 => __DIR__ . '/../..' . '/test',
+            2 => __DIR__ . '/../..' . '/test/stubs',
         ),
     );
 

@@ -20,6 +20,8 @@ class MediaPage
 		$this->avorgApi = $avorgApi;
 		$this->twig = $twig;
 		$this->wp = $wordPress;
+		
+		$this->wp->call("add_action", "parse_query", [$this, "throw404"]);
 	}
 	
 	public function createMediaPage()
@@ -57,11 +59,22 @@ class MediaPage
 		return $content;
 	}
 	
-	public function isMediaPage()
+	private function isMediaPage()
 	{
 		$mediaPageId = intval($this->wp->call("get_option", "avorgMediaPageId"), 10);
 		$thisPageId = $this->wp->call("get_the_ID");
 		
 		return $mediaPageId === $thisPageId;
+	}
+	
+	public function throw404($query)
+	{
+		try {
+			$this->avorgApi->getPresentation($query->get("presentation_id"));
+		} catch (\Exception $e) {
+			unset($query->query_vars["page_id"]);
+			$query->set_404();
+			$this->wp->call("status_header", 404);
+		}
 	}
 }

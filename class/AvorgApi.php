@@ -16,31 +16,60 @@ class AvorgApi
 		$this->apiPass = \get_option("avorgApiPass");
 	}
 	
+	/**
+	 * @param $id
+	 * @return bool
+	 * @throws \Exception
+	 */
 	public function getPresentation($id)
 	{
 		if (!is_numeric($id)) return false;
 		
 		$url = "https://api2.audioverse.org/recordings/{$id}";
-		$response = $this->getResponse($url);
 		
-		return json_decode($response)->result[0]->recordings;
+		try {
+			$response = $this->getResponse($url);
+			
+			return json_decode($response)->result[0]->recordings;
+		} catch (\Exception $e) {
+			throw new \Exception("Couldn't retrieve presentation with ID $id");
+		}
 	}
 	
+	/**
+	 * @param string $list
+	 * @return null
+	 * @throws \Exception
+	 */
 	public function getPresentations($list = "")
 	{
 		$url = "https://api2.audioverse.org/recordings/$list";
 		$trimmedUrl = trim($url, "/");
-		$response = $this->getResponse($trimmedUrl);
-		$responseObject = json_decode($response);
 		
-		return (isset($responseObject->result)) ? $responseObject->result : null;
+		try {
+			$response = $this->getResponse($trimmedUrl);
+			$responseObject = json_decode($response);
+			
+			return (isset($responseObject->result)) ? $responseObject->result : null;
+		} catch (\Exception $e) {
+			throw new \Exception("Couldn't retrieve list of presentations");
+		}
 	}
 	
+	/**
+	 * @param $url
+	 * @return bool|string
+	 * @throws \Exception
+	 */
 	private function getResponse($url)
 	{
-		if (! $this->context) $this->context = $this->createContext();
-
-		return file_get_contents($url, false, $this->context);
+		if (!$this->context) $this->context = $this->createContext();
+		
+		if ($result = @file_get_contents($url, false, $this->context)) {
+			return $result;
+		} else {
+			throw new \Exception("Failed to get response from network");
+		}
 	}
 	
 	private function createContext()

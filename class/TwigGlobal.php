@@ -6,11 +6,17 @@ if (!\defined('ABSPATH')) exit;
 
 class TwigGlobal
 {
+	/** @var Localization $localization */
+	private $localization;
+	
+	/** @var WordPress $wp */
 	private $wp;
+	
 	private $data = [];
 	
-	public function __construct(WordPress $wordPress)
+	public function __construct(Localization $localization, WordPress $wordPress)
 	{
+		$this->localization = $localization;
 		$this->wp = $wordPress;
 	}
 	
@@ -26,12 +32,12 @@ class TwigGlobal
 	
 	public function i__($string)
 	{
-		return $this->wp->call("__", $string);
+		return $this->localization->i__($string);
 	}
 	
 	public function _n($single, $plural, $number)
 	{
-		return $this->wp->call("_n", $single, $plural, $number);
+		return $this->localization->_n($single, $plural, $number);
 	}
 	
 	public function loadData($data)
