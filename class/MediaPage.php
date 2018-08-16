@@ -22,6 +22,8 @@ class MediaPage
 		$this->wp = $wordPress;
 		
 		$this->wp->call("add_action", "parse_query", [$this, "throw404"]);
+		$this->wp->call("add_filter", "pre_get_document_title", [$this, "setTitle"]);
+		$this->wp->call("add_filter", "the_title", [$this, "setTitle"]);
 	}
 	
 	public function createMediaPage()
@@ -76,5 +78,14 @@ class MediaPage
 			$query->set_404();
 			$this->wp->call("status_header", 404);
 		}
+	}
+	
+	public function setTitle($title)
+	{
+		$presentationId = $this->wp->call("get_query_var", "presentation_id");
+		
+		$presentation = $this->avorgApi->getPresentation($presentationId);
+		
+		return "{$presentation->title} - AudioVerse";
 	}
 }

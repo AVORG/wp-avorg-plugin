@@ -217,4 +217,43 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->assertArrayNotHasKey("page_id", $wp_query->query_vars);
 	}
+	
+	public function testRegistersSetTitleMethodForTabTitle()
+	{
+		$this->assertWordPressFunctionCalledWith(
+			"add_filter",
+			"pre_get_document_title",
+			[$this->mediaPage, "setTitle"]
+		);
+	}
+	
+	public function testRegistersSetTitleMethodForContentTitle()
+	{
+		$this->assertWordPressFunctionCalledWith(
+			"add_filter",
+			"the_title",
+			[$this->mediaPage, "setTitle"]
+		);
+	}
+	
+	public function testSetTitleMethod()
+	{
+		$presentation = new StdClass();
+		$presentation->title = "Presentation Title";
+		
+		$this->mockAvorgApi->setReturnValue("getPresentation", $presentation);
+		
+		$result = $this->mediaPage->setTitle("old title");
+		
+		$this->assertEquals("Presentation Title - AudioVerse", $result);
+	}
+	
+	public function testUsesPresentationIdQueryVar()
+	{
+		$this->mockWordPress->setReturnValue("call", 7);
+		
+		$this->mediaPage->setTitle("old title");
+		
+		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", 7);
+	}
 }
