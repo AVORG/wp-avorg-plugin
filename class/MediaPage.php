@@ -86,6 +86,6 @@ class MediaPage
 		
 		$presentation = $this->avorgApi->getPresentation($presentationId);
 		
-		return "{$presentation->title} - AudioVerse";
+		return $presentation ? "{$presentation->title} - AudioVerse" : $title;
 	}
 }

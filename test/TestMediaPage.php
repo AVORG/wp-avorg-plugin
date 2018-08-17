@@ -256,4 +256,13 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", 7);
 	}
+	
+	public function testSetTitleWorksWhenNoPresentation()
+	{
+		$this->mockAvorgApi->setReturnValue("getPresentation", null);
+		
+		$result = $this->mediaPage->setTitle("old title");
+		
+		$this->assertEquals("old title", $result);
+	}
 }
