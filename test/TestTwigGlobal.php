@@ -8,7 +8,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 		
 		$global->i__("string");
 		
-		$this->assertWordPressFunctionCalledWith("__", "string");
+		$this->assertWordPressFunctionCalledWith("__", "string", $this->textDomain);
 	}
 	
 	public function test__FunctionReturnsValue()
@@ -72,7 +72,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 		
 		$global->_n("single", "plural", 5);
 		
-		$this->assertWordPressFunctionCalledWith("_n", "single", "plural", 5);
+		$this->assertWordPressFunctionCalledWith("_n", "single", "plural", 5, $this->textDomain);
 	}
 	
 	public function test_nFunctionReturnsValue()

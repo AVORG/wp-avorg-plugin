@@ -1,10 +1,12 @@
 <?php
 /*
-Plugin Name: AudioVerse
+Plugin Name: WP Avorg Plugin
 Description: AudioVerse plugin
 Author: Nathan Arthur
 Version: 1.0
 Author URI: http://NathanArthur.com/
+Text Domain: wp-avorg-plugin
+Domain Path: /languages
 */
 
 namespace Avorg;
@@ -37,3 +39,7 @@ $router = $factory->getRouter();
 function plugin_deactivate()
 {
 }
+
+// object initialization
+// trying to see if I need to explicitly initialize localization object in order to make textdomain loading work
+$factory->getLocalization();

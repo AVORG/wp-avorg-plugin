@@ -1,34 +1,28 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: AudioVerse CMS, Gen-5\n"
+"Project-Id-Version: WP Avorg Plugin 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-08 09:11-0400\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Alvin Cardona <onmission4god@gmail.com>\n"
 "Language-Team: AudioVerse I/T Department <technical@audioverse.org>\n"
-"Language: es\n"
+"Language: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: translate\n"
-"X-Poedit-Basepath: /Users/audioverse/Sites/avorg/avorg-main/\n"
-"X-Poedit-SearchPath-0: library/Custom\n"
-"X-Poedit-SearchPath-1: application\n"
+"X-Poedit-KeywordsList: __;_e;_n\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ../class\n"
 
 #: application/helpers/view/FormatDate.php:156
 #: application/helpers/view/FormatDate.php:159
 #, php-format
 msgid "%1$d day ago"
-msgstr "Hace %1$d días"
-
-#: application/helpers/view/FormatDate.php:156
-#: application/helpers/view/FormatDate.php:159
-#, php-format
-msgid "%1$d days ago"
-msgstr "Hace %1$d días"
+msgid_plural "%1$d days ago"
+msgstr[0] "Hace %1$d días"
+msgstr[1] "Hace %1$d días"
 
 #: application/helpers/view/FormatDate.php:159
 #: application/helpers/view/FormatDate.php:162

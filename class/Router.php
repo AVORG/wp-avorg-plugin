@@ -12,10 +12,15 @@ class Router
 	/** @var WordPress $wp */
 	private $wp;
 	
+	private $languages;
+	
 	public function __construct( Filesystem $filesystem, WordPress $WordPress)
 	{
 		$this->filesystem = $filesystem;
 		$this->wp = $WordPress;
+		
+		$this->wp->call("add_action", "parse_query", [$this, "handleQuery"]);
+		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"));
 	}
 	
 	public function activate()
@@ -69,13 +74,19 @@ class Router
 	{
 		$requestUri = $_SERVER["REQUEST_URI"];
 		
-		$languageFile = $this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json");
-		$languages = json_decode($languageFile);
-		
-		return array_reduce($languages, function($carry, $language) use($requestUri) {
+		$newLang = array_reduce($this->languages, function ($carry, $language) use ($requestUri) {
 			$doesBaseRouteMatch = substr($requestUri, 0, strlen($language->baseRoute)) === $language->baseRoute;
 			
 			return $doesBaseRouteMatch ? $language->wpLanguageCode : $carry;
 		}, $lang);
+		
+//		var_dump($lang, $newLang);
+		
+//		return $newLang;
+		return "es_ES";
+	}
+	
+	public function handleQuery()
+	{
 	}
 }

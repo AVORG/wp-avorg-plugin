@@ -74,7 +74,12 @@ final class TestRouter extends Avorg\TestCase
 	private function getAddRewriteCalls()
 	{
 		$calls = $this->mockWordPress->getCalls("call");
-		return array_slice($calls, 2);
+		
+		return array_reduce($calls, function($carry, $call) {
+			$isAddRewriteCall = $call[0] === "add_rewrite_rule";
+			
+			return $isAddRewriteCall ? array_merge($carry, [$call]) : $carry;
+		}, []);
 	}
 	
 	public function testCallsWordPress()
@@ -116,7 +121,7 @@ final class TestRouter extends Avorg\TestCase
 				return $carry || $outputUrl === $result;
 			}, false);
 			
-			$this->assertTrue($doesMatch, $inputUrl);
+			$this->assertTrue($doesMatch, "Input: $inputUrl\r\nExpected Output: $outputUrl");
 		}
 	}
 	
@@ -168,5 +173,19 @@ final class TestRouter extends Avorg\TestCase
 		$_SERVER["REQUEST_URI"] = "/deutsch";
 		
 		$this->assertEquals("de_DE", $this->router->setLocale("lang"));
+	}
+	
+	public function testRegistersQueryHandler()
+	{
+		$this->assertWordPressFunctionCalledWith(
+			"add_action",
+			"parse_query",
+			[$this->router, "handleQuery"]
+		);
+	}
+	
+	public function testHandleQueryMethodExists()
+	{
+		$this->assertClassHasAttribute("handleQuery", "Avorg\\Router");
 	}
 }

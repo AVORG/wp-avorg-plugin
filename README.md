@@ -57,3 +57,27 @@ Usage                        | Result
 ```bash
 composer test
 ```
+
+## Working With Translation Files
+
+Install gettext on your mac:
+
+```bash
+brew install gettext
+brew link --force gettext
+```
+
+Convert a PO language file to an MO language file:
+
+```bash
+msgfmt -o wp-avorg-plugin-es_ES.mo wp-avorg-plugin-es_ES.po
+```
+
+File names:
+
+- `{textdomain}-{languagecode}.po`
+- `{textdomain}-{languagecode}.mo`
+
+More information on plugin localization:
+
+- [Everything You Need to Know About Translating WordPress Plugins](https://premium.wpmudev.org/blog/translating-wordpress-plugins/)

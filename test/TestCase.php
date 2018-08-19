@@ -27,6 +27,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var Factory $factory */
 	protected $factory;
 	
+	protected $textDomain = "wp-avorg-plugin";
+	
 	protected function setUp()
 	{
 		define( "ABSPATH", "/" );
