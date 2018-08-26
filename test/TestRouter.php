@@ -184,8 +184,8 @@ final class TestRouter extends Avorg\TestCase
 		);
 	}
 	
-	public function testHandleQueryMethodExists()
-	{
-		$this->assertClassHasAttribute("handleQuery", "Avorg\\Router");
-	}
+//	public function testHandleQueryMethodExists()
+//	{
+//		$this->assertClassHasAttribute("handleQuery", "Avorg\\Router");
+//	}
 }

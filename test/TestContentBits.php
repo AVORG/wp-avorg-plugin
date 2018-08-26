@@ -170,6 +170,24 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$calls = $this->mockWordPress->getCalls("call");
 		
-		$this->assertTrue( ! isset( $calls[2][1]['tax_query'] ) );
+		$this->assertNull( $calls[2][1]['tax_query']['terms'] );
+	}
+	
+	public function testMediaTargetingIsExclusive()
+	{
+		$this->contentBits->renderShortcode([]);
+		
+		$this->assertAnyCallMatches($this->mockWordPress, "call", function($call) {
+			return $call[1]['tax_query']['terms'] === null;
+		}, "Failed asserting that media targeting is exclusive");
+	}
+	
+	public function testDoesNotTryToSelectRandomItemInEmptyArray()
+	{
+		$this->mockWordPress->setReturnValues("call", ['111', [], []]);
+		
+		$result = $this->contentBits->renderShortcode([]);
+		
+		$this->assertNotCalled($this->mockPhp, "array_rand");
 	}
 }

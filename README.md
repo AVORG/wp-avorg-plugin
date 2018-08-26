@@ -78,6 +78,15 @@ File names:
 - `{textdomain}-{languagecode}.po`
 - `{textdomain}-{languagecode}.mo`
 
+Pluralized translations should appear in a language's `.po` file in the following format:
+
+```po
+msgid "%1$d day ago"
+msgid_plural "%1$d days ago"
+msgstr[0] "Hace %1$d días"
+msgstr[1] "Hace %1$d días"
+```
+
 More information on plugin localization:
 
 - [Everything You Need to Know About Translating WordPress Plugins](https://premium.wpmudev.org/blog/translating-wordpress-plugins/)

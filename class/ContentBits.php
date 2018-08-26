@@ -167,18 +167,17 @@ class ContentBits
 	
 	public function renderShortcode($attributes)
 	{
+		$shortcodeId = $attributes['id'];
 		$presentationId = $this->wp->call('get_query_var', 'presentation_id');
-		$posts = $this->getBits($attributes['id'], $presentationId)
-			?: $this->getBits($attributes['id']);
-		$postIndex = $this->php->array_rand($posts);
-		$post = $posts[$postIndex];
+		$posts = $this->getBits($shortcodeId, $presentationId)
+			?: $this->getBits($shortcodeId);
 		
-		return $post->post_content;
+		return $posts ? $this->randomChoice($posts)->post_content : null;
 	}
 	
 	private function getBits($identifier, $presentationId = null)
 	{
-		$taxQuery = ($presentationId) ? [
+		$taxQuery = [
 			'tax_query' => [
 				[
 					'taxonomy' => 'avorgMediaIds',
@@ -186,7 +185,7 @@ class ContentBits
 					'terms' => $presentationId
 				]
 			]
-		] : [];
+		];
 		
 		return $this->wp->call("get_posts", [
 			'posts_per_page' => -1,
@@ -197,5 +196,16 @@ class ContentBits
 					'value' => $identifier
 				]
 			]] + $taxQuery);
+	}
+	
+	/**
+	 * @param $items
+	 * @return mixed
+	 */
+	private function randomChoice($items)
+	{
+		$i = $this->php->array_rand($items);
+		
+		return $items[$i];
 	}
 }

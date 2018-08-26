@@ -82,8 +82,8 @@ class Router
 		
 //		var_dump($lang, $newLang);
 		
-//		return $newLang;
-		return "es_ES";
+		return $newLang;
+//		return "es_ES";
 	}
 	
 	public function handleQuery()
