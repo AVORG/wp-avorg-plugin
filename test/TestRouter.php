@@ -2,65 +2,6 @@
 
 final class TestRouter extends Avorg\TestCase
 {
-	private $testCases = [
-		[
-			"english/sermons/recordings/316/parents-how.html",
-			"index.php?page_id=10&presentation_id=316"
-		],
-		[
-			"english/sermons/recordings/2913/generation-of-youth-for-christ.html",
-			"index.php?page_id=10&presentation_id=2913"
-		],
-		[
-			"english/sermons/recordings/3914/killing-the-fat-king.html",
-			"index.php?page_id=10&presentation_id=3914"
-		],
-		[
-			"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html",
-			"index.php?page_id=10&presentation_id=17663"
-		],
-		[
-			"english/sermons/recordings/17831/the-last-attack.html",
-			"index.php?page_id=10&presentation_id=17831"
-		],
-		[
-			"english/sermons/recordings/17833/single-and-satisfied.html",
-			"index.php?page_id=10&presentation_id=17833"
-		],
-		[
-			"english/sermons/recordings/316/parents-how.html/",
-			"index.php?page_id=10&presentation_id=316"
-		],
-		[
-			"english/sermons/recordings/2913/generation-of-youth-for-christ.html/",
-			"index.php?page_id=10&presentation_id=2913"
-		],
-		[
-			"english/sermons/recordings/3914/killing-the-fat-king.html/",
-			"index.php?page_id=10&presentation_id=3914"
-		],
-		[
-			"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html/",
-			"index.php?page_id=10&presentation_id=17663"
-		],
-		[
-			"english/sermons/recordings/17831/the-last-attack.html/",
-			"index.php?page_id=10&presentation_id=17831"
-		],
-		[
-			"english/sermons/recordings/17833/single-and-satisfied.html/",
-			"index.php?page_id=10&presentation_id=17833"
-		],
-		[
-			"espanol/sermones/grabaciones/17283/saludismo.html",
-			"index.php?page_id=10&presentation_id=17283"
-		],
-		[
-			"francais/predications/enregistrements/3839/jesus-sur-le-mont-des-oliviers.html",
-			"index.php?page_id=10&presentation_id=3839"
-		]
-	];
-	
 	/** @var \Avorg\Router $router */
 	protected $router;
 	
@@ -99,7 +40,12 @@ final class TestRouter extends Avorg\TestCase
 		$this->assertEquals("top", $priority);
 	}
 	
-	public function testRewriteRuleRewritesCorrectly()
+	/**
+	 * @dataProvider rewriteInputOutputProvider
+	 * @param $inputUrl
+	 * @param $outputUrl
+	 */
+	public function testRewriteRuleRewritesCorrectly($inputUrl, $outputUrl)
 	{
 		$this->mockWordPress->setReturnValue("call", 10);
 		
@@ -107,22 +53,87 @@ final class TestRouter extends Avorg\TestCase
 		
 		$addRewriteCalls = $this->getAddRewriteCalls();
 		
-		foreach ($this->testCases as $case) {
-			$inputUrl = $case[0];
-			$outputUrl = $case[1];
+		$doesMatch = array_reduce($addRewriteCalls, function ($carry, $call) use ($inputUrl, $outputUrl) {
+			$regex = $call[1];
+			$redirect = $call[2];
 			
-			$doesMatch = array_reduce($addRewriteCalls, function ($carry, $call) use ($inputUrl, $outputUrl) {
-				$regex = $call[1];
-				$redirect = $call[2];
-				
-				preg_match("/$regex/", $inputUrl, $matches);
-				$result = eval("return \"$redirect\";");
-				
-				return $carry || $outputUrl === $result;
-			}, false);
+			preg_match("/$regex/", $inputUrl, $matches);
+			$result = eval("return \"$redirect\";");
 			
-			$this->assertTrue($doesMatch, "Input: $inputUrl\r\nExpected Output: $outputUrl");
-		}
+			return $carry || $outputUrl === $result;
+		}, false);
+		
+		$this->assertTrue($doesMatch, "Input: $inputUrl\r\nExpected Output: $outputUrl");
+	}
+	
+	public function rewriteInputOutputProvider()
+	{
+		return [
+			[
+				"english/sermons/recordings/316/parents-how.html",
+				"index.php?page_id=10&presentation_id=316"
+			],
+			[
+				"english/sermons/recordings/2913/generation-of-youth-for-christ.html",
+				"index.php?page_id=10&presentation_id=2913"
+			],
+			[
+				"english/sermons/recordings/3914/killing-the-fat-king.html",
+				"index.php?page_id=10&presentation_id=3914"
+			],
+			[
+				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html",
+				"index.php?page_id=10&presentation_id=17663"
+			],
+			[
+				"english/sermons/recordings/17831/the-last-attack.html",
+				"index.php?page_id=10&presentation_id=17831"
+			],
+			[
+				"english/sermons/recordings/17833/single-and-satisfied.html",
+				"index.php?page_id=10&presentation_id=17833"
+			],
+			[
+				"english/sermons/recordings/316/parents-how.html/",
+				"index.php?page_id=10&presentation_id=316"
+			],
+			[
+				"english/sermons/recordings/2913/generation-of-youth-for-christ.html/",
+				"index.php?page_id=10&presentation_id=2913"
+			],
+			[
+				"english/sermons/recordings/3914/killing-the-fat-king.html/",
+				"index.php?page_id=10&presentation_id=3914"
+			],
+			[
+				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html/",
+				"index.php?page_id=10&presentation_id=17663"
+			],
+			[
+				"english/sermons/recordings/17831/the-last-attack.html/",
+				"index.php?page_id=10&presentation_id=17831"
+			],
+			[
+				"english/sermons/recordings/17833/single-and-satisfied.html/",
+				"index.php?page_id=10&presentation_id=17833"
+			],
+			[
+				"espanol/sermones/grabaciones/17283/saludismo.html",
+				"index.php?page_id=10&presentation_id=17283"
+			],
+			[
+				"francais/predications/enregistrements/3839/jesus-sur-le-mont-des-oliviers.html",
+				"index.php?page_id=10&presentation_id=3839"
+			],
+			[
+				"espanol",
+				"index.php?page_id=10"
+			],
+			[
+				"espanol/",
+				"index.php?page_id=10"
+			]
+		];
 	}
 	
 	public function testFlushesRewireRules()
@@ -174,18 +185,4 @@ final class TestRouter extends Avorg\TestCase
 		
 		$this->assertEquals("de_DE", $this->router->setLocale("lang"));
 	}
-	
-	public function testRegistersQueryHandler()
-	{
-		$this->assertWordPressFunctionCalledWith(
-			"add_action",
-			"parse_query",
-			[$this->router, "handleQuery"]
-		);
-	}
-	
-//	public function testHandleQueryMethodExists()
-//	{
-//		$this->assertClassHasAttribute("handleQuery", "Avorg\\Router");
-//	}
 }
