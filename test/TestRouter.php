@@ -185,4 +185,37 @@ final class TestRouter extends Avorg\TestCase
 		
 		$this->assertEquals("de_DE", $this->router->setLocale("lang"));
 	}
+
+    /**
+     * @dataProvider redirectFilteringProvider
+     * @param $requestUrl
+     * @param $shouldAllowRedirect
+     */
+    public function testRedirectFiltering($requestUrl, $shouldAllowRedirect)
+    {
+        $_SERVER["HTTP_HOST"] = "localhost:8080";
+        $_SERVER["REQUEST_URI"] = $requestUrl;
+        $path = parse_url($requestUrl, PHP_URL_PATH);
+        $fullRequestUrl = $_SERVER["HTTP_HOST"] . $path;
+        $expected = $shouldAllowRedirect ? "redirect_url" : "http://" . $fullRequestUrl;
+        $result = $this->router->filterRedirect("redirect_url");
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function redirectFilteringProvider()
+    {
+        return [
+            "Spanish Route" => ["localhost:8080/espanol", FALSE],
+            "No Language Route" => ["localhost:8080/path", TRUE],
+            "Complex Spanish Route" => ["localhost:8080/espanol/path/to/page", FALSE],
+            "French Route" => ["localhost:8080/francais", FALSE],
+            "Spanish Production Url" => ["https://audioverse.org/espanol", FALSE],
+            "No Language Production Url" => ["https://audioverse.org/path/to/page", TRUE],
+            "Spanish Path" => ["/espanol", FALSE],
+            "No Language Path" => ["/path", TRUE],
+            "Complex Spanish Path" => ["/espanol/path/to/page", FALSE],
+            "French Path" => ["/francais", FALSE]
+        ];
+    }
 }

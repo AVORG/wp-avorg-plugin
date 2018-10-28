@@ -35,6 +35,7 @@ $router = $factory->getRouter();
 
 \add_filter("the_content", array($mediaPage, "addMediaPageUI"));
 \add_filter("locale", array($router, "setLocale"));
+\add_filter("redirect_canonical", array($router, "filterRedirect"));
 
 function plugin_deactivate()
 {

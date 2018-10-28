@@ -84,4 +84,17 @@ class Router
 		
 		return $newLang;
 	}
+
+	public function filterRedirect($redirectUrl) {
+	    $host = $_SERVER["HTTP_HOST"];
+	    $requestUri = $_SERVER["REQUEST_URI"];
+	    $path = parse_url($requestUri, PHP_URL_PATH);
+        $fullRequestUri = $host . $path;
+	    $fragment = strtolower(explode("/", $path)[1]);
+	    $isFragmentLanguage = array_reduce((array) $this->languages, function($carry, $language) use($fragment) {
+	        return $carry || $fragment === strtolower($language->baseRoute);
+        }, FALSE);
+
+	    return $isFragmentLanguage ? "http://$fullRequestUri" : $redirectUrl;
+    }
 }
