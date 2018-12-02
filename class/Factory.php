@@ -78,7 +78,7 @@ class Factory
 	{
 		return $this->getObject(
 			"ListShortcode",
-			$this->getAvorgApi(),
+			$this->getPresentationRepository(),
 			$this->getRenderer(),
 			$this->getWordPress()
 		);
@@ -129,6 +129,7 @@ class Factory
 		return $this->getObject(
 			"MediaPage",
 			$this->getAvorgApi(),
+			$this->getPresentationRepository(),
 			$this->getRenderer(),
 			$this->getWordPress()
 		);
@@ -144,6 +145,18 @@ class Factory
 			$this->getWordPress()
 		);
 	}
+
+    /**
+     * @return PresentationRepository
+     */
+    public function getPresentationRepository()
+    {
+        return $this->getObject(
+            "PresentationRepository",
+            $this->getAvorgApi(),
+            $this->getRouter()
+        );
+    }
 	
 	/**
 	 * @return AvorgApi

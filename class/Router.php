@@ -97,4 +97,18 @@ class Router
 
 	    return $isFragmentLanguage ? "http://$fullRequestUri" : $redirectUrl;
     }
+
+    public function getUrlForApiRecording($apiRecording)
+    {
+        $filteredLanguages = array_filter((array)$this->languages, function ($language) use ($apiRecording) {
+            return $language->dbCode === $apiRecording->lang;
+        });
+        $language = reset($filteredLanguages);
+
+        return "/" . $language->baseRoute . "/" .
+            $language->modules->sermons . "/" .
+            $language->controllers->recordings . "/" .
+            $apiRecording->id . "/" .
+            rawurlencode($apiRecording->title) . ".html";
+    }
 }

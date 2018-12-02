@@ -218,4 +218,20 @@ final class TestRouter extends Avorg\TestCase
             "French Path" => ["/francais", FALSE]
         ];
     }
+
+    public function testGetUrlForApiRecording()
+    {
+        $apiRecording = $this->convertArrayToObjectRecursively([
+            "lang" => "en",
+            "id" => "1836",
+            "title" => 'E.P. Daniels and True Revival'
+        ]);
+
+        $url = $this->router->getUrlForApiRecording($apiRecording);
+
+        $this->assertEquals(
+            "/english/sermons/recordings/1836/E.P.%20Daniels%20and%20True%20Revival.html",
+            $url
+        );
+    }
 }

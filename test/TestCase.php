@@ -190,4 +190,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		
 		$this->assertTrue( $result, $errorMessage );
 	}
+
+    /**
+     * @param $array
+     * @return mixed
+     */
+    protected function convertArrayToObjectRecursively($array)
+    {
+        return json_decode(json_encode($array), FALSE);
+    }
 }

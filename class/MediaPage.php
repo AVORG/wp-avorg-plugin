@@ -8,16 +8,20 @@ class MediaPage
 {
 	/** @var AvorgApi $avorgApi */
 	private $avorgApi;
-	
+
+	/** @var PresentationRepository $presentationRepository */
+	private $presentationRepository;
+
 	/** @var Renderer $twig */
 	private $twig;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(AvorgApi $avorgApi, Renderer $twig, WordPress $wordPress)
+	public function __construct(AvorgApi $avorgApi, PresentationRepository $presentationRepository, Renderer $twig, WordPress $wordPress)
 	{
 		$this->avorgApi = $avorgApi;
+		$this->presentationRepository = $presentationRepository;
 		$this->twig = $twig;
 		$this->wp = $wordPress;
 		
@@ -51,7 +55,7 @@ class MediaPage
 	{
 		if ($this->isMediaPage()) {
 			$presentationId = $this->wp->call("get_query_var", "presentation_id");
-			$presentation = $this->avorgApi->getPresentation($presentationId);
+			$presentation = $this->presentationRepository->getPresentation($presentationId);
 			
 			$ui = $this->twig->render("organism-recording.twig", ["presentation" => $presentation], true);
 			
@@ -78,20 +82,14 @@ class MediaPage
 			$query->set_404();
 			$this->wp->call("status_header", 404);
 		}
-		
-//		var_dump("HELLO WORLD");
-//		var_dump(get_translations_for_domain('wp-avorg-plugin'));
-//		global $l10n;
-//		_load_textdomain_just_in_time( 'wp-avorg-plugin' );
-//		var_dump($l10n);
 	}
 	
 	public function setTitle($title)
 	{
 		$presentationId = $this->wp->call("get_query_var", "presentation_id");
 		
-		$presentation = $this->avorgApi->getPresentation($presentationId);
+		$presentation = $this->presentationRepository->getPresentation($presentationId);
 		
-		return $presentation ? "{$presentation->title} - AudioVerse" : $title;
+		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : $title;
 	}
 }

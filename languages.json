@@ -1,42 +1,46 @@
 {
   "English": {
-	"baseRoute": "english",
-	"wpLanguageCode": "en_US",
-	"modules": {
-		"sermons": "sermons"
-	},
-	"controllers": {
-		"recordings": "recordings"
-	}
+    "baseRoute": "english",
+    "wpLanguageCode": "en_US",
+    "dbCode": "en",
+    "modules": {
+      "sermons": "sermons"
+    },
+    "controllers": {
+      "recordings": "recordings"
+    }
   },
   "French": {
-	"baseRoute": "francais",
-	"wpLanguageCode": "fr_FR",
-	"modules": {
-	  "sermons": "predications"
-	},
-	"controllers": {
-	  "recordings": "enregistrements"
-	}
+    "baseRoute": "francais",
+    "wpLanguageCode": "fr_FR",
+    "dbCode": "fr",
+    "modules": {
+      "sermons": "predications"
+    },
+    "controllers": {
+      "recordings": "enregistrements"
+    }
   },
   "German": {
-	"baseRoute": "deutsch",
-	"wpLanguageCode": "de_DE",
-	"modules": {
-	  "sermons": "sermons"
-	},
-	"controllers": {
-	  "recordings": "recordings"
-	}
+    "baseRoute": "deutsch",
+    "wpLanguageCode": "de_DE",
+    "dbCode": "de",
+    "modules": {
+      "sermons": "sermons"
+    },
+    "controllers": {
+      "recordings": "recordings"
+    }
   },
   "Spanish": {
-	"baseRoute": "espanol",
-	"wpLanguageCode": "es_ES",
-	"modules": {
-	  "sermons": "sermones"
-	},
-	"controllers": {
-	  "recordings": "grabaciones"
-	}
+    "baseRoute": "espanol",
+    "wpLanguageCode": "es_ES",
+    "dbCode": "es",
+    "modules": {
+      "sermons": "sermones"
+    },
+    "controllers": {
+      "recordings": "grabaciones"
+    }
   }
 }

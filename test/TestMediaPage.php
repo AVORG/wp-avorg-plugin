@@ -130,8 +130,12 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
 		
 		$this->mediaPage->addMediaPageUI("content");
-		
-		$this->assertTwigTemplateRenderedWithData("organism-recording.twig", ["presentation" => "presentation"]);
+
+		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) {
+            $callGlobal = $call[1]["avorg"];
+
+		    return $callGlobal->presentation instanceof \Avorg\Presentation || $carry;
+        });
 	}
 	
 	public function testGetsQueryVar()
@@ -238,8 +242,11 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testSetTitleMethod()
 	{
-		$presentation = new StdClass();
-		$presentation->title = "Presentation Title";
+		$presentation = $this->convertArrayToObjectRecursively([
+		    "recordings" => [
+		        "title" => "Presentation Title"
+            ]
+        ]);
 		
 		$this->mockAvorgApi->setReturnValue("getPresentation", $presentation);
 		
