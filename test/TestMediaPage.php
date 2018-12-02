@@ -23,7 +23,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockTwig->setReturnValue("render", "playerUI");
 		
-		return $this->mediaPage->addMediaPageUI("");
+		return $this->mediaPage->addUi("");
 	}
 	
 	protected function make404ThrowingMediaPage()
@@ -104,14 +104,14 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testPassesPageContent()
 	{
-		$haystack = $this->mediaPage->addMediaPageUI("content");
+		$haystack = $this->mediaPage->addUi("content");
 		
 		$this->assertContains("content", $haystack);
 	}
 	
 	public function testUsesTwig()
 	{
-		$this->mediaPage->addMediaPageUI("content");
+		$this->mediaPage->addUi("content");
 		
 		$this->assertTwigTemplateRenderedWithData("organism-recording.twig", ["presentation" => null]);
 	}
@@ -129,7 +129,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
 		
-		$this->mediaPage->addMediaPageUI("content");
+		$this->mediaPage->addUi("content");
 
 		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) {
             $callGlobal = $call[1]["avorg"];
@@ -140,7 +140,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testGetsQueryVar()
 	{
-		$this->mediaPage->addMediaPageUI("content");
+		$this->mediaPage->addUi("content");
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "get_query_var", "presentation_id");
 	}
@@ -149,7 +149,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", [7, 7, "54321"]);
 		
-		$this->mediaPage->addMediaPageUI("content");
+		$this->mediaPage->addUi("content");
 		
 		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", "54321");
 	}
@@ -272,4 +272,13 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->assertEquals("old title", $result);
 	}
+
+    public function testRegistersAddUiMethod()
+    {
+        $this->assertWordPressFunctionCalledWith(
+            "add_filter",
+            "the_content",
+            [$this->mediaPage, "addUi"]
+        );
+    }
 }

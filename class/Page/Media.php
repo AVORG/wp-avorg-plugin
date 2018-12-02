@@ -1,35 +1,35 @@
 <?php
 
-namespace Avorg;
+namespace Avorg\Page;
+
+use Avorg\AvorgApi;
+use Avorg\Page;
+use Avorg\PresentationRepository;
+use Avorg\Renderer;
+use Avorg\WordPress;
 
 if (!\defined('ABSPATH')) exit;
 
-class MediaPage
+class Media extends Page
 {
-	/** @var AvorgApi $avorgApi */
-	private $avorgApi;
+    /** @var AvorgApi $avorgApi */
+    protected $avorgApi;
 
-	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
+    /** @var PresentationRepository $presentationRepository */
+    protected $presentationRepository;
 
-	/** @var Renderer $twig */
-	private $twig;
-	
-	/** @var WordPress $wp */
-	private $wp;
-	
-	public function __construct(AvorgApi $avorgApi, PresentationRepository $presentationRepository, Renderer $twig, WordPress $wordPress)
-	{
-		$this->avorgApi = $avorgApi;
-		$this->presentationRepository = $presentationRepository;
-		$this->twig = $twig;
-		$this->wp = $wordPress;
-		
-		$this->wp->call("add_action", "parse_query", [$this, "throw404"]);
-		$this->wp->call("add_filter", "pre_get_document_title", [$this, "setTitle"]);
-		$this->wp->call("add_filter", "the_title", [$this, "setTitle"]);
-	}
-	
+    /** @var Renderer $twig */
+    protected $twig;
+
+    public function __construct(AvorgApi $avorgApi, PresentationRepository $presentationRepository, Renderer $twig, WordPress $wordPress)
+    {
+        parent::__construct($wordPress);
+
+        $this->avorgApi = $avorgApi;
+        $this->presentationRepository = $presentationRepository;
+        $this->twig = $twig;
+    }
+
 	public function createMediaPage()
 	{
 		$mediaPageId = $this->wp->call("get_option", "avorgMediaPageId");
@@ -51,7 +51,7 @@ class MediaPage
 		}
 	}
 	
-	public function addMediaPageUI($content)
+	public function addUi($content)
 	{
 		if ($this->isMediaPage()) {
 			$presentationId = $this->wp->call("get_query_var", "presentation_id");

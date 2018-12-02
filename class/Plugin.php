@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Avorg\Page\Media;
+
 if (!\defined('ABSPATH')) exit;
 
 class Plugin
@@ -12,7 +14,7 @@ class Plugin
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
 	
-	/** @var MediaPage $mediaPage */
+	/** @var Media $mediaPage */
 	private $mediaPage;
 	
 	/** @var Renderer $renderer */
@@ -25,12 +27,12 @@ class Plugin
 	private $wp;
 	
 	public function __construct(
-		ContentBits $contentBits,
-		ListShortcode $listShortcode,
-		MediaPage $mediaPage,
-		Renderer $renderer,
-		Router $router,
-		WordPress $WordPress
+        ContentBits $contentBits,
+        ListShortcode $listShortcode,
+        Media $mediaPage,
+        Renderer $renderer,
+        Router $router,
+        WordPress $WordPress
 	)
 	{
 		$this->contentBits = $contentBits;

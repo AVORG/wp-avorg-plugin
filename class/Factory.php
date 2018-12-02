@@ -122,12 +122,12 @@ class Factory
 	}
 	
 	/**
-	 * @return MediaPage
+	 * @return Page\Media
 	 */
 	public function getMediaPage()
 	{
 		return $this->getObject(
-			"MediaPage",
+			"Page\\Media",
 			$this->getAvorgApi(),
 			$this->getPresentationRepository(),
 			$this->getRenderer(),

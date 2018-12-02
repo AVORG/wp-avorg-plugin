@@ -21,7 +21,6 @@ $factory = new Factory();
 $plugin = $factory->getPlugin();
 $adminPanel = $factory->getAdminPanel();
 $contentBits = $factory->getContentBits();
-$mediaPage = $factory->getMediaPage();
 $router = $factory->getRouter();
 
 \register_activation_hook(__FILE__, array($plugin, "activate"));
@@ -33,7 +32,6 @@ $router = $factory->getRouter();
 \add_action("save_post", array($contentBits, "saveIdentifierMetaBox"));
 \add_action("wp_enqueue_scripts", array($plugin, "enqueueScripts"));
 
-\add_filter("the_content", array($mediaPage, "addMediaPageUI"));
 \add_filter("locale", array($router, "setLocale"));
 \add_filter("redirect_canonical", array($router, "filterRedirect"));
 
