@@ -140,9 +140,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 			return $carry || $call === $needle;
 		}, false);
 
+		$needleHaystack = json_encode($needle);
 		$callExport = json_encode($calls);
-		
-		$this->assertTrue($wasCalled, "Failed to assert $function was called using specified arguments\r\n\r\n$callExport");
+        $message = "Failed to assert $function was called using specified arguments\r\n\r\nNeedle:\r\n$needleHaystack\r\nHaystack:\r\n$callExport";
+
+        $this->assertTrue(
+		    $wasCalled,
+            $message
+        );
 	}
 	
 	protected function assertErrorRenderedWithMessage($message)
