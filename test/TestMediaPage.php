@@ -2,7 +2,7 @@
 
 final class TestMediaPage extends Avorg\TestCase
 {
-	/** @var \Avorg\MediaPage $mediaPage */
+	/** @var \Avorg\Page\Media $mediaPage */
 	protected $mediaPage;
 	
 	private $mediaPageInsertCall = array("wp_insert_post", array(
@@ -52,7 +52,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", [false, false, 7]);
 		
-		$this->mediaPage->createMediaPage();
+		$this->mediaPage->createPage();
 		
 		$this->assertCalledWith(
 			$this->mockWordPress,
@@ -65,7 +65,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testGetsMediaPageId()
 	{
-		$this->mediaPage->createMediaPage();
+		$this->mediaPage->createPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "get_option", "avorgMediaPageId");
 	}
@@ -74,7 +74,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", [7, false]);
 		
-		$this->mediaPage->createMediaPage();
+		$this->mediaPage->createPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
 	}
@@ -83,7 +83,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("call", 7);
 		
-		$this->mediaPage->createMediaPage();
+		$this->mediaPage->createPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "get_post_status", 7);
 	}
@@ -92,7 +92,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", [7, "trash"]);
 		
-		$this->mediaPage->createMediaPage();
+		$this->mediaPage->createPage();
 		
 		$this->assertCalledWith($this->mockWordPress, "call", "wp_publish_post", 7);
 	}

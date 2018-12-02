@@ -21,6 +21,9 @@ class Media extends Page
     /** @var Renderer $twig */
     protected $twig;
 
+    protected $defaultPageTitle = "Media Detail";
+    protected $defaultPageContent = "Media Detail";
+
     public function __construct(AvorgApi $avorgApi, PresentationRepository $presentationRepository, Renderer $twig, WordPress $wordPress)
     {
         parent::__construct($wordPress);
@@ -30,24 +33,25 @@ class Media extends Page
         $this->twig = $twig;
     }
 
-	public function createMediaPage()
+	public function createPage()
 	{
-		$mediaPageId = $this->wp->call("get_option", "avorgMediaPageId");
-		$postStatus = $this->wp->call("get_post_status", $mediaPageId);
+        $pageIdOptionId = "avorg" . array_slice(explode('\\', __CLASS__), -1, 1)[0] . "PageId";
+        $postId = $this->wp->call("get_option", $pageIdOptionId);
+		$postStatus = $this->wp->call("get_post_status", $postId);
 		
-		if ($mediaPageId === false || $postStatus === false) {
+		if ($postId === false || $postStatus === false) {
 			$id = $this->wp->call("wp_insert_post", array(
-				"post_content" => "Media Detail",
-				"post_title" => "Media Detail",
+				"post_content" => $this->defaultPageContent,
+				"post_title" => $this->defaultPageTitle,
 				"post_status" => "publish",
 				"post_type" => "page"
 			), true);
 			
-			$this->wp->call("update_option", "avorgMediaPageId", $id);
+			$this->wp->call("update_option", $pageIdOptionId, $id);
 		}
 		
 		if ($postStatus === "trash") {
-			$this->wp->call("wp_publish_post", $mediaPageId);
+			$this->wp->call("wp_publish_post", $postId);
 		}
 	}
 	

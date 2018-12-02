@@ -47,13 +47,13 @@ class Plugin
 	
 	public function activate()
 	{
-		$this->mediaPage->createMediaPage();
+		$this->mediaPage->createPage();
 		$this->router->activate();
 	}
 	
 	public function init()
 	{
-		$this->mediaPage->createMediaPage();
+		$this->mediaPage->createPage();
 		$this->router->addRewriteRules();
 		$this->contentBits->init();
 		$this->listShortcode->addShortcode();
