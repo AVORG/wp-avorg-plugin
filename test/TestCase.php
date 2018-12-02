@@ -139,8 +139,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		$wasCalled = array_reduce($calls, function ($carry, $call) use ($needle) {
 			return $carry || $call === $needle;
 		}, false);
+
+		$callExport = var_export($calls, TRUE);
 		
-		$this->assertTrue($wasCalled, "Failed to assert $function was called using specified arguments");
+		$this->assertTrue($wasCalled, "Failed to assert $function was called using specified arguments\r\n\r\n$callExport");
 	}
 	
 	protected function assertErrorRenderedWithMessage($message)
