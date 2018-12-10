@@ -21,6 +21,7 @@ class Media extends Page
     protected $pageIdOptionName = "avorgMediaPageId";
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
+    protected $twigTemplate = "organism-recording.twig";
 
     public function __construct(
     	AvorgApi $avorgApi,
@@ -56,13 +57,13 @@ class Media extends Page
 	}
 
 	/**
-	 * @return string
+	 * @return array
 	 */
-	protected function buildUi()
+	protected function getTwigData()
 	{
 		$presentationId = $this->wp->call("get_query_var", "presentation_id");
 		$presentation = $this->presentationRepository->getPresentation($presentationId);
 
-		return $this->renderer->render("organism-recording.twig", ["presentation" => $presentation], true);
+		return ["presentation" => $presentation];
 	}
 }

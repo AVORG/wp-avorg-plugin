@@ -13,7 +13,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var Php $mockPhp */
 	protected $mockPhp;
 	
-	/** @var Twig $mockTwig */
+	/** @var Twig|StubTwig $mockTwig */
 	protected $mockTwig;
 	
 	/** @var WordPress $mockWordPress */
@@ -48,7 +48,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	private function resetMocks() {
 		$this->mockAvorgApi = $this->objectMocker->buildMock("AvorgApi");
 		$this->mockPhp = $this->objectMocker->buildMock("Php");
-		$this->mockTwig = $this->objectMocker->buildMock("Twig");
+		$this->mockTwig = new StubTwig($this);
 		$this->mockWordPress = $this->objectMocker->buildMock("WordPress");
 	}
 	
@@ -75,8 +75,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		
 		$this->assertMethodExists( $mockName, $method, $calls );
 		
-		$error = $this->makeHaystackError( $mockName, $method, $arguments, $calls, "was" );
-		
+//		$error = $this->makeHaystackError( $mockName, $method, $arguments, $calls, "was" );
+		$error = "Disabled Error Message";
+
 		$this->assertTrue( in_array( $arguments, $calls, TRUE ), $error );
 	}
 	
@@ -156,17 +157,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 			"type" => "error",
 			"message" => $message
 		]);
-	}
-	
-	protected function assertTwigTemplateRendered($template)
-	{
-		$message = "Failed to assert that $template was rendered";
-		
-		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template) {
-			$callTemplate = $call[0];
-			
-			return $carry || $callTemplate === $template;
-		}, $message);
 	}
 	
 	protected function assertTwigTemplateRenderedWithData($template, $data)

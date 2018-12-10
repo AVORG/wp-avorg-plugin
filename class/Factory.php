@@ -10,18 +10,6 @@ if (!\defined('ABSPATH')) exit;
  */
 class Factory
 {
-	/** @var AvorgApi $avorgApi */
-	private $avorgApi;
-	
-	/** @var Php $php */
-	private $php;
-	
-	/** @var Twig $twig */
-	private $twig;
-	
-	/** @var WordPress $wordPress */
-	private $wordPress;
-
 	private $objectGraph = [
 		"AdminPanel" => [
 			"Plugin",
@@ -62,6 +50,18 @@ class Factory
 			"WordPress"
 		]
 	];
+
+	/** @var AvorgApi $avorgApi */
+	private $avorgApi;
+
+	/** @var Php $php */
+	private $php;
+
+	/** @var Twig $twig */
+	private $twig;
+
+	/** @var WordPress $wordPress */
+	private $wordPress;
 	
 	/**
 	 * Factory constructor.
@@ -100,6 +100,15 @@ class Factory
 			"Page\\Media",
 			$this->getAvorgApi(),
 			$this->getPresentationRepository(),
+			$this->getRenderer(),
+			$this->getWordPress()
+		);
+	}
+
+	public function getTopicPage()
+	{
+		return $this->getObject(
+			"Page\\Topic",
 			$this->getRenderer(),
 			$this->getWordPress()
 		);
