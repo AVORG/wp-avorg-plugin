@@ -12,6 +12,7 @@ abstract class Page
     /** @var WordPress $wp */
     protected $wp;
 
+    protected $pageIdOptionName;
     protected $defaultPageContent;
     protected $defaultPageTitle;
 
@@ -53,7 +54,7 @@ abstract class Page
 				"post_type" => "page"
 			), true);
 
-			$this->wp->call("update_option", $this->getPageIdOptionId(), $id);
+			$this->wp->call("update_option", $this->pageIdOptionName, $id);
 		}
 
 		if ($postStatus === "trash") {
@@ -74,22 +75,6 @@ abstract class Page
 	 */
 	protected function getPostId()
 	{
-		return $this->wp->call("get_option", $this->getPageIdOptionId());
-	}
-
-	/**
-	 * @return string
-	 */
-	private function getPageIdOptionId()
-	{
-		return "avorg" . $this->getCalledClassName() . "PageId";
-	}
-
-	/**
-	 * @return string
-	 */
-	private function getCalledClassName()
-	{
-		return array_slice(explode('\\', get_called_class()), -1, 1)[0];
+		return $this->wp->call("get_option", $this->pageIdOptionName);
 	}
 }
