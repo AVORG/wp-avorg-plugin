@@ -24,7 +24,6 @@ $contentBits = $factory->getContentBits();
 $router = $factory->getRouter();
 
 \register_activation_hook(__FILE__, array($plugin, "activate"));
-\register_deactivation_hook(__FILE__, "plugin_deactivate");
 
 \add_action("admin_menu", array($adminPanel, "register"));
 \add_action("init", array($plugin, "init"));
@@ -34,11 +33,3 @@ $router = $factory->getRouter();
 
 \add_filter("locale", array($router, "setLocale"));
 \add_filter("redirect_canonical", array($router, "filterRedirect"));
-
-function plugin_deactivate()
-{
-}
-
-// object initialization
-// trying to see if I need to explicitly initialize localization object in order to make textdomain loading work
-$factory->getLocalization();

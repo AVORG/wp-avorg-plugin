@@ -21,6 +21,47 @@ class Factory
 	
 	/** @var WordPress $wordPress */
 	private $wordPress;
+
+	private $objectGraph = [
+		"AdminPanel" => [
+			"Plugin",
+			"Renderer",
+			"WordPress"
+		],
+		"ContentBits" => [
+			"Php",
+			"Renderer",
+			"WordPress"
+		],
+		"ListShortcode" => [
+			"PresentationRepository",
+			"Renderer",
+			"WordPress"
+		],
+		"Localization" => [
+			"WordPress"
+		],
+		"Plugin" => [
+			"ContentBits",
+			"ListShortcode",
+			"MediaPage",
+			"Renderer",
+			"Router",
+			"WordPress"
+		],
+		"PresentationRepository" => [
+			"AvorgApi",
+			"Router"
+		],
+		"Renderer" => [
+			"Factory",
+			"Twig"
+		],
+		"Router" => [
+			"Filesystem",
+			"WordPress"
+		]
+	];
 	
 	/**
 	 * Factory constructor.
@@ -43,84 +84,13 @@ class Factory
 	}
 	
 	/**
-	 * @return AdminPanel
+	 * @return Factory
 	 */
-	public function getAdminPanel()
+	public function getFactory()
 	{
-		return $this->getObject(
-			"AdminPanel",
-			$this->getPlugin(),
-			$this->getRenderer(),
-			$this->getWordPress()
-		);
+		return $this;
 	}
-	
-	/**
-	 * @return Plugin
-	 */
-	public function getPlugin()
-	{
-		return $this->getObject(
-			"Plugin",
-			$this->getContentBits(),
-			$this->getListShortcode(),
-			$this->getMediaPage(),
-			$this->getRenderer(),
-			$this->getRouter(),
-			$this->getWordPress()
-		);
-	}
-	
-	/**
-	 * @return ListShortcode
-	 */
-	public function getListShortcode()
-	{
-		return $this->getObject(
-			"ListShortcode",
-			$this->getPresentationRepository(),
-			$this->getRenderer(),
-			$this->getWordPress()
-		);
-	}
-	
-	/**
-	 * @return ContentBits
-	 */
-	public function getContentBits()
-	{
-		return $this->getObject(
-			"ContentBits",
-			$this->getPhp(),
-			$this->getRenderer(),
-			$this->getWordPress()
-		);
-	}
-	
-	/**
-	 * @return Router
-	 */
-	public function getRouter()
-	{
-		return $this->getObject(
-			"Router",
-			$this->getFilesystem(),
-			$this->getWordPress()
-		);
-	}
-	
-	/**
-	 * @return TwigGlobal
-	 */
-	public function getTwigGlobal()
-	{
-		return $this->makeObject(
-			"TwigGlobal",
-			$this->getLocalization(),
-			$this->getWordPress()
-		);
-	}
-	
+
 	/**
 	 * @return Page\Media
 	 */
@@ -134,88 +104,33 @@ class Factory
 			$this->getWordPress()
 		);
 	}
-	
+
 	/**
-	 * @return Localization
+	 * @return TwigGlobal
 	 */
-	public function getLocalization()
+	public function getTwigGlobal()
 	{
-		return $this->getObject(
-			"Localization",
+		return $this->makeObject(
+			"TwigGlobal",
+			$this->getLocalization(),
 			$this->getWordPress()
 		);
 	}
 
-    /**
-     * @return PresentationRepository
-     */
-    public function getPresentationRepository()
-    {
-        return $this->getObject(
-            "PresentationRepository",
-            $this->getAvorgApi(),
-            $this->getRouter()
-        );
-    }
-	
-	/**
-	 * @return AvorgApi
-	 */
-	public function getAvorgApi()
+	public function __call($method, $args = [])
 	{
-		return $this->getObject("AvorgApi");
-	}
-	
-	/**
-	 * @return Php
-	 */
-	public function getPhp()
-	{
-		return $this->getObject("Php");
-	}
-	
-	/**
-	 * @return Renderer
-	 */
-	public function getRenderer()
-	{
-		return $this->getObject(
-			"Renderer",
-			$this->getFactory(),
-			$this->getTwig()
-		);
-	}
-	
-	/**
-	 * @return Twig
-	 */
-	public function getTwig()
-	{
-		return $this->getObject("Twig");
-	}
-	
-	/**
-	 * @return WordPress
-	 */
-	public function getWordPress()
-	{
-		return $this->getObject("WordPress");
-	}
-	
-	/**
-	 * @return Filesystem
-	 */
-	public function getFilesystem()
-	{
-		return $this->getObject("Filesystem");
-	}
-	
-	/**
-	 * @return Factory
-	 */
-	public function getFactory()
-	{
-		return $this;
+		$isGet = substr( $method, 0, 3 ) === "get";
+
+		if (!$isGet) return null;
+
+		$name = substr($method, 3, strlen($method) - 3);
+		$dependencyNames = isset($this->objectGraph[$name]) ? $this->objectGraph[$name] : [];
+		$dependencies = array_map(function($dependencyName) {
+			$methodName = "get$dependencyName";
+			return $this->$methodName();
+		}, $dependencyNames);
+
+		return $this->getObject($name, ...$dependencies);
 	}
 	
 	/**

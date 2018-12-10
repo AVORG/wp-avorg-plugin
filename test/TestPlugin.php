@@ -20,33 +20,6 @@ final class TestPlugin extends Avorg\TestCase
 		$this->plugin = $this->factory->getPlugin();
 	}
 	
-	public function testInsertsMediaDetailsPage()
-	{
-		$this->mockWordPress->setReturnValue("call", false);
-		
-		$this->plugin->activate();
-		
-		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
-	}
-	
-	public function testDoesNotInsertPageTwice()
-	{
-		$this->mockWordPress->setReturnValue("call", ["post"]);
-		
-		$this->plugin->activate();
-		
-		$this->assertNotCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
-	}
-	
-	public function testInsertsMediaDetailsPageOnInit()
-	{
-		$this->mockWordPress->setReturnValue("call", false);
-		
-		$this->plugin->init();
-		
-		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
-	}
-	
 	public function testActivatesRouterOnPluginActivate()
 	{
 		$plugin = $this->factory->getPlugin();
@@ -217,5 +190,14 @@ final class TestPlugin extends Avorg\TestCase
 		$this->plugin->renderAdminNotices();
 		
 		$this->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!");
+	}
+
+	public function testRegistersCallbacksOnMediaPage()
+	{
+		$this->assertWordPressFunctionCalledWith(
+			"add_filter",
+			"the_content",
+			[$this->factory->getMediaPage(), "addUi"]
+		);
 	}
 }
