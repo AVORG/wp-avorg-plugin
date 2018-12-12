@@ -16,7 +16,7 @@ final class TestRenderer extends Avorg\TestCase
 	{
 		$this->renderer->render("admin.twig");
 		
-		$this->assertTwigTemplateRendered("admin.twig");
+		$this->mockTwig->assertTwigTemplateRendered("admin.twig");
 	}
 	
 	public function testRenderFunctionPassesAvorgGlobalObject()

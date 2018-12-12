@@ -190,15 +190,6 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->assertFalse($wp_query->was404set);
 	}
 	
-	public function testRegistersThrow404Method()
-	{
-		$this->assertWordPressFunctionCalledWith(
-			"add_action",
-			"parse_query",
-			[$this->mediaPage, "throw404"]
-		);
-	}
-	
 	public function testHandlesExceptionAndThrows404()
 	{
 		$mediaPage = $this->make404ThrowingMediaPage();
@@ -220,24 +211,6 @@ final class TestMediaPage extends Avorg\TestCase
 		$mediaPage->throw404($wp_query);
 		
 		$this->assertArrayNotHasKey("page_id", $wp_query->query_vars);
-	}
-	
-	public function testRegistersSetTitleMethodForTabTitle()
-	{
-		$this->assertWordPressFunctionCalledWith(
-			"add_filter",
-			"pre_get_document_title",
-			[$this->mediaPage, "setTitle"]
-		);
-	}
-	
-	public function testRegistersSetTitleMethodForContentTitle()
-	{
-		$this->assertWordPressFunctionCalledWith(
-			"add_filter",
-			"the_title",
-			[$this->mediaPage, "setTitle"]
-		);
 	}
 	
 	public function testSetTitleMethod()
@@ -273,12 +246,74 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->assertEquals("old title", $result);
 	}
 
-    public function testRegistersAddUiMethod()
-    {
-        $this->assertWordPressFunctionCalledWith(
-            "add_filter",
-            "the_content",
-            [$this->mediaPage, "addUi"]
-        );
-    }
+	/**
+	 * @dataProvider getExpectedCallbacks
+	 * @param $registrationMethod
+	 * @param $hookId
+	 * @param $callbackName
+	 */
+	public function testRegistersCallbacks($registrationMethod, $hookId, $callbackName)
+	{
+		$this->mediaPage->registerCallbacks();
+
+		$this->assertWordPressFunctionCalledWith(
+			$registrationMethod,
+			$hookId,
+			[$this->mediaPage, $callbackName]
+		);
+	}
+
+	public function getExpectedCallbacks()
+	{
+		return [
+			"Tab Title" => [
+				"add_filter",
+				"pre_get_document_title",
+				"setTitle"
+			],
+			"Content Title" => [
+				"add_filter",
+				"the_title",
+				"setTitle"
+			],
+			"Throw 404" => [
+				"add_action",
+				"parse_query",
+				"throw404"
+			],
+			"Add UI" => [
+				"add_filter",
+				"the_content",
+				"addUi"
+			],
+			"Create page on activation" => [
+				"register_activation_hook",
+				AVORG_BASE_PATH . "/wp-avorg-plugin.php",
+				"createPage"
+			],
+			"Create page on init" => [
+				"add_action",
+				"init",
+				"createPage"
+			]
+		];
+	}
+
+	public function testInsertsMediaDetailsPage()
+	{
+		$this->mockWordPress->setReturnValue("call", false);
+
+		$this->mediaPage->createPage();
+
+		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
+	}
+
+	public function testDoesNotInsertPageTwice()
+	{
+		$this->mockWordPress->setReturnValue("call", ["post"]);
+
+		$this->mediaPage->createPage();
+
+		$this->assertNotCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
+	}
 }

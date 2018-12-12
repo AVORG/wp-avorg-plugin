@@ -29,7 +29,10 @@ class Renderer
 			$output = $this->twig->render($template, $data);
 		} catch (\Exception $e) {
 			$output = "Oops! Something went wrong while rendering this page.";
-			if (WP_DEBUG) $output .= "<br>" . $e->getMessage();
+			if (WP_DEBUG) {
+				$output .= "<br>" . $e->getMessage();
+				echo $output;
+			};
 		} finally {
 			if ($shouldReturn) {
 				return $output;

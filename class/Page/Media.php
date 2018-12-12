@@ -18,64 +18,23 @@ class Media extends Page
     /** @var PresentationRepository $presentationRepository */
     protected $presentationRepository;
 
-    /** @var Renderer $twig */
-    protected $twig;
-
+    protected $pageIdOptionName = "avorgMediaPageId";
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
+    protected $twigTemplate = "organism-recording.twig";
 
-    public function __construct(AvorgApi $avorgApi, PresentationRepository $presentationRepository, Renderer $twig, WordPress $wordPress)
+    public function __construct(
+    	AvorgApi $avorgApi,
+		PresentationRepository $presentationRepository,
+		Renderer $renderer,
+		WordPress $wordPress
+	)
     {
-        parent::__construct($wordPress);
+        parent::__construct($renderer, $wordPress);
 
         $this->avorgApi = $avorgApi;
         $this->presentationRepository = $presentationRepository;
-        $this->twig = $twig;
     }
-
-	public function createPage()
-	{
-        $pageIdOptionId = "avorg" . array_slice(explode('\\', __CLASS__), -1, 1)[0] . "PageId";
-        $postId = $this->wp->call("get_option", $pageIdOptionId);
-		$postStatus = $this->wp->call("get_post_status", $postId);
-		
-		if ($postId === false || $postStatus === false) {
-			$id = $this->wp->call("wp_insert_post", array(
-				"post_content" => $this->defaultPageContent,
-				"post_title" => $this->defaultPageTitle,
-				"post_status" => "publish",
-				"post_type" => "page"
-			), true);
-			
-			$this->wp->call("update_option", $pageIdOptionId, $id);
-		}
-		
-		if ($postStatus === "trash") {
-			$this->wp->call("wp_publish_post", $postId);
-		}
-	}
-	
-	public function addUi($content)
-	{
-		if ($this->isMediaPage()) {
-			$presentationId = $this->wp->call("get_query_var", "presentation_id");
-			$presentation = $this->presentationRepository->getPresentation($presentationId);
-			
-			$ui = $this->twig->render("organism-recording.twig", ["presentation" => $presentation], true);
-			
-			return $ui . $content;
-		}
-		
-		return $content;
-	}
-	
-	private function isMediaPage()
-	{
-		$mediaPageId = intval($this->wp->call("get_option", "avorgMediaPageId"), 10);
-		$thisPageId = $this->wp->call("get_the_ID");
-		
-		return $mediaPageId === $thisPageId;
-	}
 	
 	public function throw404($query)
 	{
@@ -95,5 +54,16 @@ class Media extends Page
 		$presentation = $this->presentationRepository->getPresentation($presentationId);
 		
 		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : $title;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getTwigData()
+	{
+		$presentationId = $this->wp->call("get_query_var", "presentation_id");
+		$presentation = $this->presentationRepository->getPresentation($presentationId);
+
+		return ["presentation" => $presentation];
 	}
 }

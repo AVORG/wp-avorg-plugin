@@ -43,17 +43,16 @@ class Plugin
 		$this->wp = $WordPress;
 		
 		$this->wp->call("add_action", "admin_notices", [$this, "renderAdminNotices"]);
+		$this->mediaPage->registerCallbacks();
 	}
 	
 	public function activate()
 	{
-		$this->mediaPage->createPage();
 		$this->router->activate();
 	}
 	
 	public function init()
 	{
-		$this->mediaPage->createPage();
 		$this->router->addRewriteRules();
 		$this->contentBits->init();
 		$this->listShortcode->addShortcode();
