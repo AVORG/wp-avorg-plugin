@@ -37,7 +37,7 @@ final class TestMediaPage extends Avorg\TestCase
 			$this->mockWordPress
 		);
 		
-		return $factory->getMediaPage();
+		return $factory->getPage_Media();
 	}
 	
 	protected function setUp()
@@ -45,7 +45,7 @@ final class TestMediaPage extends Avorg\TestCase
 		parent::setUp();
 		
 		$this->mockWordPress->setReturnValue("call", 5);
-		$this->mediaPage = $this->factory->getMediaPage();
+		$this->mediaPage = $this->factory->getPage_Media();
 	}
 	
 	public function testSavesMediaPageId()

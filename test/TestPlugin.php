@@ -197,7 +197,7 @@ final class TestPlugin extends Avorg\TestCase
 		$this->assertWordPressFunctionCalledWith(
 			"add_filter",
 			"the_content",
-			[$this->factory->getMediaPage(), "addUi"]
+			[$this->factory->getPage_Media(), "addUi"]
 		);
 	}
 }
