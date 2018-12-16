@@ -145,4 +145,13 @@ final class TestPresentation extends Avorg\TestCase
 
         $this->assertEquals(null, $presentation->getLogUrl());
     }
+
+    public function testIncludesPublishDate()
+	{
+		$presentation = $this->getPresentationForApiResponse([
+			"publishDate" => "2018-02-19 05:22:17"
+		]);
+
+		$this->assertEquals("2018-02-19 05:22:17", $presentation->getDatePublished());
+	}
 }

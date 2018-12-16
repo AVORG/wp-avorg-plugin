@@ -17,10 +17,10 @@ abstract class Page
     protected $defaultPageTitle;
     protected $twigTemplate;
 
-    public function __construct(Renderer $renderer, WordPress $wordPress)
+    public function __construct(Renderer $renderer, WordPress $wp)
     {
     	$this->renderer = $renderer;
-        $this->wp = $wordPress;
+        $this->wp = $wp;
 	}
 
     abstract public function throw404($query);

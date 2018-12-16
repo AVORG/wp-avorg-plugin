@@ -25,17 +25,34 @@ class PresentationRepository
      */
     public function getPresentations($list = "")
     {
-        $apiResponse = $this->api->getPresentations($list) ?: [];
+        $apiResponse = $this->api->getPresentations($list);
 
-        return array_map([$this, "buildPresentation"], $apiResponse);
+		return $this->buildPresentations($apiResponse);
     }
 
-    public function getPresentation($presentationId)
+	/**
+	 * @param $presentationId
+	 * @return Presentation|null
+	 * @throws \Exception
+	 */
+	public function getPresentation($presentationId)
     {
         $apiResponse = $this->api->getPresentation($presentationId);
 
         return $apiResponse ? $this->buildPresentation($apiResponse) : null;
     }
+
+	/**
+	 * @param $topicId
+	 * @return array
+	 * @throws \Exception
+	 */
+	public function getTopicPresentations($topicId)
+	{
+		$apiResponse = $this->api->getTopicPresentations($topicId);
+
+		return $this->buildPresentations($apiResponse);
+	}
 
     /**
      * @param $apiRecording
@@ -48,4 +65,13 @@ class PresentationRepository
 
         return new Presentation($unwrappedRecording, $url);
     }
+
+	/**
+	 * @param $apiResponse
+	 * @return array
+	 */
+	private function buildPresentations($apiResponse)
+	{
+		return array_map([$this, "buildPresentation"], $apiResponse ?: []);
+	}
 }

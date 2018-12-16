@@ -66,4 +66,49 @@ final class TestTopicPage extends Avorg\TestCase
 
 		$this->mockTwig->assertTwigTemplateRendered("organism-topic.twig");
 	}
+
+	public function testGetsTopicId()
+	{
+		$this->topicPage->addUi("content");
+
+		$this->mockWordPress->assertMethodCalledWith("call", "get_query_var", "topic_id");
+	}
+
+	public function testGetsPresentations()
+	{
+		$this->mockWordPress->setReturnValue("call", 10);
+
+		$this->topicPage->addUi("content");
+
+		$this->assertCalledWith($this->mockAvorgApi, "getTopicPresentations", 10);
+	}
+
+	public function testUsesPresentationsToRender()
+	{
+		$this->mockAvorgApi->setReturnValue("getTopicPresentations", []);
+
+		$this->topicPage->addUi("content");
+
+		$this->mockTwig->assertTwigTemplateRenderedWithData(
+			"organism-topic.twig",
+			["recordings" => []]
+		);
+	}
+
+	public function testGetsWrappedRecordings()
+	{
+		$this->mockAvorgApi->setReturnValue("getTopicPresentations", [
+			[ "recordings" => "RECORDING" ]
+		]);
+
+		$this->topicPage->addUi("content");
+
+		$calls = $this->mockTwig->getCalls("render");
+
+		$dataObject = $calls[0][1]["avorg"];
+		$recordings = $dataObject->recordings;
+		$recording = $recordings[0];
+
+		$this->assertInstanceOf("\\Avorg\\Presentation", $recording);
+	}
 }

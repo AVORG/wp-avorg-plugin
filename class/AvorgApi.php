@@ -6,6 +6,7 @@ if (!\defined('ABSPATH')) exit;
 
 class AvorgApi
 {
+	private $apiBaseUrl = "https://api2.audioverse.org";
 	private $apiUser;
 	private $apiPass;
 	private $context;
@@ -25,7 +26,7 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 		
-		$url = "https://api2.audioverse.org/recordings/{$id}";
+		$url = "$this->apiBaseUrl/recordings/{$id}";
 		
 		try {
 			$response = $this->getResponse($url);
@@ -43,13 +44,35 @@ class AvorgApi
 	 */
 	public function getPresentations($list = "")
 	{
-		$url = "https://api2.audioverse.org/recordings/$list";
+		$url = "$this->apiBaseUrl/recordings/$list";
 		$trimmedUrl = trim($url, "/");
-		
+
+		return $this->getPresentationsResponse($trimmedUrl);
+	}
+
+	/**
+	 * @param $topicId
+	 * @return null
+	 * @throws \Exception
+	 */
+	public function getTopicPresentations($topicId)
+	{
+		$url = "$this->apiBaseUrl/recordings/topic/$topicId";
+
+		return $this->getPresentationsResponse($url);
+	}
+
+	/**
+	 * @param $apiUrl
+	 * @return null
+	 * @throws \Exception
+	 */
+	private function getPresentationsResponse($apiUrl)
+	{
 		try {
-			$response = $this->getResponse($trimmedUrl);
+			$response = $this->getResponse($apiUrl);
 			$responseObject = json_decode($response);
-			
+
 			return (isset($responseObject->result)) ? $responseObject->result : null;
 		} catch (\Exception $e) {
 			throw new \Exception("Couldn't retrieve list of presentations");

@@ -201,7 +201,8 @@ trait Stub
 	public function assertMethodCalledWith($method, ...$args)
 	{
 		$argsExport = var_export($args, TRUE);
-		$haystackExport = var_export($this->getCalls($method), TRUE);
+//		$haystackExport = var_export($this->getCalls($method), TRUE);
+		$haystackExport = "DISABLED HAYSTACK EXPORT";
 		$message = "Failed asserting that '$method' was called with args $argsExport\r\n\r\nHaystack:\r\n$haystackExport";
 
 		$this->testCase->assertTrue(

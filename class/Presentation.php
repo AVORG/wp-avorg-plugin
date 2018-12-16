@@ -25,6 +25,11 @@ class Presentation
         );
     }
 
+    public function getDatePublished()
+	{
+		return $this->apiPresentation->publishDate;
+	}
+
     public function getLogUrl()
     {
         $apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
