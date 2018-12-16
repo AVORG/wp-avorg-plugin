@@ -84,7 +84,7 @@ class Plugin
 	
 	private function enqueuePluginStyles()
 	{
-		$url = $this->wp->call("plugins_url", "style.css", dirname(__FILE__));
+		$url = $this->wp->call("plugins_url", "style/style.css", dirname(__FILE__));
 		$this->wp->call("wp_enqueue_style", "avorgStyle", $url);
 	}
 	
