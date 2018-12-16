@@ -47,23 +47,33 @@ final class TestRouter extends Avorg\TestCase
 	 */
 	public function testRewriteRuleRewritesCorrectly($inputUrl, $outputUrl)
 	{
-		$this->mockWordPress->setReturnValue("call", 10);
+		$this->mockWordPress->setMappedReturnValues("call", [
+			["get_option", "avorgMediaPageId", 10],
+			["get_option", "page_on_front", "HOME_PAGE_ID"],
+			["get_option", "avorgTopicPageId", "TOPIC_PAGE_ID"]
+		]);
 		
 		$this->router->activate();
 		
 		$addRewriteCalls = $this->getAddRewriteCalls();
 		
-		$doesMatch = array_reduce($addRewriteCalls, function ($carry, $call) use ($inputUrl, $outputUrl) {
+		$results = array_map(function ($call) use ($inputUrl) {
 			$regex = $call[1];
 			$redirect = $call[2];
 			
 			preg_match("/$regex/", $inputUrl, $matches);
-			$result = eval("return \"$redirect\";");
-			
-			return $carry || $outputUrl === $result;
-		}, false);
-		
-		$this->assertTrue($doesMatch, "Input: $inputUrl\r\nExpected Output: $outputUrl");
+
+			return eval("return \"$redirect\";");
+		}, $addRewriteCalls);
+
+		$resultsExport = var_export($results, true);
+		$errorMessage = "Input: $inputUrl\r\nExpected Output: $outputUrl\r\nHaystack:\r\n$resultsExport";
+
+		$this->assertContains(
+			$outputUrl,
+			$results,
+			$errorMessage
+		);
 	}
 	
 	public function rewriteInputOutputProvider()
@@ -127,11 +137,15 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"espanol",
-				"index.php?page_id=10"
+				"index.php?page_id=HOME_PAGE_ID"
 			],
 			[
 				"espanol/",
-				"index.php?page_id=10"
+				"index.php?page_id=HOME_PAGE_ID"
+			],
+			[
+				"english/topics/102/great-controversy.html",
+				"index.php?page_id=TOPIC_PAGE_ID&topic_id=102"
 			]
 		];
 	}

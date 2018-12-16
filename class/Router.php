@@ -30,16 +30,23 @@ class Router
 	
 	public function addRewriteRules()
 	{
-		$mediaPageId = $this->wp->call("get_option", "avorgMediaPageId");
 		$homePageId = $this->wp->call("get_option", "page_on_front");
+		$mediaPageId = $this->wp->call("get_option", "avorgMediaPageId");
+		$topicPageId = $this->wp->call("get_option", "avorgTopicPageId");
 		$this->wp->call("add_rewrite_tag", "%presentation_id%", "(\d+)");
 		
-		array_map(function ($language) use ($mediaPageId, $homePageId) {
+		array_map(function ($language) use ($mediaPageId, $homePageId, $topicPageId) {
 			$this->addMediaPageRewriteRule(
 				$mediaPageId,
 				$language->baseRoute,
 				$language->modules->sermons,
 				$language->controllers->recordings
+			);
+
+			$this->addTopicPageRewriteRule(
+				$topicPageId,
+				$language->baseRoute,
+				$language->modules->topics
 			);
 			
 			$this->addHomePageRewriteRule($language, $homePageId);
@@ -52,6 +59,15 @@ class Router
 		$redirect = "index.php?page_id=$mediaPageId&presentation_id=\$matches[1]";
 		$priority = "top";
 		
+		$this->wp->call("add_rewrite_rule", $regex, $redirect, $priority);
+	}
+
+	public function addTopicPageRewriteRule($topicPageId, $languageTrans, $topicsTrans)
+	{
+		$regex = "^$languageTrans\/$topicsTrans\/(\d+)\/[\w-\.]+\/?";
+		$redirect = "index.php?page_id=$topicPageId&topic_id=\$matches[1]";
+		$priority = "top";
+
 		$this->wp->call("add_rewrite_rule", $regex, $redirect, $priority);
 	}
 	

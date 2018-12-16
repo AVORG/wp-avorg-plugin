@@ -44,7 +44,12 @@ class Plugin
 		$this->renderer = $renderer;
 		$this->router = $router;
 		$this->wp = $WordPress;
-		
+
+		$this->registerCallbacks();
+	}
+
+	private function registerCallbacks()
+	{
 		$this->wp->call("add_action", "admin_notices", [$this, "renderAdminNotices"]);
 		$this->page_media->registerCallbacks();
 		$this->page_topic->registerCallbacks();

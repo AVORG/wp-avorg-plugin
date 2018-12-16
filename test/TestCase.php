@@ -16,7 +16,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var Twig|StubTwig $mockTwig */
 	protected $mockTwig;
 	
-	/** @var WordPress $mockWordPress */
+	/** @var WordPress|StubWordPress $mockWordPress */
 	protected $mockWordPress;
 	
 	/* Helper Fields */
@@ -49,7 +49,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		$this->mockAvorgApi = $this->objectMocker->buildMock("AvorgApi");
 		$this->mockPhp = $this->objectMocker->buildMock("Php");
 		$this->mockTwig = new StubTwig($this);
-		$this->mockWordPress = $this->objectMocker->buildMock("WordPress");
+		$this->mockWordPress = new StubWordPress($this);
 	}
 	
 	protected function output( $data ) {

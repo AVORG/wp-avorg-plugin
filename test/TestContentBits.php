@@ -151,7 +151,7 @@ final class TestContentBits extends Avorg\TestCase
 		$post = new stdClass();
 		$post->post_content = "hello world";
 		$posts = [$post];
-		$this->mockWordPress->setReturnValues("call", ['111', [], $posts]);
+		$this->mockWordPress->setReturnValues("call", '111', [], $posts);
 		
 		$this->contentBits->renderShortcode([]);
 		

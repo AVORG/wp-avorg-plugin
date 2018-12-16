@@ -20,7 +20,7 @@ final class TestAdminPanel extends Avorg\TestCase
 	
 	public function testRendersPage()
 	{
-		$this->mockWordPress->setReturnValues( "call", [ "username", "password" ] );
+		$this->mockWordPress->setReturnValues( "call", "username", "password" );
 		
 		$this->adminPanel->render();
 		

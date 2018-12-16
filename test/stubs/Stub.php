@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+define("STUB_NULL", "stub_null");
+
 trait Stub
 {
 	private $calls = [];
@@ -31,23 +33,33 @@ trait Stub
 	{
 		$this->calls[$method][] = $args;
 
-		return $this->getIndexedReturnValue($method) ?:
-			$this->getMappedReturnValue($method, $args) ?:
-				$this->getConsecutiveReturnValue($method) ?:
-					$this->getCallbackReturnValue($method, $args) ?:
-						$this->getReturnValue($method);
+		$indexedReturnValue = $this->getIndexedReturnValue($method);
+		if ($indexedReturnValue !== STUB_NULL) return $indexedReturnValue;
+
+		$mappedReturnValue = $this->getMappedReturnValue($method, $args);
+		if ($mappedReturnValue !== STUB_NULL) return $mappedReturnValue;
+
+		$consecutiveReturnValue = $this->getConsecutiveReturnValue($method);
+		if ($consecutiveReturnValue !== STUB_NULL) return $consecutiveReturnValue;
+
+		$callbackReturnValue = $this->getCallbackReturnValue($method, $args);
+		if ($callbackReturnValue !== STUB_NULL) return $callbackReturnValue;
+
+		$returnValue = $this->getReturnValue($method);
+		return ($returnValue !== STUB_NULL) ? $returnValue : null;
 	}
 
 	private function getConsecutiveReturnValue($method)
 	{
-		if (!isset($this->consecutiveReturnValues[$method])) return null;
+		if (!isset($this->consecutiveReturnValues[$method])) return STUB_NULL;
 
-		return (count($this->consecutiveReturnValues[$method]) > 0) ? array_shift($this->consecutiveReturnValues[$method]) : null;
+		return (count($this->consecutiveReturnValues[$method]) > 0) ?
+			array_shift($this->consecutiveReturnValues[$method]) : STUB_NULL;
 	}
 
 	private function getCallbackReturnValue($method, $args)
 	{
-		if (!isset($this->returnCallbacks[$method])) return null;
+		if (!isset($this->returnCallbacks[$method])) return STUB_NULL;
 
 		return call_user_func($this->returnCallbacks[$method], ...$args);
 	}
@@ -62,7 +74,8 @@ trait Stub
 
 		$currentIndex = $this->methodCallIndices[$method];
 
-		return isset($this->indexedReturnValues[$method][$currentIndex]) ? $this->indexedReturnValues[$method][$currentIndex] : null;
+		return isset($this->indexedReturnValues[$method][$currentIndex]) ?
+			$this->indexedReturnValues[$method][$currentIndex] : STUB_NULL;
 	}
 
 	/**
@@ -77,13 +90,14 @@ trait Stub
 	/**
 	 * @param $method
 	 * @param $args
-	 * @return null
+	 * @return mixed
 	 */
 	private function getMappedReturnValue($method, $args)
 	{
 		$callSignature = json_encode($args);
 
-		return isset($this->mappedReturnValues[$method][$callSignature]) ? $this->mappedReturnValues[$method][$callSignature] : null;
+		return isset($this->mappedReturnValues[$method][$callSignature]) ?
+			$this->mappedReturnValues[$method][$callSignature] : STUB_NULL;
 	}
 
 	/**
@@ -92,7 +106,7 @@ trait Stub
 	 */
 	private function getReturnValue($method)
 	{
-		return isset($this->returnValues[$method]) ? $this->returnValues[$method] : null;
+		return isset($this->returnValues[$method]) ? $this->returnValues[$method] : STUB_NULL;
 	}
 
 	/**

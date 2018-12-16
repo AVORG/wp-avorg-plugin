@@ -50,7 +50,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testSavesMediaPageId()
 	{
-		$this->mockWordPress->setReturnValues("call", [false, false, 7]);
+		$this->mockWordPress->setReturnValues("call", false, false, 7);
 		
 		$this->mediaPage->createPage();
 		
@@ -72,11 +72,11 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testCreatesPageIfNoPageStatus()
 	{
-		$this->mockWordPress->setReturnValues("call", [7, false]);
+		$this->mockWordPress->setReturnValues("call", 7, false);
 		
 		$this->mediaPage->createPage();
-		
-		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
+
+		$this->mockWordPress->assertMethodCalledWith("call", ...$this->mediaPageInsertCall);
 	}
 	
 	public function testChecksPostStatus()
@@ -90,7 +90,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testUntrashesMediaPage()
 	{
-		$this->mockWordPress->setReturnValues("call", [7, "trash"]);
+		$this->mockWordPress->setReturnValues("call", 7, "trash");
 		
 		$this->mediaPage->createPage();
 		
@@ -147,7 +147,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testGetsPresentation()
 	{
-		$this->mockWordPress->setReturnValues("call", [7, 7, "54321"]);
+		$this->mockWordPress->setReturnValues("call", 7, 7, "54321");
 		
 		$this->mediaPage->addUi("content");
 		
@@ -156,7 +156,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testConvertsMediaPageIdStringToNumber()
 	{
-		$this->mockWordPress->setReturnValues("call", ["5", 5]);
+		$this->mockWordPress->setReturnValues("call", "5", 5);
 		
 		$this->assertPlayerUiInjected();
 	}

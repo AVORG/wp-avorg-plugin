@@ -4,7 +4,8 @@
     "wpLanguageCode": "en_US",
     "dbCode": "en",
     "modules": {
-      "sermons": "sermons"
+      "sermons": "sermons",
+      "topics": "topics"
     },
     "controllers": {
       "recordings": "recordings"
@@ -15,7 +16,8 @@
     "wpLanguageCode": "fr_FR",
     "dbCode": "fr",
     "modules": {
-      "sermons": "predications"
+      "sermons": "predications",
+      "topics": "sujets"
     },
     "controllers": {
       "recordings": "enregistrements"
@@ -26,7 +28,8 @@
     "wpLanguageCode": "de_DE",
     "dbCode": "de",
     "modules": {
-      "sermons": "sermons"
+      "sermons": "sermons",
+      "topics": "topics"
     },
     "controllers": {
       "recordings": "recordings"
@@ -37,7 +40,8 @@
     "wpLanguageCode": "es_ES",
     "dbCode": "es",
     "modules": {
-      "sermons": "sermones"
+      "sermons": "sermones",
+      "topics": "temas"
     },
     "controllers": {
       "recordings": "grabaciones"
