@@ -33,8 +33,9 @@ class Router
 		$homePageId = $this->wp->call("get_option", "page_on_front");
 		$mediaPageId = $this->wp->call("get_option", "avorgMediaPageId");
 		$topicPageId = $this->wp->call("get_option", "avorgTopicPageId");
-		$this->wp->call("add_rewrite_tag", "%presentation_id%", "(\d+)");
-		
+
+		$this->addRewriteTags();
+
 		array_map(function ($language) use ($mediaPageId, $homePageId, $topicPageId) {
 			$this->addMediaPageRewriteRule(
 				$mediaPageId,
@@ -51,6 +52,12 @@ class Router
 			
 			$this->addHomePageRewriteRule($language, $homePageId);
 		}, (array)$this->languages);
+	}
+
+	private function addRewriteTags()
+	{
+		$this->wp->call("add_rewrite_tag", "%presentation_id%", "(\d+)");
+		$this->wp->call("add_rewrite_tag", "%topic_id%", "(\d+)");
 	}
 	
 	public function addMediaPageRewriteRule($mediaPageId, $languageTrans, $sermonsTrans, $recordingsTrans)

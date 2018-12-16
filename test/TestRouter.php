@@ -4,42 +4,42 @@ final class TestRouter extends Avorg\TestCase
 {
 	/** @var \Avorg\Router $router */
 	protected $router;
-	
+
 	public function setUp()
 	{
 		parent::setUp();
-		
+
 		$this->router = $this->factory->getRouter();
 	}
-	
+
 	private function getAddRewriteCalls()
 	{
 		$calls = $this->mockWordPress->getCalls("call");
-		
-		return array_reduce($calls, function($carry, $call) {
+
+		return array_reduce($calls, function ($carry, $call) {
 			$isAddRewriteCall = $call[0] === "add_rewrite_rule";
-			
+
 			return $isAddRewriteCall ? array_merge($carry, [$call]) : $carry;
 		}, []);
 	}
-	
+
 	public function testCallsWordPress()
 	{
 		$this->router->activate();
-		
+
 		$this->assertCalled($this->mockWordPress, "call");
 	}
-	
+
 	public function testAssignsHighPriority()
 	{
 		$this->router->activate();
-		
+
 		$addRewriteCalls = $this->getAddRewriteCalls();
 		$priority = $addRewriteCalls[0][3];
-		
+
 		$this->assertEquals("top", $priority);
 	}
-	
+
 	/**
 	 * @dataProvider rewriteInputOutputProvider
 	 * @param $inputUrl
@@ -52,15 +52,15 @@ final class TestRouter extends Avorg\TestCase
 			["get_option", "page_on_front", "HOME_PAGE_ID"],
 			["get_option", "avorgTopicPageId", "TOPIC_PAGE_ID"]
 		]);
-		
+
 		$this->router->activate();
-		
+
 		$addRewriteCalls = $this->getAddRewriteCalls();
-		
+
 		$results = array_map(function ($call) use ($inputUrl) {
 			$regex = $call[1];
 			$redirect = $call[2];
-			
+
 			preg_match("/$regex/", $inputUrl, $matches);
 
 			return eval("return \"$redirect\";");
@@ -75,7 +75,7 @@ final class TestRouter extends Avorg\TestCase
 			$errorMessage
 		);
 	}
-	
+
 	public function rewriteInputOutputProvider()
 	{
 		return [
@@ -149,103 +149,121 @@ final class TestRouter extends Avorg\TestCase
 			]
 		];
 	}
-	
+
 	public function testFlushesRewireRules()
 	{
 		$this->router->activate();
-		
+
 		$this->assertCalledWith($this->mockWordPress, "call", "flush_rewrite_rules");
 	}
-	
-	public function testRegistersPresParam()
-	{
-		$this->router->activate();
-		
-		$this->assertCalledWith($this->mockWordPress, "call", "add_rewrite_tag", "%presentation_id%", "(\d+)");
-	}
-	
+
 	public function testUsesSavedMediaPageId()
 	{
 		$this->mockWordPress->setReturnValue("call", 3);
-		
+
 		$this->router->activate();
-		
+
 		$addRewriteCalls = $this->getAddRewriteCalls();
 		$redirect = $addRewriteCalls[0][2];
-		
+
 		$this->assertContains("page_id=3", $redirect);
 	}
-	
+
 	public function testSetLocaleFunctionExists()
 	{
 		$this->assertTrue(method_exists($this->router, "setLocale"));
 	}
-	
+
 	public function testSetLocaleFunctionReturnsPreviousLang()
 	{
 		$this->assertEquals("lang", $this->router->setLocale("lang"));
 	}
-	
+
 	public function testSetsSpanishLocale()
 	{
 		$_SERVER["REQUEST_URI"] = "/espanol";
-		
+
 		$this->assertEquals("es_ES", $this->router->setLocale("lang"));
 	}
-	
+
 	public function testUsesLanguageFile()
 	{
 		$_SERVER["REQUEST_URI"] = "/deutsch";
-		
+
 		$this->assertEquals("de_DE", $this->router->setLocale("lang"));
 	}
 
-    /**
-     * @dataProvider redirectFilteringProvider
-     * @param $requestUrl
-     * @param $shouldAllowRedirect
-     */
-    public function testRedirectFiltering($requestUrl, $shouldAllowRedirect)
-    {
-        $_SERVER["HTTP_HOST"] = "localhost:8080";
-        $_SERVER["REQUEST_URI"] = $requestUrl;
-        $path = parse_url($requestUrl, PHP_URL_PATH);
-        $fullRequestUrl = $_SERVER["HTTP_HOST"] . $path;
-        $expected = $shouldAllowRedirect ? "redirect_url" : "http://" . $fullRequestUrl;
-        $result = $this->router->filterRedirect("redirect_url");
+	/**
+	 * @dataProvider redirectFilteringProvider
+	 * @param $requestUrl
+	 * @param $shouldAllowRedirect
+	 */
+	public function testRedirectFiltering($requestUrl, $shouldAllowRedirect)
+	{
+		$_SERVER["HTTP_HOST"] = "localhost:8080";
+		$_SERVER["REQUEST_URI"] = $requestUrl;
+		$path = parse_url($requestUrl, PHP_URL_PATH);
+		$fullRequestUrl = $_SERVER["HTTP_HOST"] . $path;
+		$expected = $shouldAllowRedirect ? "redirect_url" : "http://" . $fullRequestUrl;
+		$result = $this->router->filterRedirect("redirect_url");
 
-        $this->assertEquals($expected, $result);
-    }
+		$this->assertEquals($expected, $result);
+	}
 
-    public function redirectFilteringProvider()
-    {
-        return [
-            "Spanish Route" => ["localhost:8080/espanol", FALSE],
-            "No Language Route" => ["localhost:8080/path", TRUE],
-            "Complex Spanish Route" => ["localhost:8080/espanol/path/to/page", FALSE],
-            "French Route" => ["localhost:8080/francais", FALSE],
-            "Spanish Production Url" => ["https://audioverse.org/espanol", FALSE],
-            "No Language Production Url" => ["https://audioverse.org/path/to/page", TRUE],
-            "Spanish Path" => ["/espanol", FALSE],
-            "No Language Path" => ["/path", TRUE],
-            "Complex Spanish Path" => ["/espanol/path/to/page", FALSE],
-            "French Path" => ["/francais", FALSE]
-        ];
-    }
+	public function redirectFilteringProvider()
+	{
+		return [
+			"Spanish Route" => ["localhost:8080/espanol", FALSE],
+			"No Language Route" => ["localhost:8080/path", TRUE],
+			"Complex Spanish Route" => ["localhost:8080/espanol/path/to/page", FALSE],
+			"French Route" => ["localhost:8080/francais", FALSE],
+			"Spanish Production Url" => ["https://audioverse.org/espanol", FALSE],
+			"No Language Production Url" => ["https://audioverse.org/path/to/page", TRUE],
+			"Spanish Path" => ["/espanol", FALSE],
+			"No Language Path" => ["/path", TRUE],
+			"Complex Spanish Path" => ["/espanol/path/to/page", FALSE],
+			"French Path" => ["/francais", FALSE]
+		];
+	}
 
-    public function testGetUrlForApiRecording()
-    {
-        $apiRecording = $this->convertArrayToObjectRecursively([
-            "lang" => "en",
-            "id" => "1836",
-            "title" => 'E.P. Daniels and True Revival'
-        ]);
+	public function testGetUrlForApiRecording()
+	{
+		$apiRecording = $this->convertArrayToObjectRecursively([
+			"lang" => "en",
+			"id" => "1836",
+			"title" => 'E.P. Daniels and True Revival'
+		]);
 
-        $url = $this->router->getUrlForApiRecording($apiRecording);
+		$url = $this->router->getUrlForApiRecording($apiRecording);
 
-        $this->assertEquals(
-            "/english/sermons/recordings/1836/E.P.%20Daniels%20and%20True%20Revival.html",
-            $url
-        );
-    }
+		$this->assertEquals(
+			"/english/sermons/recordings/1836/E.P.%20Daniels%20and%20True%20Revival.html",
+			$url
+		);
+	}
+
+	/**
+	 * @dataProvider rewriteTagProvider
+	 * @param $tag
+	 * @param $regex
+	 */
+	public function testRegistersRewriteTags($tag, $regex)
+	{
+		$this->router->activate();
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"call",
+			"add_rewrite_tag",
+			$tag,
+			$regex
+		);
+	}
+
+	public function rewriteTagProvider()
+	{
+		return [
+			"presentation_id" => [ "%presentation_id%", "(\d+)" ],
+			"topic_id" => [ "%topic_id%", "(\d+)" ]
+		];
+	}
 }
