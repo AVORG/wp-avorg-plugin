@@ -95,4 +95,14 @@ abstract class Page
 	{
 		return $this->wp->call("get_option", $this->pageIdOptionName);
 	}
+
+	/**
+	 * @param $query
+	 */
+	protected function set404($query)
+	{
+		unset($query->query_vars["page_id"]);
+		$query->set_404();
+		$this->wp->call("status_header", 404);
+	}
 }

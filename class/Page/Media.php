@@ -41,29 +41,39 @@ class Media extends Page
 		try {
 			$this->avorgApi->getPresentation($query->get("presentation_id"));
 		} catch (\Exception $e) {
-			unset($query->query_vars["page_id"]);
-			$query->set_404();
-			$this->wp->call("status_header", 404);
+			$this->set404($query);
 		}
 	}
-	
+
+	/**
+	 * @param $title
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function setTitle($title)
 	{
-		$presentationId = $this->wp->call("get_query_var", "presentation_id");
-		
-		$presentation = $this->presentationRepository->getPresentation($presentationId);
-		
+		$presentation = $this->getPresentation();
+
 		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : $title;
 	}
 
 	/**
 	 * @return array
+	 * @throws \Exception
 	 */
 	protected function getTwigData()
 	{
-		$presentationId = $this->wp->call("get_query_var", "presentation_id");
-		$presentation = $this->presentationRepository->getPresentation($presentationId);
+		return ["presentation" => $this->getPresentation()];
+	}
 
-		return ["presentation" => $presentation];
+	/**
+	 * @return \Avorg\Presentation|null
+	 * @throws \Exception
+	 */
+	private function getPresentation()
+	{
+		$presentationId = $this->wp->call("get_query_var", "presentation_id");
+
+		return $this->presentationRepository->getPresentation($presentationId);
 	}
 }

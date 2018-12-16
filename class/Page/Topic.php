@@ -2,7 +2,6 @@
 
 namespace Avorg\Page;
 
-use Avorg\AvorgApi;
 use Avorg\Page;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
