@@ -192,12 +192,27 @@ final class TestPlugin extends Avorg\TestCase
 		$this->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!");
 	}
 
-	public function testRegistersCallbacksOnMediaPage()
+	/**
+	 * @dataProvider pageNameProvider
+	 * @param $pageName
+	 */
+	public function testRegistersPageCallbacks($pageName)
 	{
+		$factoryMethodName = "getPage_$pageName";
+		$pageObject = $this->factory->$factoryMethodName();
+
 		$this->assertWordPressFunctionCalledWith(
 			"add_filter",
 			"the_content",
-			[$this->factory->getPage_Media(), "addUi"]
+			[$pageObject, "addUi"]
 		);
+	}
+
+	public function pageNameProvider()
+	{
+		return [
+			"Media Page" => ["Media"],
+			"Topic Page" => ["Topic"]
+		];
 	}
 }

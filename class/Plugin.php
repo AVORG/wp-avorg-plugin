@@ -12,22 +12,26 @@ class Plugin
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
 	
-	/** @var Page\Media $mediaPage */
-	private $mediaPage;
+	/** @var Page\Media $page_media */
+	private $page_media;
+
+	/** @var Page\Topic $page_topic */
+	private $page_topic;
 	
 	/** @var Renderer $renderer */
 	private $renderer;
 	
 	/** @var Router $router */
 	private $router;
-	
+
 	/** @var WordPress $wp */
 	private $wp;
 	
 	public function __construct(
         ContentBits $contentBits,
         ListShortcode $listShortcode,
-        Page\Media $mediaPage,
+        Page\Media $page_media,
+        Page\Topic $page_topic,
         Renderer $renderer,
         Router $router,
         WordPress $WordPress
@@ -35,13 +39,15 @@ class Plugin
 	{
 		$this->contentBits = $contentBits;
 		$this->listShortcode = $listShortcode;
-		$this->mediaPage = $mediaPage;
+		$this->page_media = $page_media;
+		$this->page_topic = $page_topic;
 		$this->renderer = $renderer;
 		$this->router = $router;
 		$this->wp = $WordPress;
 		
 		$this->wp->call("add_action", "admin_notices", [$this, "renderAdminNotices"]);
-		$this->mediaPage->registerCallbacks();
+		$this->page_media->registerCallbacks();
+		$this->page_topic->registerCallbacks();
 	}
 	
 	public function activate()
