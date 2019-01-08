@@ -132,6 +132,20 @@ class Router
             $language->modules->sermons . "/" .
             $language->controllers->recordings . "/" .
             $apiRecording->id . "/" .
-            rawurlencode($apiRecording->title) . ".html";
+			$this->formatTitleForUrl($apiRecording) . ".html";
     }
+
+	/**
+	 * @param $apiRecording
+	 * @return string
+	 */
+	private function formatTitleForUrl($apiRecording)
+	{
+		$title = $apiRecording->title;
+		$titleLowerCase = strtolower($title);
+		$titleNoPunctuation = preg_replace("/[^\w ]/", "", $titleLowerCase);
+		$titleHyphenated = str_replace(" ", "-", $titleNoPunctuation);
+
+		return $titleHyphenated;
+	}
 }

@@ -237,7 +237,7 @@ final class TestRouter extends Avorg\TestCase
 		$url = $this->router->getUrlForApiRecording($apiRecording);
 
 		$this->assertEquals(
-			"/english/sermons/recordings/1836/E.P.%20Daniels%20and%20True%20Revival.html",
+			"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
 			$url
 		);
 	}
