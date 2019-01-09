@@ -17,6 +17,9 @@ class Plugin
 
 	/** @var Page\Topic $page_topic */
 	private $page_topic;
+
+	/** @var Pwa $pwa */
+	private $pwa;
 	
 	/** @var Renderer $renderer */
 	private $renderer;
@@ -32,6 +35,7 @@ class Plugin
         ListShortcode $listShortcode,
         Page\Media $page_media,
         Page\Topic $page_topic,
+        Pwa $pwa,
         Renderer $renderer,
         Router $router,
         WordPress $WordPress
@@ -41,6 +45,7 @@ class Plugin
 		$this->listShortcode = $listShortcode;
 		$this->page_media = $page_media;
 		$this->page_topic = $page_topic;
+		$this->pwa = $pwa;
 		$this->renderer = $renderer;
 		$this->router = $router;
 		$this->wp = $WordPress;
@@ -53,6 +58,7 @@ class Plugin
 		$this->wp->call("add_action", "admin_notices", [$this, "renderAdminNotices"]);
 		$this->page_media->registerCallbacks();
 		$this->page_topic->registerCallbacks();
+		$this->pwa->registerCallbacks();
 	}
 	
 	public function activate()

@@ -34,22 +34,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		define( "ABSPATH", "/" );
 		
 		$this->objectMocker = new MockFactory();
-		
-		$this->resetMocks();
-		
-		$this->factory = new Factory(
-			$this->mockAvorgApi,
-			$this->mockPhp,
-			$this->mockTwig,
-			$this->mockWordPress
+		$this->factory = new Factory();
+
+		$this->factory->injectObjects(
+			$this->mockAvorgApi = $this->objectMocker->buildMock("AvorgApi"),
+			$this->mockPhp = $this->objectMocker->buildMock("Php"),
+			$this->mockTwig = new StubTwig($this),
+			$this->mockWordPress = new StubWordPress($this)
 		);
-	}
-	
-	private function resetMocks() {
-		$this->mockAvorgApi = $this->objectMocker->buildMock("AvorgApi");
-		$this->mockPhp = $this->objectMocker->buildMock("Php");
-		$this->mockTwig = new StubTwig($this);
-		$this->mockWordPress = new StubWordPress($this);
 	}
 	
 	protected function output( $data ) {

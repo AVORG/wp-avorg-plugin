@@ -5,36 +5,26 @@ final class TestPlugin extends Avorg\TestCase
 	/** @var \Avorg\Plugin $plugin */
 	protected $plugin;
 	
-	private $mediaPageInsertCall = array("wp_insert_post", array(
-		"post_content" => "Media Detail",
-		"post_title" => "Media Detail",
-		"post_status" => "publish",
-		"post_type" => "page"
-	), true);
-	
 	protected function setUp()
 	{
 		parent::setUp();
 		
 		$this->mockWordPress->setReturnValue("call", 5);
-		$this->plugin = $this->factory->getPlugin();
+		$this->plugin = $this->factory->get("Plugin");
 	}
 	
 	public function testActivatesRouterOnPluginActivate()
 	{
-		$plugin = $this->factory->getPlugin();
-		
-		$plugin->activate();
+		$this->plugin->activate();
 		
 		$this->assertWordPressFunctionCalled("flush_rewrite_rules");
 	}
 	
 	public function testInitInitsContentBits()
 	{
-		$plugin = $this->factory->getPlugin();
-		$contentBits = $this->factory->getContentBits();
+		$contentBits = $this->factory->get("ContentBits");
 		
-		$plugin->init();
+		$this->plugin->init();
 
 		$this->assertWordPressFunctionCalledWith(
 			"add_shortcode",
@@ -45,9 +35,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testInitInitsRouter()
 	{
-		$plugin = $this->factory->getPlugin();
-		
-		$plugin->init();
+		$this->plugin->init();
 		
 		$this->assertWordPressFunctionCalled("add_rewrite_rule");
 	}
@@ -83,10 +71,9 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testInitsListShortcode()
 	{
-		$plugin = $this->factory->getPlugin();
-		$listShortcode = $this->factory->getListShortcode();
+		$listShortcode = $this->factory->get("ListShortcode");
 		
-		$plugin->init();
+		$this->plugin->init();
 		
 		$this->assertWordPressFunctionCalledWith(
 			"add_shortcode",
@@ -195,11 +182,11 @@ final class TestPlugin extends Avorg\TestCase
 	/**
 	 * @dataProvider pageNameProvider
 	 * @param $pageName
+	 * @throws ReflectionException
 	 */
 	public function testRegistersPageCallbacks($pageName)
 	{
-		$factoryMethodName = "getPage_$pageName";
-		$pageObject = $this->factory->$factoryMethodName();
+		$pageObject = $this->factory->get("Page\\$pageName");
 
 		$this->assertWordPressFunctionCalledWith(
 			"add_filter",
@@ -214,5 +201,17 @@ final class TestPlugin extends Avorg\TestCase
 			"Media Page" => ["Media"],
 			"Topic Page" => ["Topic"]
 		];
+	}
+
+	public function testRegistersPwaCallbacks()
+	{
+		$pwa = $this->factory->get("Pwa");
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"call",
+			"add_action",
+			"wp_front_service_worker",
+			[$pwa, "registerServiceWorker"]
+		);
 	}
 }

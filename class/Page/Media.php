@@ -18,7 +18,6 @@ class Media extends Page
     /** @var PresentationRepository $presentationRepository */
     protected $presentationRepository;
 
-    protected $pageIdOptionName = "avorgMediaPageId";
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
     protected $twigTemplate = "organism-recording.twig";

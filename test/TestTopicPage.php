@@ -17,7 +17,7 @@ final class TestTopicPage extends Avorg\TestCase
 		parent::setUp();
 
 		$this->mockWordPress->setReturnValue("call", 5);
-		$this->topicPage = $this->factory->getPage_Topic();
+		$this->topicPage = $this->factory->get("Page\\Topic");
 	}
 
 	public function testExists()
@@ -35,7 +35,7 @@ final class TestTopicPage extends Avorg\TestCase
 			$this->mockWordPress,
 			"call",
 			"update_option",
-			"avorgTopicPageId",
+			"avorg_page_id_avorg_page_topic",
 			false
 		);
 	}

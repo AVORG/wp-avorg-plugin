@@ -12,7 +12,7 @@ abstract class Page
     /** @var WordPress $wp */
     protected $wp;
 
-    protected $pageIdOptionName;
+    private $pageIdOptionName;
     protected $defaultPageContent;
     protected $defaultPageTitle;
     protected $twigTemplate;
@@ -21,6 +21,8 @@ abstract class Page
     {
     	$this->renderer = $renderer;
         $this->wp = $wp;
+
+		$this->setPageIdOptionName();
 	}
 
     abstract public function throw404($query);
@@ -104,5 +106,15 @@ abstract class Page
 		unset($query->query_vars["page_id"]);
 		$query->set_404();
 		$this->wp->call("status_header", 404);
+	}
+
+	private function setPageIdOptionName()
+	{
+		$prefix = "avorg_page_id_";
+		$class = get_class($this);
+		$lowercase = strtolower($class);
+		$slashToUnderscore = str_replace("\\", "_", $lowercase);
+
+		$this->pageIdOptionName = $prefix . $slashToUnderscore;
 	}
 }

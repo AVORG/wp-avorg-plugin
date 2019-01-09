@@ -15,7 +15,7 @@ final class TestAdminPanel extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->adminPanel = $this->factory->getAdminPanel();
+		$this->adminPanel = $this->factory->get("AdminPanel");
 	}
 	
 	public function testRendersPage()
@@ -24,7 +24,10 @@ final class TestAdminPanel extends Avorg\TestCase
 		
 		$this->adminPanel->render();
 		
-		$this->assertTwigTemplateRenderedWithData("admin.twig", ["apiUser" => "username", "apiPass" => "password"]);
+		$this->assertTwigTemplateRenderedWithData(
+			"admin.twig",
+			["apiUser" => "username", "apiPass" => "password"]
+		);
 	}
 	
 	public function testRegistersPage()

@@ -17,7 +17,6 @@ class Topic extends Page
 	/** @var WordPress $wp */
 	protected $wp;
 
-	protected $pageIdOptionName = "avorgTopicPageId";
 	protected $defaultPageTitle = "Topic Detail";
 	protected $defaultPageContent = "Topic Detail";
 	protected $twigTemplate = "organism-topic.twig";

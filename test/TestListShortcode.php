@@ -9,7 +9,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->listShortcode = $this->factory->getListShortcode();
+		$this->listShortcode = $this->factory->get("ListShortcode");
 	}
 	
 	// helper functions

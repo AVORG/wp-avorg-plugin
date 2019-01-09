@@ -9,7 +9,7 @@ final class TestRouter extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->router = $this->factory->getRouter();
+		$this->router = $this->factory->get("Router");
 	}
 
 	private function getAddRewriteCalls()

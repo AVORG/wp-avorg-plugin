@@ -29,15 +29,17 @@ final class TestMediaPage extends Avorg\TestCase
 	protected function make404ThrowingMediaPage()
 	{
 		$avorgApi = new \Avorg\AvorgApi_exceptions();
-		
-		$factory = new \Avorg\Factory(
+
+		$factory = new \Avorg\Factory();
+
+		$factory->injectObjects(
 			$avorgApi,
 			$this->mockPhp,
 			$this->mockTwig,
 			$this->mockWordPress
 		);
 		
-		return $factory->getPage_Media();
+		return $factory->get("Page\\Media");
 	}
 	
 	protected function setUp()
@@ -45,7 +47,7 @@ final class TestMediaPage extends Avorg\TestCase
 		parent::setUp();
 		
 		$this->mockWordPress->setReturnValue("call", 5);
-		$this->mediaPage = $this->factory->getPage_Media();
+		$this->mediaPage = $this->factory->get("Page\\Media");
 	}
 	
 	public function testSavesMediaPageId()
@@ -58,7 +60,7 @@ final class TestMediaPage extends Avorg\TestCase
 			$this->mockWordPress,
 			"call",
 			"update_option",
-			"avorgMediaPageId",
+			"avorg_page_id_avorg_page_media",
 			7
 		);
 	}
@@ -67,7 +69,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith($this->mockWordPress, "call", "get_option", "avorgMediaPageId");
+		$this->assertCalledWith($this->mockWordPress, "call", "get_option", "avorg_page_id_avorg_page_media");
 	}
 	
 	public function testCreatesPageIfNoPageStatus()

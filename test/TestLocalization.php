@@ -9,7 +9,7 @@ final class TestLocalization extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->localization = $this->factory->getLocalization();
+		$this->localization = $this->factory->get("Localization");
 	}
 	
 	public function test__iFunctionExsits()

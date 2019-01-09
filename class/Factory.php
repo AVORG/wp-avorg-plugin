@@ -4,85 +4,57 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
-/**
- * Class Factory
- * @package Avorg
- */
 class Factory
 {
 	private $namespace = __NAMESPACE__;
 
-	/** @var AvorgApi $avorgApi */
-	private $avorgApi;
+	private $objects = [];
 
-	/** @var Php $php */
-	private $php;
-
-	/** @var Twig $twig */
-	private $twig;
-
-	/** @var WordPress $wordPress */
-	private $wordPress;
-	
-	/**
-	 * Factory constructor.
-	 * @param AvorgApi|null $avorgApi
-	 * @param Php|null $php
-	 * @param Twig|null $twig
-	 * @param WordPress|null $wordPress
-	 */
-	public function __construct(
-		AvorgApi $avorgApi = null,
-		Php $php = null,
-		Twig $twig = null,
-		WordPress $wordPress = null
-	)
+	public function injectObjects(...$objects)
 	{
-		$this->avorgApi = $avorgApi;
-		$this->php = $php;
-		$this->twig = $twig;
-		$this->wordPress = $wordPress;
-	}
-	
-	/**
-	 * @return Factory
-	 */
-	public function getFactory()
-	{
-		return $this;
+		$this->objects = array_merge($this->objects, $objects);
 	}
 
 	/**
-	 * @return TwigGlobal
-	 */
-	public function getTwigGlobal()
-	{
-		return $this->makeObject(
-			"$this->namespace\\TwigGlobal",
-			$this->getLocalization(),
-			$this->getWordPress()
-		);
-	}
-
-	/**
-	 * @param $method
-	 * @param array $args
+	 * @param $class
 	 * @return null
 	 * @throws \ReflectionException
 	 */
-	public function __call($method, $args = [])
+	public function get($class)
 	{
-		$isGet = substr( $method, 0, 3 ) === "get";
-		if (!$isGet) return null;
-		$name = substr($method, 3, strlen($method) - 3);
-		$qualifiedName = $this->getQualifiedName($name);
-		$dependencyNames = $this->getDependencyNames($qualifiedName);
-		$dependencies = array_map(function($dependencyName) {
-			$methodName = "get$dependencyName";
-			return $this->$methodName();
-		}, $dependencyNames);
+		if (is_a($this, $class)) return $this;
+
+		$qualifiedName = $this->getQualifiedName($class);
+		$dependencies = $this->getDependencies($qualifiedName);
+
 		return $this->getObject($qualifiedName, ...$dependencies);
 	}
+
+	/**
+	 * @param $class
+	 * @return null
+	 * @throws \ReflectionException
+	 */
+	public function make($class)
+	{
+		$qualifiedName = $this->getQualifiedName($class);
+		$dependencies = $this->getDependencies($qualifiedName);
+
+		return $this->makeObject($qualifiedName, ...$dependencies);
+	}
+
+	/**
+	 * @param $qualifiedName
+	 * @return array
+	 * @throws \ReflectionException
+	 */
+	private function getDependencies($qualifiedName)
+	{
+		$dependencyNames = $this->getDependencyNames($qualifiedName);
+
+		return array_map([$this, "get"], $dependencyNames);
+	}
+
 	/**
 	 * @param $className
 	 * @return array|mixed
@@ -93,12 +65,13 @@ class Factory
 		$reflection = new \ReflectionClass($className);
 		$constructor = $reflection->getConstructor();
 		$params = ($constructor) ? $constructor->getParameters() : [];
-		return array_map(function(\ReflectionParameter $param) {
-			$name = $param->getClass()->name;
 
+		return array_map(function (\ReflectionParameter $param) {
+			$name = $param->getClass()->name;
 			return $this->getQualifiedName($name);
 		}, $params);
 	}
+
 	/**
 	 * @param $name
 	 * @return string
@@ -107,15 +80,9 @@ class Factory
 	{
 		$isQualified = strpos(trim($name, "\\"), "$this->namespace\\") === 0;
 
-		if ($isQualified) return $name;
-
-		$isNamespacedMethod = strpos($name, "_") !== false;
-
-		if ($isNamespacedMethod) return $this->convertNamespacedMethodNameToQualifiedName($name);
-
-		return "\\$this->namespace\\$name";
+		return $isQualified ? $name : "\\$this->namespace\\$name";
 	}
-	
+
 	/**
 	 * @param string $class
 	 * @param array ...$dependencies
@@ -123,13 +90,10 @@ class Factory
 	 */
 	private function getObject($class, ...$dependencies)
 	{
-		$propertyName = $this->getPropertyName($class);
-		
-		if (! isset($this->$propertyName)) $this->$propertyName = new $class(...$dependencies);
-		
-		return $this->$propertyName;
+		return $this->getSavedObject($class) ?:
+			$this->objects[] = new $class(...$dependencies);
 	}
-	
+
 	/**
 	 * @param string $class
 	 * @param array ...$dependencies
@@ -137,40 +101,20 @@ class Factory
 	 */
 	private function makeObject($class, ...$dependencies)
 	{
-		$propertyName = $this->getPropertyName($class);
-		$shouldUseProperty = property_exists($this, $propertyName) && isset($this->$propertyName);
-		
-		return $shouldUseProperty ? $this->$propertyName : new $class(...$dependencies);
+		return $this->getSavedObject($class) ?:
+			new $class(...$dependencies);
 	}
 
 	/**
 	 * @param $class
-	 * @return string
+	 * @return mixed
 	 */
-	private function getPropertyName($class)
+	private function getSavedObject($class)
 	{
-		return lcfirst($this->getSimpleClassName($class));
-	}
+		$matchingObjects = array_filter($this->objects, function($object) use($class) {
+			return is_a($object, $class);
+		});
 
-	/**
-	 * @param $name
-	 * @return string
-	 */
-	private function getSimpleClassName($name)
-	{
-		$nameFragments = explode("\\", $name);
-		return end($nameFragments);
-	}
-
-	/**
-	 * @param $methodName
-	 * @return string
-	 */
-	private function convertNamespacedMethodNameToQualifiedName($methodName)
-	{
-		$fragments = explode("_", $methodName);
-		$partiallyQualifiedName = implode("\\", $fragments);
-
-		return "\\$this->namespace\\$partiallyQualifiedName";
+		return end($matchingObjects);
 	}
 }
