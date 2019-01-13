@@ -17,4 +17,11 @@ final class TestPlaylistPage extends Avorg\TestCase
 	{
 		$this->assertInstanceOf("\\Avorg\\Page\\Playlist", $this->playlistPage);
 	}
+
+/*	public function testRendersCorrectTemplate()
+	{
+		$this->playlistPage->addUi("content");
+
+		$this->assertTwigTemplateRendered();
+	}*/
 }

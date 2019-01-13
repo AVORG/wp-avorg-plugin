@@ -115,7 +115,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mediaPage->addUi("content");
 		
-		$this->assertTwigTemplateRenderedWithData("organism-recording.twig", ["presentation" => null]);
+		$this->mockTwig->assertTwigTemplateRenderedWithData("organism-recording.twig", ["presentation" => null]);
 	}
 	
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
@@ -200,7 +200,7 @@ final class TestMediaPage extends Avorg\TestCase
 		$mediaPage->throw404($wp_query);
 		
 		$this->assertTrue($wp_query->was404set);
-		$this->assertWordPressFunctionCalledWith("status_header", 404);
+		$this->mockWordPress->assertWordPressFunctionCalledWith("status_header", 404);
 	}
 	
 	public function testThrowing404UnsetsPageId()
@@ -258,7 +258,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mediaPage->registerCallbacks();
 
-		$this->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertWordPressFunctionCalledWith(
 			$registrationMethod,
 			$hookId,
 			[$this->mediaPage, $callbackName]

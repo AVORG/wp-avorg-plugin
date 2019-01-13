@@ -19,7 +19,7 @@ final class TestLocalization extends Avorg\TestCase
 	
 	public function testRegistersLanguageAdditionMethod()
 	{
-		$this->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertWordPressFunctionCalledWith(
 			"add_action",
 			"init",
 			[$this->localization, "loadLanguages"]
@@ -30,7 +30,7 @@ final class TestLocalization extends Avorg\TestCase
 	{
 		$this->localization->loadLanguages();
 		
-		$this->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertWordPressFunctionCalledWith(
 			"load_plugin_textdomain",
 			$this->textDomain,
 			false,
@@ -42,13 +42,13 @@ final class TestLocalization extends Avorg\TestCase
 	{
 		$this->localization->i__("to translate");
 		
-		$this->assertWordPressFunctionCalledWith("__", "to translate", $this->textDomain);
+		$this->mockWordPress->assertWordPressFunctionCalledWith("__", "to translate", $this->textDomain);
 	}
 	
 	public function testCallsUnderscoreEnWithDomain()
 	{
 		$this->localization->_n("cat","cats",3);
 		
-		$this->assertWordPressFunctionCalledWith("_n", "cat", "cats", 3, $this->textDomain);
+		$this->mockWordPress->assertWordPressFunctionCalledWith("_n", "cat", "cats", 3, $this->textDomain);
 	}
 }

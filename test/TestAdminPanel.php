@@ -24,7 +24,7 @@ final class TestAdminPanel extends Avorg\TestCase
 		
 		$this->adminPanel->render();
 		
-		$this->assertTwigTemplateRenderedWithData(
+		$this->mockTwig->assertTwigTemplateRenderedWithData(
 			"admin.twig",
 			["apiUser" => "username", "apiPass" => "password"]
 		);
@@ -47,7 +47,7 @@ final class TestAdminPanel extends Avorg\TestCase
 		
 		$this->adminPanel->render();
 		
-		$this->assertWordPressFunctionCalled("flush_rewrite_rules");
+		$this->mockWordPress->assertWordPressFunctionCalled("flush_rewrite_rules");
 	}
 	
 	public function testSetsApiUser()

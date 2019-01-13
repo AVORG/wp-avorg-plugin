@@ -11,6 +11,14 @@ class StubTwig extends Twig
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function assertErrorRenderedWithMessage($message)
+	{
+		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", [
+			"type" => "error",
+			"message" => $message
+		]);
+	}
+
 	public function assertTwigTemplateRenderedWithData($template, $data)
 	{
 		$this->assertAnyCallMatches("render", function($carry, $call) use($template, $data) {

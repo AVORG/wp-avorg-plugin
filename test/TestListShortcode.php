@@ -32,7 +32,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->addShortcode();
 		
-		$this->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertWordPressFunctionCalledWith(
 			"add_shortcode",
 			"avorg-list",
 			[$this->listShortcode, "renderShortcode"]

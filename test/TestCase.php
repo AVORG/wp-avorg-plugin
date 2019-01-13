@@ -111,67 +111,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		return implode( "\r\n\r\n", $errorLines );
 	}
 	
-	protected function assertWordPressFunctionCalled($function)
-	{
-		$calls = $this->mockWordPress->getCalls("call");
-		
-		$wasCalled = array_reduce($calls, function ($carry, $call) use ($function) {
-			return $carry || $call[0] === $function;
-		}, false);
-		
-		$error = "Failed to assert $function was called using the WordPress wrapper\r\n\r\n" . json_encode($calls);
-		
-		$this->assertTrue($wasCalled, $error);
-	}
-	
-	protected function assertWordPressFunctionCalledWith($function, ...$arguments)
-	{
-		$needle = array_merge( [$function], $arguments );
-		$calls = $this->mockWordPress->getCalls("call");
-		
-		$wasCalled = array_reduce($calls, function ($carry, $call) use ($needle) {
-			return $carry || $call === $needle;
-		}, false);
-
-		$needleHaystack = json_encode($needle);
-		$callExport = json_encode($calls);
-        $message = "Failed to assert $function was called using specified arguments\r\n\r\nNeedle:\r\n$needleHaystack\r\nHaystack:\r\n$callExport";
-
-        $this->assertTrue(
-		    $wasCalled,
-            $message
-        );
-	}
-	
-	protected function assertErrorRenderedWithMessage($message)
-	{
-		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", [
-			"type" => "error",
-			"message" => $message
-		]);
-	}
-	
-	protected function assertTwigTemplateRenderedWithData($template, $data)
-	{
-		$message = "Failed to assert that $template was rendered with specified data";
-		
-		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) use($template, $data) {
-			$callTemplate = $call[0];
-			$callGlobal = $call[1]["avorg"];
-			$hasData = $this->doesGlobalContainData($callGlobal, $data);
-			$callMatches = $callTemplate === $template && $hasData;
-			
-			return $carry || $callMatches;
-		}, $message);
-	}
-	
-	private function doesGlobalContainData($global, $data)
-	{
-		return array_reduce(array_keys($data), function ($carry, $key) use ($global, $data) {
-			return $carry && $global->$key === $data[$key];
-		}, true);
-	}
-	
 	protected function assertAnyCallMatches($mock, $method, $callback, $errorMessage = "" ) {
 		$calls = $mock->getCalls( $method );
 		
