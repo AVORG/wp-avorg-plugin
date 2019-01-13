@@ -17,7 +17,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->plugin->activate();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("flush_rewrite_rules");
+		$this->mockWordPress->assertMethodCalled("flush_rewrite_rules");
 	}
 	
 	public function testInitInitsContentBits()
@@ -26,7 +26,7 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->init();
 
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"add_shortcode",
 			"avorg-bits",
 			[$contentBits, "renderShortcode"]
@@ -37,21 +37,21 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->plugin->init();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("add_rewrite_rule");
+		$this->mockWordPress->assertMethodCalled("add_rewrite_rule");
 	}
 	
 	public function testEnqueueScripts()
 	{
 		$this->plugin->enqueueScripts();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("wp_enqueue_style");
+		$this->mockWordPress->assertMethodCalled("wp_enqueue_style");
 	}
 	
 	public function testEnqueueScriptsGetsStylesheetUrl()
 	{
 		$this->plugin->enqueueScripts();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("plugins_url");
+		$this->mockWordPress->assertMethodCalled("plugins_url");
 	}
 	
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
@@ -74,7 +74,7 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->init();
 		
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"add_shortcode",
 			"avorg-list",
 			[$listShortcode, "renderShortcode"]
@@ -85,7 +85,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->plugin->enqueueScripts();
 		
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
 			"avorgVideoJsStyle",
 			"//vjs.zencdn.net/7.0/video-js.min.css"
@@ -96,7 +96,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->plugin->enqueueScripts();
 		
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_script",
 			"avorgVideoJsScript",
 			"//vjs.zencdn.net/7.0/video.min.js"
@@ -107,7 +107,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->plugin->enqueueScripts();
 		
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_script",
 			"avorgVideoJsHlsScript",
 			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
@@ -116,7 +116,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testSubscribesToAdminNoticeActionUsingAppropriateCallBackMethod()
 	{
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"add_action",
 			"admin_notices",
 			[$this->plugin, "renderAdminNotices"]
@@ -127,7 +127,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->plugin->renderAdminNotices();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("settings_errors");
+		$this->mockWordPress->assertMethodCalled("settings_errors");
 	}
 	
 	public function testErrorNoticePostedWhenPermalinksTurnedOff()
@@ -143,21 +143,21 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$this->plugin->renderAdminNotices();
 		
-		$this->mockWordPress->assertWordPressFunctionCalledWith("get_option", "permalink_structure");
+		$this->mockWordPress->assertMethodCalledWith("get_option", "permalink_structure");
 	}
 	
 	public function testGetsAvorgApiUser()
 	{
 		$this->plugin->renderAdminNotices();
 		
-		$this->mockWordPress->assertWordPressFunctionCalledWith("get_option", "avorgApiUser");
+		$this->mockWordPress->assertMethodCalledWith("get_option", "avorgApiUser");
 	}
 	
 	public function testGetsAvorgApiPass()
 	{
 		$this->plugin->renderAdminNotices();
 		
-		$this->mockWordPress->assertWordPressFunctionCalledWith("get_option", "avorgApiPass");
+		$this->mockWordPress->assertMethodCalledWith("get_option", "avorgApiPass");
 	}
 	
 	public function testErrorNoticePostedWhenNoAvorgApiUser()
@@ -187,7 +187,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$pageObject = $this->factory->get("Page\\$pageName");
 
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"add_filter",
 			"the_content",
 			[$pageObject, "addUi"]

@@ -216,7 +216,7 @@ final class TestMediaPage extends Avorg\TestCase
 		$mediaPage->throw404($wp_query);
 		
 		$this->assertTrue($wp_query->was404set);
-		$this->mockWordPress->assertWordPressFunctionCalledWith("status_header", 404);
+		$this->mockWordPress->assertMethodCalledWith("status_header", 404);
 	}
 	
 	public function testThrowing404UnsetsPageId()
@@ -276,7 +276,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mediaPage->registerCallbacks();
 
-		$this->mockWordPress->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			$registrationMethod,
 			$hookId,
 			[$this->mediaPage, $callbackName]

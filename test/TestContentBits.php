@@ -16,21 +16,21 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->contentBits->init();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("register_post_type");
+		$this->mockWordPress->assertMethodCalled("register_post_type");
 	}
 	
 	public function testInitRegistersTaxonomy()
 	{
 		$this->contentBits->init();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("register_taxonomy");
+		$this->mockWordPress->assertMethodCalled("register_taxonomy");
 	}
 	
 	public function testAddMetaBoxMethod()
 	{
 		$this->contentBits->addIdentifierMetaBox();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("add_meta_box");
+		$this->mockWordPress->assertMethodCalled("add_meta_box");
 	}
 	
 	public function testGetsSavedIdentifier()
@@ -93,7 +93,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->contentBits->renderShortcode([]);
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("get_posts");
+		$this->mockWordPress->assertMethodCalled("get_posts");
 	}
 	
 	public function testRenderShortcodeUsesIdAttribute()

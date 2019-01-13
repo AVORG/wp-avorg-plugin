@@ -47,7 +47,7 @@ final class TestAdminPanel extends Avorg\TestCase
 		
 		$this->adminPanel->render();
 		
-		$this->mockWordPress->assertWordPressFunctionCalled("flush_rewrite_rules");
+		$this->mockWordPress->assertMethodCalled("flush_rewrite_rules");
 	}
 	
 	public function testSetsApiUser()

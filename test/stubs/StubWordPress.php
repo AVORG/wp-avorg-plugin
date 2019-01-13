@@ -27,14 +27,4 @@ class StubWordPress extends WordPress
 
 		return $this->traitHandleCall($wpMethod, $wpArgs);
 	}
-
-	public function assertWordPressFunctionCalled($function)
-	{
-		$this->assertMethodCalled($function);
-	}
-
-	public function assertWordPressFunctionCalledWith($function, ...$arguments)
-	{
-		$this->assertMethodCalledWith($function, ...$arguments);
-	}
 }
