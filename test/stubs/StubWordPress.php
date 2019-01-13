@@ -12,19 +12,4 @@ class StubWordPress extends WordPress
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
-
-	/**
-	 * @param $method
-	 * @param $args
-	 * @return mixed|null
-	 */
-	public function handleCall($method, $args)
-	{
-		if ($method !== "__call") return $this->traitHandleCall($method, $args);
-
-		$wpMethod = $args[0];
-		$wpArgs = $args[1];
-
-		return $this->traitHandleCall($wpMethod, $wpArgs);
-	}
 }

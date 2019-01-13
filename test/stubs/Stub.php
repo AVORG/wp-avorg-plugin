@@ -31,6 +31,10 @@ trait Stub
 	 */
 	public function handleCall($method, $args)
 	{
+		$isMagicCall = $method === "__call";
+		$method = ($isMagicCall) ? $args[0] : $method;
+		$args = ($isMagicCall) ? $args[1] : $args;
+
 		$this->calls[$method][] = $args;
 
 		$indexedReturnValue = $this->getIndexedReturnValue($method);
