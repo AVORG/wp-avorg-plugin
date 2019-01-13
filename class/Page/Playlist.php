@@ -19,7 +19,7 @@ class Playlist extends Page
 
 	public function setTitle($title)
 	{
-		// TODO: Implement setTitle() method.
+		return $title;
 	}
 
 	protected function getTwigData()
