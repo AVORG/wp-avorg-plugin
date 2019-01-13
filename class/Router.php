@@ -37,18 +37,8 @@ class Router
 		$this->addRewriteTags();
 
 		array_map(function ($language) use ($mediaPageId, $homePageId, $topicPageId) {
-			$this->addMediaPageRewriteRule(
-				$mediaPageId,
-				$language->baseRoute,
-				$language->modules->sermons,
-				$language->controllers->recordings
-			);
-
-			$this->addTopicPageRewriteRule(
-				$topicPageId,
-				$language->baseRoute,
-				$language->modules->topics
-			);
+			$this->addMediaPageRewriteRule($mediaPageId, $language);
+			$this->addTopicPageRewriteRule($topicPageId, $language);
 			
 			$this->addHomePageRewriteRule($language, $homePageId);
 		}, (array)$this->languages);
@@ -60,18 +50,25 @@ class Router
 		$this->wp->add_rewrite_tag( "%topic_id%", "(\d+)");
 	}
 	
-	public function addMediaPageRewriteRule($mediaPageId, $languageTrans, $sermonsTrans, $recordingsTrans)
+	public function addMediaPageRewriteRule($mediaPageId, $language)
 	{
-		$regex = "^$languageTrans\/$sermonsTrans\/$recordingsTrans\/(\d+)\/[\w-\.]+\/?";
+		$baseRoute = $language->baseRoute;
+		$sermons = $language->urlFragments->sermons;
+		$recordings = $language->urlFragments->recordings;
+
+		$regex = "^$baseRoute\/$sermons\/$recordings\/(\d+)\/[\w-\.]+\/?";
 		$redirect = "index.php?page_id=$mediaPageId&presentation_id=\$matches[1]";
 		$priority = "top";
 		
 		$this->wp->add_rewrite_rule( $regex, $redirect, $priority);
 	}
 
-	public function addTopicPageRewriteRule($topicPageId, $languageTrans, $topicsTrans)
+	public function addTopicPageRewriteRule($topicPageId, $language)
 	{
-		$regex = "^$languageTrans\/$topicsTrans\/(\d+)\/[\w-\.]+\/?";
+		$baseRoute = $language->baseRoute;
+		$topics = $language->urlFragments->topics;
+
+		$regex = "^$baseRoute\/$topics\/(\d+)\/[\w-\.]+\/?";
 		$redirect = "index.php?page_id=$topicPageId&topic_id=\$matches[1]";
 		$priority = "top";
 
@@ -127,8 +124,8 @@ class Router
         $language = reset($filteredLanguages);
 
         return "/" . $language->baseRoute . "/" .
-            $language->modules->sermons . "/" .
-            $language->controllers->recordings . "/" .
+            $language->urlFragments->sermons . "/" .
+            $language->urlFragments->recordings . "/" .
             $apiRecording->id . "/" .
 			$this->formatTitleForUrl($apiRecording) . ".html";
     }
