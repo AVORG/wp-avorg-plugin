@@ -150,7 +150,7 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$this->mediaPage->addUi("content");
 		
-		$this->assertCalledWith($this->mockWordPress, "get_query_var", "presentation_id");
+		$this->assertCalledWith($this->mockWordPress, "get_query_var", "entity_id");
 	}
 	
 	public function testGetsPresentation()
@@ -175,20 +175,12 @@ final class TestMediaPage extends Avorg\TestCase
 	public function testUsesPresentationIdToGetPresentation()
 	{
 		$wp_query = new \Avorg\WP_Query();
-		$wp_query->getReturnVal = 42;
+
+		$this->mockWordPress->setReturnValue("get_query_var", 42);
 		
 		$this->mediaPage->throw404($wp_query);
 		
 		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", 42);
-	}
-	
-	public function testGetsPresentationIdFromQuery()
-	{
-		$wp_query = new \Avorg\WP_Query();
-		
-		$this->mediaPage->throw404($wp_query);
-		
-		$this->assertEquals(["presentation_id"], $wp_query->getCallArgs);
 	}
 	
 	public function testDoesNotSet404IfPresentationExists()

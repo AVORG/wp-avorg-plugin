@@ -4,22 +4,34 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
+define("AVORG_BASE_ROUTE_TOKEN", "{base_route}");
+define("AVORG_ENTITY_ID_TOKEN", "{entity_id}");
+define("AVORG_VARIABLE_FRAGMENT_TOKEN", "{variable_fragment}");
+
 class Router
 {
 	/** @var Filesystem $filesystem */
 	private $filesystem;
+
+	/** @var PageFactory $pageFactory */
+	private $pageFactory;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
 	private $languages;
 	
-	public function __construct(Filesystem $filesystem, WordPress $WordPress)
+	public function __construct(
+		Filesystem $filesystem,
+		PageFactory $pageFactory,
+		WordPress $WordPress
+	)
 	{
 		$this->filesystem = $filesystem;
+		$this->pageFactory = $pageFactory;
 		$this->wp = $WordPress;
 		
-		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"));
+		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"), TRUE);
 	}
 	
 	public function activate()
@@ -36,43 +48,54 @@ class Router
 
 		$this->addRewriteTags();
 
-		array_map(function ($language) use ($mediaPageId, $homePageId, $topicPageId) {
-			$this->addMediaPageRewriteRule($mediaPageId, $language);
-			$this->addTopicPageRewriteRule($topicPageId, $language);
-			
+		$pages = $this->pageFactory->getPages();
+
+		array_map(function ($language) use ($mediaPageId, $homePageId, $topicPageId, $pages) {
+			$this->addPageRewriteRules($pages, $language);
 			$this->addHomePageRewriteRule($language, $homePageId);
 		}, (array)$this->languages);
 	}
 
+	private function addPageRewriteRules($pages, $language)
+	{
+		array_walk($pages, function(Page $page) use ($language) {
+			$route = $page->getRoute();
+
+			if (strstr($route, AVORG_ENTITY_ID_TOKEN) === FALSE) {
+				throw new \Exception("Missing entity ID token in route");
+			}
+
+			$regex = $this->prepareRewriteRegex($route, $language);
+			$pageId = $page->getPostId();
+			$redirect = "index.php?page_id=$pageId&entity_id=\$matches[1]";
+
+			$this->wp->add_rewrite_rule( $regex, $redirect, "top");
+		});
+	}
+
+	/**
+	 * @param $route
+	 * @param $language
+	 * @return mixed|string
+	 */
+	private function prepareRewriteRegex($route, $language)
+	{
+		$route = str_replace("/", "\/", $route);
+		$route = str_replace(AVORG_BASE_ROUTE_TOKEN, $language["baseRoute"], $route);
+		$route = array_reduce(array_keys($language["urlFragments"]), function ($carry, $key) use ($language) {
+			$pattern = "/\b$key\b/";
+			$replace = $language["urlFragments"][$key];
+			return preg_replace($pattern, $replace, $carry);
+		}, $route);
+		$route = str_replace(AVORG_ENTITY_ID_TOKEN, "(\d+)", $route);
+		$route = str_replace(AVORG_VARIABLE_FRAGMENT_TOKEN, "[\w-\.]+", $route);
+
+		return "^$route\/?";
+	}
+
 	private function addRewriteTags()
 	{
-		$this->wp->add_rewrite_tag( "%presentation_id%", "(\d+)");
-		$this->wp->add_rewrite_tag( "%topic_id%", "(\d+)");
-	}
-	
-	public function addMediaPageRewriteRule($mediaPageId, $language)
-	{
-		$baseRoute = $language->baseRoute;
-		$sermons = $language->urlFragments->sermons;
-		$recordings = $language->urlFragments->recordings;
-
-		$regex = "^$baseRoute\/$sermons\/$recordings\/(\d+)\/[\w-\.]+\/?";
-		$redirect = "index.php?page_id=$mediaPageId&presentation_id=\$matches[1]";
-		$priority = "top";
-		
-		$this->wp->add_rewrite_rule( $regex, $redirect, $priority);
-	}
-
-	public function addTopicPageRewriteRule($topicPageId, $language)
-	{
-		$baseRoute = $language->baseRoute;
-		$topics = $language->urlFragments->topics;
-
-		$regex = "^$baseRoute\/$topics\/(\d+)\/[\w-\.]+\/?";
-		$redirect = "index.php?page_id=$topicPageId&topic_id=\$matches[1]";
-		$priority = "top";
-
-		$this->wp->add_rewrite_rule( $regex, $redirect, $priority);
+		$this->wp->add_rewrite_tag( "%entity_id%", "(\d+)");
 	}
 	
 	/**
@@ -82,7 +105,7 @@ class Router
 	public function addHomePageRewriteRule($language, $homePageId)
 	{
 		$this->wp->add_rewrite_rule(
-			"^$language->baseRoute",
+			"^" . $language["baseRoute"],
 			"index.php?page_id=$homePageId",
 			"top");
 	}
@@ -92,12 +115,12 @@ class Router
 		$requestUri = $_SERVER["REQUEST_URI"];
 		
 		$newLang = array_reduce((array)$this->languages, function ($carry, $language) use ($requestUri) {
-			$substringLength = strlen($language->baseRoute);
+			$substringLength = strlen($language["baseRoute"]);
 			$trimmedUri = trim($requestUri, "/");
 			$baseRoute = substr($trimmedUri, 0, $substringLength);
-			$doesBaseRouteMatch = $baseRoute === $language->baseRoute;
+			$doesBaseRouteMatch = $baseRoute === $language["baseRoute"];
 			
-			return $doesBaseRouteMatch ? $language->wpLanguageCode : $carry;
+			return $doesBaseRouteMatch ? $language["wpLanguageCode"] : $carry;
 		}, $lang);
 		
 		return $newLang;
@@ -110,7 +133,7 @@ class Router
         $fullRequestUri = $host . $path;
 	    $fragment = strtolower(explode("/", $path)[1]);
 	    $isFragmentLanguage = array_reduce((array) $this->languages, function($carry, $language) use($fragment) {
-	        return $carry || $fragment === strtolower($language->baseRoute);
+	        return $carry || $fragment === strtolower($language["baseRoute"]);
         }, FALSE);
 
 	    return $isFragmentLanguage ? "http://$fullRequestUri" : $redirectUrl;
@@ -119,13 +142,13 @@ class Router
     public function getUrlForApiRecording($apiRecording)
     {
         $filteredLanguages = array_filter((array)$this->languages, function ($language) use ($apiRecording) {
-            return $language->dbCode === $apiRecording->lang;
+            return $language["dbCode"] === $apiRecording->lang;
         });
         $language = reset($filteredLanguages);
 
-        return "/" . $language->baseRoute . "/" .
-            $language->urlFragments->sermons . "/" .
-            $language->urlFragments->recordings . "/" .
+        return "/" . $language["baseRoute"] . "/" .
+            $language["urlFragments"]["sermons"] . "/" .
+            $language["urlFragments"]["recordings"] . "/" .
             $apiRecording->id . "/" .
 			$this->formatTitleForUrl($apiRecording) . ".html";
     }

@@ -42,10 +42,20 @@ final class TestRouter extends Avorg\TestCase
 	public function testRewriteRuleRewritesCorrectly($inputUrl, $outputUrl)
 	{
 		$this->mockWordPress->setMappedReturnValues("get_option", [
-			["avorgMediaPageId", 10],
-			["page_on_front", "HOME_PAGE_ID"],
-			["avorgTopicPageId", "TOPIC_PAGE_ID"]
+			["page_on_front", "HOME_PAGE_ID"]
 		]);
+
+		$this->mockWordPress->setReturnCallback("get_option", function(...$args) {
+			$optionId = $args[0];
+			$pageIdOptionPrefix = "avorg_page_id_avorg_page_";
+			$isPageIdOption = strstr($optionId, $pageIdOptionPrefix) !== false;
+
+			if (!$isPageIdOption) return STUB_NULL;
+
+			$pageName = end(explode("_", $optionId));
+
+			return strtoupper($pageName . "_PAGE_ID");
+		});
 
 		$this->router->activate();
 
@@ -75,59 +85,59 @@ final class TestRouter extends Avorg\TestCase
 		return [
 			[
 				"english/sermons/recordings/316/parents-how.html",
-				"index.php?page_id=10&presentation_id=316"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=316"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html",
-				"index.php?page_id=10&presentation_id=2913"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=2913"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html",
-				"index.php?page_id=10&presentation_id=3914"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=3914"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html",
-				"index.php?page_id=10&presentation_id=17663"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17663"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html",
-				"index.php?page_id=10&presentation_id=17831"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17831"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html",
-				"index.php?page_id=10&presentation_id=17833"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17833"
 			],
 			[
 				"english/sermons/recordings/316/parents-how.html/",
-				"index.php?page_id=10&presentation_id=316"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=316"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html/",
-				"index.php?page_id=10&presentation_id=2913"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=2913"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html/",
-				"index.php?page_id=10&presentation_id=3914"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=3914"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html/",
-				"index.php?page_id=10&presentation_id=17663"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17663"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html/",
-				"index.php?page_id=10&presentation_id=17831"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17831"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html/",
-				"index.php?page_id=10&presentation_id=17833"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17833"
 			],
 			[
 				"espanol/sermones/grabaciones/17283/saludismo.html",
-				"index.php?page_id=10&presentation_id=17283"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17283"
 			],
 			[
 				"francais/predications/enregistrements/3839/jesus-sur-le-mont-des-oliviers.html",
-				"index.php?page_id=10&presentation_id=3839"
+				"index.php?page_id=MEDIA_PAGE_ID&entity_id=3839"
 			],
 			[
 				"espanol",
@@ -139,7 +149,7 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"english/topics/102/great-controversy.html",
-				"index.php?page_id=TOPIC_PAGE_ID&topic_id=102"
+				"index.php?page_id=TOPIC_PAGE_ID&entity_id=102"
 			]
 		];
 	}
@@ -255,8 +265,7 @@ final class TestRouter extends Avorg\TestCase
 	public function rewriteTagProvider()
 	{
 		return [
-			"presentation_id" => [ "%presentation_id%", "(\d+)" ],
-			"topic_id" => [ "%topic_id%", "(\d+)" ]
+			"entity_id" => [ "%entity_id%", "(\d+)" ],
 		];
 	}
 }

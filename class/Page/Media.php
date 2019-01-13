@@ -21,6 +21,7 @@ class Media extends Page
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
     protected $twigTemplate = "organism-recording.twig";
+    protected $route = AVORG_BASE_ROUTE_TOKEN . "/sermons/recordings/" . AVORG_ENTITY_ID_TOKEN . "/" . AVORG_VARIABLE_FRAGMENT_TOKEN;
 
     public function __construct(
     	AvorgApi $avorgApi,
@@ -38,7 +39,7 @@ class Media extends Page
 	public function throw404($query)
 	{
 		try {
-			$this->avorgApi->getPresentation($query->get("presentation_id"));
+			$this->getEntity();
 		} catch (\Exception $e) {
 			$this->set404($query);
 		}
@@ -47,32 +48,46 @@ class Media extends Page
 	/**
 	 * @param $title
 	 * @return string
-	 * @throws \Exception
 	 */
 	public function setTitle($title)
 	{
-		$presentation = $this->getPresentation();
+		$presentation = $this->getEntitySafe();
 
 		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : $title;
 	}
 
 	/**
 	 * @return array
-	 * @throws \Exception
 	 */
 	protected function getTwigData()
 	{
-		return ["presentation" => $this->getPresentation()];
+		$entity = $this->getEntitySafe();
+
+		return ["presentation" => $entity];
+	}
+
+	/**
+	 * @return \Avorg\Presentation|null
+	 */
+	private function getEntitySafe()
+	{
+		try {
+			return $this->getEntity();
+		} catch (\Exception $e) {
+			return null;
+		}
 	}
 
 	/**
 	 * @return \Avorg\Presentation|null
 	 * @throws \Exception
 	 */
-	private function getPresentation()
+	private function getEntity()
 	{
-		$presentationId = $this->wp->get_query_var( "presentation_id");
+		$entityId = $this->getEntityId();
 
-		return $this->presentationRepository->getPresentation($presentationId);
+		return $this->presentationRepository->getPresentation($entityId);
 	}
+
+
 }

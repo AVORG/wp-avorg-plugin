@@ -7,6 +7,8 @@ if ( !\defined( 'ABSPATH' ) ) exit;
 /**
  * @method add_action($string, array $array)
  * @method add_filter($string, array $array)
+ * @method add_rewrite_rule($string, $string1, $string2)
+ * @method add_rewrite_tag($string, $string1)
  * @method get_option($pageIdOptionName)
  * @method get_post_status($postId)
  * @method get_the_ID()
@@ -15,6 +17,7 @@ if ( !\defined( 'ABSPATH' ) ) exit;
  * @method update_option($pageIdOptionName, $id)
  * @method wp_insert_post(array $array, $true)
  * @method wp_publish_post($postId)
+ * @method get_query_var($string)
  */
 class WordPress {
 	public function __call( $function, $arguments ) {

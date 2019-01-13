@@ -11,6 +11,7 @@ class Playlist extends Page
 	protected $defaultPageTitle = "Playlist Detail";
 	protected $defaultPageContent = "Playlist Detail";
 	protected $twigTemplate = "page-playlist.twig";
+	protected $route = AVORG_ENTITY_ID_TOKEN;
 
 	public function throw404($query)
 	{

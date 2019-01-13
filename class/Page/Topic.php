@@ -20,6 +20,7 @@ class Topic extends Page
 	protected $defaultPageTitle = "Topic Detail";
 	protected $defaultPageContent = "Topic Detail";
 	protected $twigTemplate = "organism-topic.twig";
+	protected $route = AVORG_BASE_ROUTE_TOKEN . "/topics/" . AVORG_ENTITY_ID_TOKEN . "/" . AVORG_VARIABLE_FRAGMENT_TOKEN;
 
 	public function __construct(
 		PresentationRepository $presentationRepository,

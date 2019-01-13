@@ -17,7 +17,8 @@ abstract class Page
     protected $defaultPageTitle;
     protected $twigTemplate;
 
-    public function __construct(Renderer $renderer, WordPress $wp)
+
+	public function __construct(Renderer $renderer, WordPress $wp)
     {
     	$this->renderer = $renderer;
         $this->wp = $wp;
@@ -44,6 +45,11 @@ abstract class Page
 	public function addUi($content)
 	{
 		return ($this->isThisPage()) ? $this->buildUi() . $content : $content;
+	}
+
+	public function getRoute()
+	{
+		return $this->route;
 	}
 
 	/**
@@ -94,7 +100,7 @@ abstract class Page
 	/**
 	 * @return mixed
 	 */
-	private function getPostId()
+	public function getPostId()
 	{
 		return $this->wp->get_option( $this->pageIdOptionName);
 	}
@@ -117,5 +123,10 @@ abstract class Page
 		$slashToUnderscore = str_replace("\\", "_", $lowercase);
 
 		$this->pageIdOptionName = $prefix . $slashToUnderscore;
+	}
+
+	protected function getEntityId()
+	{
+		return $this->wp->get_query_var( "entity_id");
 	}
 }
