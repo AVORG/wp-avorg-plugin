@@ -15,24 +15,20 @@ class Pwa
 
 	public function registerCallbacks()
 	{
-		$this->wp->call(
-			"add_action",
+		$this->wp->add_action(
 			"wp_front_service_worker",
-			[$this, "registerServiceWorker"]
-		);
+			[$this, "registerServiceWorker"]);
 	}
 
 	public function registerServiceWorker()
 	{
 		//var_dump('hello world');die;
 
-		$this->wp->call(
-			"wp_register_service_worker_script",
+		$this->wp->wp_register_service_worker_script(
 			"avorgServiceWorker",
 			[
 				"src" => AVORG_BASE_PATH . "/serviceWorker.js"
-			]
-		);
+			]);
 
 		wp_register_service_worker_caching_route(
 			'/wp-content/.*\.(?:png|gif|jpg|jpeg|svg|webp)(\?.*)?$',

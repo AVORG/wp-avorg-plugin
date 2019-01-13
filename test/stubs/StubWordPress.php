@@ -8,7 +8,7 @@ class StubWordPress extends WordPress
 		handleCall as protected traitHandleCall;
 	}
 
-	public function call( $function, ...$arguments )
+	public function __call( $function, $arguments )
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -20,11 +20,12 @@ class StubWordPress extends WordPress
 	 */
 	public function handleCall($method, $args)
 	{
-		if ($method !== "call") return $this->traitHandleCall($method, $args);
-		
-		$wpMethod = array_shift($args);
+		if ($method !== "__call") return $this->traitHandleCall($method, $args);
 
-		return $this->traitHandleCall($wpMethod, $args);
+		$wpMethod = $args[0];
+		$wpArgs = $args[1];
+
+		return $this->traitHandleCall($wpMethod, $wpArgs);
 	}
 
 	public function assertWordPressFunctionCalled($function)

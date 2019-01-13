@@ -83,7 +83,7 @@ class ContentBits
 			'capability_type' => 'post',
 		);
 		
-		$this->wp->call("register_post_type", "avorgContentBits", $args);
+		$this->wp->register_post_type( "avorgContentBits", $args);
 	}
 	
 	private function addMediaIdTaxonomy()
@@ -122,7 +122,7 @@ class ContentBits
 			'rewrite' => false,
 		);
 		
-		$this->wp->call("register_taxonomy", "avorgMediaIds", array('avorgcontentbits'), $args);
+		$this->wp->register_taxonomy( "avorgMediaIds", array('avorgcontentbits'), $args);
 	}
 	
 	public function addIdentifierMetaBox()
@@ -136,13 +136,13 @@ class ContentBits
 			'default'
 		);
 		
-		$this->wp->call("add_meta_box", ...$args);
+		$this->wp->add_meta_box( ...$args);
 	}
 	
 	public function renderIdentifierMetaBox()
 	{
-		$postId = $this->wp->call("get_the_ID");
-		$savedValue = $this->wp->call("get_post_meta", $postId, "_avorgBitIdentifier", true);
+		$postId = $this->wp->get_the_ID();
+		$savedValue = $this->wp->get_post_meta( $postId, "_avorgBitIdentifier", true);
 		
 		$this->twig->render("identifierMetaBox.twig", ["savedIdentifier" => $savedValue]);
 	}
@@ -151,24 +151,22 @@ class ContentBits
 	{
 		if (!isset($_POST["avorgBitIdentifier"])) return;
 		
-		$postId = $this->wp->call("get_the_ID");
-		$this->wp->call(
-			"update_post_meta",
+		$postId = $this->wp->get_the_ID();
+		$this->wp->update_post_meta(
 			$postId,
 			"_avorgBitIdentifier",
-			$_POST["avorgBitIdentifier"]
-		);
+			$_POST["avorgBitIdentifier"]);
 	}
 	
 	private function addShortcode()
 	{
-		$this->wp->call("add_shortcode", "avorg-bits", [$this, "renderShortcode"]);
+		$this->wp->add_shortcode( "avorg-bits", [$this, "renderShortcode"]);
 	}
 	
 	public function renderShortcode($attributes)
 	{
 		$shortcodeId = $attributes['id'];
-		$presentationId = $this->wp->call('get_query_var', 'presentation_id');
+		$presentationId = $this->wp->get_query_var( 'presentation_id');
 		$posts = $this->getBits($shortcodeId, $presentationId)
 			?: $this->getBits($shortcodeId);
 		
@@ -187,7 +185,7 @@ class ContentBits
 			]
 		];
 		
-		return $this->wp->call("get_posts", [
+		return $this->wp->get_posts( [
 			'posts_per_page' => -1,
 			'post_type' => 'avorgContentBits',
 			'meta_query' => [

@@ -24,7 +24,7 @@ class ListShortcode
 	
 	public function addShortcode()
 	{
-		$this->wp->call("add_shortcode", "avorg-list", [$this, "renderShortcode"]);
+		$this->wp->add_shortcode( "avorg-list", [$this, "renderShortcode"]);
 	}
 	
 	public function renderShortcode($attributes)

@@ -55,7 +55,7 @@ class Plugin
 
 	private function registerCallbacks()
 	{
-		$this->wp->call("add_action", "admin_notices", [$this, "renderAdminNotices"]);
+		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
 		$this->page_media->registerCallbacks();
 		$this->page_topic->registerCallbacks();
 		$this->pwa->registerCallbacks();
@@ -81,7 +81,7 @@ class Plugin
 	
 	public function renderAdminNotices()
 	{
-		$this->wp->call("settings_errors");
+		$this->wp->settings_errors();
 		
 		$this->outputPermalinkError();
 		$this->outputApiUsernameError();
@@ -90,46 +90,40 @@ class Plugin
 	
 	private function enqueuePluginStyles()
 	{
-		$url = $this->wp->call("plugins_url", "style/style.css", dirname(__FILE__));
-		$this->wp->call("wp_enqueue_style", "avorgStyle", $url);
+		$url = $this->wp->plugins_url("style/style.css", dirname(__FILE__));
+		$this->wp->wp_enqueue_style("avorgStyle", $url);
 	}
 	
 	private function enqueueVideoJsAssets()
 	{
-		$this->wp->call(
-			"wp_enqueue_style",
+		$this->wp->wp_enqueue_style(
 			"avorgVideoJsStyle",
-			"//vjs.zencdn.net/7.0/video-js.min.css"
-		);
-		$this->wp->call(
-			"wp_enqueue_script",
+			"//vjs.zencdn.net/7.0/video-js.min.css");
+		$this->wp->wp_enqueue_script(
 			"avorgVideoJsScript",
-			"//vjs.zencdn.net/7.0/video.min.js"
-		);
-		$this->wp->call(
-			"wp_enqueue_script",
+			"//vjs.zencdn.net/7.0/video.min.js");
+		$this->wp->wp_enqueue_script(
 			"avorgVideoJsHlsScript",
-			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
-		);
+			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js");
 	}
 	
 	protected function outputPermalinkError()
 	{
-		if ($this->wp->call("get_option", "permalink_structure")) return;
+		if ($this->wp->get_option("permalink_structure")) return;
 		
 		$this->renderer->renderNotice("error", "AVORG Warning: Permalinks turned off!");
 	}
 	
 	protected function outputApiUsernameError()
 	{
-		if ($this->wp->call("get_option", "avorgApiUser")) return;
+		if ($this->wp->get_option("avorgApiUser")) return;
 		
 		$this->renderer->renderNotice("error", "AVORG Warning: Missing API username!");
 	}
 	
 	protected function outputApiPasswordError()
 	{
-		if ($this->wp->call("get_option", "avorgApiPass")) return;
+		if ($this->wp->get_option("avorgApiPass")) return;
 		
 		$this->renderer->renderNotice("error", "AVORG Warning: Missing API password!");
 	}

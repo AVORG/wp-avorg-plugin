@@ -31,16 +31,14 @@ abstract class Page
 
 	public function registerCallbacks()
 	{
-		$this->wp->call("add_action", "parse_query", [$this, "throw404"]);
-		$this->wp->call("add_action", "init", [$this, "createPage"]);
-		$this->wp->call("add_filter", "pre_get_document_title", [$this, "setTitle"]);
-		$this->wp->call("add_filter", "the_title", [$this, "setTitle"]);
-		$this->wp->call("add_filter", "the_content", [$this, "addUi"]);
-		$this->wp->call(
-			"register_activation_hook",
+		$this->wp->add_action( "parse_query", [$this, "throw404"]);
+		$this->wp->add_action( "init", [$this, "createPage"]);
+		$this->wp->add_filter( "pre_get_document_title", [$this, "setTitle"]);
+		$this->wp->add_filter( "the_title", [$this, "setTitle"]);
+		$this->wp->add_filter( "the_content", [$this, "addUi"]);
+		$this->wp->register_activation_hook(
 			AVORG_BASE_PATH . "/wp-avorg-plugin.php",
-			[$this, "createPage"]
-		);
+			[$this, "createPage"]);
 	}
 
 	public function addUi($content)
@@ -59,33 +57,32 @@ abstract class Page
 	public function createPage()
 	{
 		$postId = $this->getPostId();
-		$postStatus = $this->wp->call("get_post_status", $postId);
+		$postStatus = $this->wp->get_post_status( $postId);
 
 		if ($postId === false || $postStatus === false) {
 			$this->doCreatePage();
 		}
 
 		if ($postStatus === "trash") {
-			$this->wp->call("wp_publish_post", $postId);
+			$this->wp->wp_publish_post( $postId);
 		}
 	}
 
 	private function doCreatePage()
 	{
-		$id = $this->wp->call("wp_insert_post", array(
+		$id = $this->wp->wp_insert_post( array(
 			"post_content" => $this->defaultPageContent,
 			"post_title" => $this->defaultPageTitle,
 			"post_status" => "publish",
-			"post_type" => "page"
-		), true);
+			"post_type" => "page"), true);
 
-		$this->wp->call("update_option", $this->pageIdOptionName, $id);
+		$this->wp->update_option( $this->pageIdOptionName, $id);
 	}
 
 	protected function isThisPage()
 	{
 		$postId = intval($this->getPostId(), 10);
-		$thisPageId = $this->wp->call("get_the_ID");
+		$thisPageId = $this->wp->get_the_ID();
 
 		return $postId === $thisPageId;
 	}
@@ -95,7 +92,7 @@ abstract class Page
 	 */
 	private function getPostId()
 	{
-		return $this->wp->call("get_option", $this->pageIdOptionName);
+		return $this->wp->get_option( $this->pageIdOptionName);
 	}
 
 	/**
@@ -105,7 +102,7 @@ abstract class Page
 	{
 		unset($query->query_vars["page_id"]);
 		$query->set_404();
-		$this->wp->call("status_header", 404);
+		$this->wp->status_header( 404);
 	}
 
 	private function setPageIdOptionName()

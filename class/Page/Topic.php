@@ -49,7 +49,7 @@ class Topic extends Page
 	 */
 	protected function getTwigData()
 	{
-		$topicId = $this->wp->call("get_query_var", "topic_id");
+		$topicId = $this->wp->get_query_var( "topic_id");
 
 		$presentations = $this->presentationRepository->getTopicPresentations($topicId);
 

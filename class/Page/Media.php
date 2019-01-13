@@ -71,7 +71,7 @@ class Media extends Page
 	 */
 	private function getPresentation()
 	{
-		$presentationId = $this->wp->call("get_query_var", "presentation_id");
+		$presentationId = $this->wp->get_query_var( "presentation_id");
 
 		return $this->presentationRepository->getPresentation($presentationId);
 	}
