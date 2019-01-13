@@ -15,7 +15,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	{
 		$global = $this->factory->make("TwigGlobal");
 		
-		$this->mockWordPress->setReturnValue("call", "translation");
+		$this->mockWordPress->setReturnValue("__", "translation");
 		
 		$result = $global->i__("string");
 		
@@ -79,7 +79,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	{
 		$global = $this->factory->make("TwigGlobal");
 		
-		$this->mockWordPress->setReturnValue("call", "translation");
+		$this->mockWordPress->setReturnValue("_n", "translation");
 		
 		$result = $global->_n("single", "plural", 5);
 		

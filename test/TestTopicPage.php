@@ -16,7 +16,9 @@ final class TestTopicPage extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->mockWordPress->setReturnValue("call", 5);
+		$this->mockWordPress->setReturnValue("get_option", 5);
+		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->setReturnValues("get_query_var",  5);
 		$this->topicPage = $this->factory->get("Page\\Topic");
 	}
 
@@ -27,13 +29,14 @@ final class TestTopicPage extends Avorg\TestCase
 
 	public function testHasPageIdOptionName()
 	{
-		$this->mockWordPress->setReturnValue("call", false);
+		$this->mockWordPress->setReturnValue("get_option", false);
+		$this->mockWordPress->setReturnValue("get_post_status", false);
+		$this->mockWordPress->setReturnValue("wp_insert_post", false);
 
 		$this->topicPage->createPage();
 
 		$this->assertCalledWith(
 			$this->mockWordPress,
-			"call",
 			"update_option",
 			"avorg_page_id_avorg_page_topic",
 			false
@@ -42,13 +45,14 @@ final class TestTopicPage extends Avorg\TestCase
 
 	public function testInsertsPageWithDefaultContentAndTitle()
 	{
-		$this->mockWordPress->setReturnValue("call", false);
+		$this->mockWordPress->setReturnValue("get_option", false);
+		$this->mockWordPress->setReturnValue("get_post_status", false);
+		$this->mockWordPress->setReturnValue("wp_insert_post", false);
 
 		$this->topicPage->createPage();
 
 		$this->assertCalledWith(
 			$this->mockWordPress,
-			"call",
 			...$this->topicPageInsertCall
 		);
 	}
@@ -71,12 +75,14 @@ final class TestTopicPage extends Avorg\TestCase
 	{
 		$this->topicPage->addUi("content");
 
-		$this->mockWordPress->assertMethodCalledWith("call", "get_query_var", "topic_id");
+		$this->mockWordPress->assertMethodCalledWith( "get_query_var", "topic_id");
 	}
 
 	public function testGetsPresentations()
 	{
-		$this->mockWordPress->setReturnValue("call", 10);
+		$this->mockWordPress->setReturnValue("get_option", 10);
+		$this->mockWordPress->setReturnValue("get_the_ID", 10);
+		$this->mockWordPress->setReturnValues("get_query_var",  10);
 
 		$this->topicPage->addUi("content");
 

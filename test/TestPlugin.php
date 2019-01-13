@@ -56,13 +56,12 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
-		$this->mockWordPress->setReturnValue("call", "path");
+		$this->mockWordPress->setReturnValue("plugins_url", "path");
 		
 		$this->plugin->enqueueScripts();
 		
 		$this->assertCalledWith(
 			$this->mockWordPress,
-			"call",
 			"wp_enqueue_style",
 			"avorgStyle",
 			"path"
@@ -208,7 +207,6 @@ final class TestPlugin extends Avorg\TestCase
 		$pwa = $this->factory->get("Pwa");
 
 		$this->mockWordPress->assertMethodCalledWith(
-			"call",
 			"add_action",
 			"wp_front_service_worker",
 			[$pwa, "registerServiceWorker"]

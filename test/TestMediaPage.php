@@ -45,20 +45,20 @@ final class TestMediaPage extends Avorg\TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		
-		$this->mockWordPress->setReturnValue("call", 5);
+
 		$this->mediaPage = $this->factory->get("Page\\Media");
 	}
 	
 	public function testSavesMediaPageId()
 	{
-		$this->mockWordPress->setReturnValues("call", false, false, 7);
+		$this->mockWordPress->setReturnValue("get_option", false);
+		$this->mockWordPress->setReturnValue("get_post_status", false);
+		$this->mockWordPress->setReturnValue("wp_insert_post", 7);
 		
 		$this->mediaPage->createPage();
 		
 		$this->assertCalledWith(
 			$this->mockWordPress,
-			"call",
 			"update_option",
 			"avorg_page_id_avorg_page_media",
 			7
@@ -69,38 +69,43 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith($this->mockWordPress, "call", "get_option", "avorg_page_id_avorg_page_media");
+		$this->assertCalledWith($this->mockWordPress, "get_option", "avorg_page_id_avorg_page_media");
 	}
 	
 	public function testCreatesPageIfNoPageStatus()
 	{
-		$this->mockWordPress->setReturnValues("call", 7, false);
+		$this->mockWordPress->setReturnValue("get_option", 7);
+		$this->mockWordPress->setReturnValue("get_post_status", false);
 		
 		$this->mediaPage->createPage();
 
-		$this->mockWordPress->assertMethodCalledWith("call", ...$this->mediaPageInsertCall);
+		$this->mockWordPress->assertMethodCalledWith(...$this->mediaPageInsertCall);
 	}
 	
 	public function testChecksPostStatus()
 	{
-		$this->mockWordPress->setReturnValue("call", 7);
+		$this->mockWordPress->setReturnValue("get_option", 7);
 		
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith($this->mockWordPress, "call", "get_post_status", 7);
+		$this->assertCalledWith($this->mockWordPress,  "get_post_status", 7);
 	}
 	
 	public function testUntrashesMediaPage()
 	{
-		$this->mockWordPress->setReturnValues("call", 7, "trash");
+		$this->mockWordPress->setReturnValue("get_option", 7);
+		$this->mockWordPress->setReturnValue("get_post_status", "trash");
 		
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith($this->mockWordPress, "call", "wp_publish_post", 7);
+		$this->assertCalledWith($this->mockWordPress,  "wp_publish_post", 7);
 	}
 	
 	public function testAddsMediaPageUI()
 	{
+		$this->mockWordPress->setReturnValue("get_option", 5);
+		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+
 		$this->assertPlayerUiInjected();
 	}
 	
@@ -113,6 +118,9 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testUsesTwig()
 	{
+		$this->mockWordPress->setReturnValue("get_option", 5);
+		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+
 		$this->mediaPage->addUi("content");
 		
 		$this->mockTwig->assertTwigTemplateRenderedWithData("organism-recording.twig", ["presentation" => null]);
@@ -130,6 +138,8 @@ final class TestMediaPage extends Avorg\TestCase
 	public function testPassesPresentationToTwig()
 	{
 		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
+		$this->mockWordPress->setReturnValue("get_option", 5);
+		$this->mockWordPress->setReturnValue("get_the_ID", 5);
 		
 		$this->mediaPage->addUi("content");
 
@@ -142,14 +152,19 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testGetsQueryVar()
 	{
+		$this->mockWordPress->setReturnValue("get_option", 5);
+		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+
 		$this->mediaPage->addUi("content");
 		
-		$this->assertCalledWith($this->mockWordPress, "call", "get_query_var", "presentation_id");
+		$this->assertCalledWith($this->mockWordPress, "get_query_var", "presentation_id");
 	}
 	
 	public function testGetsPresentation()
 	{
-		$this->mockWordPress->setReturnValues("call", 7, 7, "54321");
+		$this->mockWordPress->setReturnValue("get_option", 7);
+		$this->mockWordPress->setReturnValue("get_the_ID", 7);
+		$this->mockWordPress->setReturnValues("get_query_var",  "54321");
 		
 		$this->mediaPage->addUi("content");
 		
@@ -158,7 +173,8 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testConvertsMediaPageIdStringToNumber()
 	{
-		$this->mockWordPress->setReturnValues("call", "5", 5);
+		$this->mockWordPress->setReturnValue("get_option", "7");
+		$this->mockWordPress->setReturnValue("get_the_ID", 7);
 		
 		$this->assertPlayerUiInjected();
 	}
@@ -232,7 +248,9 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testUsesPresentationIdQueryVar()
 	{
-		$this->mockWordPress->setReturnValue("call", 7);
+		$this->mockWordPress->setReturnValue("get_option", 7);
+		$this->mockWordPress->setReturnValue("get_the_ID", 7);
+		$this->mockWordPress->setReturnValues("get_query_var",  7);
 		
 		$this->mediaPage->setTitle("old title");
 		
@@ -303,19 +321,21 @@ final class TestMediaPage extends Avorg\TestCase
 
 	public function testInsertsMediaDetailsPage()
 	{
-		$this->mockWordPress->setReturnValue("call", false);
+		$this->mockWordPress->setReturnValue("get_option", false);
+		$this->mockWordPress->setReturnValue("get_post_status", false);
 
 		$this->mediaPage->createPage();
 
-		$this->assertCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
+		$this->assertCalledWith($this->mockWordPress, ...$this->mediaPageInsertCall);
 	}
 
 	public function testDoesNotInsertPageTwice()
 	{
-		$this->mockWordPress->setReturnValue("call", ["post"]);
+		$this->mockWordPress->setReturnValue("get_option", ["post"]);
+		$this->mockWordPress->setReturnValue("get_post_status", ["post"]);
 
 		$this->mediaPage->createPage();
 
-		$this->assertNotCalledWith($this->mockWordPress, "call", ...$this->mediaPageInsertCall);
+		$this->assertNotCalledWith($this->mockWordPress, ...$this->mediaPageInsertCall);
 	}
 }

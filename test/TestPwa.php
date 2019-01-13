@@ -22,7 +22,6 @@ final class TestPwa extends Avorg\TestCase
 		$this->pwa->registerCallbacks();
 
 		$this->mockWordPress->assertMethodCalledWith(
-			"call",
 			"add_action",
 			"wp_front_service_worker",
 			[$this->pwa, "registerServiceWorker"]

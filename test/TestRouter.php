@@ -14,20 +14,14 @@ final class TestRouter extends Avorg\TestCase
 
 	private function getAddRewriteCalls()
 	{
-		$calls = $this->mockWordPress->getCalls("call");
-
-		return array_reduce($calls, function ($carry, $call) {
-			$isAddRewriteCall = $call[0] === "add_rewrite_rule";
-
-			return $isAddRewriteCall ? array_merge($carry, [$call]) : $carry;
-		}, []);
+		return $this->mockWordPress->getCalls("add_rewrite_rule");
 	}
 
 	public function testCallsWordPress()
 	{
 		$this->router->activate();
 
-		$this->assertCalled($this->mockWordPress, "call");
+		$this->assertCalled($this->mockWordPress, "flush_rewrite_rules");
 	}
 
 	public function testAssignsHighPriority()
@@ -35,7 +29,7 @@ final class TestRouter extends Avorg\TestCase
 		$this->router->activate();
 
 		$addRewriteCalls = $this->getAddRewriteCalls();
-		$priority = $addRewriteCalls[0][3];
+		$priority = $addRewriteCalls[0][2];
 
 		$this->assertEquals("top", $priority);
 	}
@@ -47,10 +41,10 @@ final class TestRouter extends Avorg\TestCase
 	 */
 	public function testRewriteRuleRewritesCorrectly($inputUrl, $outputUrl)
 	{
-		$this->mockWordPress->setMappedReturnValues("call", [
-			["get_option", "avorgMediaPageId", 10],
-			["get_option", "page_on_front", "HOME_PAGE_ID"],
-			["get_option", "avorgTopicPageId", "TOPIC_PAGE_ID"]
+		$this->mockWordPress->setMappedReturnValues("get_option", [
+			["avorgMediaPageId", 10],
+			["page_on_front", "HOME_PAGE_ID"],
+			["avorgTopicPageId", "TOPIC_PAGE_ID"]
 		]);
 
 		$this->router->activate();
@@ -58,8 +52,8 @@ final class TestRouter extends Avorg\TestCase
 		$addRewriteCalls = $this->getAddRewriteCalls();
 
 		$results = array_map(function ($call) use ($inputUrl) {
-			$regex = $call[1];
-			$redirect = $call[2];
+			$regex = $call[0];
+			$redirect = $call[1];
 
 			preg_match("/$regex/", $inputUrl, $matches);
 
@@ -154,17 +148,17 @@ final class TestRouter extends Avorg\TestCase
 	{
 		$this->router->activate();
 
-		$this->assertCalledWith($this->mockWordPress, "call", "flush_rewrite_rules");
+		$this->assertCalledWith($this->mockWordPress,  "flush_rewrite_rules");
 	}
 
 	public function testUsesSavedMediaPageId()
 	{
-		$this->mockWordPress->setReturnValue("call", 3);
+		$this->mockWordPress->setReturnValue("get_option", 3);
 
 		$this->router->activate();
 
 		$addRewriteCalls = $this->getAddRewriteCalls();
-		$redirect = $addRewriteCalls[0][2];
+		$redirect = $addRewriteCalls[0][1];
 
 		$this->assertContains("page_id=3", $redirect);
 	}
@@ -252,7 +246,6 @@ final class TestRouter extends Avorg\TestCase
 		$this->router->activate();
 
 		$this->mockWordPress->assertMethodCalledWith(
-			"call",
 			"add_rewrite_tag",
 			$tag,
 			$regex
