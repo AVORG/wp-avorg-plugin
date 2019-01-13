@@ -150,6 +150,10 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"english/topics/102/great-controversy.html",
 				"index.php?page_id=TOPIC_PAGE_ID&entity_id=102"
+			],
+			[
+				"english/playlists/lists/14/how-to-be-saved.html",
+				"index.php?page_id=PLAYLIST_PAGE_ID&entity_id=14"
 			]
 		];
 	}

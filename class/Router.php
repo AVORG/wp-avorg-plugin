@@ -85,6 +85,9 @@ class Router
 		$route = array_reduce(array_keys($language["urlFragments"]), function ($carry, $key) use ($language) {
 			$pattern = "/\b$key\b/";
 			$replace = $language["urlFragments"][$key];
+
+			if (!$replace) return $carry;
+
 			return preg_replace($pattern, $replace, $carry);
 		}, $route);
 		$route = str_replace(AVORG_ENTITY_ID_TOKEN, "(\d+)", $route);
