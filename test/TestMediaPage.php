@@ -5,13 +5,6 @@ final class TestMediaPage extends Avorg\TestCase
 	/** @var \Avorg\Page\Media $mediaPage */
 	protected $mediaPage;
 	
-	private $mediaPageInsertCall = array("wp_insert_post", array(
-		"post_content" => "Media Detail",
-		"post_title" => "Media Detail",
-		"post_status" => "publish",
-		"post_type" => "page"
-	), true);
-	
 	private function assertPlayerUiInjected()
 	{
 		$haystack = $this->makePlayerUiHaystack();
@@ -79,7 +72,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->createPage();
 
-		$this->mockWordPress->assertMethodCalledWith(...$this->mediaPageInsertCall);
+		$this->mockWordPress->assertPageCreated("Media Detail", "Media Detail");
 	}
 	
 	public function testChecksPostStatus()
@@ -326,7 +319,7 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$this->mediaPage->createPage();
 
-		$this->assertCalledWith($this->mockWordPress, ...$this->mediaPageInsertCall);
+		$this->mockWordPress->assertPageCreated("Media Detail", "Media Detail");
 	}
 
 	public function testDoesNotInsertPageTwice()
@@ -336,6 +329,6 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$this->mediaPage->createPage();
 
-		$this->assertNotCalledWith($this->mockWordPress, ...$this->mediaPageInsertCall);
+		$this->mockWordPress->assertPageNotCreated("Media Detail", "Media Detail");
 	}
 }

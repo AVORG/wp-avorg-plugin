@@ -224,6 +224,29 @@ trait Stub
 	/**
 	 * @param string $method
 	 * @param mixed ...$args
+	 */
+	public function assertMethodNotCalledWith($method, ...$args)
+	{
+		$message = "Failed asserting that '$method' was not called with specified args";
+
+		$condition = $this->wasMethodCalledWith($method, ...$args);
+
+		$this->testCase->assertFalse(
+			$condition,
+			$message
+		);
+
+		if ($condition) {
+			echo "Needle:\r\n";
+			dump($args);
+			echo "Haystack:\r\n";
+			dump($this->getCalls($method));
+		}
+	}
+
+	/**
+	 * @param string $method
+	 * @param mixed ...$args
 	 * @return bool
 	 */
 	public function wasMethodCalledWith($method, ...$args)

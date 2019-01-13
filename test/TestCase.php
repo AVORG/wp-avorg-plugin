@@ -40,7 +40,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 			$this->mockAvorgApi = $this->objectMocker->buildMock("AvorgApi"),
 			$this->mockPhp = $this->objectMocker->buildMock("Php"),
 			$this->mockTwig = new StubTwig($this),
-			$this->mockWordPress = new StubWordPress($this)
+			$this->mockWordPress = new StubWordPress($this, $this->factory)
 		);
 	}
 	

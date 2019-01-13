@@ -9,7 +9,7 @@ abstract class Page
 	/** @var Renderer $renderer */
 	protected $renderer;
 
-    /** @var WordPress $wp */
+	/** @var WordPress $wp */
     protected $wp;
 
     private $pageIdOptionName;
@@ -51,7 +51,11 @@ abstract class Page
 	 */
 	protected function buildUi()
 	{
-		return $this->renderer->render($this->twigTemplate, $this->getTwigData(), true);
+		return $this->renderer->render(
+			$this->twigTemplate,
+			$this->getTwigData() ?: [],
+			true
+		);
 	}
 
 	public function createPage()

@@ -185,20 +185,15 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testRegistersPageCallbacks($pageName)
 	{
-		$pageObject = $this->factory->get("Page\\$pageName");
-
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_filter",
-			"the_content",
-			[$pageObject, "addUi"]
-		);
+		$this->mockWordPress->assertPageRegistered($pageName);
 	}
 
 	public function pageNameProvider()
 	{
 		return [
 			"Media Page" => ["Media"],
-			"Topic Page" => ["Topic"]
+			"Topic Page" => ["Topic"],
+			"Playlist Page" => ["Playlist"]
 		];
 	}
 

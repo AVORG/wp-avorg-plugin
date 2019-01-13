@@ -8,6 +8,9 @@ if (!\defined('ABSPATH')) exit;
 
 class Playlist extends Page
 {
+	protected $defaultPageTitle = "Playlist Detail";
+	protected $defaultPageContent = "Playlist Detail";
+	protected $twigTemplate = "page-playlist.twig";
 
 	public function throw404($query)
 	{

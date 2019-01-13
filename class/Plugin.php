@@ -12,11 +12,8 @@ class Plugin
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
 	
-	/** @var Page\Media $page_media */
-	private $page_media;
-
-	/** @var Page\Topic $page_topic */
-	private $page_topic;
+	/** @var PageFactory $pageFactory */
+	private $pageFactory;
 
 	/** @var Pwa $pwa */
 	private $pwa;
@@ -33,8 +30,7 @@ class Plugin
 	public function __construct(
         ContentBits $contentBits,
         ListShortcode $listShortcode,
-        Page\Media $page_media,
-        Page\Topic $page_topic,
+        PageFactory $pageFactory,
         Pwa $pwa,
         Renderer $renderer,
         Router $router,
@@ -43,8 +39,7 @@ class Plugin
 	{
 		$this->contentBits = $contentBits;
 		$this->listShortcode = $listShortcode;
-		$this->page_media = $page_media;
-		$this->page_topic = $page_topic;
+		$this->pageFactory = $pageFactory;
 		$this->pwa = $pwa;
 		$this->renderer = $renderer;
 		$this->router = $router;
@@ -56,9 +51,8 @@ class Plugin
 	private function registerCallbacks()
 	{
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
-		$this->page_media->registerCallbacks();
-		$this->page_topic->registerCallbacks();
 		$this->pwa->registerCallbacks();
+		$this->registerPageCallbacks();
 	}
 	
 	public function activate()
@@ -126,5 +120,13 @@ class Plugin
 		if ($this->wp->get_option("avorgApiPass")) return;
 		
 		$this->renderer->renderNotice("error", "AVORG Warning: Missing API password!");
+	}
+
+	private function registerPageCallbacks()
+	{
+		$pages = $this->pageFactory->getPages();
+		array_walk($pages, function (Page $page) {
+			$page->registerCallbacks();
+		});
 	}
 }

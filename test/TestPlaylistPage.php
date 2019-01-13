@@ -9,7 +9,6 @@ final class TestPlaylistPage extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->mockWordPress->setReturnValue("call", 5);
 		$this->playlistPage = $this->factory->get("Page\\Playlist");
 	}
 
@@ -18,10 +17,25 @@ final class TestPlaylistPage extends Avorg\TestCase
 		$this->assertInstanceOf("\\Avorg\\Page\\Playlist", $this->playlistPage);
 	}
 
-/*	public function testRendersCorrectTemplate()
+	public function testRendersCorrectTemplate()
 	{
+		$this->mockWordPress->setReturnValue("get_option", 7);
+		$this->mockWordPress->setReturnValue("get_the_ID", 7);
+
 		$this->playlistPage->addUi("content");
 
-		$this->assertTwigTemplateRendered();
-	}*/
+		$this->mockTwig->assertTwigTemplateRendered("page-playlist.twig");
+	}
+
+	public function testDefaultContentAndTitleSet()
+	{
+		$this->mockWordPress->setReturnValue("get_option", false);
+
+		$this->playlistPage->createPage();
+
+		$this->mockWordPress->assertPageCreated(
+			"Playlist Detail",
+			"Playlist Detail"
+		);
+	}
 }
