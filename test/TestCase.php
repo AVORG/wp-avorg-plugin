@@ -2,15 +2,13 @@
 
 namespace Avorg;
 
-require_once(dirname(__FILE__) . '/MockFactory.php');
-
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/* Mock Objects */
 	
-	/** @var AvorgApi $mockAvorgApi */
+	/** @var AvorgApi|StubAvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
 	
-	/** @var Php $mockPhp */
+	/** @var Php|StubPhp $mockPhp */
 	protected $mockPhp;
 	
 	/** @var Twig|StubTwig $mockTwig */
@@ -21,9 +19,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	/* Helper Fields */
 	
-	/** @var MockFactory $objectMocker */
-	protected $objectMocker;
-	
 	/** @var Factory $factory */
 	protected $factory;
 	
@@ -32,13 +27,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	protected function setUp()
 	{
 		define( "ABSPATH", "/" );
-		
-		$this->objectMocker = new MockFactory();
+
 		$this->factory = new Factory();
 
 		$this->factory->injectObjects(
-			$this->mockAvorgApi = $this->objectMocker->buildMock("AvorgApi"),
-			$this->mockPhp = $this->objectMocker->buildMock("Php"),
+			$this->mockAvorgApi = new StubAvorgApi($this),
+			$this->mockPhp = new StubPhp($this),
 			$this->mockTwig = new StubTwig($this),
 			$this->mockWordPress = new StubWordPress($this, $this->factory)
 		);

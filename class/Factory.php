@@ -10,6 +10,11 @@ class Factory
 
 	private $objects = [];
 
+	public function __construct(...$objects)
+	{
+		$this->injectObjects(...$objects);
+	}
+
 	public function injectObjects(...$objects)
 	{
 		$this->objects = array_merge($this->objects, $objects);

@@ -45,4 +45,9 @@ final class TestPlaylistPage extends Avorg\TestCase
 
 		$this->assertEquals("Title", $title);
 	}
+
+//	public function testGetsPlaylist()
+//	{
+//
+//	}
 }

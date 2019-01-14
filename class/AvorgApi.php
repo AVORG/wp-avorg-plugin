@@ -16,6 +16,20 @@ class AvorgApi
 		$this->apiUser = \get_option("avorgApiUser");
 		$this->apiPass = \get_option("avorgApiPass");
 	}
+
+	public function getPlaylist($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		try {
+			$response = $this->getResponse("$this->apiBaseUrl/playlist/$id");
+			$responseObject = json_decode($response);
+
+			return $responseObject->result;
+		} catch (\Exception $e) {
+			return false;
+		}
+	}
 	
 	/**
 	 * @param $id
