@@ -60,8 +60,7 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->enqueueScripts();
 		
-		$this->assertCalledWith(
-			$this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
 			"avorgStyle",
 			"path"

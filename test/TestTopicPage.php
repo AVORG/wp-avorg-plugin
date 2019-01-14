@@ -35,8 +35,7 @@ final class TestTopicPage extends Avorg\TestCase
 
 		$this->topicPage->createPage();
 
-		$this->assertCalledWith(
-			$this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"update_option",
 			"avorg_page_id_avorg_page_topic",
 			false
@@ -51,8 +50,7 @@ final class TestTopicPage extends Avorg\TestCase
 
 		$this->topicPage->createPage();
 
-		$this->assertCalledWith(
-			$this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			...$this->topicPageInsertCall
 		);
 	}
@@ -86,7 +84,7 @@ final class TestTopicPage extends Avorg\TestCase
 
 		$this->topicPage->addUi("content");
 
-		$this->assertCalledWith($this->mockAvorgApi, "getTopicPresentations", 10);
+		$this->mockAvorgApi->assertMethodCalledWith( "getTopicPresentations", 10);
 	}
 
 	public function testUsesPresentationsToRender()

@@ -34,7 +34,7 @@ final class TestAdminPanel extends Avorg\TestCase
 	{
 		$this->adminPanel->register();
 		
-		$this->assertCalledWith($this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"add_menu_page",
 			"AVORG", "AVORG", "manage_options", "avorg",
 			array($this->adminPanel, "render")
@@ -56,7 +56,7 @@ final class TestAdminPanel extends Avorg\TestCase
 		
 		$this->adminPanel->render();
 		
-		$this->assertCalledWith($this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"update_option", "avorgApiUser", "user");
 	}
 	
@@ -66,7 +66,7 @@ final class TestAdminPanel extends Avorg\TestCase
 		
 		$this->adminPanel->render();
 		
-		$this->assertCalledWith($this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"update_option", "avorgApiPass", "pass");
 	}
 	
@@ -74,7 +74,7 @@ final class TestAdminPanel extends Avorg\TestCase
 	{
 		$this->adminPanel->render();
 		
-		$this->assertCalledWith($this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"get_option", "avorgApiUser");
 	}
 	
@@ -82,7 +82,7 @@ final class TestAdminPanel extends Avorg\TestCase
 	{
 		$this->adminPanel->render();
 		
-		$this->assertCalledWith($this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"get_option", "avorgApiPass");
 	}
 }

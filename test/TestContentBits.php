@@ -39,7 +39,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->renderIdentifierMetaBox();
 		
-		$this->assertCalledWith($this->mockWordPress, "get_post_meta", 7, "_avorgBitIdentifier", true);
+		$this->mockWordPress->assertMethodCalledWith( "get_post_meta", 7, "_avorgBitIdentifier", true);
 	}
 	
 	public function testPassesSavedValueToTwig()
@@ -60,8 +60,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->saveIdentifierMetaBox();
 		
-		$this->assertCalledWith(
-			$this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"update_post_meta",
 			7,
 			"_avorgBitIdentifier",
@@ -72,15 +71,15 @@ final class TestContentBits extends Avorg\TestCase
 	public function testDoesntSaveIfValueNotPassed()
 	{
 		$this->contentBits->saveIdentifierMetaBox();
-		
-		$this->assertNotCalled($this->mockWordPress, "update_post_meta");
+
+		$this->mockWordPress->assertMethodNotCalled("update_post_meta");
 	}
 	
 	public function testAddsShortcode()
 	{
 		$this->contentBits->init();
 		
-		$this->assertCalledWith($this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"add_shortcode", "avorg-bits", [$this->contentBits, "renderShortcode"]);
 	}
 	
@@ -100,7 +99,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->contentBits->renderShortcode(['id' => 'passedId']);
 		
-		$this->assertAnyCallMatches($this->mockWordPress, "get_posts", function ($carry, $call) {
+		$this->mockWordPress->assertAnyCallMatches( "get_posts", function ($carry, $call) {
 			if (!isset($call[0]['meta_query'][0]['value'])) return $carry;
 			
 			return $carry || $call[0]['meta_query'][0]['value'] === "passedId";
@@ -114,7 +113,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->renderShortcode([]);
 		
-		$this->assertCalledWith($this->mockPhp, "array_rand", $posts);
+		$this->mockPhp->assertMethodCalledWith( "array_rand", $posts);
 	}
 	
 	public function testReturnsRandomPostContent()
@@ -136,7 +135,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->renderShortcode([]);
 		
-		$this->assertAnyCallMatches($this->mockWordPress, "get_posts", function ($carry, $call) {
+		$this->mockWordPress->assertAnyCallMatches( "get_posts", function ($carry, $call) {
 			if (!isset($call[0]['tax_query'][0]['terms'])) return $carry;
 			
 			return $carry || $call[0]['tax_query'][0]['terms'] === "111";
@@ -154,7 +153,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->renderShortcode([]);
 		
-		$this->assertCalledWith($this->mockPhp, "array_rand", $posts);
+		$this->mockPhp->assertMethodCalledWith( "array_rand", $posts);
 	}
 	
 	public function testSecondCallDoesntIncludePresentationId()
@@ -176,7 +175,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->contentBits->renderShortcode([]);
 		
-		$this->assertAnyCallMatches($this->mockWordPress, "get_posts", function($call) {
+		$this->mockWordPress->assertAnyCallMatches( "get_posts", function($call) {
 			return $call[0]['tax_query']['terms'] === null;
 		}, "Failed asserting that media targeting is exclusive");
 	}
@@ -185,8 +184,8 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("call", ['111', [], []]);
 		
-		$result = $this->contentBits->renderShortcode([]);
-		
-		$this->assertNotCalled($this->mockPhp, "array_rand");
+		$this->contentBits->renderShortcode([]);
+
+		$this->mockPhp->assertMethodNotCalled("array_rand");
 	}
 }

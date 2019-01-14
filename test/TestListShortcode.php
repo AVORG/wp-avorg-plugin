@@ -18,7 +18,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->renderShortcode(["list" => $listType]);
 		
-		$this->assertCalledWith($this->mockAvorgApi, "getPresentations", $listType);
+		$this->mockAvorgApi->assertMethodCalledWith( "getPresentations", $listType);
 	}
 	
 	// tests
@@ -48,7 +48,7 @@ final class TestListShortcode extends Avorg\TestCase
 		
 		$this->listShortcode->renderShortcode("");
 
-		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) {
+		$this->mockTwig->assertAnyCallMatches( "render", function($carry, $call) {
             $callGlobal = $call[1]["avorg"];
 
 		    return $callGlobal->recordings[2] instanceof \Avorg\Presentation || $carry;
@@ -68,7 +68,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->renderShortcode( [ "list" => "nonsense" ] );
 		
-		$this->assertCalledWith( $this->mockAvorgApi, "getPresentations", null );
+		$this->mockAvorgApi->assertMethodCalledWith( "getPresentations", null );
 	}
 	
 	public function testRenderFunctionGetsFeaturedMessages()

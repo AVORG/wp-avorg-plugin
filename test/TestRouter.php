@@ -21,7 +21,7 @@ final class TestRouter extends Avorg\TestCase
 	{
 		$this->router->activate();
 
-		$this->assertCalled($this->mockWordPress, "flush_rewrite_rules");
+		$this->mockWordPress->assertMethodCalled("flush_rewrite_rules");
 	}
 
 	public function testAssignsHighPriority()
@@ -162,7 +162,7 @@ final class TestRouter extends Avorg\TestCase
 	{
 		$this->router->activate();
 
-		$this->assertCalledWith($this->mockWordPress,  "flush_rewrite_rules");
+		$this->mockWordPress->assertMethodCalledWith(  "flush_rewrite_rules");
 	}
 
 	public function testUsesSavedMediaPageId()

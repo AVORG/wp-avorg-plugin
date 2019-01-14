@@ -50,8 +50,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith(
-			$this->mockWordPress,
+		$this->mockWordPress->assertMethodCalledWith(
 			"update_option",
 			"avorg_page_id_avorg_page_media",
 			7
@@ -62,7 +61,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith($this->mockWordPress, "get_option", "avorg_page_id_avorg_page_media");
+		$this->mockWordPress->assertMethodCalledWith( "get_option", "avorg_page_id_avorg_page_media");
 	}
 	
 	public function testCreatesPageIfNoPageStatus()
@@ -81,7 +80,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith($this->mockWordPress,  "get_post_status", 7);
+		$this->mockWordPress->assertMethodCalledWith(  "get_post_status", 7);
 	}
 	
 	public function testUntrashesMediaPage()
@@ -91,7 +90,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->createPage();
 		
-		$this->assertCalledWith($this->mockWordPress,  "wp_publish_post", 7);
+		$this->mockWordPress->assertMethodCalledWith(  "wp_publish_post", 7);
 	}
 	
 	public function testAddsMediaPageUI()
@@ -136,7 +135,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->addUi("content");
 
-		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) {
+		$this->mockTwig->assertAnyCallMatches( "render", function($carry, $call) {
             $callGlobal = $call[1]["avorg"];
 
 		    return $callGlobal->presentation instanceof \Avorg\Presentation || $carry;
@@ -150,7 +149,7 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$this->mediaPage->addUi("content");
 		
-		$this->assertCalledWith($this->mockWordPress, "get_query_var", "entity_id");
+		$this->mockWordPress->assertMethodCalledWith( "get_query_var", "entity_id");
 	}
 	
 	public function testGetsPresentation()
@@ -161,7 +160,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->addUi("content");
 		
-		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", "54321");
+		$this->mockAvorgApi->assertMethodCalledWith( "getPresentation", "54321");
 	}
 	
 	public function testConvertsMediaPageIdStringToNumber()
@@ -180,7 +179,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->throw404($wp_query);
 		
-		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", 42);
+		$this->mockAvorgApi->assertMethodCalledWith( "getPresentation", 42);
 	}
 	
 	public function testDoesNotSet404IfPresentationExists()
@@ -239,7 +238,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->setTitle("old title");
 		
-		$this->assertCalledWith($this->mockAvorgApi, "getPresentation", 7);
+		$this->mockAvorgApi->assertMethodCalledWith( "getPresentation", 7);
 	}
 	
 	public function testSetTitleWorksWhenNoPresentation()
