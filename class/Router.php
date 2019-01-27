@@ -148,11 +148,15 @@ class Router
         });
         $language = reset($filteredLanguages);
 
-        return "/" . $language["baseRoute"] . "/" .
-            $language["urlFragments"]["sermons"] . "/" .
-            $language["urlFragments"]["recordings"] . "/" .
-            $apiRecording->id . "/" .
-			$this->formatTitleForUrl($apiRecording) . ".html";
+        $fragments = [
+			$language["baseRoute"],
+			$language["urlFragments"]["sermons"],
+			$language["urlFragments"]["recordings"],
+			$apiRecording->id,
+			$this->formatTitleForUrl($apiRecording) . ".html"
+		];
+
+		return "/" . implode("/", $fragments);
     }
 
 	/**
