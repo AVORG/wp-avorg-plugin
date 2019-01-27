@@ -4,17 +4,16 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
-define("AVORG_BASE_ROUTE_TOKEN", "{base_route}");
-define("AVORG_ENTITY_ID_TOKEN", "{entity_id}");
-define("AVORG_VARIABLE_FRAGMENT_TOKEN", "{variable_fragment}");
-
-class LegacyRouter
+class Router
 {
 	/** @var Filesystem $filesystem */
 	private $filesystem;
 
 	/** @var PageFactory $pageFactory */
 	private $pageFactory;
+
+	/** @var RouteFactory $routeFactory */
+	private $routeFactory;
 	
 	/** @var WordPress $wp */
 	private $wp;
@@ -24,11 +23,13 @@ class LegacyRouter
 	public function __construct(
 		Filesystem $filesystem,
 		PageFactory $pageFactory,
+		RouteFactory $routeFactory,
 		WordPress $WordPress
 	)
 	{
 		$this->filesystem = $filesystem;
 		$this->pageFactory = $pageFactory;
+		$this->routeFactory = $routeFactory;
 		$this->wp = $WordPress;
 		
 		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"), TRUE);
@@ -56,61 +57,55 @@ class LegacyRouter
 		}, (array)$this->languages);
 	}
 
-	private function addPageRewriteRules($pages, $language)
-	{
-		array_walk($pages, function(Page $page) use ($language) {
-			$route = $page->getRoute();
-
-			if (strstr($route, AVORG_ENTITY_ID_TOKEN) === FALSE) {
-				throw new \Exception("Missing entity ID token in route");
-			}
-
-			$regex = $this->prepareRewriteRegex($route, $language);
-			$pageId = $page->getPostId();
-			$redirect = "index.php?page_id=$pageId&entity_id=\$matches[1]";
-
-			$this->wp->add_rewrite_rule( $regex, $redirect, "top");
-		});
-	}
-
-	/**
-	 * @param $route
-	 * @param $language
-	 * @return mixed|string
-	 */
-	private function prepareRewriteRegex($route, $language)
-	{
-		$route = str_replace("/", "\/", $route);
-		$route = str_replace(AVORG_BASE_ROUTE_TOKEN, $language["baseRoute"], $route);
-		$route = array_reduce(array_keys($language["urlFragments"]), function ($carry, $key) use ($language) {
-			$pattern = "/\b$key\b/";
-			$replace = $language["urlFragments"][$key];
-
-			if (!$replace) return $carry;
-
-			return preg_replace($pattern, $replace, $carry);
-		}, $route);
-		$route = str_replace(AVORG_ENTITY_ID_TOKEN, "(\d+)", $route);
-		$route = str_replace(AVORG_VARIABLE_FRAGMENT_TOKEN, "[\w-\.]+", $route);
-
-		return "^$route\/?";
-	}
-
-	private function addRewriteTags()
-	{
-		$this->wp->add_rewrite_tag( "%entity_id%", "(\d+)");
-	}
-	
 	/**
 	 * @param $language
 	 * @param $homePageId
 	 */
 	public function addHomePageRewriteRule($language, $homePageId)
 	{
+		$route = $this->routeFactory->getPageRoute($homePageId, "{ language }");
+
 		$this->wp->add_rewrite_rule(
-			"^" . $language["baseRoute"],
-			"index.php?page_id=$homePageId",
-			"top");
+			$route->getRouteRegex(),
+			$route->getRedirect(),
+			"top"
+		);
+	}
+
+	private function addPageRewriteRules($pages, $language)
+	{
+		array_walk($pages, function(Page $page) use ($language) {
+			$routeFormat = $page->getRoute();
+			$translatedFormat = $this->translateFormat($language, $routeFormat);
+			$pageId = $page->getPostId();
+			$route = $this->routeFactory->getPageRoute($pageId, $translatedFormat);
+			$regex = $route->getRouteRegex();
+			$redirect = $route->getRedirect();
+
+			$this->wp->add_rewrite_rule( $regex, $redirect, "top");
+		});
+	}
+
+	/**
+	 * @param $language
+	 * @param $routeFormat
+	 * @return mixed
+	 */
+	private function translateFormat($language, $routeFormat)
+	{
+		return array_reduce(array_keys($language["urlFragments"]), function ($carry, $key) use ($language) {
+			$pattern = "/\b$key\b/";
+			$replace = $language["urlFragments"][$key];
+
+			if (!$replace) return $carry;
+
+			return preg_replace($pattern, $replace, $carry);
+		}, $routeFormat);
+	}
+
+	private function addRewriteTags()
+	{
+		$this->wp->add_rewrite_tag( "%entity_id%", "(\d+)");
 	}
 	
 	public function setLocale($lang)

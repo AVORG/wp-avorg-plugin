@@ -18,6 +18,7 @@ if ( !\defined( 'ABSPATH' ) ) exit;
  * @method wp_insert_post(array $array, $true)
  * @method wp_publish_post($postId)
  * @method get_query_var($string)
+ * @method plugin_dir_url()
  */
 class WordPress {
 	public function __call( $function, $arguments ) {

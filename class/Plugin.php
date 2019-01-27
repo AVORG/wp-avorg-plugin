@@ -21,7 +21,7 @@ class Plugin
 	/** @var Renderer $renderer */
 	private $renderer;
 	
-	/** @var LegacyRouter $router */
+	/** @var Router $router */
 	private $router;
 
 	/** @var WordPress $wp */
@@ -33,7 +33,7 @@ class Plugin
 		PageFactory $pageFactory,
 		Pwa $pwa,
 		Renderer $renderer,
-		LegacyRouter $router,
+		Router $router,
 		WordPress $WordPress
 	)
 	{

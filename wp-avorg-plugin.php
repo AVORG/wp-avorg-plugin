@@ -21,7 +21,7 @@ $factory = new Factory();
 $plugin = $factory->get("Plugin");
 $adminPanel = $factory->get("AdminPanel");
 $contentBits = $factory->get("ContentBits");
-$router = $factory->get("LegacyRouter");
+$router = $factory->get("Router");
 
 \register_activation_hook(__FILE__, array($plugin, "activate"));
 

@@ -17,7 +17,7 @@ class Playlist extends Page
 	protected $defaultPageTitle = "Playlist Detail";
 	protected $defaultPageContent = "Playlist Detail";
 	protected $twigTemplate = "page-playlist.twig";
-	protected $route = AVORG_BASE_ROUTE_TOKEN . "/playlists/lists/" . AVORG_ENTITY_ID_TOKEN . "/" . AVORG_VARIABLE_FRAGMENT_TOKEN;
+	protected $route = "{ language }/playlists/lists/{ entity_id:[0-9]+ }[/{ slug }]";
 
 	public function __construct(AvorgApi $avorgApi, Renderer $renderer, WordPress $wp)
 	{

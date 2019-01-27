@@ -31,7 +31,15 @@ abstract class Route
 		return $this;
 	}
 
-	abstract public function getRedirect();
+	public function getRedirect()
+	{
+		$baseRedirect = $this->getBaseRoute();
+		$queryVarString = $this->getQueryVarString();
+
+		return $queryVarString ? "$baseRedirect&$queryVarString" : $baseRedirect;
+	}
+
+	abstract function getBaseRoute();
 
 	public function getRouteRegex()
 	{
@@ -154,8 +162,9 @@ abstract class Route
 	private function getRawFragmentContent($route, $type)
 	{
 		preg_match($this->fragmentPatterns[$type], $route, $matches);
+		$content = (count($matches) > 1) ? $matches[1] : "";
 
-		return trim($matches[1]);
+		return trim($content);
 	}
 
 	/**

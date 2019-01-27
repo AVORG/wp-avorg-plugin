@@ -21,11 +21,8 @@ class PageRoute extends Route
 		return $this;
 	}
 
-	public function getRedirect()
+	function getBaseRoute()
 	{
-		$baseRedirect = "index.php?page_id=$this->pageId";
-		$queryVarString = $this->getQueryVarString();
-
-		return $queryVarString ? "$baseRedirect&$queryVarString" : $baseRedirect;
+		return "index.php?page_id=$this->pageId";
 	}
 }

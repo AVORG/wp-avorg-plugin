@@ -1,15 +1,15 @@
 <?php
 
-final class TestLegacyRouter extends Avorg\TestCase
+final class TestRouter extends Avorg\TestCase
 {
-	/** @var \Avorg\LegacyRouter $router */
+	/** @var \Avorg\Router $router */
 	protected $router;
 
 	public function setUp()
 	{
 		parent::setUp();
 
-		$this->router = $this->factory->get("LegacyRouter");
+		$this->router = $this->factory->get("Router");
 	}
 
 	public function testCallsWordPress()
@@ -80,75 +80,75 @@ final class TestLegacyRouter extends Avorg\TestCase
 		return [
 			[
 				"english/sermons/recordings/316/parents-how.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=316"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=2913"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=3914"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17663"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17831"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17833"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
 			],
 			[
 				"english/sermons/recordings/316/parents-how.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=316"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=2913"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=3914"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17663"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17831"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17833"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
 			],
 			[
 				"espanol/sermones/grabaciones/17283/saludismo.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=17283"
+				"index.php?page_id=MEDIA_PAGE_ID&language=espanol&entity_id=17283&slug=saludismo.html"
 			],
 			[
 				"francais/predications/enregistrements/3839/jesus-sur-le-mont-des-oliviers.html",
-				"index.php?page_id=MEDIA_PAGE_ID&entity_id=3839"
+				"index.php?page_id=MEDIA_PAGE_ID&language=francais&entity_id=3839&slug=jesus-sur-le-mont-des-oliviers.html"
 			],
 			[
 				"espanol",
-				"index.php?page_id=HOME_PAGE_ID"
+				"index.php?page_id=HOME_PAGE_ID&language=espanol"
 			],
 			[
 				"espanol/",
-				"index.php?page_id=HOME_PAGE_ID"
+				"index.php?page_id=HOME_PAGE_ID&language=espanol"
 			],
 			[
 				"english/topics/102/great-controversy.html",
-				"index.php?page_id=TOPIC_PAGE_ID&entity_id=102"
+				"index.php?page_id=TOPIC_PAGE_ID&language=english&entity_id=102&slug=great-controversy.html"
 			],
 			[
 				"english/playlists/lists/14/how-to-be-saved.html",
-				"index.php?page_id=PLAYLIST_PAGE_ID&entity_id=14"
+				"index.php?page_id=PLAYLIST_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
 			]
 		];
 	}

@@ -21,7 +21,7 @@ class Media extends Page
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
     protected $twigTemplate = "organism-recording.twig";
-    protected $route = AVORG_BASE_ROUTE_TOKEN . "/sermons/recordings/" . AVORG_ENTITY_ID_TOKEN . "/" . AVORG_VARIABLE_FRAGMENT_TOKEN;
+    protected $route = "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]";
 
     public function __construct(
     	AvorgApi $avorgApi,
