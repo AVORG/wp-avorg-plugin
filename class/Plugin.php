@@ -21,20 +21,20 @@ class Plugin
 	/** @var Renderer $renderer */
 	private $renderer;
 	
-	/** @var Router $router */
+	/** @var LegacyRouter $router */
 	private $router;
 
 	/** @var WordPress $wp */
 	private $wp;
 	
 	public function __construct(
-        ContentBits $contentBits,
-        ListShortcode $listShortcode,
-        PageFactory $pageFactory,
-        Pwa $pwa,
-        Renderer $renderer,
-        Router $router,
-        WordPress $WordPress
+		ContentBits $contentBits,
+		ListShortcode $listShortcode,
+		PageFactory $pageFactory,
+		Pwa $pwa,
+		Renderer $renderer,
+		LegacyRouter $router,
+		WordPress $WordPress
 	)
 	{
 		$this->contentBits = $contentBits;

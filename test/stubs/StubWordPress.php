@@ -24,6 +24,26 @@ class StubWordPress extends WordPress
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function setCurrentPageToPage($page)
+	{
+		$this->setSavedPageId($page, 7);
+		$this->setCurrentPageId(7);
+	}
+
+	public function setCurrentPageId($id)
+	{
+		$this->setReturnValue("get_the_ID", $id);
+	}
+
+	public function setSavedPageId($page, $id)
+	{
+		$optionName = $this->getPageIdOptionName($page);
+
+		$this->setMappedReturnValues("get_option", [
+			[ $optionName, $id ]
+		]);
+	}
+
 	public function assertPageCreated($content, $title)
 	{
 		$this->assertMethodCalledWith("wp_insert_post", array(
@@ -57,5 +77,15 @@ class StubWordPress extends WordPress
 			"the_content",
 			[$pageObject, "addUi"]
 		);
+	}
+
+	public function getPageIdOptionName($page)
+	{
+		$prefix = "avorg_page_id_";
+		$class = get_class($page);
+		$lowercase = strtolower($class);
+		$slashToUnderscore = str_replace("\\", "_", $lowercase);
+
+		return $prefix . $slashToUnderscore;
 	}
 }

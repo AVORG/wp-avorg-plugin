@@ -22,7 +22,7 @@ class Pwa
 
 	public function registerServiceWorker()
 	{
-		//var_dump('hello world');die;
+		var_dump('hello world');die;
 
 		$this->wp->wp_register_service_worker_script(
 			"avorgServiceWorker",

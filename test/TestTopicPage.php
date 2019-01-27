@@ -73,7 +73,7 @@ final class TestTopicPage extends Avorg\TestCase
 	{
 		$this->topicPage->addUi("content");
 
-		$this->mockWordPress->assertMethodCalledWith( "get_query_var", "topic_id");
+		$this->mockWordPress->assertMethodCalledWith( "get_query_var", "entity_id");
 	}
 
 	public function testGetsPresentations()

@@ -9,10 +9,10 @@ class PresentationRepository
     /** @var AvorgApi $api */
     private $api;
 
-    /** @var Router $router */
+    /** @var LegacyRouter $router */
     private $router;
 
-    public function __construct(AvorgApi $api, Router $router)
+    public function __construct(AvorgApi $api, LegacyRouter $router)
     {
         $this->api = $api;
         $this->router = $router;

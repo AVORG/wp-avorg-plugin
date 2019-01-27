@@ -1,15 +1,15 @@
 <?php
 
-final class TestRouter extends Avorg\TestCase
+final class TestLegacyRouter extends Avorg\TestCase
 {
-	/** @var \Avorg\Router $router */
+	/** @var \Avorg\LegacyRouter $router */
 	protected $router;
 
 	public function setUp()
 	{
 		parent::setUp();
 
-		$this->router = $this->factory->get("Router");
+		$this->router = $this->factory->get("LegacyRouter");
 	}
 
 	private function getAddRewriteCalls()

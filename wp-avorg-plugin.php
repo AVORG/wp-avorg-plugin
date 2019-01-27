@@ -21,7 +21,7 @@ $factory = new Factory();
 $plugin = $factory->get("Plugin");
 $adminPanel = $factory->get("AdminPanel");
 $contentBits = $factory->get("ContentBits");
-$router = $factory->get("Router");
+$router = $factory->get("LegacyRouter");
 
 \register_activation_hook(__FILE__, array($plugin, "activate"));
 
@@ -38,7 +38,7 @@ $router = $factory->get("Router");
 
 function registerServiceWorker()
 {
-	var_dump('hello');die;
+//	var_dump('hello');die;
 
 	\wp_register_service_worker_script(
 		"avorgServiceWorker",
@@ -54,7 +54,7 @@ function registerServiceWorker()
 			'cacheName' => 'images',
 			'plugins'   => array(
 				'expiration'        => array(
-					'maxEntries'    => 60,
+					'maxEntries'    => 100,
 					'maxAgeSeconds' => 60 * 60 * 24,
 				),
 			),
@@ -62,8 +62,15 @@ function registerServiceWorker()
 	);
 }
 
-
 \add_action(
 	"wp_front_service_worker",
 	"registerServiceWorker"
 );
+
+//registerServiceWorker();
+
+//global $wp_filter;
+//echo '<pre>';
+//var_dump( $wp_filter['wp_front_service_worker'] );
+//echo '</pre>';
+//die;

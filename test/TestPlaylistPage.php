@@ -19,8 +19,7 @@ final class TestPlaylistPage extends Avorg\TestCase
 
 	public function testRendersCorrectTemplate()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 7);
-		$this->mockWordPress->setReturnValue("get_the_ID", 7);
+		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
 
 		$this->playlistPage->addUi("content");
 
@@ -46,8 +45,25 @@ final class TestPlaylistPage extends Avorg\TestCase
 		$this->assertEquals("Title", $title);
 	}
 
-//	public function testGetsPlaylist()
-//	{
-//
-//	}
+	public function testPassesPlaylistToView()
+	{
+		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
+		$this->mockAvorgApi->setReturnValue("getPlaylist", "playlist");
+
+		$this->playlistPage->addUi("");
+
+		$this->mockTwig->assertTwigTemplateRenderedWithData("page-playlist.twig", [
+			"playlist" => "playlist"
+		]);
+	}
+
+	public function testGetsPlaylistById()
+	{
+		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
+		$this->mockWordPress->setReturnValue("get_query_var", 7);
+
+		$this->playlistPage->addUi("");
+
+		$this->mockAvorgApi->assertMethodCalledWith("getPlaylist", 7);
+	}
 }

@@ -8,7 +8,7 @@ define("AVORG_BASE_ROUTE_TOKEN", "{base_route}");
 define("AVORG_ENTITY_ID_TOKEN", "{entity_id}");
 define("AVORG_VARIABLE_FRAGMENT_TOKEN", "{variable_fragment}");
 
-class Router
+class LegacyRouter
 {
 	/** @var Filesystem $filesystem */
 	private $filesystem;

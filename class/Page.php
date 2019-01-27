@@ -16,6 +16,7 @@ abstract class Page
     protected $defaultPageContent;
     protected $defaultPageTitle;
     protected $twigTemplate;
+	protected $route;
 
 
 	public function __construct(Renderer $renderer, WordPress $wp)
