@@ -14,7 +14,10 @@ class Localization
 	public function __construct(WordPress $wordPress)
 	{
 		$this->wp = $wordPress;
-		
+	}
+
+	public function registerCallbacks()
+	{
 		$this->wp->add_action( "init", [$this, "loadLanguages"]);
 	}
 	
@@ -25,7 +28,7 @@ class Localization
 	
 	public function _n($single, $plural, $number)
 	{
-		return $this->wp->_n( $single, $plural, $number, $this->domain);
+		return $this->wp->_n($single, $plural, $number, $this->domain);
 	}
 	
 	public function loadLanguages()
@@ -35,6 +38,7 @@ class Localization
 		$this->wp->load_plugin_textdomain(
 			$this->domain,
 			false,
-			$relativePath);
+			$relativePath
+		);
 	}
 }

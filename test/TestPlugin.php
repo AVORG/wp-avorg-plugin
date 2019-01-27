@@ -206,4 +206,15 @@ final class TestPlugin extends Avorg\TestCase
 			[$pwa, "registerServiceWorker"]
 		);
 	}
+
+	public function testRegistersLocalizationCallbacks()
+	{
+		$localization = $this->factory->get("Localization");
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"add_action",
+			"init",
+			[$localization, "loadLanguages"]
+		);
+	}
 }

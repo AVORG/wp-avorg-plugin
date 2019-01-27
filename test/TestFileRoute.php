@@ -21,7 +21,7 @@ final class TestFileRoute extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("plugin_dir_url", "plugin/dir/url/");
 
-		$redirect = $this->fileRoute->setRoute("my/route")
+		$redirect = $this->fileRoute->setFormat("my/route")
 			->setFile("path/to/file.php")
 			->getRedirect();
 

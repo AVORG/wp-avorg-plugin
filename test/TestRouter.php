@@ -264,7 +264,8 @@ final class TestRouter extends Avorg\TestCase
 	public function rewriteTagProvider()
 	{
 		return [
-			"entity_id" => [ "%entity_id%", "(\d+)" ],
+			"entity_id" => [ "%entity_id%", "([0-9]+)" ],
+			"language" => [ "%language%", "([\w-\.]+)" ]
 		];
 	}
 }

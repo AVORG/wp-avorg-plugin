@@ -13,6 +13,6 @@ class RouteFactory
 	{
 		$route = new PageRoute();
 
-		return $route->setPageId($pageId)->setRoute($routeFormat);
+		return $route->setPageId($pageId)->setFormat($routeFormat);
 	}
 }

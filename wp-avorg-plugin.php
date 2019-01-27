@@ -34,8 +34,6 @@ $router = $factory->get("Router");
 \add_filter("locale", array($router, "setLocale"));
 \add_filter("redirect_canonical", array($router, "filterRedirect"));
 
-
-
 function registerServiceWorker()
 {
 //	var_dump('hello');die;

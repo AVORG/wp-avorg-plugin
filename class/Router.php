@@ -43,31 +43,24 @@ class Router
 	
 	public function addRewriteRules()
 	{
-		$homePageId = $this->wp->get_option( "page_on_front");
-		$mediaPageId = $this->wp->get_option( "avorgMediaPageId");
-		$topicPageId = $this->wp->get_option( "avorgTopicPageId");
-
-		$this->addRewriteTags();
+		$this->addHomePageRewriteRule();
 
 		$pages = $this->pageFactory->getPages();
-
-		array_map(function ($language) use ($mediaPageId, $homePageId, $topicPageId, $pages) {
+		array_map(function ($language) use ($pages) {
 			$this->addPageRewriteRules($pages, $language);
-			$this->addHomePageRewriteRule($language, $homePageId);
 		}, (array)$this->languages);
 	}
 
-	/**
-	 * @param $language
-	 * @param $homePageId
-	 */
-	public function addHomePageRewriteRule($language, $homePageId)
+	public function addHomePageRewriteRule()
 	{
+		$homePageId = $this->wp->get_option( "page_on_front");
 		$route = $this->routeFactory->getPageRoute($homePageId, "{ language }");
+		$regex = $route->getRegex();
+		$redirect = $route->getRedirect();
 
 		$this->wp->add_rewrite_rule(
-			$route->getRouteRegex(),
-			$route->getRedirect(),
+			$regex,
+			$redirect,
 			"top"
 		);
 	}
@@ -75,15 +68,31 @@ class Router
 	private function addPageRewriteRules($pages, $language)
 	{
 		array_walk($pages, function(Page $page) use ($language) {
-			$routeFormat = $page->getRoute();
-			$translatedFormat = $this->translateFormat($language, $routeFormat);
-			$pageId = $page->getPostId();
-			$route = $this->routeFactory->getPageRoute($pageId, $translatedFormat);
-			$regex = $route->getRouteRegex();
-			$redirect = $route->getRedirect();
+			$routeFormat = $this->translateFormat($language, $page->getRouteFormat());
+			$route = $this->routeFactory->getPageRoute($page->getPostId(), $routeFormat);
 
-			$this->wp->add_rewrite_rule( $regex, $redirect, "top");
+			$this->addRewriteTags($route);
+			$this->addRewriteRule($route);
 		});
+	}
+
+	/**
+	 * @param $route
+	 */
+	private function addRewriteTags(Route $route)
+	{
+		$tags = $route->getRewriteTags();
+		$keys = array_keys($tags);
+		array_walk($keys, function ($key) use ($tags) {
+			$this->wp->add_rewrite_tag("%$key%", $tags[$key]);
+		});
+	}
+
+	private function addRewriteRule(Route $route)
+	{
+		$regex = $route->getRegex();
+		$redirect = $route->getRedirect();
+		$this->wp->add_rewrite_rule( $regex, $redirect, "top");
 	}
 
 	/**
@@ -101,11 +110,6 @@ class Router
 
 			return preg_replace($pattern, $replace, $carry);
 		}, $routeFormat);
-	}
-
-	private function addRewriteTags()
-	{
-		$this->wp->add_rewrite_tag( "%entity_id%", "(\d+)");
 	}
 	
 	public function setLocale($lang)

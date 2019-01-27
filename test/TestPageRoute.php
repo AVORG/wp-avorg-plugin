@@ -25,9 +25,9 @@ final class TestPageRoute extends Avorg\TestCase
 	 */
 	public function testRouteMatchesCorrectRequests($route, $matchables, $missables = [])
 	{
-		$this->pageRoute->setRoute($route);
+		$this->pageRoute->setFormat($route);
 
-		$regex = $this->pageRoute->getRouteRegex();
+		$regex = $this->pageRoute->getRegex();
 
 		array_walk($matchables, function ($matchable) use ($regex) {
 			$this->assertRegExp("#$regex#", $matchable);
@@ -110,9 +110,9 @@ final class TestPageRoute extends Avorg\TestCase
 	{
 		$this->expectException(\Exception::class);
 
-		$this->pageRoute->setRoute("$");
+		$this->pageRoute->setFormat("$");
 
-		$this->pageRoute->getRouteRegex();
+		$this->pageRoute->getRegex();
 	}
 
 	/**
@@ -123,9 +123,9 @@ final class TestPageRoute extends Avorg\TestCase
 	 */
 	public function testRouteRedirects($routePattern, $inputUrl, $outputUrl)
 	{
-		$this->pageRoute->setRoute($routePattern)->setPageId("PAGE_ID");
+		$this->pageRoute->setFormat($routePattern)->setPageId("PAGE_ID");
 
-		$regex = $this->pageRoute->getRouteRegex();
+		$regex = $this->pageRoute->getRegex();
 		$redirect = $this->pageRoute->getRedirect();
 
 		preg_match("/$regex/", $inputUrl, $matches);

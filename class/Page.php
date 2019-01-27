@@ -48,7 +48,7 @@ abstract class Page
 		return ($this->isThisPage()) ? $this->buildUi() . $content : $content;
 	}
 
-	public function getRoute()
+	public function getRouteFormat()
 	{
 		return $this->route;
 	}

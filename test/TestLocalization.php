@@ -12,18 +12,9 @@ final class TestLocalization extends Avorg\TestCase
 		$this->localization = $this->factory->get("Localization");
 	}
 	
-	public function test__iFunctionExsits()
+	public function test__iFunctionExists()
 	{
 		$this->assertTrue(method_exists($this->localization, "i__"));
-	}
-	
-	public function testRegistersLanguageAdditionMethod()
-	{
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_action",
-			"init",
-			[$this->localization, "loadLanguages"]
-		);
 	}
 	
 	public function testLoadLanguagesCallsTextDomainLoadingFunction()

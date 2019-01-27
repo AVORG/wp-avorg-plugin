@@ -8,22 +8,42 @@ if (!\defined('ABSPATH')) exit;
 
 class RouteVariable extends RouteFragment
 {
+	private $defaultTokenRegex = "([\w-\.]+)";
+
 	/**
 	 * @return string
 	 */
 	public function getRegex()
 	{
-		$contentPieces = explode(":", $this->content, 2);
-		$pattern = (count($contentPieces) > 1) ? $contentPieces[1] : false;
-
-		return $pattern ? "($pattern)" : "([\w-\.]+)";
+		return $this->getPattern();
 	}
 
-	public function getRedirectTokens()
+	public function getRewriteTags()
 	{
-		$contentPieces = explode(":", $this->content, 2);
-		$name = $contentPieces[0];
+		return [$this->getName() => $this->getPattern()];
+	}
 
-		return [$name];
+	/**
+	 * @return bool|mixed|string
+	 */
+	private function getPattern()
+	{
+		$pieces = $this->getContentPieces();
+		$hasPattern = count($pieces) > 1;
+
+		return $hasPattern ? "($pieces[1])" : $this->defaultTokenRegex;
+	}
+
+	private function getName()
+	{
+		return $this->getContentPieces()[0];
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getContentPieces()
+	{
+		return explode(":", $this->content, 2);
 	}
 }

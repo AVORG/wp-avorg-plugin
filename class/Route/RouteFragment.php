@@ -23,11 +23,11 @@ abstract class RouteFragment
 		}, "");
 	}
 
-	public function getRedirectTokens() {
+	public function getRewriteTags() {
 		if (!is_array($this->content)) return [];
 
 		return array_reduce($this->content, function($carry, RouteFragment $child) {
-			return array_merge($carry, $child->getRedirectTokens());
+			return array_merge($carry, $child->getRewriteTags());
 		}, []);
 	}
 

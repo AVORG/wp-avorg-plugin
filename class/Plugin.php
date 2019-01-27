@@ -11,6 +11,9 @@ class Plugin
 	
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
+
+	/** @var Localization */
+	private $localization;
 	
 	/** @var PageFactory $pageFactory */
 	private $pageFactory;
@@ -30,6 +33,7 @@ class Plugin
 	public function __construct(
 		ContentBits $contentBits,
 		ListShortcode $listShortcode,
+		Localization $localization,
 		PageFactory $pageFactory,
 		Pwa $pwa,
 		Renderer $renderer,
@@ -39,6 +43,7 @@ class Plugin
 	{
 		$this->contentBits = $contentBits;
 		$this->listShortcode = $listShortcode;
+		$this->localization = $localization;
 		$this->pageFactory = $pageFactory;
 		$this->pwa = $pwa;
 		$this->renderer = $renderer;
@@ -53,6 +58,7 @@ class Plugin
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
 		$this->pwa->registerCallbacks();
 		$this->registerPageCallbacks();
+		$this->localization->registerCallbacks();
 	}
 	
 	public function activate()

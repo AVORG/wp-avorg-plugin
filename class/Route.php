@@ -23,7 +23,7 @@ abstract class Route
 	 * @param string $route
 	 * @return Route
 	 */
-	public function setRoute($route)
+	public function setFormat($route)
 	{
 		$this->route = $route;
 		$this->routeTree = $this->composeRouteTree($this->route);
@@ -41,7 +41,7 @@ abstract class Route
 
 	abstract function getBaseRoute();
 
-	public function getRouteRegex()
+	public function getRegex()
 	{
 		$regex = array_reduce($this->routeTree, function ($carry, $trunk) {
 			return $carry . $trunk->getRegex();
@@ -181,17 +181,26 @@ abstract class Route
 	 */
 	protected function getQueryVarString()
 	{
-		$tokens = array_reduce($this->routeTree, function($carry, RouteFragment $fragment) {
-			return array_merge($carry, $fragment->getRedirectTokens());
-		}, []);
+		$tokens = $this->getRewriteTags();
+		$tokenNames = array_keys($tokens);
 
-		$queryVars = array_map(function ($key) use ($tokens) {
-			$varName = $tokens[$key];
+		$queryVars = array_map(function ($key) use ($tokenNames) {
+			$varName = $tokenNames[$key];
 			$matchKey = $key + 1;
 
 			return "$varName=\$matches[$matchKey]";
-		}, array_keys($tokens));
+		}, array_keys($tokenNames));
 
 		return implode("&", $queryVars);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getRewriteTags()
+	{
+		return array_reduce($this->routeTree, function ($carry, RouteFragment $fragment) {
+			return array_merge($carry, $fragment->getRewriteTags());
+		}, []);
 	}
 }
