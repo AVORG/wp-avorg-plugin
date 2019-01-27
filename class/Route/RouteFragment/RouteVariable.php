@@ -18,4 +18,12 @@ class RouteVariable extends RouteFragment
 
 		return $pattern ? "($pattern)" : "([\w-\.]+)";
 	}
+
+	public function getRedirectTokens()
+	{
+		$contentPieces = explode(":", $this->content, 2);
+		$name = $contentPieces[0];
+
+		return [$name];
+	}
 }

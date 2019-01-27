@@ -10,6 +10,8 @@ if (!\defined('ABSPATH')) exit;
 abstract class Route
 {
 	private $route;
+	protected $routeTree;
+
 	private $fragmentPatterns = [
 		"variable" => "/^{(.+?)}/",
 		"segment" => "/^(\w+)/",
@@ -19,17 +21,21 @@ abstract class Route
 
 	/**
 	 * @param string $route
+	 * @return Route
 	 */
 	public function setRoute($route)
 	{
 		$this->route = $route;
+		$this->routeTree = $this->composeRouteTree($this->route);
+
+		return $this;
 	}
+
+	abstract public function getRedirect();
 
 	public function getRouteRegex()
 	{
-		$tree = $this->composeRouteTree($this->route);
-
-		$regex = array_reduce($tree, function ($carry, $trunk) {
+		$regex = array_reduce($this->routeTree, function ($carry, $trunk) {
 			return $carry . $trunk->getRegex();
 		}, "");
 
@@ -159,5 +165,24 @@ abstract class Route
 	private function throwInvalidRouteException($route)
 	{
 		throw new \Exception("Invalid route $this->route. Failed to continue at $route");
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getQueryVarString()
+	{
+		$tokens = array_reduce($this->routeTree, function($carry, RouteFragment $fragment) {
+			return array_merge($carry, $fragment->getRedirectTokens());
+		}, []);
+
+		$queryVars = array_map(function ($key) use ($tokens) {
+			$varName = $tokens[$key];
+			$matchKey = $key + 1;
+
+			return "$varName=\$matches[$matchKey]";
+		}, array_keys($tokens));
+
+		return implode("&", $queryVars);
 	}
 }

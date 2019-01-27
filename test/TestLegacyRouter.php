@@ -12,11 +12,6 @@ final class TestLegacyRouter extends Avorg\TestCase
 		$this->router = $this->factory->get("LegacyRouter");
 	}
 
-	private function getAddRewriteCalls()
-	{
-		return $this->mockWordPress->getCalls("add_rewrite_rule");
-	}
-
 	public function testCallsWordPress()
 	{
 		$this->router->activate();
@@ -28,7 +23,7 @@ final class TestLegacyRouter extends Avorg\TestCase
 	{
 		$this->router->activate();
 
-		$addRewriteCalls = $this->getAddRewriteCalls();
+		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
 		$priority = $addRewriteCalls[0][2];
 
 		$this->assertEquals("top", $priority);
@@ -59,7 +54,7 @@ final class TestLegacyRouter extends Avorg\TestCase
 
 		$this->router->activate();
 
-		$addRewriteCalls = $this->getAddRewriteCalls();
+		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
 
 		$results = array_map(function ($call) use ($inputUrl) {
 			$regex = $call[0];
@@ -171,7 +166,7 @@ final class TestLegacyRouter extends Avorg\TestCase
 
 		$this->router->activate();
 
-		$addRewriteCalls = $this->getAddRewriteCalls();
+		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
 		$redirect = $addRewriteCalls[0][1];
 
 		$this->assertContains("page_id=3", $redirect);

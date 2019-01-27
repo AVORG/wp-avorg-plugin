@@ -21,9 +21,9 @@ final class TestPageRoute extends Avorg\TestCase
 	 * @param $route
 	 * @param array $matchables
 	 * @param array $missables
-	 * @dataProvider routeToRegexProvider
+	 * @dataProvider routeAndRequestsProvider
 	 */
-	public function testRouteToRegex($route, $matchables, $missables = [])
+	public function testRouteMatchesCorrectRequests($route, $matchables, $missables = [])
 	{
 		$this->pageRoute->setRoute($route);
 
@@ -38,7 +38,7 @@ final class TestPageRoute extends Avorg\TestCase
 		});
 	}
 
-	public function routeToRegexProvider()
+	public function routeAndRequestsProvider()
 	{
 		return [
 			"static" => [
@@ -113,5 +113,46 @@ final class TestPageRoute extends Avorg\TestCase
 		$this->pageRoute->setRoute("$");
 
 		$this->pageRoute->getRouteRegex();
+	}
+
+	/**
+	 * @dataProvider routeRedirectsProvider
+	 * @param $routePattern
+	 * @param $inputUrl
+	 * @param $outputUrl
+	 */
+	public function testRouteRedirects($routePattern, $inputUrl, $outputUrl)
+	{
+		$this->pageRoute->setRoute($routePattern)->setPageId("PAGE_ID");
+
+		$regex = $this->pageRoute->getRouteRegex();
+		$redirect = $this->pageRoute->getRedirect();
+
+		preg_match("/$regex/", $inputUrl, $matches);
+
+		$result = eval("return \"$redirect\";");
+
+		$this->assertEquals($outputUrl, $result);
+	}
+
+	public function routeRedirectsProvider()
+	{
+		return [
+			"standard presentation route" => [
+				"english/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]",
+				"english/sermons/recordings/316/parents-how.html",
+				"index.php?page_id=PAGE_ID&entity_id=316&slug=parents-how.html"
+			],
+			"optional token" => [
+				"route/with[/{ token }]",
+				"route/with/token",
+				"index.php?page_id=PAGE_ID&token=token"
+			],
+			"no tokens" => [
+				"route/to/page",
+				"route/to/page",
+				"index.php?page_id=PAGE_ID"
+			]
+		];
 	}
 }

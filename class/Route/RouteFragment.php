@@ -23,5 +23,13 @@ abstract class RouteFragment
 		}, "");
 	}
 
+	public function getRedirectTokens() {
+		if (!is_array($this->content)) return [];
+
+		return array_reduce($this->content, function($carry, RouteFragment $child) {
+			return array_merge($carry, $child->getRedirectTokens());
+		}, []);
+	}
+
 	abstract public function getRegex();
 }
