@@ -5,6 +5,7 @@ namespace Avorg\Page;
 use Avorg\Page;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
+use Avorg\RouteFactory;
 use Avorg\WordPress;
 
 if (!\defined('ABSPATH')) exit;
@@ -20,15 +21,16 @@ class Topic extends Page
 	protected $defaultPageTitle = "Topic Detail";
 	protected $defaultPageContent = "Topic Detail";
 	protected $twigTemplate = "organism-topic.twig";
-	protected $route = "{ language }/topics/{ entity_id:[0-9]+ }[/{ slug }]";
+	protected $routeFormat = "{ language }/topics/{ entity_id:[0-9]+ }[/{ slug }]";
 
 	public function __construct(
 		PresentationRepository $presentationRepository,
 		Renderer $renderer,
+		RouteFactory $routeFactory,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $routeFactory, $wp);
 
 		$this->presentationRepository = $presentationRepository;
 		$this->wp = $wp;

@@ -68,7 +68,7 @@ class Plugin
 	
 	public function init()
 	{
-		$this->router->addRewriteRules();
+		$this->router->registerRoutes();
 		$this->contentBits->init();
 		$this->listShortcode->addShortcode();
 	}

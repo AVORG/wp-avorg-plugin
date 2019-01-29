@@ -4,7 +4,12 @@ define('WP_USE_THEMES', false);
 
 $wpBasePath = dirname(dirname(dirname(__DIR__)));
 
-require( "$wpBasePath/wp-load.php" );
+require( "$wpBasePath/wp-blog-header.php" );
 
-echo "hello world<br>";
-echo plugin_dir_url(__FILE__) . basename(__FILE__);
+$endpointId = get_query_var("endpoint_id");
+if (!$endpointId) throw new Exception("Can't access endpoint id");
+
+$endpointFactory = $factory->get("EndpointFactory");
+$endpoint = $endpointFactory->getEndpoint($endpointId);
+
+echo $endpoint->getOutput();

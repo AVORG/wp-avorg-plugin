@@ -17,16 +17,11 @@ final class TestFeed extends Avorg\TestCase
 		$this->assertInstanceOf("\\Avorg\\Feed", $this->feed);
 	}
 
-	public function testToString()
-	{
-		$this->assertTrue(is_string((string) $this->feed));
-	}
-
 	public function testsReturnsRenderedTemplate()
 	{
 		$this->mockTwig->setReturnValue("render", "compiled_twig");
 
-		$result = (string) $this->feed;
+		$result = $this->feed->toXml();
 
 		$this->assertEquals("compiled_twig", $result);
 	}
@@ -41,7 +36,7 @@ final class TestFeed extends Avorg\TestCase
 	{
 		$this->feed->$function(...$args);
 
-		$this->feed->__toString();
+		$this->feed->toXml();
 
 		$this->mockTwig->assertTwigTemplateRenderedWithData("page-feed.twig", $expectedData);
 	}

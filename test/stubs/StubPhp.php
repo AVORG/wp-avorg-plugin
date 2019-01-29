@@ -10,4 +10,9 @@ class StubPhp extends Php
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
+
+	public function header($string)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
 }

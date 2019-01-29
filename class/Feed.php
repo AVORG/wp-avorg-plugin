@@ -20,7 +20,7 @@ class Feed
 		$this->renderer = $renderer;
 	}
 
-	public function __toString()
+	public function toXml()
 	{
 		$xml = $this->renderer->render(
 			"page-feed.twig",

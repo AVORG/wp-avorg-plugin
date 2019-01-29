@@ -9,6 +9,10 @@ if (!\defined('ABSPATH')) exit;
 
 abstract class Route
 {
+	/** @var Filesystem $filesystem */
+	private $filesystem;
+
+	private $languages;
 	private $route;
 	protected $routeTree;
 
@@ -18,6 +22,13 @@ abstract class Route
 		"separator" => "/^\//",
 		"option" => "/^\[/"
 	];
+
+	public function __construct(Filesystem $filesystem)
+	{
+		$this->filesystem = $filesystem;
+
+		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"), TRUE);
+	}
 
 	/**
 	 * @param string $route
@@ -31,7 +42,53 @@ abstract class Route
 		return $this;
 	}
 
-	public function getRedirect()
+	/**
+	 * @return mixed
+	 */
+	public function getRewriteTags()
+	{
+		return array_merge(
+			$this->getBaseTags(),
+			$this->getTreeTags()
+		);
+	}
+
+	protected function getBaseTags()
+	{
+		return [];
+	}
+
+	public function getRewriteRules()
+	{
+		$baseRegex = $this->getRegex();
+		$baseRedirect = $this->getRedirect();
+
+		return array_map(function($language) use($baseRegex, $baseRedirect) {
+			return [
+				"regex" => $this->translateFormat($language, $baseRegex),
+				"redirect" => $baseRedirect
+			];
+		}, $this->languages ?: []);
+	}
+
+	/**
+	 * @param $language
+	 * @param $routeFormat
+	 * @return mixed
+	 */
+	private function translateFormat($language, $routeFormat)
+	{
+		return array_reduce(array_keys($language["urlFragments"]), function ($carry, $key) use ($language) {
+			$pattern = "/\b$key\b/";
+			$replace = $language["urlFragments"][$key];
+
+			if (!$replace) return $carry;
+
+			return preg_replace($pattern, $replace, $carry);
+		}, $routeFormat);
+	}
+
+	private function getRedirect()
 	{
 		$baseRedirect = $this->getBaseRoute();
 		$queryVarString = $this->getQueryVarString();
@@ -41,9 +98,9 @@ abstract class Route
 
 	abstract function getBaseRoute();
 
-	public function getRegex()
+	private function getRegex()
 	{
-		$regex = array_reduce($this->routeTree, function ($carry, $trunk) {
+		$regex = array_reduce((array) $this->routeTree, function ($carry, $trunk) {
 			return $carry . $trunk->getRegex();
 		}, "");
 
@@ -181,7 +238,7 @@ abstract class Route
 	 */
 	protected function getQueryVarString()
 	{
-		$tokens = $this->getRewriteTags();
+		$tokens = $this->getTreeTags();
 		$tokenNames = array_keys($tokens);
 
 		$queryVars = array_map(function ($key) use ($tokenNames) {
@@ -197,9 +254,9 @@ abstract class Route
 	/**
 	 * @return mixed
 	 */
-	public function getRewriteTags()
+	private function getTreeTags()
 	{
-		return array_reduce($this->routeTree, function ($carry, RouteFragment $fragment) {
+		return array_reduce((array)$this->routeTree, function ($carry, RouteFragment $fragment) {
 			return array_merge($carry, $fragment->getRewriteTags());
 		}, []);
 	}

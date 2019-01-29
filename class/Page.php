@@ -9,6 +9,9 @@ abstract class Page
 	/** @var Renderer $renderer */
 	protected $renderer;
 
+	/** @var RouteFactory $routeFactory */
+	private $routeFactory;
+
 	/** @var WordPress $wp */
     protected $wp;
 
@@ -16,12 +19,13 @@ abstract class Page
     protected $defaultPageContent;
     protected $defaultPageTitle;
     protected $twigTemplate;
-	protected $route;
+	protected $routeFormat;
 
 
-	public function __construct(Renderer $renderer, WordPress $wp)
+	public function __construct(Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
     {
     	$this->renderer = $renderer;
+    	$this->routeFactory = $routeFactory;
         $this->wp = $wp;
 
 		$this->setPageIdOptionName();
@@ -48,9 +52,9 @@ abstract class Page
 		return ($this->isThisPage()) ? $this->buildUi() . $content : $content;
 	}
 
-	public function getRouteFormat()
+	public function getRoute()
 	{
-		return $this->route;
+		return $this->routeFactory->getPageRoute($this->getPostId(), $this->routeFormat);
 	}
 
 	/**

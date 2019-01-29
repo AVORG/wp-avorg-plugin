@@ -6,6 +6,7 @@ use Avorg\AvorgApi;
 use Avorg\Page;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
+use Avorg\RouteFactory;
 use Avorg\WordPress;
 
 if (!\defined('ABSPATH')) exit;
@@ -21,16 +22,17 @@ class Media extends Page
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
     protected $twigTemplate = "organism-recording.twig";
-    protected $route = "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]";
+    protected $routeFormat = "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]";
 
     public function __construct(
     	AvorgApi $avorgApi,
 		PresentationRepository $presentationRepository,
 		Renderer $renderer,
+		RouteFactory $routeFactory,
 		WordPress $wordPress
 	)
     {
-        parent::__construct($renderer, $wordPress);
+        parent::__construct($renderer, $routeFactory, $wordPress);
 
         $this->avorgApi = $avorgApi;
         $this->presentationRepository = $presentationRepository;

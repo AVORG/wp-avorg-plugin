@@ -149,6 +149,10 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"english/playlists/lists/14/how-to-be-saved.html",
 				"index.php?page_id=PLAYLIST_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
+			],
+			[
+				"english/sermons/presenters/podcast/134/latest/david-shin.xml",
+				"endpoint.php?endpoint_id=RssEndpoint&language=english&entity_id=134&slug=david-shin.xml"
 			]
 		];
 	}
@@ -265,7 +269,8 @@ final class TestRouter extends Avorg\TestCase
 	{
 		return [
 			"entity_id" => [ "%entity_id%", "([0-9]+)" ],
-			"language" => [ "%language%", "([\w-\.]+)" ]
+			"language" => [ "%language%", "([\w-\.]+)" ],
+			"endpoint_id" => [ "%endpoint_id%", "([\w-\.]+)" ]
 		];
 	}
 }

@@ -27,7 +27,7 @@ final class TestPageRoute extends Avorg\TestCase
 	{
 		$this->pageRoute->setFormat($route);
 
-		$regex = $this->pageRoute->getRegex();
+		$regex = $this->pageRoute->getRewriteRules()["English"]["regex"];
 
 		array_walk($matchables, function ($matchable) use ($regex) {
 			$this->assertRegExp("#$regex#", $matchable);
@@ -112,7 +112,7 @@ final class TestPageRoute extends Avorg\TestCase
 
 		$this->pageRoute->setFormat("$");
 
-		$this->pageRoute->getRegex();
+		$this->pageRoute->getRewriteRules();
 	}
 
 	/**
@@ -125,14 +125,19 @@ final class TestPageRoute extends Avorg\TestCase
 	{
 		$this->pageRoute->setFormat($routePattern)->setPageId("PAGE_ID");
 
-		$regex = $this->pageRoute->getRegex();
-		$redirect = $this->pageRoute->getRedirect();
+		$pairs = $this->pageRoute->getRewriteRules();
 
-		preg_match("/$regex/", $inputUrl, $matches);
+		$result = array_reduce($pairs, function($carry, $pair) use($inputUrl, $outputUrl) {
+			$regex = $pair["regex"];
+			$redirect = $pair["redirect"];
 
-		$result = eval("return \"$redirect\";");
+			preg_match("/$regex/", $inputUrl, $matches);
+			$result = eval("return \"$redirect\";");
 
-		$this->assertEquals($outputUrl, $result);
+			return $carry || $result === $outputUrl;
+		}, false);
+
+		$this->assertTrue($result);
 	}
 
 	public function routeRedirectsProvider()

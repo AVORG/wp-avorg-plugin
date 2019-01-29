@@ -6,6 +6,9 @@ if (!\defined('ABSPATH')) exit;
 
 class Router
 {
+	/** @var EndpointFactory $endpointFactory */
+	private $endpointFactory;
+
 	/** @var Filesystem $filesystem */
 	private $filesystem;
 
@@ -21,12 +24,14 @@ class Router
 	private $languages;
 	
 	public function __construct(
+		EndpointFactory $endpointFactory,
 		Filesystem $filesystem,
 		PageFactory $pageFactory,
 		RouteFactory $routeFactory,
 		WordPress $WordPress
 	)
 	{
+		$this->endpointFactory = $endpointFactory;
 		$this->filesystem = $filesystem;
 		$this->pageFactory = $pageFactory;
 		$this->routeFactory = $routeFactory;
@@ -37,43 +42,53 @@ class Router
 	
 	public function activate()
 	{
-		$this->addRewriteRules();
+		$this->registerRoutes();
 		$this->wp->flush_rewrite_rules();
 	}
 	
-	public function addRewriteRules()
+	public function registerRoutes()
 	{
-		$this->addHomePageRewriteRule();
-
-		$pages = $this->pageFactory->getPages();
-		array_map(function ($language) use ($pages) {
-			$this->addPageRewriteRules($pages, $language);
-		}, (array)$this->languages);
+		$routes = $this->getRoutes();
+		array_walk($routes, function($route) {
+			$this->addRewriteTags($route);
+			$this->addRewriteRules($route);
+		});
 	}
 
-	public function addHomePageRewriteRule()
+	/**
+	 * @return array
+	 */
+	private function getRoutes()
 	{
-		$homePageId = $this->wp->get_option( "page_on_front");
-		$route = $this->routeFactory->getPageRoute($homePageId, "{ language }");
-		$regex = $route->getRegex();
-		$redirect = $route->getRedirect();
-
-		$this->wp->add_rewrite_rule(
-			$regex,
-			$redirect,
-			"top"
+		return array_merge(
+			[$this->getHomeRoute()],
+			$this->getPageRoutes(),
+			$this->getEndpointRoutes()
 		);
 	}
 
-	private function addPageRewriteRules($pages, $language)
+	private function getHomeRoute()
 	{
-		array_walk($pages, function(Page $page) use ($language) {
-			$routeFormat = $this->translateFormat($language, $page->getRouteFormat());
-			$route = $this->routeFactory->getPageRoute($page->getPostId(), $routeFormat);
+		$homePageId = $this->wp->get_option( "page_on_front");
 
-			$this->addRewriteTags($route);
-			$this->addRewriteRule($route);
-		});
+		return $this->routeFactory->getPageRoute($homePageId, "{ language }");
+	}
+
+	private function getPageRoutes()
+	{
+		return array_map(function(Page $page) {
+			return $page->getRoute();
+		}, $this->pageFactory->getPages());
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getEndpointRoutes()
+	{
+		return array_map(function(Endpoint $endpoint) {
+			return $endpoint->getRoute();
+		}, $this->endpointFactory->getEndpoints());
 	}
 
 	/**
@@ -88,28 +103,13 @@ class Router
 		});
 	}
 
-	private function addRewriteRule(Route $route)
+	private function addRewriteRules(Route $route)
 	{
-		$regex = $route->getRegex();
-		$redirect = $route->getRedirect();
-		$this->wp->add_rewrite_rule( $regex, $redirect, "top");
-	}
+		$rules = $route->getRewriteRules();
 
-	/**
-	 * @param $language
-	 * @param $routeFormat
-	 * @return mixed
-	 */
-	private function translateFormat($language, $routeFormat)
-	{
-		return array_reduce(array_keys($language["urlFragments"]), function ($carry, $key) use ($language) {
-			$pattern = "/\b$key\b/";
-			$replace = $language["urlFragments"][$key];
-
-			if (!$replace) return $carry;
-
-			return preg_replace($pattern, $replace, $carry);
-		}, $routeFormat);
+		array_walk($rules, function($rule) {
+			$this->wp->add_rewrite_rule( $rule["regex"], $rule["redirect"], "top");
+		});
 	}
 	
 	public function setLocale($lang)
