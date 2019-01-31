@@ -9,8 +9,8 @@ class Router
 	/** @var EndpointFactory $endpointFactory */
 	private $endpointFactory;
 
-	/** @var Filesystem $filesystem */
-	private $filesystem;
+	/** @var LanguageFactory $languageFactory */
+	private $languageFactory;
 
 	/** @var PageFactory $pageFactory */
 	private $pageFactory;
@@ -21,29 +21,24 @@ class Router
 	/** @var WordPress $wp */
 	private $wp;
 	
-	private $languages;
-	
 	public function __construct(
 		EndpointFactory $endpointFactory,
-		Filesystem $filesystem,
+		LanguageFactory $languageFactory,
 		PageFactory $pageFactory,
 		RouteFactory $routeFactory,
 		WordPress $WordPress
 	)
 	{
 		$this->endpointFactory = $endpointFactory;
-		$this->filesystem = $filesystem;
+		$this->languageFactory = $languageFactory;
 		$this->pageFactory = $pageFactory;
 		$this->routeFactory = $routeFactory;
 		$this->wp = $WordPress;
-		
-		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"), TRUE);
 	}
 	
 	public function activate()
 	{
 		$this->registerRoutes();
-		$this->wp->flush_rewrite_rules();
 	}
 	
 	public function registerRoutes()
@@ -61,17 +56,17 @@ class Router
 	private function getRoutes()
 	{
 		return array_merge(
-			[$this->getHomeRoute()],
+			$this->getLanguageRoutes(),
 			$this->getPageRoutes(),
 			$this->getEndpointRoutes()
 		);
 	}
 
-	private function getHomeRoute()
+	private function getLanguageRoutes()
 	{
-		$homePageId = $this->wp->get_option( "page_on_front");
-
-		return $this->routeFactory->getPageRoute($homePageId, "{ language }");
+		return array_map(function(Language $language) {
+			return $language->getRoute();
+		}, $this->languageFactory->getLanguages());
 	}
 
 	private function getPageRoutes()
@@ -112,46 +107,36 @@ class Router
 		});
 	}
 	
-	public function setLocale($lang)
+	public function setLocale($previous)
 	{
 		$requestUri = $_SERVER["REQUEST_URI"];
-		
-		$newLang = array_reduce((array)$this->languages, function ($carry, $language) use ($requestUri) {
-			$substringLength = strlen($language["baseRoute"]);
-			$trimmedUri = trim($requestUri, "/");
-			$baseRoute = substr($trimmedUri, 0, $substringLength);
-			$doesBaseRouteMatch = $baseRoute === $language["baseRoute"];
-			
-			return $doesBaseRouteMatch ? $language["wpLanguageCode"] : $carry;
-		}, $lang);
-		
-		return $newLang;
+		$baseRoute  = explode("/", trim($requestUri, "/"))[0];
+		$language   = $this->languageFactory->getLanguageByBaseRoute($baseRoute);
+
+		return ($language) ? $language->getLangCode() : $previous;
 	}
 
 	public function filterRedirect($redirectUrl) {
-	    $host = $_SERVER["HTTP_HOST"];
-	    $requestUri = $_SERVER["REQUEST_URI"];
-	    $path = parse_url($requestUri, PHP_URL_PATH);
-        $fullRequestUri = $host . $path;
-	    $fragment = strtolower(explode("/", $path)[1]);
-	    $isFragmentLanguage = array_reduce((array) $this->languages, function($carry, $language) use($fragment) {
-	        return $carry || $fragment === strtolower($language["baseRoute"]);
-        }, FALSE);
+	    $host           = $_SERVER["HTTP_HOST"];
+		$requestUri     = $_SERVER["REQUEST_URI"];
+		$path           = parse_url($requestUri, PHP_URL_PATH);
+		$baseRoute      = explode("/", trim($path, "/"))[0];
+		$language       = $this->languageFactory->getLanguageByBaseRoute($baseRoute);
+		$fullRequestUri = $host . $path;
 
-	    return $isFragmentLanguage ? "http://$fullRequestUri" : $redirectUrl;
+	    return $language ? "http://$fullRequestUri" : $redirectUrl;
     }
 
     public function getUrlForApiRecording($apiRecording)
     {
-        $filteredLanguages = array_filter((array)$this->languages, function ($language) use ($apiRecording) {
-            return $language["dbCode"] === $apiRecording->lang;
-        });
-        $language = reset($filteredLanguages);
+        $language = $this->languageFactory->getLanguageByLangCode($apiRecording->lang);
+
+        if (!$language) return null;
 
         $fragments = [
-			$language["baseRoute"],
-			$language["urlFragments"]["sermons"],
-			$language["urlFragments"]["recordings"],
+			$language->getBaseRoute(),
+			$language->translateUrlFragment("sermons"),
+			$language->translateUrlFragment("recordings"),
 			$apiRecording->id,
 			$this->formatTitleForUrl($apiRecording) . ".html"
 		];

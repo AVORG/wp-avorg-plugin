@@ -136,11 +136,11 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"espanol",
-				"index.php?page_id=HOME_PAGE_ID&language=espanol"
+				"index.php?page_id=HOME_PAGE_ID"
 			],
 			[
 				"espanol/",
-				"index.php?page_id=HOME_PAGE_ID&language=espanol"
+				"index.php?page_id=HOME_PAGE_ID"
 			],
 			[
 				"english/topics/102/great-controversy.html",
@@ -202,14 +202,14 @@ final class TestRouter extends Avorg\TestCase
 
 	/**
 	 * @dataProvider redirectFilteringProvider
-	 * @param $requestUrl
+	 * @param $requestUri
 	 * @param $shouldAllowRedirect
 	 */
-	public function testRedirectFiltering($requestUrl, $shouldAllowRedirect)
+	public function testRedirectFiltering($requestUri, $shouldAllowRedirect)
 	{
 		$_SERVER["HTTP_HOST"] = "localhost:8080";
-		$_SERVER["REQUEST_URI"] = $requestUrl;
-		$path = parse_url($requestUrl, PHP_URL_PATH);
+		$_SERVER["REQUEST_URI"] = $requestUri;
+		$path = parse_url($requestUri, PHP_URL_PATH);
 		$fullRequestUrl = $_SERVER["HTTP_HOST"] . $path;
 		$expected = $shouldAllowRedirect ? "redirect_url" : "http://" . $fullRequestUrl;
 		$result = $this->router->filterRedirect("redirect_url");
@@ -269,7 +269,6 @@ final class TestRouter extends Avorg\TestCase
 	{
 		return [
 			"entity_id" => [ "%entity_id%", "([0-9]+)" ],
-			"language" => [ "%language%", "([\w-\.]+)" ],
 			"endpoint_id" => [ "%endpoint_id%", "([\w-\.]+)" ]
 		];
 	}
