@@ -124,6 +124,12 @@ class Router
 		$language       = $this->languageFactory->getLanguageByBaseRoute($baseRoute);
 		$fullRequestUri = $host . $path;
 
+		avorgLog(
+			"Filter redirect. " .
+			"Request: " . var_export($redirectUrl, TRUE) . "; " .
+			"Should cancel: " . var_export((bool) $language, TRUE)
+		);
+
 	    return $language ? "http://$fullRequestUri" : $redirectUrl;
     }
 

@@ -34,3 +34,9 @@ $router = $factory->get("Router");
 
 \add_filter("locale", array($router, "setLocale"));
 \add_filter("redirect_canonical", array($router, "filterRedirect"));
+
+function avorgLog($message) {
+	$line = date('Y-m-d H:i:s') . " : $message" . PHP_EOL;
+
+	file_put_contents(AVORG_BASE_PATH . "/logs/general.log", $line, FILE_APPEND);
+}
