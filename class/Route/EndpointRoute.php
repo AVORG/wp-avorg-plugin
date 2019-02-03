@@ -37,8 +37,6 @@ class EndpointRoute extends Route
 		$basePath = ltrim(parse_url($baseUrl, PHP_URL_PATH), "/");
 		$str = "${basePath}endpoint.php?endpoint_id=$this->id";
 
-//		var_dump($str);
-
 		return $str;
 	}
 

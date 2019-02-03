@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Avorg\MediaFile\AudioFile;
+
 if (!\defined('ABSPATH')) exit;
 
 class Presentation
@@ -17,6 +19,20 @@ class Presentation
         $this->languageFactory = $languageFactory;
     }
 
+	public function toJson()
+	{
+		$data = array_merge((array) $this->apiPresentation, [
+			"url" => $this->getUrl(),
+			"audioFiles" => $this->convertMediaFilesToArrays($this->getAudioFiles()),
+			"videoFiles" => $this->convertMediaFilesToArrays($this->getVideoFiles()),
+			"logUrl" => $this->getLogUrl(),
+			"datePublished" => $this->getDatePublished(),
+			"presenters" => $this->getPresenters()
+		]);
+
+		return json_encode($data);
+	}
+
     public function getAudioFiles()
     {
         $apiMediaFiles = (isset($this->apiPresentation->mediaFiles)) ? $this->apiPresentation->mediaFiles : [];
@@ -30,6 +46,12 @@ class Presentation
     public function getDatePublished()
 	{
 		return $this->apiPresentation->publishDate;
+	}
+
+	public function getId()
+	{
+
+		return $this->apiPresentation->id;
 	}
 
     public function getLogUrl()
@@ -118,4 +140,18 @@ class Presentation
             return new $className($item);
         }, $items);
     }
+
+	/**
+	 * @param $mediaFiles
+	 * @return array
+	 */
+	private function convertMediaFilesToArrays($mediaFiles)
+	{
+		return array_map(function (MediaFile $mediaFile) {
+			return [
+				"streamUrl" => $mediaFile->getStreamUrl(),
+				"type" => $mediaFile->getType()
+			];
+		}, $mediaFiles);
+	}
 }

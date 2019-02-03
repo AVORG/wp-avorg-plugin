@@ -1,3 +1,5 @@
+{% set shouldLinkTitles = (shouldLinkTitles is defined) ? shouldLinkTitles : true %}
+
 <ul class="avorg-molecule-recordingsList">
 	{% for recording in avorg.recordings %}
 		<li>
@@ -6,7 +8,7 @@
 			{% include "molecule-recordingMeta.twig" with {
 				presentation: recording,
 				additionalInfo: agePhrase,
-				shouldLinkTitle: true
+				shouldLinkTitle: shouldLinkTitles
 			} only %}
 		</li>
 	{% endfor %}

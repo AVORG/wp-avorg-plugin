@@ -1,3 +1,5 @@
 <div class="avorg-page-playlist">
-	{% include "molecule-recordingsList.twig" %}
+	{% include "molecule-recordingsList.twig" with {
+		shouldLinkTitles: false
+	} %}
 </div>

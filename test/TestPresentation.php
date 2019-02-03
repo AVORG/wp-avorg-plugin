@@ -171,4 +171,128 @@ final class TestPresentation extends Avorg\TestCase
 			$presentation->getUrl()
 		);
 	}
+
+	public function testGetId()
+	{
+		$apiRecording = $this->convertArrayToObjectRecursively([
+			"id" => "1836"
+		]);
+
+		$presentation = $this->getPresentationForApiResponse($apiRecording);
+
+		$this->assertEquals(1836, $presentation->getId());
+	}
+
+	/**
+	 * @param $recordingArray
+	 * @param $expectedKey
+	 * @param $expectedValue
+	 * @throws ReflectionException
+	 * @dataProvider jsonTestProvider
+	 */
+	public function testToJson($recordingArray, $expectedKey, $expectedValue)
+	{
+		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
+		$presentation = $this->getPresentationForApiResponse($apiRecording);
+		$json         = $presentation->toJson();
+		$object       = json_decode($json, true);
+
+		$this->assertEquals($expectedValue, $object[$expectedKey]);
+	}
+
+	public function jsonTestProvider()
+	{
+		return [
+			"id" => [
+				["id" => "1836"],
+				"id",
+				1836
+			],
+			"title" => [
+				["title" => 'E.P. Daniels and True Revival'],
+				"title",
+				"E.P. Daniels and True Revival"
+			],
+			"url" => [
+				[
+					"lang" => "en",
+					"id" => "1836",
+					"title" => 'E.P. Daniels and True Revival'
+				],
+				"url",
+				"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html"
+			],
+			"audio files" => [
+				[
+					"mediaFiles" => [[
+						"streamURL" => "stream_url",
+						"filename" => "audio.mp3"
+					]]
+				],
+				"audioFiles",
+				[[
+					"streamUrl" => "stream_url",
+					"type" => "audio/mp3"
+				]]
+			],
+			"video files" => [
+				[
+					"videoFiles" => [[
+						"downloadURL" => "stream_url",
+						"filename" => "video.mp4",
+						"container" => "m3u8_ios"
+					]]
+				],
+				"videoFiles",
+				[[
+					"streamUrl" => "stream_url",
+					"type" => "audio/mp4"
+				]]
+			],
+			"log url" => [
+				[
+					"videoFiles" => [
+						[
+							"logURL" => "log_url",
+							"container" => "m3u8_ios"
+						],
+						[
+							"logURL" => null,
+							"container" => "m3u8_ios"
+						]
+					]
+				],
+				"logUrl",
+				"log_url"
+			],
+			"date published" => [
+				["publishDate" => "2018-02-19 05:22:17"],
+				"datePublished",
+				"2018-02-19 05:22:17"
+			],
+			"presenters" => [
+				[
+					"presenters" => [
+						[
+							"photo86" => "photo_url",
+							"givenName" => "first_name",
+							"surname" => "last_name",
+							"suffix" => "suffix"
+						]
+					]
+				],
+				"presenters",
+				[
+					[
+						"photo" => "photo_url",
+						"name" => [
+							"first" => "first_name",
+							"last" => "last_name",
+							"suffix" => "suffix"
+						]
+					]
+				]
+			]
+		];
+	}
 }
