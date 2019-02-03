@@ -41,15 +41,6 @@ final class TestAdminPanel extends Avorg\TestCase
 		);
 	}
 	
-	public function testRunsActivationCodeWhenAsked()
-	{
-		$_POST = array("reactivate" => "Reactivate");
-		
-		$this->adminPanel->render();
-		
-		$this->mockWordPress->assertMethodCalled("flush_rewrite_rules");
-	}
-	
 	public function testSetsApiUser()
 	{
 		$_POST = $this->saveApiCredentialsPost;

@@ -124,7 +124,7 @@ class Router
 		$language       = $this->languageFactory->getLanguageByBaseRoute($baseRoute);
 		$fullRequestUri = $host . $path;
 
-		avorgLog(
+		Logger::log(
 			"Filter redirect. " .
 			"Request: " . var_export($redirectUrl, TRUE) . "; " .
 			"Should cancel: " . var_export((bool) $language, TRUE)
@@ -132,35 +132,4 @@ class Router
 
 	    return $language ? "http://$fullRequestUri" : $redirectUrl;
     }
-
-    public function getUrlForApiRecording($apiRecording)
-    {
-        $language = $this->languageFactory->getLanguageByLangCode($apiRecording->lang);
-
-        if (!$language) return null;
-
-        $fragments = [
-			$language->getBaseRoute(),
-			$language->translateUrlFragment("sermons"),
-			$language->translateUrlFragment("recordings"),
-			$apiRecording->id,
-			$this->formatTitleForUrl($apiRecording) . ".html"
-		];
-
-		return "/" . implode("/", $fragments);
-    }
-
-	/**
-	 * @param $apiRecording
-	 * @return string
-	 */
-	private function formatTitleForUrl($apiRecording)
-	{
-		$title = $apiRecording->title;
-		$titleLowerCase = strtolower($title);
-		$titleNoPunctuation = preg_replace("/[^\w ]/", "", $titleLowerCase);
-		$titleHyphenated = str_replace(" ", "-", $titleNoPunctuation);
-
-		return $titleHyphenated;
-	}
 }

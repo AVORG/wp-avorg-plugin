@@ -9,12 +9,16 @@ class PresentationRepository
     /** @var AvorgApi $api */
     private $api;
 
+    /** @var LanguageFactory $languageFactory */
+    private $languageFactory;
+
     /** @var Router $router */
     private $router;
 
-    public function __construct(AvorgApi $api, Router $router)
+    public function __construct(AvorgApi $api, LanguageFactory $languageFactory, Router $router)
     {
         $this->api = $api;
+        $this->languageFactory = $languageFactory;
         $this->router = $router;
     }
 
@@ -54,17 +58,14 @@ class PresentationRepository
 		return $this->buildPresentations($apiResponse);
 	}
 
-    /**
-     * @param $apiRecording
-     * @return Presentation
-     */
-    private function buildPresentation($apiRecording)
-    {
-        $unwrappedRecording = $apiRecording->recordings;
-        $url = $this->router->getUrlForApiRecording($unwrappedRecording);
+	public function getPlaylistPresentations($playlistId)
+	{
+		$apiResponse = $this->api->getPlaylist($playlistId);
 
-        return new Presentation($unwrappedRecording, $url);
-    }
+		return array_map(function ($recording) {
+			return new Presentation($recording, $this->languageFactory);
+		}, $apiResponse->recordings ?: []);
+	}
 
 	/**
 	 * @param $apiResponse
@@ -74,4 +75,16 @@ class PresentationRepository
 	{
 		return array_map([$this, "buildPresentation"], $apiResponse ?: []);
 	}
+
+	/**
+	 * @param $apiRecording
+	 * @return Presentation
+	 */
+	private function buildPresentation($apiRecording)
+	{
+		$unwrappedRecording = $apiRecording->recordings;
+
+		return new Presentation($unwrappedRecording, $this->languageFactory);
+	}
+
 }

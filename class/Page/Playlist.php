@@ -3,7 +3,10 @@
 namespace Avorg\Page;
 
 use Avorg\AvorgApi;
+use function Avorg\avorgLog;
 use Avorg\Page;
+use Avorg\Presentation;
+use Avorg\PresentationRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
 use Avorg\WordPress;
@@ -12,19 +15,19 @@ if (!\defined('ABSPATH')) exit;
 
 class Playlist extends Page
 {
-	/** @var AvorgApi $avorgApi */
-	private $avorgApi;
+	/** @var PresentationRepository $presentationRepository */
+	private $presentationRepository;
 
 	protected $defaultPageTitle = "Playlist Detail";
 	protected $defaultPageContent = "Playlist Detail";
 	protected $twigTemplate = "page-playlist.twig";
 	protected $routeFormat = "{ language }/playlists/lists/{ entity_id:[0-9]+ }[/{ slug }]";
 
-	public function __construct(AvorgApi $avorgApi, Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
+	public function __construct(PresentationRepository $presentationRepository, Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
 	{
 		parent::__construct($renderer, $routeFactory, $wp);
 
-		$this->avorgApi = $avorgApi;
+		$this->presentationRepository = $presentationRepository;
 	}
 
 	public function throw404($query)
@@ -40,10 +43,9 @@ class Playlist extends Page
 	protected function getTwigData()
 	{
 		$id = $this->getEntityId();
-		$playlist = $this->avorgApi->getPlaylist($id);
 
 		return [
-			"playlist" => $playlist
+			"recordings" => $this->presentationRepository->getPlaylistPresentations($id)
 		];
 	}
 }

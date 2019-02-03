@@ -6,13 +6,15 @@ if (!\defined('ABSPATH')) exit;
 
 class Presentation
 {
-    private $apiPresentation;
-    private $url;
+	/** @var LanguageFactory $languageFactory */
+	private $languageFactory;
 
-    public function __construct($apiPresentation, $url = null)
+    private $apiPresentation;
+
+    public function __construct($apiPresentation, LanguageFactory $languageFactory)
     {
         $this->apiPresentation = $apiPresentation;
-        $this->url = $url;
+        $this->languageFactory = $languageFactory;
     }
 
     public function getAudioFiles()
@@ -64,8 +66,33 @@ class Presentation
 
     public function getUrl()
     {
-        return $this->url;
+		$language = $this->languageFactory->getLanguageByLangCode($this->apiPresentation->lang);
+
+		if (!$language) return null;
+
+		$fragments = [
+			$language->getBaseRoute(),
+			$language->translateUrlFragment("sermons"),
+			$language->translateUrlFragment("recordings"),
+			$this->apiPresentation->id,
+			$this->formatTitleForUrl($this->apiPresentation->title) . ".html"
+		];
+
+		return "/" . implode("/", $fragments);
     }
+
+	/**
+	 * @param $title
+	 * @return string
+	 */
+	private function formatTitleForUrl($title)
+	{
+		$titleLowerCase = strtolower($title);
+		$titleNoPunctuation = preg_replace("/[^\w ]/", "", $titleLowerCase);
+		$titleHyphenated = str_replace(" ", "-", $titleNoPunctuation);
+
+		return $titleHyphenated;
+	}
 
     public function getVideoFiles()
     {

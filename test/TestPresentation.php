@@ -2,15 +2,16 @@
 
 final class TestPresentation extends Avorg\TestCase
 {
-    /**
-     * @param $apiResponse
-     * @return \Avorg\Presentation
-     */
+	/**
+	 * @param $apiResponse
+	 * @return \Avorg\Presentation
+	 * @throws ReflectionException
+	 */
     protected function getPresentationForApiResponse($apiResponse)
     {
         $apiResponseObject = $this->convertArrayToObjectRecursively($apiResponse);
 
-        return new \Avorg\Presentation($apiResponseObject);
+        return new \Avorg\Presentation($apiResponseObject, $this->factory->get("LanguageFactory"));
     }
 
     public function testIncludesPresenterPhotos()
@@ -153,5 +154,21 @@ final class TestPresentation extends Avorg\TestCase
 		]);
 
 		$this->assertEquals("2018-02-19 05:22:17", $presentation->getDatePublished());
+	}
+
+	public function testGetUrl()
+	{
+		$apiRecording = $this->convertArrayToObjectRecursively([
+			"lang" => "en",
+			"id" => "1836",
+			"title" => 'E.P. Daniels and True Revival'
+		]);
+
+		$presentation = $this->getPresentationForApiResponse($apiRecording);
+
+		$this->assertEquals(
+			"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
+			$presentation->getUrl()
+		);
 	}
 }

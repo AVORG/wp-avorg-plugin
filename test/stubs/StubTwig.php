@@ -19,28 +19,27 @@ class StubTwig extends Twig
 		]);
 	}
 
+	public function assertTwigTemplateRendered($template)
+	{
+		$this->assertTwigTemplateRenderedWithDataMatching($template, function() { return true; });
+	}
+
 	public function assertTwigTemplateRenderedWithData($template, $data)
 	{
-		$this->assertAnyCallMatches("render", function($carry, $call) use($template, $data) {
+		$this->assertTwigTemplateRenderedWithDataMatching($template, [$this, "doesDataObjectIncludeData"], $data);
+	}
+
+	public function assertTwigTemplateRenderedWithDataMatching($template, $callable, ...$params)
+	{
+		$this->assertAnyCallMatches("render", function($carry, $call) use($template, $callable, $params) {
 			$callTemplate = $call[0];
 			$callDataObject = $call[1]["avorg"];
 
 			$doesTemplateMatch = $callTemplate === $template;
-			$doesIncludeData = $this->doesDataObjectIncludeData($callDataObject, $data);
+			$doesMatch = call_user_func($callable, $callDataObject, ...$params);
 
-			return $carry || ($doesTemplateMatch && $doesIncludeData);
+			return $carry || ($doesTemplateMatch && $doesMatch);
 		});
-	}
-
-	public function assertTwigTemplateRendered($template)
-	{
-		$message = "Failed to assert that $template was rendered";
-
-		$this->assertAnyCallMatches("render", function($carry, $call) use($template) {
-			$callTemplate = $call[0];
-
-			return $carry || ($callTemplate === $template);
-		}, $message);
 	}
 
 	/**

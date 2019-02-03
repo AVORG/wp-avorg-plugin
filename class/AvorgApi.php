@@ -21,10 +21,8 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 		$url = "$this->apiBaseUrl/playlist/$id";
-		var_dump($url);die;
 
 		try {
-
 			$response = $this->getResponse($url);
 			$responseObject = json_decode($response);
 

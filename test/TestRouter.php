@@ -12,13 +12,6 @@ final class TestRouter extends Avorg\TestCase
 		$this->router = $this->factory->get("Router");
 	}
 
-	public function testCallsWordPress()
-	{
-		$this->router->activate();
-
-		$this->mockWordPress->assertMethodCalled("flush_rewrite_rules");
-	}
-
 	public function testAssignsHighPriority()
 	{
 		$this->router->activate();
@@ -157,13 +150,6 @@ final class TestRouter extends Avorg\TestCase
 		];
 	}
 
-	public function testFlushesRewireRules()
-	{
-		$this->router->activate();
-
-		$this->mockWordPress->assertMethodCalledWith(  "flush_rewrite_rules");
-	}
-
 	public function testUsesSavedMediaPageId()
 	{
 		$this->mockWordPress->setReturnValue("get_option", 3);
@@ -231,22 +217,6 @@ final class TestRouter extends Avorg\TestCase
 			"Complex Spanish Path" => ["/espanol/path/to/page", FALSE],
 			"French Path" => ["/francais", FALSE]
 		];
-	}
-
-	public function testGetUrlForApiRecording()
-	{
-		$apiRecording = $this->convertArrayToObjectRecursively([
-			"lang" => "en",
-			"id" => "1836",
-			"title" => 'E.P. Daniels and True Revival'
-		]);
-
-		$url = $this->router->getUrlForApiRecording($apiRecording);
-
-		$this->assertEquals(
-			"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
-			$url
-		);
 	}
 
 	/**

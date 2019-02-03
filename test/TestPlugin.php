@@ -13,13 +13,6 @@ final class TestPlugin extends Avorg\TestCase
 		$this->plugin = $this->factory->get("Plugin");
 	}
 	
-	public function testActivatesRouterOnPluginActivate()
-	{
-		$this->plugin->activate();
-		
-		$this->mockWordPress->assertMethodCalled("flush_rewrite_rules");
-	}
-	
 	public function testInitInitsContentBits()
 	{
 		$contentBits = $this->factory->get("ContentBits");

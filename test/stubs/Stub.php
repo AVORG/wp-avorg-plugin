@@ -259,6 +259,11 @@ trait Stub
 		$calls = $this->getCalls($method);
 		$bool = array_reduce($calls, $callable, FALSE);
 		$error = $message ?: "Failed asserting any call matches callback.";
+
+		if (!$bool) {
+			dump($calls);
+		}
+
 		$this->testCase->assertTrue($bool, $error);
 	}
 
