@@ -38,4 +38,17 @@ final class TestEndpointRoute extends Avorg\TestCase
 
 		$this->mockWordPress->assertMethodCalledWith("plugin_dir_url", AVORG_BASE_PATH . "/endpoint.php");
 	}
+
+	public function testEndpointRouteUsesHtaccessStylePlaceholders()
+	{
+		$this->mockWordPress->setReturnValue("plugin_dir_url", "http://localhost:8080/plugin/dir/url/");
+
+		$pairs = $this->fileRoute->setFormat("my/{route}")
+			->setEndpointId("myId")
+			->getRewriteRules();
+
+		$redirect = $pairs["English"]["redirect"];
+
+		$this->assertEquals("plugin/dir/url/endpoint.php?endpoint_id=myId&route=$1", $redirect);
+	}
 }

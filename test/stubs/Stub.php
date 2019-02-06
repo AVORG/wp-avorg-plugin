@@ -208,17 +208,17 @@ trait Stub
 
 		$condition = $this->wasMethodCalledWith($method, ...$args);
 
-		$this->testCase->assertTrue(
-			$condition,
-			$message
-		);
-
 		if (!$condition) {
 			echo "Needle:\r\n";
 			dump($args);
 			echo "Haystack:\r\n";
 			dump($this->getCalls($method));
 		}
+
+		$this->testCase->assertTrue(
+			$condition,
+			$message
+		);
 	}
 
 	/**

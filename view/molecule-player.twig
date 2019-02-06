@@ -32,6 +32,9 @@
 	<script>
 		window.addEventListener("load", function () {
 			var buildPlayerMarkup = function (id, mediaSources) {
+                fetch("/api/presentation/19238")
+					.then(function(data) { console.log(data) });
+
 				return playerPrototype.replace(/#player_id#/g, id).replace(/#player_sources#/g, mediaSources);
 			};
 			

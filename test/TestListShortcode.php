@@ -41,18 +41,14 @@ final class TestListShortcode extends Avorg\TestCase
 	
 	public function testRenderFunction()
 	{
-		$entry = new stdClass();
-		$entry->recordings = new stdClass();
-		$entry->recordings->title = "Recording Title";
-		$this->mockAvorgApi->setReturnValue("getPresentations", [$entry, $entry, $entry]);
+		$entry = ["title" => "Recording Title"];
+		$this->mockAvorgApi->loadPresentations($entry, $entry, $entry);
 		
 		$this->listShortcode->renderShortcode("");
 
-		$this->mockTwig->assertAnyCallMatches( "render", function($carry, $call) {
-            $callGlobal = $call[1]["avorg"];
-
-		    return $callGlobal->recordings[2] instanceof \Avorg\Presentation || $carry;
-        });
+		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function($data) {
+			return $data->recordings[2] instanceof \Avorg\Presentation;
+		});
 	}
 	
 	public function testRenderFunctionReturnsRenderedView()

@@ -23,31 +23,13 @@ final class TestRouter extends Avorg\TestCase
 	}
 
 	/**
-	 * @dataProvider rewriteInputOutputProvider
+	 * @dataProvider pageRouteProvider
 	 * @param $inputUrl
 	 * @param $outputUrl
 	 */
-	public function testRewriteRuleRewritesCorrectly($inputUrl, $outputUrl)
+	public function testPageRoutes($inputUrl, $outputUrl)
 	{
-		$this->mockWordPress->setMappedReturnValues("get_option", [
-			["page_on_front", "HOME_PAGE_ID"]
-		]);
-
-		$this->mockWordPress->setReturnCallback("get_option", function(...$args) {
-			$optionId = $args[0];
-			$pageIdOptionPrefix = "avorg_page_id_avorg_page_";
-			$isPageIdOption = strstr($optionId, $pageIdOptionPrefix) !== false;
-
-			if (!$isPageIdOption) return STUB_NULL;
-
-			$pageName = end(explode("_", $optionId));
-
-			return strtoupper($pageName . "_PAGE_ID");
-		});
-
-		$this->router->activate();
-
-		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
+		$addRewriteCalls = $this->getRewriteRules();
 
 		$results = array_map(function ($call) use ($inputUrl) {
 			$regex = $call[0];
@@ -58,17 +40,10 @@ final class TestRouter extends Avorg\TestCase
 			return eval("return \"$redirect\";");
 		}, $addRewriteCalls);
 
-		$resultsExport = var_export($results, true);
-		$errorMessage = "Input: $inputUrl\r\nExpected Output: $outputUrl\r\nHaystack:\r\n$resultsExport";
-
-		$this->assertContains(
-			$outputUrl,
-			$results,
-			$errorMessage
-		);
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
 	}
 
-	public function rewriteInputOutputProvider()
+	public function pageRouteProvider()
 	{
 		return [
 			[
@@ -142,10 +117,39 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"english/playlists/lists/14/how-to-be-saved.html",
 				"index.php?page_id=PLAYLIST_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
-			],
+			]
+		];
+	}
+
+	/**
+	 * @param $inputUrl
+	 * @param $outputUrl
+	 * @dataProvider outputRouteProvider
+	 */
+	public function testEndpointRoutes($inputUrl, $outputUrl)
+	{
+		$addRewriteCalls = $this->getRewriteRules();
+
+		$results = array_map(function ($call) use ($inputUrl) {
+			$regex = $call[0];
+			$redirect = $call[1];
+
+			return preg_replace("/$regex/", $redirect, $inputUrl);
+		}, $addRewriteCalls);
+
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
+	}
+
+	public function outputRouteProvider()
+	{
+		return [
 			[
 				"english/sermons/presenters/podcast/134/latest/david-shin.xml",
 				"endpoint.php?endpoint_id=RssEndpoint&language=english&entity_id=134&slug=david-shin.xml"
+			],
+			[
+				"api/presentation/123",
+				"endpoint.php?endpoint_id=PresentationEndpoint&entity_id=123"
 			]
 		];
 	}
@@ -241,5 +245,49 @@ final class TestRouter extends Avorg\TestCase
 			"entity_id" => [ "%entity_id%", "([0-9]+)" ],
 			"endpoint_id" => [ "%endpoint_id%", "([\w-\.]+)" ]
 		];
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getRewriteRules()
+	{
+		$this->mockWordPress->setMappedReturnValues("get_option", [
+			["page_on_front", "HOME_PAGE_ID"]
+		]);
+
+		$this->mockWordPress->setReturnCallback("get_option", function (...$args) {
+			$optionId = $args[0];
+			$pageIdOptionPrefix = "avorg_page_id_avorg_page_";
+			$isPageIdOption = strstr($optionId, $pageIdOptionPrefix) !== false;
+
+			if (!$isPageIdOption) return STUB_NULL;
+
+			$pageName = end(explode("_", $optionId));
+
+			return strtoupper($pageName . "_PAGE_ID");
+		});
+
+		$this->router->activate();
+
+		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
+		return $addRewriteCalls;
+	}
+
+	/**
+	 * @param $inputUrl
+	 * @param $outputUrl
+	 * @param $results
+	 */
+	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results)
+	{
+		$resultsExport = var_export($results, true);
+		$errorMessage = "Input: $inputUrl\r\nExpected Output: $outputUrl\r\nHaystack:\r\n$resultsExport";
+
+		$this->assertContains(
+			$outputUrl,
+			$results,
+			$errorMessage
+		);
 	}
 }

@@ -46,4 +46,9 @@ class EndpointRoute extends Route
 			"endpoint_id" => "([\w-\.]+)"
 		];
 	}
+
+	protected function formatQueryVar($queryKey, $matchKey)
+	{
+		return "$queryKey=\$$matchKey";
+	}
 }

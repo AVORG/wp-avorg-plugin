@@ -39,6 +39,7 @@ class Router
 	public function activate()
 	{
 		$this->registerRoutes();
+		$this->wp->flush_rewrite_rules();
 	}
 	
 	public function registerRoutes()
@@ -88,6 +89,7 @@ class Router
 
 	/**
 	 * @param $route
+	 * @throws \Exception
 	 */
 	private function addRewriteTags(Route $route)
 	{
@@ -101,6 +103,8 @@ class Router
 	private function addRewriteRules(Route $route)
 	{
 		$rules = $route->getRewriteRules();
+
+		Logger::log(var_export($rules,true));
 
 		array_walk($rules, function($rule) {
 			$this->wp->add_rewrite_rule( $rule["regex"], $rule["redirect"], "top");

@@ -108,8 +108,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testSubscribesToAdminNoticeActionUsingAppropriateCallBackMethod()
 	{
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_action",
+		$this->mockWordPress->assertActionAdded(
 			"admin_notices",
 			[$this->plugin, "renderAdminNotices"]
 		);
@@ -193,8 +192,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$pwa = $this->factory->get("Pwa");
 
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_action",
+		$this->mockWordPress->assertActionAdded(
 			"wp_front_service_worker",
 			[$pwa, "registerServiceWorker"]
 		);
@@ -204,10 +202,19 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$localization = $this->factory->get("Localization");
 
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_action",
+		$this->mockWordPress->assertActionAdded(
 			"init",
 			[$localization, "loadLanguages"]
+		);
+	}
+
+	public function testRegistersActionCallbacks()
+	{
+		$action = $this->factory->get("AjaxAction\\Presentation");
+
+		$this->mockWordPress->assertActionAdded(
+			"wp_ajax_Avorg_AjaxAction_Presentation",
+			[$action, "run"]
 		);
 	}
 }

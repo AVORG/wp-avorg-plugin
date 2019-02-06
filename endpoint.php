@@ -16,4 +16,8 @@ $endpointFactory = $factory->get("EndpointFactory");
 /** @var \Avorg\Endpoint $endpoint */
 $endpoint = $endpointFactory->getEndpoint($endpointId);
 
-echo $endpoint->getOutput();
+$output = $endpoint->getOutput();
+
+echo $output;
+
+//var_dump('hello', $output, $_SERVER);die;

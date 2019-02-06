@@ -13,7 +13,7 @@ abstract class Route
 	private $filesystem;
 
 	private $languages;
-	private $route;
+	private $routeFormat;
 	protected $routeTree;
 
 	private $fragmentPatterns = [
@@ -31,22 +31,25 @@ abstract class Route
 	}
 
 	/**
-	 * @param string $route
+	 * @param string $routeFormat
 	 * @return Route
 	 */
-	public function setFormat($route)
+	public function setFormat($routeFormat)
 	{
-		$this->route = $route;
-		$this->routeTree = $this->composeRouteTree($this->route);
+		$this->routeFormat = $routeFormat;
+		$this->routeTree = $this->composeRouteTree($this->routeFormat);
 
 		return $this;
 	}
 
 	/**
 	 * @return mixed
+	 * @throws \Exception
 	 */
 	public function getRewriteTags()
 	{
+		$this->validateRoute();
+
 		return array_merge(
 			$this->getBaseTags(),
 			$this->getTreeTags()
@@ -58,8 +61,14 @@ abstract class Route
 		return [];
 	}
 
+	/**
+	 * @return array
+	 * @throws \Exception
+	 */
 	public function getRewriteRules()
 	{
+		$this->validateRoute();
+
 		$baseRegex = $this->getRegex();
 		$baseRedirect = $this->getRedirect();
 
@@ -69,6 +78,11 @@ abstract class Route
 				"redirect" => $baseRedirect
 			];
 		}, $this->languages ?: []);
+	}
+
+	private function validateRoute()
+	{
+		if (!$this->routeFormat) throw new \Exception("No route format provided");
 	}
 
 	/**
@@ -230,13 +244,13 @@ abstract class Route
 	 */
 	private function throwInvalidRouteException($route)
 	{
-		throw new \Exception("Invalid route $this->route. Failed to continue at $route");
+		throw new \Exception("Invalid route $this->routeFormat. Failed to continue at $route");
 	}
 
 	/**
 	 * @return array
 	 */
-	protected function getQueryVarString()
+	private function getQueryVarString()
 	{
 		$tokens = $this->getTreeTags();
 		$tokenNames = array_keys($tokens);
@@ -245,7 +259,7 @@ abstract class Route
 			$varName = $tokenNames[$key];
 			$matchKey = $key + 1;
 
-			return "$varName=\$matches[$matchKey]";
+			return $this->formatQueryVar($varName, $matchKey);
 		}, array_keys($tokenNames));
 
 		return implode("&", $queryVars);
@@ -259,5 +273,10 @@ abstract class Route
 		return array_reduce((array)$this->routeTree, function ($carry, RouteFragment $fragment) {
 			return array_merge($carry, $fragment->getRewriteTags());
 		}, []);
+	}
+
+	protected function formatQueryVar($queryKey, $matchKey)
+	{
+		return "$queryKey=\$matches[$matchKey]";
 	}
 }

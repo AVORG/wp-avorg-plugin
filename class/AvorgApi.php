@@ -45,7 +45,7 @@ class AvorgApi
 		
 		try {
 			$response = $this->getResponse($url);
-			
+
 			return json_decode($response)->result[0];
 		} catch (\Exception $e) {
 			throw new \Exception("Couldn't retrieve presentation with ID $id");

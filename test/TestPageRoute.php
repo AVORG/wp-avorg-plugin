@@ -160,4 +160,18 @@ final class TestPageRoute extends Avorg\TestCase
 			]
 		];
 	}
+
+	public function testThrowsExceptionIfNoFormat()
+	{
+		$this->expectException(Exception::class);
+
+		$this->pageRoute->getRewriteRules();
+	}
+
+	public function testThrowsExceptionIfNoFormatWhenGettingRewriteTags()
+	{
+		$this->expectException(Exception::class);
+
+		$this->pageRoute->getRewriteTags();
+	}
 }

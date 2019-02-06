@@ -72,11 +72,7 @@ class StubWordPress extends WordPress
 	{
 		$pageObject = $this->factory->get("Page\\$pageName");
 
-		$this->assertMethodCalledWith(
-			"add_filter",
-			"the_content",
-			[$pageObject, "addUi"]
-		);
+		$this->assertFilterAdded("the_content", [$pageObject, "addUi"]);
 	}
 
 	public function getPageIdOptionName($page)
@@ -87,5 +83,31 @@ class StubWordPress extends WordPress
 		$slashToUnderscore = str_replace("\\", "_", $lowercase);
 
 		return $prefix . $slashToUnderscore;
+	}
+
+	/**
+	 * @param $tag
+	 * @param $callable
+	 */
+	public function assertFilterAdded($tag, $callable)
+	{
+		$this->assertMethodCalledWith(
+			"add_filter",
+			$tag,
+			$callable
+		);
+	}
+
+	/**
+	 * @param $tag
+	 * @param $callable
+	 */
+	public function assertActionAdded($tag, $callable)
+	{
+		$this->assertMethodCalledWith(
+			"add_action",
+			$tag,
+			$callable
+		);
 	}
 }

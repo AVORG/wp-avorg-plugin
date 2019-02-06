@@ -13,4 +13,9 @@ class Php {
 	{
 		header($string);
 	}
+
+	public function doDie()
+	{
+		die();
+	}
 }

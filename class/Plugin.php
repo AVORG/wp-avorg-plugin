@@ -6,6 +6,9 @@ if (!\defined('ABSPATH')) exit;
 
 class Plugin
 {
+	/** @var AjaxActionFactory $ajaxActionFactory */
+	private $ajaxActionFactory;
+
 	/** @var ContentBits $contentBits */
 	private $contentBits;
 	
@@ -31,6 +34,7 @@ class Plugin
 	private $wp;
 	
 	public function __construct(
+		AjaxActionFactory $ajaxActionFactory,
 		ContentBits $contentBits,
 		ListShortcode $listShortcode,
 		Localization $localization,
@@ -41,6 +45,7 @@ class Plugin
 		WordPress $WordPress
 	)
 	{
+		$this->ajaxActionFactory = $ajaxActionFactory;
 		$this->contentBits = $contentBits;
 		$this->listShortcode = $listShortcode;
 		$this->localization = $localization;
@@ -58,6 +63,7 @@ class Plugin
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
 		$this->pwa->registerCallbacks();
 		$this->registerPageCallbacks();
+		$this->registerAjaxActionCallbacks();
 		$this->localization->registerCallbacks();
 	}
 	
@@ -130,9 +136,18 @@ class Plugin
 
 	private function registerPageCallbacks()
 	{
-		$pages = $this->pageFactory->getPages();
-		array_walk($pages, function (Page $page) {
-			$page->registerCallbacks();
+		$this->registerEntityCallbacks($this->pageFactory->getPages());
+	}
+
+	private function registerAjaxActionCallbacks()
+	{
+		$this->registerEntityCallbacks($this->ajaxActionFactory->getActions());
+	}
+
+	private function registerEntityCallbacks($entities)
+	{
+		array_walk($entities, function ($entity) {
+			$entity->registerCallbacks();
 		});
 	}
 }

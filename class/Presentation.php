@@ -2,8 +2,6 @@
 
 namespace Avorg;
 
-use Avorg\MediaFile\AudioFile;
-
 if (!\defined('ABSPATH')) exit;
 
 class Presentation
