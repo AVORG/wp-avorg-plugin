@@ -61,10 +61,24 @@ class Plugin
 	private function registerCallbacks()
 	{
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
-		$this->pwa->registerCallbacks();
-		$this->registerPageCallbacks();
-		$this->registerAjaxActionCallbacks();
-		$this->localization->registerCallbacks();
+
+		$toRegister = array_merge(
+			[
+				$this->pwa,
+				$this->localization
+			],
+			$this->pageFactory->getPages(),
+			$this->ajaxActionFactory->getActions()
+		);
+
+		$this->registerEntityCallbacks($toRegister);
+	}
+
+	private function registerEntityCallbacks($entities)
+	{
+		array_walk($entities, function ($entity) {
+			$entity->registerCallbacks();
+		});
 	}
 	
 	public function activate()
@@ -122,22 +136,5 @@ class Plugin
 		$this->wp->wp_enqueue_script(
 			"avorgVideoJsHlsScript",
 			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js");
-	}
-
-	private function registerPageCallbacks()
-	{
-		$this->registerEntityCallbacks($this->pageFactory->getPages());
-	}
-
-	private function registerAjaxActionCallbacks()
-	{
-		$this->registerEntityCallbacks($this->ajaxActionFactory->getActions());
-	}
-
-	private function registerEntityCallbacks($entities)
-	{
-		array_walk($entities, function ($entity) {
-			$entity->registerCallbacks();
-		});
 	}
 }
