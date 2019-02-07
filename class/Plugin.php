@@ -88,10 +88,21 @@ class Plugin
 	public function renderAdminNotices()
 	{
 		$this->wp->settings_errors();
-		
-		$this->outputPermalinkError();
-		$this->outputApiUsernameError();
-		$this->outputApiPasswordError();
+
+		$this->outputUnsetOptionError("permalink_structure", "AVORG Warning: Permalinks turned off!");
+		$this->outputUnsetOptionError("avorgApiUser", "AVORG Warning: Missing API username!");
+		$this->outputUnsetOptionError("avorgApiPass", "AVORG Warning: Missing API password!");
+	}
+
+	/**
+	 * @param $optionName
+	 * @param $message
+	 */
+	private function outputUnsetOptionError($optionName, $message)
+	{
+		if ($this->wp->get_option($optionName)) return;
+
+		$this->renderer->renderNotice("error", $message);
 	}
 	
 	private function enqueuePluginStyles()
@@ -111,27 +122,6 @@ class Plugin
 		$this->wp->wp_enqueue_script(
 			"avorgVideoJsHlsScript",
 			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js");
-	}
-	
-	protected function outputPermalinkError()
-	{
-		if ($this->wp->get_option("permalink_structure")) return;
-		
-		$this->renderer->renderNotice("error", "AVORG Warning: Permalinks turned off!");
-	}
-	
-	protected function outputApiUsernameError()
-	{
-		if ($this->wp->get_option("avorgApiUser")) return;
-		
-		$this->renderer->renderNotice("error", "AVORG Warning: Missing API username!");
-	}
-	
-	protected function outputApiPasswordError()
-	{
-		if ($this->wp->get_option("avorgApiPass")) return;
-		
-		$this->renderer->renderNotice("error", "AVORG Warning: Missing API password!");
 	}
 
 	private function registerPageCallbacks()
