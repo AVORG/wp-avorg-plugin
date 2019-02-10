@@ -199,15 +199,18 @@ final class TestPlugin extends Avorg\TestCase
 	/**
 	 * @dataProvider scriptPathProvider
 	 * @param $path
+	 * @param bool $isRelative
 	 */
-	public function testRegistersScripts($path)
+	public function testRegistersScripts($path, $isRelative = false)
 	{
 		$this->mockWordPress->runAction("wp_enqueue_scripts");
 
+		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
+
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_script",
-			"Avorg_Script_" . sha1($path),
-			$path
+			"Avorg_Script_" . sha1($fullPath),
+			$fullPath
 		);
 	}
 
@@ -215,7 +218,8 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		return [
 			["//vjs.zencdn.net/7.0/video.min.js"],
-			["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"]
+			["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
+			["script/playlist.js", true]
 		];
 	}
 }

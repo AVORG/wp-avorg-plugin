@@ -14,14 +14,14 @@ final class TestScript extends Avorg\TestCase
 
 	public function testTheScript()
 	{
-		$this->script->setPath("the_path");
+		$this->script->setPath("//the_path");
 
 		$this->script->enqueue();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_script",
-			"Avorg_Script_" . sha1("the_path"),
-			"the_path"
+			"Avorg_Script_" . sha1("//the_path"),
+			"//the_path"
 		);
 	}
 
@@ -63,13 +63,13 @@ final class TestScript extends Avorg\TestCase
 			->setReturnValue("admin_url", "ajax_url");
 
 		$this->script
-			->setPath("the_path")
+			->setPath("//the_path")
 			->setActions($this->factory->make("AjaxAction\\Presentation"))
 			->enqueue();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_localize_script",
-			"Avorg_Script_" . sha1("the_path"),
+			"Avorg_Script_" . sha1("//the_path"),
 			"avorg",
 			[
 				"nonces" => [

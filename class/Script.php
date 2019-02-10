@@ -33,7 +33,8 @@ class Script
 	 */
 	public function setPath($path)
 	{
-		$this->path = $path;
+		$isRelative = preg_match("/^(?!(http(s)?:)?\/\/).+/", $path) === 1;
+		$this->path = $isRelative ? AVORG_BASE_URL . "/$path" : $path;
 		return $this;
 	}
 

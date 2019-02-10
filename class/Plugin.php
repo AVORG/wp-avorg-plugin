@@ -84,7 +84,8 @@ class Plugin
 	{
 		$paths = [
 			"//vjs.zencdn.net/7.0/video.min.js",
-			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
+			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js",
+			"script/playlist.js"
 		];
 
 		return array_map(function($path) {
