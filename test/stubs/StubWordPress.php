@@ -110,4 +110,17 @@ class StubWordPress extends WordPress
 			$callable
 		);
 	}
+
+	public function runAction($action)
+	{
+		$calls = $this->getCalls("add_action");
+
+		$filteredCalls = array_filter($calls, function($call) use($action) {
+			return $call[0] === $action;
+		});
+
+		array_map(function($call) {
+			call_user_func($call[1]);
+		}, $filteredCalls);
+	}
 }

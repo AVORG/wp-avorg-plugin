@@ -84,28 +84,6 @@ final class TestPlugin extends Avorg\TestCase
 		);
 	}
 	
-	public function testEnqueuesVideoJsScript()
-	{
-		$this->plugin->enqueueScripts();
-		
-		$this->mockWordPress->assertMethodCalledWith(
-			"wp_enqueue_script",
-			"avorgVideoJsScript",
-			"//vjs.zencdn.net/7.0/video.min.js"
-		);
-	}
-	
-	public function testEnqueuesVideoJsHlsScript()
-	{
-		$this->plugin->enqueueScripts();
-		
-		$this->mockWordPress->assertMethodCalledWith(
-			"wp_enqueue_script",
-			"avorgVideoJsHlsScript",
-			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
-		);
-	}
-	
 	public function testSubscribesToAdminNoticeActionUsingAppropriateCallBackMethod()
 	{
 		$this->mockWordPress->assertActionAdded(
@@ -216,5 +194,27 @@ final class TestPlugin extends Avorg\TestCase
 			"wp_ajax_Avorg_AjaxAction_Presentation",
 			[$action, "run"]
 		);
+	}
+
+	/**
+	 * @dataProvider scriptPathProvider
+	 */
+	public function testRegistersScripts($path)
+	{
+		$this->mockWordPress->runAction("wp_enqueue_scripts");
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"wp_enqueue_script",
+			"Avorg_Script_" . sha1($path),
+			$path
+		);
+	}
+
+	public function scriptPathProvider()
+	{
+		return [
+			["//vjs.zencdn.net/7.0/video.min.js"],
+			["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"]
+		];
 	}
 }

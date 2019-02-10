@@ -30,6 +30,9 @@ class Plugin
 	/** @var Router $router */
 	private $router;
 
+	/** @var ScriptFactory $scriptFactory */
+	private $scriptFactory;
+
 	/** @var WordPress $wp */
 	private $wp;
 	
@@ -42,6 +45,7 @@ class Plugin
 		Pwa $pwa,
 		Renderer $renderer,
 		Router $router,
+		ScriptFactory $scriptFactory,
 		WordPress $WordPress
 	)
 	{
@@ -53,6 +57,7 @@ class Plugin
 		$this->pwa = $pwa;
 		$this->renderer = $renderer;
 		$this->router = $router;
+		$this->scriptFactory = $scriptFactory;
 		$this->wp = $WordPress;
 
 		$this->registerCallbacks();
@@ -68,10 +73,23 @@ class Plugin
 				$this->localization
 			],
 			$this->pageFactory->getPages(),
-			$this->ajaxActionFactory->getActions()
+			$this->ajaxActionFactory->getActions(),
+			$this->getScripts()
 		);
 
 		$this->registerEntityCallbacks($toRegister);
+	}
+
+	private function getScripts()
+	{
+		$paths = [
+			"//vjs.zencdn.net/7.0/video.min.js",
+			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
+		];
+
+		return array_map(function($path) {
+			return $this->scriptFactory->getScript($path);
+		}, $paths);
 	}
 
 	private function registerEntityCallbacks($entities)
@@ -130,11 +148,5 @@ class Plugin
 		$this->wp->wp_enqueue_style(
 			"avorgVideoJsStyle",
 			"//vjs.zencdn.net/7.0/video-js.min.css");
-		$this->wp->wp_enqueue_script(
-			"avorgVideoJsScript",
-			"//vjs.zencdn.net/7.0/video.min.js");
-		$this->wp->wp_enqueue_script(
-			"avorgVideoJsHlsScript",
-			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js");
 	}
 }
