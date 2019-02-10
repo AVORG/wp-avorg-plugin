@@ -5,61 +5,34 @@ namespace Avorg\AjaxAction;
 use Avorg\Php;
 use Avorg\PresentationRepository;
 use Avorg\WordPress;
+use Avorg\AjaxAction;
 
 if (!\defined('ABSPATH')) exit;
 
-class Presentation
+class Presentation extends AjaxAction
 {
-	/** @var Php $php */
-	private $php;
-
 	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
-
-	/** @var WordPress $wp */
-	private $wp;
+	protected $presentationRepository;
 
 	public function __construct(Php $php, PresentationRepository $presentationRepository, WordPress $wp)
 	{
-		$this->php = $php;
+		parent::__construct($php, $wp);
+
 		$this->presentationRepository = $presentationRepository;
-		$this->wp = $wp;
-	}
-
-	public function registerCallbacks()
-	{
-		$identifier = $this->getIdentifier();
-
-		$this->wp->add_action("wp_ajax_$identifier", [$this, "run"]);
-		$this->wp->add_action("wp_ajax_nopriv_$identifier", [$this, "run"]);
-	}
-
-	public function run()
-	{
-		$this->checkNonce();
-
-		$id = $_POST["entity_id"];
-		$presentation = $this->presentationRepository->getPresentation($id);
-
-		echo json_encode([
-			"success" => (bool) $presentation,
-			"data" => $presentation ? $presentation->toJson() : null
-		]);
-
-		$this->php->doDie();
-	}
-
-	private function checkNonce()
-	{
-		$nonceName = $this->getIdentifier();
-		$this->wp->check_ajax_referer($nonceName);
 	}
 
 	/**
-	 * @return mixed
+	 * @return array
+	 * @throws \Exception
 	 */
-	private function getIdentifier()
+	protected function getResponseData()
 	{
-		return str_replace("\\", "_", get_class($this));
+		$id = $_POST["entity_id"];
+		$presentation = $this->presentationRepository->getPresentation($id);
+
+		return [
+			"success" => (bool)$presentation,
+			"data" => $presentation ? $presentation->toJson() : null
+		];
 	}
 }

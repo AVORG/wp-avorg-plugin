@@ -25,6 +25,8 @@ if ( !\defined( 'ABSPATH' ) ) exit;
  * @method wp_enqueue_script($string, $string1)
  * @method plugins_url($string, $dirname)
  * @method settings_errors()
+ * @method wp_create_nonce($id)
+ * @method wp_localize_script($id, $string, $nonces)
  */
 class WordPress {
 	public function __call( $function, $arguments ) {
