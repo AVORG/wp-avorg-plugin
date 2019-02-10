@@ -45,6 +45,21 @@ abstract class Page
 		$this->wp->register_activation_hook(
 			AVORG_BASE_PATH . "/wp-avorg-plugin.php",
 			[$this, "createPage"]);
+
+		$this->registerScriptCallbacks();
+	}
+
+	private function registerScriptCallbacks()
+	{
+		$scripts = $this->getScripts();
+		array_walk($scripts, function (Script $script) {
+			$script->registerCallbacks();
+		});
+	}
+
+	protected function getScripts()
+	{
+		return [];
 	}
 
 	public function addUi($content)
