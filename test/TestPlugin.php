@@ -198,6 +198,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	/**
 	 * @dataProvider scriptPathProvider
+	 * @param $path
 	 */
 	public function testRegistersScripts($path)
 	{

@@ -114,7 +114,7 @@ class Plugin
 	public function enqueueScripts()
 	{
 		$this->enqueuePluginStyles();
-		$this->enqueueVideoJsAssets();
+		$this->enqueueVideoJsStyles();
 	}
 	
 	public function renderAdminNotices()
@@ -143,7 +143,7 @@ class Plugin
 		$this->wp->wp_enqueue_style("avorgStyle", $url);
 	}
 	
-	private function enqueueVideoJsAssets()
+	private function enqueueVideoJsStyles()
 	{
 		$this->wp->wp_enqueue_style(
 			"avorgVideoJsStyle",
