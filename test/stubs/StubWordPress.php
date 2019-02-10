@@ -24,7 +24,7 @@ class StubWordPress extends WordPress
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function setCurrentPageToPage($page)
+	public function setCurrentPageToPage(Page $page)
 	{
 		$this->setSavedPageId($page, 7);
 		$this->setCurrentPageId(7);
@@ -35,7 +35,7 @@ class StubWordPress extends WordPress
 		$this->setReturnValue("get_the_ID", $id);
 	}
 
-	public function setSavedPageId($page, $id)
+	public function setSavedPageId(Page $page, $id)
 	{
 		$optionName = $this->getPageIdOptionName($page);
 
@@ -75,7 +75,7 @@ class StubWordPress extends WordPress
 		$this->assertFilterAdded("the_content", [$pageObject, "addUi"]);
 	}
 
-	public function getPageIdOptionName($page)
+	public function getPageIdOptionName(Page $page)
 	{
 		$prefix = "avorg_page_id_";
 		$class = get_class($page);
@@ -111,15 +111,25 @@ class StubWordPress extends WordPress
 		);
 	}
 
-	public function runAction($action)
+	public function runActions(...$actions)
+	{
+		array_walk($actions, function($action) {
+			$this->runAction($action);
+		});
+	}
+
+	/**
+	 * @param $action
+	 */
+	private function runAction($action)
 	{
 		$calls = $this->getCalls("add_action");
 
-		$filteredCalls = array_filter($calls, function($call) use($action) {
+		$filteredCalls = array_filter($calls, function ($call) use ($action) {
 			return $call[0] === $action;
 		});
 
-		array_map(function($call) {
+		array_map(function ($call) {
 			call_user_func($call[1]);
 		}, $filteredCalls);
 	}

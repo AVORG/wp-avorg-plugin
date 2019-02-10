@@ -199,27 +199,48 @@ final class TestPlugin extends Avorg\TestCase
 	/**
 	 * @dataProvider scriptPathProvider
 	 * @param $path
+	 * @param bool $shouldRegister
 	 * @param bool $isRelative
+	 * @param null $pageClass
+	 * @throws ReflectionException
 	 */
-	public function testRegistersScripts($path, $isRelative = false)
+	public function testRegistersScripts($path, $shouldRegister = true, $isRelative = false, $pageClass = null)
 	{
-		$this->mockWordPress->runAction("wp_enqueue_scripts");
+		if ($pageClass) {
+			/** @var Avorg\Page $page */
+			$page = $this->factory->get($pageClass);
+
+			$this->mockWordPress->setCurrentPageToPage(
+				$page
+			);
+
+			$page->registerCallbacks();
+		}
+
+		$this->mockWordPress->runActions("wp", "wp_enqueue_scripts");
 
 		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
 
-		$this->mockWordPress->assertMethodCalledWith(
+		$args = [
 			"wp_enqueue_script",
 			"Avorg_Script_" . sha1($fullPath),
 			$fullPath
-		);
+		];
+
+		if ($shouldRegister) {
+			$this->mockWordPress->assertMethodCalledWith(...$args);
+		} else {
+			$this->mockWordPress->assertMethodNotCalledWith(...$args);
+		}
 	}
 
 	public function scriptPathProvider()
 	{
 		return [
-			["//vjs.zencdn.net/7.0/video.min.js"],
-			["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
-			["script/playlist.js", true]
+			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
+			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
+			"don't load playlist.js on other pages" => ["script/playlist.js", false, true],
+			"load playlist.js on playlist page" => ["script/playlist.js", true, true, "Page\\Playlist"]
 		];
 	}
 }
