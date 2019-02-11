@@ -61,7 +61,7 @@ class Media extends Page
 	/**
 	 * @return array
 	 */
-	protected function getTwigData()
+	protected function getData()
 	{
 		$entity = $this->getEntitySafe();
 

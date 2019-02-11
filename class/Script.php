@@ -10,6 +10,7 @@ class Script
 	private $wp;
 
 	private $actions = [];
+	private $data = [];
 	private $path;
 
 	public function __construct(WordPress $wp)
@@ -24,6 +25,12 @@ class Script
 	public function setActions(...$actions)
 	{
 		$this->actions = $actions;
+		return $this;
+	}
+
+	public function setData($data)
+	{
+		$this->data = array_merge($this->data, $data);
 		return $this;
 	}
 
@@ -68,10 +75,10 @@ class Script
 	 */
 	private function getLocalizeData()
 	{
-		return [
+		return array_merge([
 			"nonces" => $this->getNonces(),
 			"ajax_url" => $this->wp->admin_url("admin-ajax.php")
-		];
+		], $this->data);
 	}
 
 	/**

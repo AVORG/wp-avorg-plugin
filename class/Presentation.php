@@ -20,6 +20,7 @@ class Presentation
 	public function toJson()
 	{
 		$data = array_merge((array) $this->apiPresentation, [
+			"id" => $this->getId(),
 			"url" => $this->getUrl(),
 			"audioFiles" => $this->convertMediaFilesToArrays($this->getAudioFiles()),
 			"videoFiles" => $this->convertMediaFilesToArrays($this->getVideoFiles()),
@@ -49,7 +50,7 @@ class Presentation
 	public function getId()
 	{
 
-		return $this->apiPresentation->id;
+		return intval($this->apiPresentation->id);
 	}
 
     public function getLogUrl()

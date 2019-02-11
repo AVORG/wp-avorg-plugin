@@ -50,7 +50,7 @@ class Topic extends Page
 	 * @return array
 	 * @throws \Exception
 	 */
-	protected function getTwigData()
+	protected function getData()
 	{
 		$topicId = $this->wp->get_query_var( "entity_id");
 

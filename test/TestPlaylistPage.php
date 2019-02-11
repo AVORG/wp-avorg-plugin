@@ -70,4 +70,26 @@ final class TestPlaylistPage extends Avorg\TestCase
 			return is_a($data->recordings[0], "\\Avorg\\Presentation");
 		});
 	}
+
+	public function testPassesPresentationsToScript()
+	{
+		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
+		$this->mockAvorgApi->setReturnValue("getPlaylist", json_decode(json_encode([
+			"recordings" => [
+				$this->convertArrayToObjectRecursively(["id" => "1836"])
+			]
+		])));
+
+		$this->playlistPage->registerCallbacks();
+
+		$this->mockWordPress->runActions("wp", "wp_enqueue_scripts");
+
+		$this->mockWordPress->assertMethodCalled("wp_localize_script");
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($carry, $call) {
+			$data = $call[2];
+			$recording = $data["recordings"][0];
+
+			return $carry || $recording->id === 1836;
+		});
+	}
 }

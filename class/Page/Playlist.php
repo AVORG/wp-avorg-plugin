@@ -52,19 +52,36 @@ class Playlist extends Page
 		return $title;
 	}
 
-	protected function getTwigData()
-	{
-		$id = $this->getEntityId();
-
-		return [
-			"recordings" => $this->presentationRepository->getPlaylistPresentations($id)
-		];
-	}
-
 	protected function getScripts()
 	{
 		return [
-			$this->scriptFactory->getScript("script/playlist.js")
+			$this->scriptFactory->getScript("script/playlist.js")->setData($this->getStaticData())
 		];
+	}
+
+	private function getStaticData()
+	{
+		$staticPresentations = array_map(function(Presentation $presentation) {
+			return json_decode($presentation->toJson());
+		}, $this->getPresentations());
+
+		return [
+			"recordings" => $staticPresentations
+		];
+	}
+
+	protected function getData()
+	{
+		return [
+			"recordings" => $this->getPresentations()
+		];
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getPresentations()
+	{
+		return $this->presentationRepository->getPlaylistPresentations($this->getEntityId());
 	}
 }

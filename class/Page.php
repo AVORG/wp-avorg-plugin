@@ -33,10 +33,11 @@ abstract class Page
 
     abstract public function throw404($query);
     abstract public function setTitle($title);
-    abstract protected function getTwigData();
+    abstract protected function getData();
 
 	public function registerCallbacks()
 	{
+		$this->wp->add_action("wp", [$this, "registerScriptCallbacks"]);
 		$this->wp->add_action( "parse_query", [$this, "throw404"]);
 		$this->wp->add_action( "init", [$this, "createPage"]);
 		$this->wp->add_filter( "pre_get_document_title", [$this, "setTitle"]);
@@ -45,8 +46,6 @@ abstract class Page
 		$this->wp->register_activation_hook(
 			AVORG_BASE_PATH . "/wp-avorg-plugin.php",
 			[$this, "createPage"]);
-
-		$this->wp->add_action("wp", [$this, "registerScriptCallbacks"]);
 	}
 
 	public function registerScriptCallbacks()
@@ -81,7 +80,7 @@ abstract class Page
 	{
 		return $this->renderer->render(
 			$this->twigTemplate,
-			$this->getTwigData() ?: [],
+			$this->getData() ?: [],
 			true
 		);
 	}
