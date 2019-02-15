@@ -82,6 +82,14 @@ class Playlist extends Page
 	 */
 	private function getPresentations()
 	{
-		return $this->presentationRepository->getPlaylistPresentations($this->getEntityId());
+		$presentations = $this->presentationRepository->getPlaylistPresentations($this->getEntityId());
+
+		$array_reduce = array_reduce($presentations, function ($carry, Presentation $presentation) {
+			$carry[$presentation->getId()] = $presentation;
+
+			return $carry;
+		}, []);
+
+		return $array_reduce;
 	}
 }

@@ -83,6 +83,7 @@ class Plugin
 	private function getScripts()
 	{
 		$paths = [
+			"https://polyfill.io/v3/polyfill.min.js?features=default",
 			"//vjs.zencdn.net/7.0/video.min.js",
 			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
 		];

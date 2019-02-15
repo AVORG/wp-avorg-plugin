@@ -2,3 +2,4 @@ vendor/**/.git
 /cache/
 !/cache/empty
 /logs/*.log
+/style/.sass-cache

@@ -60,7 +60,7 @@ final class TestPlaylistPage extends Avorg\TestCase
 		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
 		$this->mockAvorgApi->setReturnValue("getPlaylist", json_decode(json_encode([
 			"recordings" => [
-				"recording"
+				$this->convertArrayToObjectRecursively(["id" => "0"])
 			]
 		])));
 
@@ -87,7 +87,7 @@ final class TestPlaylistPage extends Avorg\TestCase
 		$this->mockWordPress->assertMethodCalled("wp_localize_script");
 		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($carry, $call) {
 			$data = $call[2];
-			$recording = $data["recordings"][0];
+			$recording = $data["recordings"][1836];
 
 			return $carry || $recording->id === 1836;
 		});
