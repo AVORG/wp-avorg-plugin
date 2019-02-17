@@ -18,10 +18,5 @@ abstract class MediaFile
         return $this->apiMediaFile->streamURL;
     }
 
-    public function getType()
-    {
-        $ext = pathinfo($this->apiMediaFile->filename, PATHINFO_EXTENSION);
-
-        return "audio/$ext";
-    }
+    abstract public function getType();
 }

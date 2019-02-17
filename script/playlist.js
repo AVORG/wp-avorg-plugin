@@ -23,7 +23,7 @@ const Player = {
         <video id="${playerId}" class="avorg-prototype-player video-js vjs-fluid" controls preload="auto"
             poster="https://s.audioverse.org/images/template/player-bg4.jpg">
             
-            ${sources.map((source) => `<source src="${source.streamUrl}" type="${this.showingVideo ? "application/x-mpegURL" : source.type}">`).join("")}
+            ${sources.map((source) => `<source src="${source.streamUrl}" type="${source.type}">`).join("")}
             
             <p class="vjs-no-js">
                 To view this media please enable JavaScript, and consider upgrading to a web browser that
