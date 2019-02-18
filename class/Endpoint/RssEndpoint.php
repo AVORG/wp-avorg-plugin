@@ -34,6 +34,10 @@ abstract class RssEndpoint extends Endpoint
 		/** @var Feed $feed */
 		$feed = $this->factory->make("Feed");
 
+		$feed->setRecordings($this->getRecordings());
+
 		return $feed->toXml();
 	}
+
+	abstract protected function getRecordings();
 }

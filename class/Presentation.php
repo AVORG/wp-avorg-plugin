@@ -77,6 +77,17 @@ class Presentation
         });
     }
 
+    public function getPresentersString()
+	{
+		$presenters = $this->getPresenters();
+		$presenterFragments = array_map(function($presenter) {
+			$pieces = array_filter($presenter["name"]);
+			return implode(" ", $pieces);
+		}, $presenters);
+
+		return implode(", ", $presenterFragments);
+	}
+
     public function getPresenters()
     {
         $apiPresenters = (isset($this->apiPresentation->presenters)) ? $this->apiPresentation->presenters : [];

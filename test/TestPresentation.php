@@ -295,4 +295,32 @@ final class TestPresentation extends Avorg\TestCase
 			]
 		];
 	}
+
+	public function testGetPresenterString()
+	{
+		$presentation = $this->getPresentationForApiResponse([
+			"presenters" => [
+				[
+					"givenName" => "first_name",
+					"surname" => "last_name",
+					"suffix" => "suffix"
+				],
+				[
+					"givenName" => "first_name",
+					"surname" => "last_name",
+					"suffix" => ""
+				],
+				[
+					"givenName" => "first_name",
+					"surname" => "",
+					"suffix" => "suffix"
+				],
+			]
+		]);
+
+		$this->assertEquals(
+			"first_name last_name suffix, first_name last_name, first_name suffix",
+			$presentation->getPresentersString()
+		);
+	}
 }

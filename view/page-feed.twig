@@ -19,16 +19,17 @@
 			<itunes:category text="Christianity" />
 		</itunes:category>
 		{% for recording in avorg.recordings %}
-		<item>
-			<title>Sebastien Braxton, Sikhu Daco, Justin Kim, Jonathan Walter: 04-Worthy Is the Lamb</title>
-			<itunes:image href="http://s.audioverse.org/english/gallery/sponsors/_/1400/1400/podcast.png" />
-			<itunes:subtitle>MP3 Audio, 96 kbps</itunes:subtitle>
-			<itunes:author>Sebastien Braxton, Sikhu Daco, Justin Kim, Jonathan Walter</itunes:author>
-			<enclosure url="https://www.audioverse.org/english/download/rss/64021/2019/01/19199/20190111-1002-19199-62d0a10ad8613029e79ae3cb4bf28793-96k.mp3" type="audio/mpeg" length="20301955" />
-			<guid>19199-64021</guid>
-			<pubDate>Mon, 21 Jan 2019 06:50:21 -0800</pubDate>
-			<itunes:duration>1661</itunes:duration>
-		</item>
+			{% set audio = recording.audioFiles|first %}
+			<item>
+				<title>{{ recording.title }}</title>
+				<itunes:image href="{{ avorg.image }}" />
+				<itunes:subtitle>MP3 Audio, {{ audio.bitrate }} kbps</itunes:subtitle>
+				<itunes:author>{{ recording.presentersString }}</itunes:author>
+				<enclosure url="{{ audio.streamUrl }}" type="{{ audio.type }}" length="{{ audio.size }}" />
+				<guid>{{ recording.id }}-{{ audio.id }}</guid>
+				<pubDate>{{ recording.datePublished|date("D, d M Y H:i:s O") }}</pubDate>
+				<itunes:duration>{{ audio.duration }}</itunes:duration>
+			</item>
 		{% endfor %}
 	</channel>
 </rss>
