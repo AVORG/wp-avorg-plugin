@@ -32,8 +32,6 @@ abstract class Endpoint
 	 */
 	private function getId()
 	{
-		$pieces = explode("\\", get_class($this));
-
-		return end($pieces);
+		return str_replace("\\", "_", get_class($this));
 	}
 }

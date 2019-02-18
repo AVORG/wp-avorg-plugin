@@ -19,5 +19,3 @@ $endpoint = $endpointFactory->getEndpoint($endpointId);
 $output = $endpoint->getOutput();
 
 echo $output;
-
-//var_dump('hello', $output, $_SERVER);die;

@@ -25,7 +25,7 @@ final class TestRssEndpoint extends Avorg\TestCase
 
 		$redirect = $route->getRewriteRules()["English"]["redirect"];
 
-		$this->assertStringStartsWith("endpoint.php?endpoint_id=RssLatest", $redirect);
+		$this->assertStringStartsWith("endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest", $redirect);
 	}
 
 	public function testRouteFormatSet()

@@ -145,15 +145,15 @@ final class TestRouter extends Avorg\TestCase
 		return [
 			[
 				"english/sermons/presenters/podcast/134/latest/david-shin.xml",
-				"endpoint.php?endpoint_id=RssSpeaker&language=english&entity_id=134&slug=david-shin.xml"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssSpeaker&language=english&entity_id=134&slug=david-shin.xml"
 			],
 			[
 				"api/presentation/123",
-				"endpoint.php?endpoint_id=PresentationEndpoint&entity_id=123"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_PresentationEndpoint&entity_id=123"
 			],
 			[
 				"english/podcasts/latest",
-				"endpoint.php?endpoint_id=RssLatest&language=english"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest&language=english"
 			]
 		];
 	}
