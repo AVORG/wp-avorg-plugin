@@ -11,15 +11,13 @@ use Avorg\RouteFactory;
 
 if (!\defined('ABSPATH')) exit;
 
-class RssEndpoint extends Endpoint
+abstract class RssEndpoint extends Endpoint
 {
 	/** @var Factory $factory */
 	private $factory;
 
 	/** @var Php $php */
 	private $php;
-
-	protected $routeFormat = "{ language }/sermons/presenters/podcast/{ entity_id:[0-9]+ }/latest/{ slug }";
 
 	public function __construct(Factory $factory, Php $php, RouteFactory $routeFactory)
 	{

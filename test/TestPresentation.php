@@ -246,7 +246,7 @@ final class TestPresentation extends Avorg\TestCase
 				"videoFiles",
 				[[
 					"streamUrl" => "stream_url",
-					"type" => "audio/mp4"
+					"type" => "application/x-mpegURL"
 				]]
 			],
 			"log url" => [

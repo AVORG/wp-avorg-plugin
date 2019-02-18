@@ -9,7 +9,7 @@ final class TestRssEndpoint extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->rssEndpoint = $this->factory->get("Endpoint\\RssEndpoint");
+		$this->rssEndpoint = $this->factory->get("Endpoint\\RssEndpoint\\RssLatest");
 	}
 
 	public function testGetRouteFormat()
@@ -25,7 +25,7 @@ final class TestRssEndpoint extends Avorg\TestCase
 
 		$redirect = $route->getRewriteRules()["English"]["redirect"];
 
-		$this->assertStringStartsWith("endpoint.php?endpoint_id=RssEndpoint", $redirect);
+		$this->assertStringStartsWith("endpoint.php?endpoint_id=RssLatest", $redirect);
 	}
 
 	public function testRouteFormatSet()

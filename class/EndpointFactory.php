@@ -10,8 +10,9 @@ class EndpointFactory
 	private $factory;
 
 	private $endpointNames = [
-		"RssEndpoint",
-		"PresentationEndpoint"
+		"PresentationEndpoint",
+		"RssEndpoint\\RssLatest",
+		"RssEndpoint\\RssSpeaker"
 	];
 
 	public function __construct(Factory $factory)

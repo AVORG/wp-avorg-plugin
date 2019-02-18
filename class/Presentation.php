@@ -42,6 +42,19 @@ class Presentation
         );
     }
 
+	public function getVideoFiles()
+	{
+		$apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
+		$filteredFiles = array_filter($apiMediaFiles, function($file) {
+			return $file->container === "m3u8_ios";
+		});
+
+		return $this->wrapItems(
+			"\\Avorg\\MediaFile\\VideoFile",
+			$filteredFiles
+		);
+	}
+
     public function getDatePublished()
 	{
 		return $this->apiPresentation->publishDate;
@@ -114,19 +127,6 @@ class Presentation
 
 		return $titleHyphenated;
 	}
-
-    public function getVideoFiles()
-    {
-        $apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
-        $filteredFiles = array_filter($apiMediaFiles, function($file) {
-            return $file->container === "m3u8_ios";
-        });
-
-        return $this->wrapItems(
-            "\\Avorg\\MediaFile\\VideoFile",
-            $filteredFiles
-        );
-    }
 
     /**
      * @param $className
