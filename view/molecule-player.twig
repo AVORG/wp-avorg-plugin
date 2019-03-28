@@ -1,12 +1,14 @@
+{% set recording = (recording is defined) ? recording : avorg.presentation %}
+
 <div class="avorg-molecule-player">
 	<div class="avorg-audio-sources">
-		{% for file in avorg.presentation.audioFiles %}
+		{% for file in recording.audioFiles %}
 			<source src="{{ file.streamURL }}" type="{{ file.type }}">
 		{% endfor %}
 	</div>
 	
 	<div class="avorg-video-sources">
-		{% for file in avorg.presentation.videoFiles %}
+		{% for file in recording.videoFiles %}
 			<source src="{{ file.streamUrl }}" type="application/x-mpegURL">
 		{% endfor %}
 	</div>
@@ -22,7 +24,7 @@
 			</p>
 		</video>
 		
-		{% if avorg.presentation.videoFiles %}
+		{% if recording.videoFiles %}
 			<button id="avorg-source-toggle" class="avorg-molecule-player__toggle">Toggle Source</button>
 		{% endif %}
 	</div>
@@ -30,6 +32,9 @@
 	<script>
 		window.addEventListener("load", function () {
 			var buildPlayerMarkup = function (id, mediaSources) {
+                fetch("/api/presentation/19238")
+					.then(function(data) { console.log(data) });
+
 				return playerPrototype.replace(/#player_id#/g, id).replace(/#player_sources#/g, mediaSources);
 			};
 			
@@ -56,7 +61,7 @@
 			};
 			
 			var playerPrototype = document.querySelector('.avorg-prototype-player').outerHTML,
-				hasVideo = {{ avorg.presentation.videoFiles ? "true" : "false" }},
+				hasVideo = {{ recording.videoFiles ? "true" : "false" }},
 				videoWrapper = document.querySelector(".avorg-molecule-player__wrapper"),
 				audioSources = document.querySelector('.avorg-audio-sources').innerHTML,
 				videoSources = document.querySelector('.avorg-video-sources').innerHTML,
@@ -73,9 +78,9 @@
 			toggle.addEventListener("click", togglePlayer);
 		});
 		
-		{% if avorg.presentation.logUrl %}
+		{% if recording.logUrl %}
 		var xhr = new XMLHttpRequest();
-		xhr.open('GET', "{{ avorg.presentation.logUrl }}", true);
+		xhr.open('GET', "{{ recording.logUrl }}", true);
 		xhr.send();
 		{% endif %}
 	</script>

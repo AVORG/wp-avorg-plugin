@@ -9,28 +9,19 @@ final class TestLocalization extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->localization = $this->factory->getLocalization();
+		$this->localization = $this->factory->get("Localization");
 	}
 	
-	public function test__iFunctionExsits()
+	public function test__iFunctionExists()
 	{
 		$this->assertTrue(method_exists($this->localization, "i__"));
-	}
-	
-	public function testRegistersLanguageAdditionMethod()
-	{
-		$this->assertWordPressFunctionCalledWith(
-			"add_action",
-			"init",
-			[$this->localization, "loadLanguages"]
-		);
 	}
 	
 	public function testLoadLanguagesCallsTextDomainLoadingFunction()
 	{
 		$this->localization->loadLanguages();
 		
-		$this->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"load_plugin_textdomain",
 			$this->textDomain,
 			false,
@@ -42,13 +33,13 @@ final class TestLocalization extends Avorg\TestCase
 	{
 		$this->localization->i__("to translate");
 		
-		$this->assertWordPressFunctionCalledWith("__", "to translate", $this->textDomain);
+		$this->mockWordPress->assertMethodCalledWith("__", "to translate", $this->textDomain);
 	}
 	
 	public function testCallsUnderscoreEnWithDomain()
 	{
 		$this->localization->_n("cat","cats",3);
 		
-		$this->assertWordPressFunctionCalledWith("_n", "cat", "cats", 3, $this->textDomain);
+		$this->mockWordPress->assertMethodCalledWith("_n", "cat", "cats", 3, $this->textDomain);
 	}
 }

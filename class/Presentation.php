@@ -6,14 +6,31 @@ if (!\defined('ABSPATH')) exit;
 
 class Presentation
 {
-    private $apiPresentation;
-    private $url;
+	/** @var LanguageFactory $languageFactory */
+	private $languageFactory;
 
-    public function __construct($apiPresentation, $url = null)
+    private $apiPresentation;
+
+    public function __construct($apiPresentation, LanguageFactory $languageFactory)
     {
         $this->apiPresentation = $apiPresentation;
-        $this->url = $url;
+        $this->languageFactory = $languageFactory;
     }
+
+	public function toJson()
+	{
+		$data = array_merge((array) $this->apiPresentation, [
+			"id" => $this->getId(),
+			"url" => $this->getUrl(),
+			"audioFiles" => $this->convertMediaFilesToArrays($this->getAudioFiles()),
+			"videoFiles" => $this->convertMediaFilesToArrays($this->getVideoFiles()),
+			"logUrl" => $this->getLogUrl(),
+			"datePublished" => $this->getDatePublished(),
+			"presenters" => $this->getPresenters()
+		]);
+
+		return json_encode($data);
+	}
 
     public function getAudioFiles()
     {
@@ -25,6 +42,30 @@ class Presentation
         );
     }
 
+	public function getVideoFiles()
+	{
+		$apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
+		$filteredFiles = array_filter($apiMediaFiles, function($file) {
+			return $file->container === "m3u8_ios";
+		});
+
+		return $this->wrapItems(
+			"\\Avorg\\MediaFile\\VideoFile",
+			$filteredFiles
+		);
+	}
+
+    public function getDatePublished()
+	{
+		return $this->apiPresentation->publishDate;
+	}
+
+	public function getId()
+	{
+
+		return intval($this->apiPresentation->id);
+	}
+
     public function getLogUrl()
     {
         $apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
@@ -35,6 +76,17 @@ class Presentation
             return $file->logURL ?: $carry;
         });
     }
+
+    public function getPresentersString()
+	{
+		$presenters = $this->getPresenters();
+		$presenterFragments = array_map(function($presenter) {
+			$pieces = array_filter($presenter["name"]);
+			return implode(" ", $pieces);
+		}, $presenters);
+
+		return implode(", ", $presenterFragments);
+	}
 
     public function getPresenters()
     {
@@ -59,21 +111,33 @@ class Presentation
 
     public function getUrl()
     {
-        return $this->url;
+		$language = $this->languageFactory->getLanguageByLangCode($this->apiPresentation->lang);
+
+		if (!$language) return null;
+
+		$fragments = [
+			$language->getBaseRoute(),
+			$language->translateUrlFragment("sermons"),
+			$language->translateUrlFragment("recordings"),
+			$this->apiPresentation->id,
+			$this->formatTitleForUrl($this->apiPresentation->title) . ".html"
+		];
+
+		return "/" . implode("/", $fragments);
     }
 
-    public function getVideoFiles()
-    {
-        $apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
-        $filteredFiles = array_filter($apiMediaFiles, function($file) {
-            return $file->container === "m3u8_ios";
-        });
+	/**
+	 * @param $title
+	 * @return string
+	 */
+	private function formatTitleForUrl($title)
+	{
+		$titleLowerCase = strtolower($title);
+		$titleNoPunctuation = preg_replace("/[^\w ]/", "", $titleLowerCase);
+		$titleHyphenated = str_replace(" ", "-", $titleNoPunctuation);
 
-        return $this->wrapItems(
-            "\\Avorg\\MediaFile\\VideoFile",
-            $filteredFiles
-        );
-    }
+		return $titleHyphenated;
+	}
 
     /**
      * @param $className
@@ -86,4 +150,18 @@ class Presentation
             return new $className($item);
         }, $items);
     }
+
+	/**
+	 * @param $mediaFiles
+	 * @return array
+	 */
+	private function convertMediaFilesToArrays($mediaFiles)
+	{
+		return array_map(function (MediaFile $mediaFile) {
+			return [
+				"streamUrl" => $mediaFile->getStreamUrl(),
+				"type" => $mediaFile->getType()
+			];
+		}, $mediaFiles);
+	}
 }

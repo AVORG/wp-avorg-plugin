@@ -18,10 +18,30 @@ abstract class MediaFile
         return $this->apiMediaFile->streamURL;
     }
 
-    public function getType()
-    {
-        $ext = pathinfo($this->apiMediaFile->filename, PATHINFO_EXTENSION);
+    public function getSize()
+	{
+		return $this->getFloatAttribute("filesize");
+	}
 
-        return "audio/$ext";
-    }
+	public function getDuration()
+	{
+		return $this->getFloatAttribute("duration");
+	}
+
+	public function getBitrate()
+	{
+		return $this->getFloatAttribute("bitrate");
+	}
+
+	public function getId()
+	{
+		return $this->getFloatAttribute("fileId");
+	}
+
+	private function getFloatAttribute($name)
+	{
+		return floatval($this->apiMediaFile->$name);
+	}
+
+    abstract public function getType();
 }

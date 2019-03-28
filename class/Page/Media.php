@@ -6,6 +6,7 @@ use Avorg\AvorgApi;
 use Avorg\Page;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
+use Avorg\RouteFactory;
 use Avorg\WordPress;
 
 if (!\defined('ABSPATH')) exit;
@@ -18,19 +19,20 @@ class Media extends Page
     /** @var PresentationRepository $presentationRepository */
     protected $presentationRepository;
 
-    protected $pageIdOptionName = "avorgMediaPageId";
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
     protected $twigTemplate = "organism-recording.twig";
+    protected $routeFormat = "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]";
 
     public function __construct(
     	AvorgApi $avorgApi,
 		PresentationRepository $presentationRepository,
 		Renderer $renderer,
+		RouteFactory $routeFactory,
 		WordPress $wordPress
 	)
     {
-        parent::__construct($renderer, $wordPress);
+        parent::__construct($renderer, $routeFactory, $wordPress);
 
         $this->avorgApi = $avorgApi;
         $this->presentationRepository = $presentationRepository;
@@ -39,31 +41,55 @@ class Media extends Page
 	public function throw404($query)
 	{
 		try {
-			$this->avorgApi->getPresentation($query->get("presentation_id"));
+			$this->getEntity();
 		} catch (\Exception $e) {
-			unset($query->query_vars["page_id"]);
-			$query->set_404();
-			$this->wp->call("status_header", 404);
+			$this->set404($query);
 		}
 	}
-	
+
+	/**
+	 * @param $title
+	 * @return string
+	 */
 	public function setTitle($title)
 	{
-		$presentationId = $this->wp->call("get_query_var", "presentation_id");
-		
-		$presentation = $this->presentationRepository->getPresentation($presentationId);
-		
+		$presentation = $this->getEntitySafe();
+
 		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : $title;
 	}
 
 	/**
 	 * @return array
 	 */
-	protected function getTwigData()
+	protected function getData()
 	{
-		$presentationId = $this->wp->call("get_query_var", "presentation_id");
-		$presentation = $this->presentationRepository->getPresentation($presentationId);
+		$entity = $this->getEntitySafe();
 
-		return ["presentation" => $presentation];
+		return ["presentation" => $entity];
 	}
+
+	/**
+	 * @return \Avorg\Presentation|null
+	 */
+	private function getEntitySafe()
+	{
+		try {
+			return $this->getEntity();
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
+	/**
+	 * @return \Avorg\Presentation|null
+	 * @throws \Exception
+	 */
+	private function getEntity()
+	{
+		$entityId = $this->getEntityId();
+
+		return $this->presentationRepository->getPresentation($entityId);
+	}
+
+
 }

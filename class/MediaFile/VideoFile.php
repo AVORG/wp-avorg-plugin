@@ -12,4 +12,9 @@ class VideoFile extends MediaFile
     {
         return $this->apiMediaFile->downloadURL;
     }
+
+    public function getType()
+	{
+		return "application/x-mpegURL";
+	}
 }

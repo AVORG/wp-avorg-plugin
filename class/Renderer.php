@@ -23,14 +23,17 @@ class Renderer
 	public function render($template, $data = [], $shouldReturn = false)
 	{
 		try {
-			$twigGlobal = $this->factory->getTwigGlobal();
+			$twigGlobal = $this->factory->make("TwigGlobal");
 			$twigGlobal->loadData($data);
 			$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $twigGlobal];
 			$output = $this->twig->render($template, $data);
 		} catch (\Exception $e) {
 			$output = "Oops! Something went wrong while rendering this page.";
 			if (WP_DEBUG) {
-				$output .= "<br>" . $e->getMessage();
+				$separator = (defined("STDIN")) ? "\r\n" : "<br/>";
+				$output .= $separator . $e->getMessage();
+				$output .= $separator . $e->getFile() . ":" . $e->getLine();
+				$output .= $separator . $e->getTraceAsString() . $separator . $separator;
 				echo $output;
 			};
 		} finally {

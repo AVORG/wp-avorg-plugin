@@ -4,234 +4,294 @@ final class TestRouter extends Avorg\TestCase
 {
 	/** @var \Avorg\Router $router */
 	protected $router;
-	
+
 	public function setUp()
 	{
 		parent::setUp();
-		
-		$this->router = $this->factory->getRouter();
+
+		$this->router = $this->factory->get("Router");
 	}
-	
-	private function getAddRewriteCalls()
-	{
-		$calls = $this->mockWordPress->getCalls("call");
-		
-		return array_reduce($calls, function($carry, $call) {
-			$isAddRewriteCall = $call[0] === "add_rewrite_rule";
-			
-			return $isAddRewriteCall ? array_merge($carry, [$call]) : $carry;
-		}, []);
-	}
-	
-	public function testCallsWordPress()
-	{
-		$this->router->activate();
-		
-		$this->assertCalled($this->mockWordPress, "call");
-	}
-	
+
 	public function testAssignsHighPriority()
 	{
 		$this->router->activate();
-		
-		$addRewriteCalls = $this->getAddRewriteCalls();
-		$priority = $addRewriteCalls[0][3];
-		
+
+		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
+		$priority = $addRewriteCalls[0][2];
+
 		$this->assertEquals("top", $priority);
 	}
-	
+
 	/**
-	 * @dataProvider rewriteInputOutputProvider
+	 * @dataProvider pageRouteProvider
 	 * @param $inputUrl
 	 * @param $outputUrl
 	 */
-	public function testRewriteRuleRewritesCorrectly($inputUrl, $outputUrl)
+	public function testPageRoutes($inputUrl, $outputUrl)
 	{
-		$this->mockWordPress->setReturnValue("call", 10);
-		
-		$this->router->activate();
-		
-		$addRewriteCalls = $this->getAddRewriteCalls();
-		
-		$doesMatch = array_reduce($addRewriteCalls, function ($carry, $call) use ($inputUrl, $outputUrl) {
-			$regex = $call[1];
-			$redirect = $call[2];
-			
+		$addRewriteCalls = $this->getRewriteRules();
+
+		$results = array_map(function ($call) use ($inputUrl) {
+			$regex = $call[0];
+			$redirect = $call[1];
+
 			preg_match("/$regex/", $inputUrl, $matches);
-			$result = eval("return \"$redirect\";");
-			
-			return $carry || $outputUrl === $result;
-		}, false);
-		
-		$this->assertTrue($doesMatch, "Input: $inputUrl\r\nExpected Output: $outputUrl");
+
+			return eval("return \"$redirect\";");
+		}, $addRewriteCalls);
+
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
 	}
-	
-	public function rewriteInputOutputProvider()
+
+	public function pageRouteProvider()
 	{
 		return [
 			[
 				"english/sermons/recordings/316/parents-how.html",
-				"index.php?page_id=10&presentation_id=316"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html",
-				"index.php?page_id=10&presentation_id=2913"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html",
-				"index.php?page_id=10&presentation_id=3914"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html",
-				"index.php?page_id=10&presentation_id=17663"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html",
-				"index.php?page_id=10&presentation_id=17831"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html",
-				"index.php?page_id=10&presentation_id=17833"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
 			],
 			[
 				"english/sermons/recordings/316/parents-how.html/",
-				"index.php?page_id=10&presentation_id=316"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html/",
-				"index.php?page_id=10&presentation_id=2913"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html/",
-				"index.php?page_id=10&presentation_id=3914"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html/",
-				"index.php?page_id=10&presentation_id=17663"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html/",
-				"index.php?page_id=10&presentation_id=17831"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html/",
-				"index.php?page_id=10&presentation_id=17833"
+				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
 			],
 			[
 				"espanol/sermones/grabaciones/17283/saludismo.html",
-				"index.php?page_id=10&presentation_id=17283"
+				"index.php?page_id=MEDIA_PAGE_ID&language=espanol&entity_id=17283&slug=saludismo.html"
 			],
 			[
 				"francais/predications/enregistrements/3839/jesus-sur-le-mont-des-oliviers.html",
-				"index.php?page_id=10&presentation_id=3839"
+				"index.php?page_id=MEDIA_PAGE_ID&language=francais&entity_id=3839&slug=jesus-sur-le-mont-des-oliviers.html"
 			],
 			[
 				"espanol",
-				"index.php?page_id=10"
+				"index.php?page_id=HOME_PAGE_ID"
 			],
 			[
 				"espanol/",
-				"index.php?page_id=10"
+				"index.php?page_id=HOME_PAGE_ID"
+			],
+			[
+				"english/topics/102/great-controversy.html",
+				"index.php?page_id=TOPIC_PAGE_ID&language=english&entity_id=102&slug=great-controversy.html"
+			],
+			[
+				"english/playlists/lists/14/how-to-be-saved.html",
+				"index.php?page_id=PLAYLIST_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
 			]
 		];
 	}
-	
-	public function testFlushesRewireRules()
+
+	/**
+	 * @param $inputUrl
+	 * @param $outputUrl
+	 * @dataProvider outputRouteProvider
+	 */
+	public function testEndpointRoutes($inputUrl, $outputUrl)
 	{
-		$this->router->activate();
-		
-		$this->assertCalledWith($this->mockWordPress, "call", "flush_rewrite_rules");
+		$addRewriteCalls = $this->getRewriteRules();
+
+		$results = array_map(function ($call) use ($inputUrl) {
+			$regex = $call[0];
+			$redirect = $call[1];
+
+			return preg_replace("/$regex/", $redirect, $inputUrl);
+		}, $addRewriteCalls);
+
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
 	}
-	
-	public function testRegistersPresParam()
+
+	public function outputRouteProvider()
 	{
-		$this->router->activate();
-		
-		$this->assertCalledWith($this->mockWordPress, "call", "add_rewrite_tag", "%presentation_id%", "(\d+)");
+		return [
+			[
+				"english/sermons/presenters/podcast/134/latest/david-shin.xml",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssSpeaker&language=english&entity_id=134&slug=david-shin.xml"
+			],
+			[
+				"api/presentation/123",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_PresentationEndpoint&entity_id=123"
+			],
+			[
+				"english/podcasts/latest",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest&language=english"
+			]
+		];
 	}
-	
+
 	public function testUsesSavedMediaPageId()
 	{
-		$this->mockWordPress->setReturnValue("call", 3);
-		
+		$this->mockWordPress->setReturnValue("get_option", 3);
+
 		$this->router->activate();
-		
-		$addRewriteCalls = $this->getAddRewriteCalls();
-		$redirect = $addRewriteCalls[0][2];
-		
+
+		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
+		$redirect = $addRewriteCalls[0][1];
+
 		$this->assertContains("page_id=3", $redirect);
 	}
-	
+
 	public function testSetLocaleFunctionExists()
 	{
 		$this->assertTrue(method_exists($this->router, "setLocale"));
 	}
-	
+
 	public function testSetLocaleFunctionReturnsPreviousLang()
 	{
 		$this->assertEquals("lang", $this->router->setLocale("lang"));
 	}
-	
+
 	public function testSetsSpanishLocale()
 	{
 		$_SERVER["REQUEST_URI"] = "/espanol";
-		
+
 		$this->assertEquals("es_ES", $this->router->setLocale("lang"));
 	}
-	
+
 	public function testUsesLanguageFile()
 	{
 		$_SERVER["REQUEST_URI"] = "/deutsch";
-		
+
 		$this->assertEquals("de_DE", $this->router->setLocale("lang"));
 	}
 
-    /**
-     * @dataProvider redirectFilteringProvider
-     * @param $requestUrl
-     * @param $shouldAllowRedirect
-     */
-    public function testRedirectFiltering($requestUrl, $shouldAllowRedirect)
-    {
-        $_SERVER["HTTP_HOST"] = "localhost:8080";
-        $_SERVER["REQUEST_URI"] = $requestUrl;
-        $path = parse_url($requestUrl, PHP_URL_PATH);
-        $fullRequestUrl = $_SERVER["HTTP_HOST"] . $path;
-        $expected = $shouldAllowRedirect ? "redirect_url" : "http://" . $fullRequestUrl;
-        $result = $this->router->filterRedirect("redirect_url");
+	/**
+	 * @dataProvider redirectFilteringProvider
+	 * @param $requestUri
+	 * @param $shouldAllowRedirect
+	 */
+	public function testRedirectFiltering($requestUri, $shouldAllowRedirect)
+	{
+		$_SERVER["HTTP_HOST"] = "localhost:8080";
+		$_SERVER["REQUEST_URI"] = $requestUri;
+		$path = parse_url($requestUri, PHP_URL_PATH);
+		$fullRequestUrl = $_SERVER["HTTP_HOST"] . $path;
+		$expected = $shouldAllowRedirect ? "redirect_url" : "http://" . $fullRequestUrl;
+		$result = $this->router->filterRedirect("redirect_url");
 
-        $this->assertEquals($expected, $result);
-    }
+		$this->assertEquals($expected, $result);
+	}
 
-    public function redirectFilteringProvider()
-    {
-        return [
-            "Spanish Route" => ["localhost:8080/espanol", FALSE],
-            "No Language Route" => ["localhost:8080/path", TRUE],
-            "Complex Spanish Route" => ["localhost:8080/espanol/path/to/page", FALSE],
-            "French Route" => ["localhost:8080/francais", FALSE],
-            "Spanish Production Url" => ["https://audioverse.org/espanol", FALSE],
-            "No Language Production Url" => ["https://audioverse.org/path/to/page", TRUE],
-            "Spanish Path" => ["/espanol", FALSE],
-            "No Language Path" => ["/path", TRUE],
-            "Complex Spanish Path" => ["/espanol/path/to/page", FALSE],
-            "French Path" => ["/francais", FALSE]
-        ];
-    }
+	public function redirectFilteringProvider()
+	{
+		return [
+			"Spanish Route" => ["localhost:8080/espanol", FALSE],
+			"No Language Route" => ["localhost:8080/path", TRUE],
+			"Complex Spanish Route" => ["localhost:8080/espanol/path/to/page", FALSE],
+			"French Route" => ["localhost:8080/francais", FALSE],
+			"Spanish Production Url" => ["https://audioverse.org/espanol", FALSE],
+			"No Language Production Url" => ["https://audioverse.org/path/to/page", TRUE],
+			"Spanish Path" => ["/espanol", FALSE],
+			"No Language Path" => ["/path", TRUE],
+			"Complex Spanish Path" => ["/espanol/path/to/page", FALSE],
+			"French Path" => ["/francais", FALSE]
+		];
+	}
 
-    public function testGetUrlForApiRecording()
-    {
-        $apiRecording = $this->convertArrayToObjectRecursively([
-            "lang" => "en",
-            "id" => "1836",
-            "title" => 'E.P. Daniels and True Revival'
-        ]);
+	/**
+	 * @dataProvider rewriteTagProvider
+	 * @param $tag
+	 * @param $regex
+	 */
+	public function testRegistersRewriteTags($tag, $regex)
+	{
+		$this->router->activate();
 
-        $url = $this->router->getUrlForApiRecording($apiRecording);
+		$this->mockWordPress->assertMethodCalledWith(
+			"add_rewrite_tag",
+			$tag,
+			$regex
+		);
+	}
 
-        $this->assertEquals(
-            "/english/sermons/recordings/1836/E.P.%20Daniels%20and%20True%20Revival.html",
-            $url
-        );
-    }
+	public function rewriteTagProvider()
+	{
+		return [
+			"entity_id" => [ "%entity_id%", "([0-9]+)" ],
+			"endpoint_id" => [ "%endpoint_id%", "([\w-\.]+)" ]
+		];
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getRewriteRules()
+	{
+		$this->mockWordPress->setMappedReturnValues("get_option", [
+			["page_on_front", "HOME_PAGE_ID"]
+		]);
+
+		$this->mockWordPress->setReturnCallback("get_option", function (...$args) {
+			$optionId = $args[0];
+			$pageIdOptionPrefix = "avorg_page_id_avorg_page_";
+			$isPageIdOption = strstr($optionId, $pageIdOptionPrefix) !== false;
+
+			if (!$isPageIdOption) return STUB_NULL;
+
+			$pageName = end(explode("_", $optionId));
+
+			return strtoupper($pageName . "_PAGE_ID");
+		});
+
+		$this->router->activate();
+
+		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
+		return $addRewriteCalls;
+	}
+
+	/**
+	 * @param $inputUrl
+	 * @param $outputUrl
+	 * @param $results
+	 */
+	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results)
+	{
+		$resultsExport = var_export($results, true);
+		$errorMessage = "Input: $inputUrl\r\nExpected Output: $outputUrl\r\nHaystack:\r\n$resultsExport";
+
+		$this->assertContains(
+			$outputUrl,
+			$results,
+			$errorMessage
+		);
+	}
 }

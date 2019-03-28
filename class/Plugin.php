@@ -2,48 +2,102 @@
 
 namespace Avorg;
 
-use Avorg\Page\Media;
-
 if (!\defined('ABSPATH')) exit;
 
 class Plugin
 {
+	/** @var AjaxActionFactory $ajaxActionFactory */
+	private $ajaxActionFactory;
+
 	/** @var ContentBits $contentBits */
 	private $contentBits;
 	
 	/** @var ListShortcode $listShortcode */
 	private $listShortcode;
+
+	/** @var Localization */
+	private $localization;
 	
-	/** @var Media $mediaPage */
-	private $mediaPage;
+	/** @var PageFactory $pageFactory */
+	private $pageFactory;
+
+	/** @var Pwa $pwa */
+	private $pwa;
 	
 	/** @var Renderer $renderer */
 	private $renderer;
 	
 	/** @var Router $router */
 	private $router;
-	
+
+	/** @var ScriptFactory $scriptFactory */
+	private $scriptFactory;
+
 	/** @var WordPress $wp */
 	private $wp;
 	
 	public function __construct(
-        ContentBits $contentBits,
-        ListShortcode $listShortcode,
-        Media $mediaPage,
-        Renderer $renderer,
-        Router $router,
-        WordPress $WordPress
+		AjaxActionFactory $ajaxActionFactory,
+		ContentBits $contentBits,
+		ListShortcode $listShortcode,
+		Localization $localization,
+		PageFactory $pageFactory,
+		Pwa $pwa,
+		Renderer $renderer,
+		Router $router,
+		ScriptFactory $scriptFactory,
+		WordPress $WordPress
 	)
 	{
+		$this->ajaxActionFactory = $ajaxActionFactory;
 		$this->contentBits = $contentBits;
 		$this->listShortcode = $listShortcode;
-		$this->mediaPage = $mediaPage;
+		$this->localization = $localization;
+		$this->pageFactory = $pageFactory;
+		$this->pwa = $pwa;
 		$this->renderer = $renderer;
 		$this->router = $router;
+		$this->scriptFactory = $scriptFactory;
 		$this->wp = $WordPress;
-		
-		$this->wp->call("add_action", "admin_notices", [$this, "renderAdminNotices"]);
-		$this->mediaPage->registerCallbacks();
+
+		$this->registerCallbacks();
+	}
+
+	private function registerCallbacks()
+	{
+		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
+
+		$toRegister = array_merge(
+			[
+				$this->pwa,
+				$this->localization
+			],
+			$this->pageFactory->getPages(),
+			$this->ajaxActionFactory->getActions(),
+			$this->getScripts()
+		);
+
+		$this->registerEntityCallbacks($toRegister);
+	}
+
+	private function getScripts()
+	{
+		$paths = [
+			"https://polyfill.io/v3/polyfill.min.js?features=default",
+			"//vjs.zencdn.net/7.0/video.min.js",
+			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
+		];
+
+		return array_map(function($path) {
+			return $this->scriptFactory->getScript($path);
+		}, $paths);
+	}
+
+	private function registerEntityCallbacks($entities)
+	{
+		array_walk($entities, function ($entity) {
+			$entity->registerCallbacks();
+		});
 	}
 	
 	public function activate()
@@ -53,7 +107,7 @@ class Plugin
 	
 	public function init()
 	{
-		$this->router->addRewriteRules();
+		$this->router->registerRoutes();
 		$this->contentBits->init();
 		$this->listShortcode->addShortcode();
 	}
@@ -61,61 +115,39 @@ class Plugin
 	public function enqueueScripts()
 	{
 		$this->enqueuePluginStyles();
-		$this->enqueueVideoJsAssets();
+		$this->enqueueVideoJsStyles();
 	}
 	
 	public function renderAdminNotices()
 	{
-		$this->wp->call("settings_errors");
-		
-		$this->outputPermalinkError();
-		$this->outputApiUsernameError();
-		$this->outputApiPasswordError();
+		$this->wp->settings_errors();
+
+		$this->outputUnsetOptionError("permalink_structure", "AVORG Warning: Permalinks turned off!");
+		$this->outputUnsetOptionError("avorgApiUser", "AVORG Warning: Missing API username!");
+		$this->outputUnsetOptionError("avorgApiPass", "AVORG Warning: Missing API password!");
+	}
+
+	/**
+	 * @param $optionName
+	 * @param $message
+	 */
+	private function outputUnsetOptionError($optionName, $message)
+	{
+		if ($this->wp->get_option($optionName)) return;
+
+		$this->renderer->renderNotice("error", $message);
 	}
 	
 	private function enqueuePluginStyles()
 	{
-		$url = $this->wp->call("plugins_url", "style.css", dirname(__FILE__));
-		$this->wp->call("wp_enqueue_style", "avorgStyle", $url);
+		$url = $this->wp->plugins_url("style/style.css", dirname(__FILE__));
+		$this->wp->wp_enqueue_style("avorgStyle", $url);
 	}
 	
-	private function enqueueVideoJsAssets()
+	private function enqueueVideoJsStyles()
 	{
-		$this->wp->call(
-			"wp_enqueue_style",
+		$this->wp->wp_enqueue_style(
 			"avorgVideoJsStyle",
-			"//vjs.zencdn.net/7.0/video-js.min.css"
-		);
-		$this->wp->call(
-			"wp_enqueue_script",
-			"avorgVideoJsScript",
-			"//vjs.zencdn.net/7.0/video.min.js"
-		);
-		$this->wp->call(
-			"wp_enqueue_script",
-			"avorgVideoJsHlsScript",
-			"https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"
-		);
-	}
-	
-	protected function outputPermalinkError()
-	{
-		if ($this->wp->call("get_option", "permalink_structure")) return;
-		
-		$this->renderer->renderNotice("error", "AVORG Warning: Permalinks turned off!");
-	}
-	
-	protected function outputApiUsernameError()
-	{
-		if ($this->wp->call("get_option", "avorgApiUser")) return;
-		
-		$this->renderer->renderNotice("error", "AVORG Warning: Missing API username!");
-	}
-	
-	protected function outputApiPasswordError()
-	{
-		if ($this->wp->call("get_option", "avorgApiPass")) return;
-		
-		$this->renderer->renderNotice("error", "AVORG Warning: Missing API password!");
+			"//vjs.zencdn.net/7.0/video-js.min.css");
 	}
 }

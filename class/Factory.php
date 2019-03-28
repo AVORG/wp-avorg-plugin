@@ -4,144 +4,90 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
-/**
- * Class Factory
- * @package Avorg
- */
 class Factory
 {
-	private $objectGraph = [
-		"AdminPanel" => [
-			"Plugin",
-			"Renderer",
-			"WordPress"
-		],
-		"ContentBits" => [
-			"Php",
-			"Renderer",
-			"WordPress"
-		],
-		"ListShortcode" => [
-			"PresentationRepository",
-			"Renderer",
-			"WordPress"
-		],
-		"Localization" => [
-			"WordPress"
-		],
-		"Plugin" => [
-			"ContentBits",
-			"ListShortcode",
-			"MediaPage",
-			"Renderer",
-			"Router",
-			"WordPress"
-		],
-		"PresentationRepository" => [
-			"AvorgApi",
-			"Router"
-		],
-		"Renderer" => [
-			"Factory",
-			"Twig"
-		],
-		"Router" => [
-			"Filesystem",
-			"WordPress"
-		]
-	];
+	private $namespace = __NAMESPACE__;
 
-	/** @var AvorgApi $avorgApi */
-	private $avorgApi;
+	private $objects = [];
 
-	/** @var Php $php */
-	private $php;
-
-	/** @var Twig $twig */
-	private $twig;
-
-	/** @var WordPress $wordPress */
-	private $wordPress;
-	
-	/**
-	 * Factory constructor.
-	 * @param AvorgApi|null $avorgApi
-	 * @param Php|null $php
-	 * @param Twig|null $twig
-	 * @param WordPress|null $wordPress
-	 */
-	public function __construct(
-		AvorgApi $avorgApi = null,
-		Php $php = null,
-		Twig $twig = null,
-		WordPress $wordPress = null
-	)
+	public function __construct(...$objects)
 	{
-		$this->avorgApi = $avorgApi;
-		$this->php = $php;
-		$this->twig = $twig;
-		$this->wordPress = $wordPress;
+		$this->injectObjects(...$objects);
 	}
-	
-	/**
-	 * @return Factory
-	 */
-	public function getFactory()
+
+	public function injectObjects(...$objects)
 	{
-		return $this;
+		$this->objects = array_merge($this->objects, $objects);
 	}
 
 	/**
-	 * @return Page\Media
+	 * @param $class
+	 * @return null
+	 * @throws \ReflectionException
 	 */
-	public function getMediaPage()
+	public function get($class)
 	{
-		return $this->getObject(
-			"Page\\Media",
-			$this->getAvorgApi(),
-			$this->getPresentationRepository(),
-			$this->getRenderer(),
-			$this->getWordPress()
-		);
-	}
+		if (is_a($this, $class)) return $this;
 
-	public function getTopicPage()
-	{
-		return $this->getObject(
-			"Page\\Topic",
-			$this->getRenderer(),
-			$this->getWordPress()
-		);
+		$qualifiedName = $this->getQualifiedName($class);
+		$dependencies = $this->getDependencies($qualifiedName);
+
+		return $this->getObject($qualifiedName, ...$dependencies);
 	}
 
 	/**
-	 * @return TwigGlobal
+	 * @param $class
+	 * @return null
+	 * @throws \ReflectionException
 	 */
-	public function getTwigGlobal()
+	public function make($class)
 	{
-		return $this->makeObject(
-			"TwigGlobal",
-			$this->getLocalization(),
-			$this->getWordPress()
-		);
+		$qualifiedName = $this->getQualifiedName($class);
+		$dependencies = $this->getDependencies($qualifiedName);
+
+		return $this->makeObject($qualifiedName, ...$dependencies);
 	}
 
-	public function __call($method, $args = [])
+	/**
+	 * @param $qualifiedName
+	 * @return array
+	 * @throws \ReflectionException
+	 */
+	private function getDependencies($qualifiedName)
 	{
-		$isGet = substr( $method, 0, 3 ) === "get";
+		$dependencyNames = $this->getDependencyNames($qualifiedName);
 
-		if (!$isGet) return null;
-
-		$name = substr($method, 3, strlen($method) - 3);
-		$dependencyNames = isset($this->objectGraph[$name]) ? $this->objectGraph[$name] : [];
-		$dependencies = array_map(function($dependencyName) {
-			$methodName = "get$dependencyName";
-			return $this->$methodName();
-		}, $dependencyNames);
-
-		return $this->getObject($name, ...$dependencies);
+		return array_map([$this, "get"], $dependencyNames);
 	}
-	
+
+	/**
+	 * @param $className
+	 * @return array|mixed
+	 * @throws \ReflectionException
+	 */
+	private function getDependencyNames($className)
+	{
+		$reflection = new \ReflectionClass($className);
+		$constructor = $reflection->getConstructor();
+		$params = ($constructor) ? $constructor->getParameters() : [];
+
+		return array_map(function (\ReflectionParameter $param) {
+			$name = $param->getClass()->name;
+			return $this->getQualifiedName($name);
+		}, $params);
+	}
+
+	/**
+	 * @param $name
+	 * @return string
+	 */
+	private function getQualifiedName($name)
+	{
+		$isQualified = strpos(trim($name, "\\"), "$this->namespace\\") === 0;
+
+		return $isQualified ? $name : "\\$this->namespace\\$name";
+	}
+
 	/**
 	 * @param string $class
 	 * @param array ...$dependencies
@@ -149,14 +95,10 @@ class Factory
 	 */
 	private function getObject($class, ...$dependencies)
 	{
-		$fullClassName = "\\Avorg\\$class";
-		$propertyName = lcfirst($class);
-		
-		if (! isset($this->$propertyName)) $this->$propertyName = new $fullClassName(...$dependencies);
-		
-		return $this->$propertyName;
+		return $this->getSavedObject($class) ?:
+			$this->objects[] = new $class(...$dependencies);
 	}
-	
+
 	/**
 	 * @param string $class
 	 * @param array ...$dependencies
@@ -164,10 +106,20 @@ class Factory
 	 */
 	private function makeObject($class, ...$dependencies)
 	{
-		$fullClassName = "\\Avorg\\$class";
-		$propertyName = lcfirst($class);
-		$shouldUseProperty = property_exists($this, $propertyName) && isset($this->$propertyName);
-		
-		return $shouldUseProperty ? $this->$propertyName : new $fullClassName(...$dependencies);
+		return $this->getSavedObject($class) ?:
+			new $class(...$dependencies);
+	}
+
+	/**
+	 * @param $class
+	 * @return mixed
+	 */
+	private function getSavedObject($class)
+	{
+		$matchingObjects = array_filter($this->objects, function($object) use($class) {
+			return is_a($object, $class);
+		});
+
+		return end($matchingObjects);
 	}
 }

@@ -9,7 +9,7 @@ final class TestPresentationRepository extends Avorg\TestCase
     {
         parent::setUp();
 
-        $this->presentationRepository = $this->factory->getPresentationRepository();
+        $this->presentationRepository = $this->factory->get("PresentationRepository");
     }
 
     /**
@@ -62,7 +62,7 @@ final class TestPresentationRepository extends Avorg\TestCase
         $result = $this->presentationRepository->getPresentations();
 
         $this->assertEquals(
-            "/english/sermons/recordings/1836/E.P.%20Daniels%20and%20True%20Revival.html",
+            "/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
             $result[0]->getUrl()
         );
     }

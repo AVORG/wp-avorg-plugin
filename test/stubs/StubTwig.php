@@ -11,14 +11,48 @@ class StubTwig extends Twig
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function assertErrorRenderedWithMessage($message)
+	{
+		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", [
+			"type" => "error",
+			"message" => $message
+		]);
+	}
+
 	public function assertTwigTemplateRendered($template)
 	{
-		$message = "Failed to assert that $template was rendered";
+		$this->assertTwigTemplateRenderedWithDataMatching($template, function() { return true; });
+	}
 
-		$this->assertAnyCallMatches("render", function($carry, $call) use($template) {
+	public function assertTwigTemplateRenderedWithData($template, $data)
+	{
+		$this->assertTwigTemplateRenderedWithDataMatching($template, [$this, "doesDataObjectIncludeData"], $data);
+	}
+
+	public function assertTwigTemplateRenderedWithDataMatching($template, $callable, ...$params)
+	{
+		$this->assertAnyCallMatches("render", function($carry, $call) use($template, $callable, $params) {
 			$callTemplate = $call[0];
+			$callDataObject = $call[1]["avorg"];
 
-			return $carry || ($callTemplate === $template);
-		}, $message);
+			$doesTemplateMatch = $callTemplate === $template;
+			$doesMatch = call_user_func($callable, $callDataObject, ...$params);
+
+			return $carry || ($doesTemplateMatch && $doesMatch);
+		});
+	}
+
+	/**
+	 * @param $haystackObject
+	 * @param $keyValueNeedles
+	 * @return mixed
+	 */
+	private function doesDataObjectIncludeData($haystackObject, $keyValueNeedles)
+	{
+		return array_reduce(array_keys($keyValueNeedles), function ($carry, $key) use ($keyValueNeedles, $haystackObject) {
+			$datum = $keyValueNeedles[$key];
+
+			return $carry && $haystackObject->$key === $datum;
+		}, true);
 	}
 }

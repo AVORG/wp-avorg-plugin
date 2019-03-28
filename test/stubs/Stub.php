@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+define("STUB_NULL", "stub_null");
+
 trait Stub
 {
 	private $calls = [];
@@ -29,25 +31,39 @@ trait Stub
 	 */
 	public function handleCall($method, $args)
 	{
+		$isMagicCall = $method === "__call";
+		$method = ($isMagicCall) ? $args[0] : $method;
+		$args = ($isMagicCall) ? $args[1] : $args;
+
 		$this->calls[$method][] = $args;
 
-		return $this->getIndexedReturnValue($method) ?:
-			$this->getMappedReturnValue($method, $args) ?:
-				$this->getConsecutiveReturnValue($method) ?:
-					$this->getCallbackReturnValue($method, $args) ?:
-						$this->getReturnValue($method);
+		$indexedReturnValue = $this->getIndexedReturnValue($method);
+		if ($indexedReturnValue !== STUB_NULL) return $indexedReturnValue;
+
+		$mappedReturnValue = $this->getMappedReturnValue($method, $args);
+		if ($mappedReturnValue !== STUB_NULL) return $mappedReturnValue;
+
+		$consecutiveReturnValue = $this->getConsecutiveReturnValue($method);
+		if ($consecutiveReturnValue !== STUB_NULL) return $consecutiveReturnValue;
+
+		$callbackReturnValue = $this->getCallbackReturnValue($method, $args);
+		if ($callbackReturnValue !== STUB_NULL) return $callbackReturnValue;
+
+		$returnValue = $this->getReturnValue($method);
+		return ($returnValue !== STUB_NULL) ? $returnValue : null;
 	}
 
 	private function getConsecutiveReturnValue($method)
 	{
-		if (!isset($this->consecutiveReturnValues[$method])) return null;
+		if (!isset($this->consecutiveReturnValues[$method])) return STUB_NULL;
 
-		return (count($this->consecutiveReturnValues[$method]) > 0) ? array_shift($this->consecutiveReturnValues[$method]) : null;
+		return (count($this->consecutiveReturnValues[$method]) > 0) ?
+			array_shift($this->consecutiveReturnValues[$method]) : STUB_NULL;
 	}
 
 	private function getCallbackReturnValue($method, $args)
 	{
-		if (!isset($this->returnCallbacks[$method])) return null;
+		if (!isset($this->returnCallbacks[$method])) return STUB_NULL;
 
 		return call_user_func($this->returnCallbacks[$method], ...$args);
 	}
@@ -62,7 +78,8 @@ trait Stub
 
 		$currentIndex = $this->methodCallIndices[$method];
 
-		return isset($this->indexedReturnValues[$method][$currentIndex]) ? $this->indexedReturnValues[$method][$currentIndex] : null;
+		return isset($this->indexedReturnValues[$method][$currentIndex]) ?
+			$this->indexedReturnValues[$method][$currentIndex] : STUB_NULL;
 	}
 
 	/**
@@ -77,13 +94,14 @@ trait Stub
 	/**
 	 * @param $method
 	 * @param $args
-	 * @return null
+	 * @return mixed
 	 */
 	private function getMappedReturnValue($method, $args)
 	{
 		$callSignature = json_encode($args);
 
-		return isset($this->mappedReturnValues[$method][$callSignature]) ? $this->mappedReturnValues[$method][$callSignature] : null;
+		return isset($this->mappedReturnValues[$method][$callSignature]) ?
+			$this->mappedReturnValues[$method][$callSignature] : STUB_NULL;
 	}
 
 	/**
@@ -92,46 +110,54 @@ trait Stub
 	 */
 	private function getReturnValue($method)
 	{
-		return isset($this->returnValues[$method]) ? $this->returnValues[$method] : null;
+		return isset($this->returnValues[$method]) ? $this->returnValues[$method] : STUB_NULL;
 	}
 
 	/**
 	 * @param $method
 	 * @param $returnValue
+	 * @return Stub
 	 */
 	public function setReturnValue($method, $returnValue)
 	{
 		$this->returnValues[$method] = $returnValue;
+		return $this;
 	}
 
 	public function setReturnValues($method, ...$returnValues)
 	{
 		$this->consecutiveReturnValues[$method] = $returnValues;
+		return $this;
 	}
 
 	/**
 	 * @param $method
 	 * @param $callback
+	 * @return Stub
 	 */
 	public function setReturnCallback($method, $callback)
 	{
 		$this->returnCallbacks[$method] = $callback;
+		return $this;
 	}
 
 	/**
 	 * @param int $index Zero-based call index
 	 * @param $method
 	 * @param $returnValue
+	 * @return Stub
 	 */
 	public function setReturnValueAt($index, $method, $returnValue)
 	{
 		$this->indexedReturnValues[$method][$index] = $returnValue;
+		return $this;
 	}
 
 	/**
 	 * @param string $method
 	 * @param array $map Array of arrays, each internal array representing a list of arguments followed by a single
 	 * return value
+	 * @return Stub
 	 */
 	public function setMappedReturnValues($method, array $map)
 	{
@@ -147,10 +173,13 @@ trait Stub
 			isset($this->mappedReturnValues[$method]) ? $this->mappedReturnValues[$method] : [],
 			$processedMap
 		);
+
+		return $this;
 	}
 
 	/**
 	 * @param string $method
+	 * @return Stub
 	 */
 	public function assertMethodCalled($method)
 	{
@@ -158,10 +187,13 @@ trait Stub
 			$this->wasMethodCalled($method),
 			"Failed asserting that '$method' was called"
 		);
+
+		return $this;
 	}
 
 	/**
 	 * @param string $method
+	 * @return Stub
 	 */
 	public function assertMethodNotCalled($method)
 	{
@@ -169,6 +201,8 @@ trait Stub
 			$this->wasMethodCalled($method),
 			"Failed asserting that '$method' was not called"
 		);
+
+		return $this;
 	}
 
 	/**
@@ -183,17 +217,53 @@ trait Stub
 	/**
 	 * @param string $method
 	 * @param mixed ...$args
+	 * @return Stub
 	 */
 	public function assertMethodCalledWith($method, ...$args)
 	{
-		$argsExport = var_export($args, TRUE);
-		$haystackExport = var_export($this->getCalls($method), TRUE);
-		$message = "Failed asserting that '$method' was called with args $argsExport\r\n\r\nHaystack:\r\n$haystackExport";
+		$message = "Failed asserting that '$method' was called with specified args";
+
+		$condition = $this->wasMethodCalledWith($method, ...$args);
+
+		if (!$condition) {
+			echo "Needle:\r\n";
+			dump($args);
+			echo "Haystack:\r\n";
+			dump($this->getCalls($method));
+		}
 
 		$this->testCase->assertTrue(
-			$this->wasMethodCalledWith($method, ...$args),
+			$condition,
 			$message
 		);
+
+		return $this;
+	}
+
+	/**
+	 * @param string $method
+	 * @param mixed ...$args
+	 * @return Stub
+	 */
+	public function assertMethodNotCalledWith($method, ...$args)
+	{
+		$message = "Failed asserting that '$method' was not called with specified args";
+
+		$condition = $this->wasMethodCalledWith($method, ...$args);
+
+		$this->testCase->assertFalse(
+			$condition,
+			$message
+		);
+
+		if ($condition) {
+			echo "Needle:\r\n";
+			dump($args);
+			echo "Haystack:\r\n";
+			dump($this->getCalls($method));
+		}
+
+		return $this;
 	}
 
 	/**
@@ -211,12 +281,20 @@ trait Stub
 		$calls = $this->getCalls($method);
 		$bool = array_reduce($calls, $callable, FALSE);
 		$error = $message ?: "Failed asserting any call matches callback.";
+
+		if (!$bool) {
+			dump($calls);
+		}
+
 		$this->testCase->assertTrue($bool, $error);
+
+		return $this;
 	}
 
 	/**
 	 * @param string $method
 	 * @param string $needle
+	 * @return Stub
 	 */
 	public function assertCallsContain($method, $needle)
 	{
@@ -227,6 +305,8 @@ trait Stub
 			$this->doCallsContain($method, $needle),
 			$message
 		);
+
+		return $this;
 	}
 
 	/**
@@ -244,6 +324,8 @@ trait Stub
 	public function assertCallCount($method, $count)
 	{
 		$this->testCase->assertCount($count, $this->getCalls($method));
+
+		return $this;
 	}
 
 	/**

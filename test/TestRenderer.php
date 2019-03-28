@@ -9,7 +9,7 @@ final class TestRenderer extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->renderer = $this->factory->getRenderer();
+		$this->renderer = $this->factory->get("Renderer");
 	}
 	
 	public function testUsesTwigToRender()
@@ -35,7 +35,7 @@ final class TestRenderer extends Avorg\TestCase
 	{
 		$this->renderer->renderNotice("error", "message");
 		
-		$this->assertTwigTemplateRenderedWithData(
+		$this->mockTwig->assertTwigTemplateRenderedWithData(
 			"molecule-notice.twig",
 			[
 				"message" => "message",

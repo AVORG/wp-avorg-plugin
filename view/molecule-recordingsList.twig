@@ -1,0 +1,15 @@
+{% set shouldLinkTitles = (shouldLinkTitles is defined) ? shouldLinkTitles : true %}
+
+<ul class="avorg-molecule-recordingsList">
+	{% for recording in avorg.recordings %}
+		<li>
+			{% set days = date("now").diff(date(recording.datePublished)).days %}
+			{% set agePhrase = avorg._n("%1$d day ago", "%1$d days ago", days)|format(days) %}
+			{% include "molecule-recordingMeta.twig" with {
+				presentation: recording,
+				additionalInfo: agePhrase,
+				shouldLinkTitle: shouldLinkTitles
+			} only %}
+		</li>
+	{% endfor %}
+</ul>

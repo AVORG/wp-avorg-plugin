@@ -24,8 +24,7 @@ class AdminPanel
 	
 	public function register()
 	{
-		$this->wp->call(
-			"add_menu_page",
+		$this->wp->add_menu_page(
 			"AVORG",
 			"AVORG",
 			"manage_options",
@@ -39,8 +38,8 @@ class AdminPanel
 		$this->reactivatePlugin();
 		$this->saveApiCredentials();
 		
-		$user = $this->wp->call("get_option", "avorgApiUser");
-		$pass = $this->wp->call("get_option", "avorgApiPass");
+		$user = $this->wp->get_option("avorgApiUser");
+		$pass = $this->wp->get_option("avorgApiPass");
 		
 		$this->renderer->render("admin.twig", ["apiUser" => $user, "apiPass" => $pass]);
 	}
@@ -55,8 +54,8 @@ class AdminPanel
 	public function saveApiCredentials()
 	{
 		if (isset($_POST["save-api-credentials"])) {
-			$this->wp->call("update_option", "avorgApiUser", $_POST["api-user"]);
-			$this->wp->call("update_option", "avorgApiPass", $_POST["api-pass"]);
+			$this->wp->update_option("avorgApiUser", $_POST["api-user"]);
+			$this->wp->update_option("avorgApiPass", $_POST["api-pass"]);
 		}
 	}
 }

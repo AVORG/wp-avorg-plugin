@@ -9,7 +9,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->listShortcode = $this->factory->getListShortcode();
+		$this->listShortcode = $this->factory->get("ListShortcode");
 	}
 	
 	// helper functions
@@ -18,7 +18,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->renderShortcode(["list" => $listType]);
 		
-		$this->assertCalledWith($this->mockAvorgApi, "getPresentations", $listType);
+		$this->mockAvorgApi->assertMethodCalledWith( "getPresentations", $listType);
 	}
 	
 	// tests
@@ -32,7 +32,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->addShortcode();
 		
-		$this->assertWordPressFunctionCalledWith(
+		$this->mockWordPress->assertMethodCalledWith(
 			"add_shortcode",
 			"avorg-list",
 			[$this->listShortcode, "renderShortcode"]
@@ -41,18 +41,14 @@ final class TestListShortcode extends Avorg\TestCase
 	
 	public function testRenderFunction()
 	{
-		$entry = new stdClass();
-		$entry->recordings = new stdClass();
-		$entry->recordings->title = "Recording Title";
-		$this->mockAvorgApi->setReturnValue("getPresentations", [$entry, $entry, $entry]);
+		$entry = ["title" => "Recording Title"];
+		$this->mockAvorgApi->loadPresentations($entry, $entry, $entry);
 		
 		$this->listShortcode->renderShortcode("");
 
-		$this->assertAnyCallMatches($this->mockTwig, "render", function($carry, $call) {
-            $callGlobal = $call[1]["avorg"];
-
-		    return $callGlobal->recordings[2] instanceof \Avorg\Presentation || $carry;
-        });
+		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function($data) {
+			return $data->recordings[2] instanceof \Avorg\Presentation;
+		});
 	}
 	
 	public function testRenderFunctionReturnsRenderedView()
@@ -68,7 +64,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->renderShortcode( [ "list" => "nonsense" ] );
 		
-		$this->assertCalledWith( $this->mockAvorgApi, "getPresentations", null );
+		$this->mockAvorgApi->assertMethodCalledWith( "getPresentations", null );
 	}
 	
 	public function testRenderFunctionGetsFeaturedMessages()

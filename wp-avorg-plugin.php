@@ -14,14 +14,15 @@ namespace Avorg;
 if (!\defined('ABSPATH')) exit;
 
 define( "AVORG_BASE_PATH", dirname(__FILE__) );
+define( "AVORG_BASE_URL", \plugin_dir_url(__FILE__) );
 
 include_once(AVORG_BASE_PATH . "/vendor/autoload.php");
 
 $factory = new Factory();
-$plugin = $factory->getPlugin();
-$adminPanel = $factory->getAdminPanel();
-$contentBits = $factory->getContentBits();
-$router = $factory->getRouter();
+$plugin = $factory->get("Plugin");
+$adminPanel = $factory->get("AdminPanel");
+$contentBits = $factory->get("ContentBits");
+$router = $factory->get("Router");
 
 \register_activation_hook(__FILE__, array($plugin, "activate"));
 

@@ -2,15 +2,16 @@
 
 final class TestPresentation extends Avorg\TestCase
 {
-    /**
-     * @param $apiResponse
-     * @return \Avorg\Presentation
-     */
+	/**
+	 * @param $apiResponse
+	 * @return \Avorg\Presentation
+	 * @throws ReflectionException
+	 */
     protected function getPresentationForApiResponse($apiResponse)
     {
         $apiResponseObject = $this->convertArrayToObjectRecursively($apiResponse);
 
-        return new \Avorg\Presentation($apiResponseObject);
+        return new \Avorg\Presentation($apiResponseObject, $this->factory->get("LanguageFactory"));
     }
 
     public function testIncludesPresenterPhotos()
@@ -145,4 +146,181 @@ final class TestPresentation extends Avorg\TestCase
 
         $this->assertEquals(null, $presentation->getLogUrl());
     }
+
+    public function testIncludesPublishDate()
+	{
+		$presentation = $this->getPresentationForApiResponse([
+			"publishDate" => "2018-02-19 05:22:17"
+		]);
+
+		$this->assertEquals("2018-02-19 05:22:17", $presentation->getDatePublished());
+	}
+
+	public function testGetUrl()
+	{
+		$apiRecording = $this->convertArrayToObjectRecursively([
+			"lang" => "en",
+			"id" => "1836",
+			"title" => 'E.P. Daniels and True Revival'
+		]);
+
+		$presentation = $this->getPresentationForApiResponse($apiRecording);
+
+		$this->assertEquals(
+			"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
+			$presentation->getUrl()
+		);
+	}
+
+	public function testGetId()
+	{
+		$apiRecording = $this->convertArrayToObjectRecursively([
+			"id" => "1836"
+		]);
+
+		$presentation = $this->getPresentationForApiResponse($apiRecording);
+
+		$this->assertEquals(1836, $presentation->getId());
+	}
+
+	/**
+	 * @param $recordingArray
+	 * @param $expectedKey
+	 * @param $expectedValue
+	 * @throws ReflectionException
+	 * @dataProvider jsonTestProvider
+	 */
+	public function testToJson($recordingArray, $expectedKey, $expectedValue)
+	{
+		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
+		$presentation = $this->getPresentationForApiResponse($apiRecording);
+		$json         = $presentation->toJson();
+		$object       = json_decode($json, true);
+
+		$this->assertEquals($expectedValue, $object[$expectedKey]);
+	}
+
+	public function jsonTestProvider()
+	{
+		return [
+			"id" => [
+				["id" => "1836"],
+				"id",
+				1836
+			],
+			"title" => [
+				["title" => 'E.P. Daniels and True Revival'],
+				"title",
+				"E.P. Daniels and True Revival"
+			],
+			"url" => [
+				[
+					"lang" => "en",
+					"id" => "1836",
+					"title" => 'E.P. Daniels and True Revival'
+				],
+				"url",
+				"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html"
+			],
+			"audio files" => [
+				[
+					"mediaFiles" => [[
+						"streamURL" => "stream_url",
+						"filename" => "audio.mp3"
+					]]
+				],
+				"audioFiles",
+				[[
+					"streamUrl" => "stream_url",
+					"type" => "audio/mp3"
+				]]
+			],
+			"video files" => [
+				[
+					"videoFiles" => [[
+						"downloadURL" => "stream_url",
+						"filename" => "video.mp4",
+						"container" => "m3u8_ios"
+					]]
+				],
+				"videoFiles",
+				[[
+					"streamUrl" => "stream_url",
+					"type" => "application/x-mpegURL"
+				]]
+			],
+			"log url" => [
+				[
+					"videoFiles" => [
+						[
+							"logURL" => "log_url",
+							"container" => "m3u8_ios"
+						],
+						[
+							"logURL" => null,
+							"container" => "m3u8_ios"
+						]
+					]
+				],
+				"logUrl",
+				"log_url"
+			],
+			"date published" => [
+				["publishDate" => "2018-02-19 05:22:17"],
+				"datePublished",
+				"2018-02-19 05:22:17"
+			],
+			"presenters" => [
+				[
+					"presenters" => [
+						[
+							"photo86" => "photo_url",
+							"givenName" => "first_name",
+							"surname" => "last_name",
+							"suffix" => "suffix"
+						]
+					]
+				],
+				"presenters",
+				[
+					[
+						"photo" => "photo_url",
+						"name" => [
+							"first" => "first_name",
+							"last" => "last_name",
+							"suffix" => "suffix"
+						]
+					]
+				]
+			]
+		];
+	}
+
+	public function testGetPresenterString()
+	{
+		$presentation = $this->getPresentationForApiResponse([
+			"presenters" => [
+				[
+					"givenName" => "first_name",
+					"surname" => "last_name",
+					"suffix" => "suffix"
+				],
+				[
+					"givenName" => "first_name",
+					"surname" => "last_name",
+					"suffix" => ""
+				],
+				[
+					"givenName" => "first_name",
+					"surname" => "",
+					"suffix" => "suffix"
+				],
+			]
+		]);
+
+		$this->assertEquals(
+			"first_name last_name suffix, first_name last_name, first_name suffix",
+			$presentation->getPresentersString()
+		);
+	}
 }

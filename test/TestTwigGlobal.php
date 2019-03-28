@@ -4,18 +4,18 @@ final class TestTwigGlobal extends Avorg\TestCase
 {
 	public function test__Function()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
 		$global->i__("string");
 		
-		$this->assertWordPressFunctionCalledWith("__", "string", $this->textDomain);
+		$this->mockWordPress->assertMethodCalledWith("__", "string", $this->textDomain);
 	}
 	
 	public function test__FunctionReturnsValue()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
-		$this->mockWordPress->setReturnValue("call", "translation");
+		$this->mockWordPress->setReturnValue("__", "translation");
 		
 		$result = $global->i__("string");
 		
@@ -24,7 +24,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testLoadData()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
 		$global->loadData(["foo" => "bar"]);
 		
@@ -35,7 +35,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testUpdateData()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
 		$global->loadData(["foo" => "bar"]);
 		$global->loadData(["foo" => "baz"]);
@@ -47,7 +47,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testAddData()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
 		$global->loadData(["foo" => "bar"]);
 		$global->loadData(["wibble" => "wobble"]);
@@ -59,7 +59,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testCanCheckIfLoadedDataIsset()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
 		$global->loadData(["foo" => "bar"]);
 		
@@ -68,18 +68,18 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function test_nFunction()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
 		$global->_n("single", "plural", 5);
 		
-		$this->assertWordPressFunctionCalledWith("_n", "single", "plural", 5, $this->textDomain);
+		$this->mockWordPress->assertMethodCalledWith("_n", "single", "plural", 5, $this->textDomain);
 	}
 	
 	public function test_nFunctionReturnsValue()
 	{
-		$global = $this->factory->getTwigGlobal();
+		$global = $this->factory->make("TwigGlobal");
 		
-		$this->mockWordPress->setReturnValue("call", "translation");
+		$this->mockWordPress->setReturnValue("_n", "translation");
 		
 		$result = $global->_n("single", "plural", 5);
 		
