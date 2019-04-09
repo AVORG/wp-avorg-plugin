@@ -1,18 +1,10 @@
 console.log("avorg", avorg);
 
-function listItemTemplate(recording) {
-    return `
-    <li data-id="${recording.id}">
-    ${recording.title} ${recording.videoFiles.length ? "(video)" : ""}<br/>
-    ${recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")}
-    </li>
-    `;
-}
-
 const Player = {
     player: null,
     recording: null,
     showingVideo: null,
+    endHandler: null,
 
     hasVideo: function() {
         return this.recording.videoFiles.length > 0;
@@ -58,7 +50,9 @@ const Player = {
         xhr.send();
     },
 
-    load: function (recording = this.recording) {
+    load: function (recording = this.recording, endHandler = null) {
+        this.endHandler = endHandler;
+
         if (recording !== this.recording) this.init(recording);
 
         if (this.player !== null) this.player.dispose();
@@ -71,24 +65,68 @@ const Player = {
         this.setClickHandlers();
 
         this.player = videojs(playerId);
+        this.player.on("ended", this.endHandler);
 
         this.log()
     }
 };
 
+const Playlist = {
+    player: null,
+    recordings: null,
+    index: 0,
+
+    listItemTemplate: function (recording) {
+        return `
+        <li data-id="${recording.id}">
+        ${recording.title} ${recording.videoFiles.length ? "(video)" : ""}<br/>
+        ${recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")}
+        </li>
+        `;
+    },
+
+    renderList: function() {
+        const listHtml = this.recordings.map(this.listItemTemplate).join("");
+        document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML = listHtml;
+    },
+
+    registerClickHandler: function() {
+        document.querySelectorAll(".avorg-page-playlist__list li").forEach((item) => {
+            item.addEventListener("click", (e) => {
+                const id = e.target.getAttribute("data-id");
+
+                Player.load(avorg.recordings[id]);
+            }, false)
+        });
+    },
+
+    loadRecordingAtIndex: function(i) {
+        const recording = this.recordings[i];
+        this.index = i;
+
+        this.player.load(recording, this.next.bind(this));
+
+        document.querySelectorAll(".avorg-page-playlist__list li")
+            .forEach((e) => {e.classList.remove("active")});
+        document.querySelector(`.avorg-page-playlist__list li[data-id="${recording.id}"]`).classList.add("active");
+    },
+
+    next: function() {
+        this.loadRecordingAtIndex(this.index + 1);
+    },
+
+    init: function ( player, recordings) {
+        this.player = player;
+        this.recordings = recordings;
+
+        this.renderList();
+        this.registerClickHandler();
+        this.loadRecordingAtIndex(0);
+    }
+};
+
 document.addEventListener("DOMContentLoaded", function (event) {
-    const recordingsArray = Object.values(avorg.recordings),
-        listHtml = recordingsArray.map(listItemTemplate).join("");
+    const recordingsArray = Object.values(avorg.recordings);
 
-    Player.load(recordingsArray[0]);
-
-    document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML = listHtml;
-
-    document.querySelectorAll(".avorg-page-playlist__list li").forEach((item) => {
-        item.addEventListener("click", (e) => {
-            const id = e.target.getAttribute("data-id");
-
-            Player.load(avorg.recordings[id]);
-        }, false)
-    });
+    Playlist.init(Player, recordingsArray);
 });
