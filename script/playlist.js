@@ -50,6 +50,14 @@ const Player = {
         this.showingVideo = this.hasVideo();
     },
 
+    log: function() {
+        if (! this.recording.logUrl) { return; }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', this.recording.logUrl, true);
+        xhr.send();
+    },
+
     load: function (recording = this.recording) {
         if (recording !== this.recording) this.init(recording);
 
@@ -63,6 +71,8 @@ const Player = {
         this.setClickHandlers();
 
         this.player = videojs(playerId);
+
+        this.log()
     }
 };
 
