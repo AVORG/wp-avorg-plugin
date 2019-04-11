@@ -1,5 +1,3 @@
-console.log("avorg", avorg);
-
 const Player = {
     player: null,
     recording: null,
@@ -68,6 +66,10 @@ const Player = {
         this.player.on("ended", this.endHandler);
 
         this.log()
+    },
+
+    play: function () {
+        this.player.play();
     }
 };
 
@@ -86,16 +88,19 @@ const Playlist = {
     },
 
     renderList: function() {
-        const listHtml = this.recordings.map(this.listItemTemplate).join("");
-        document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML = listHtml;
+        document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML
+            = this.recordings.map( this.listItemTemplate ).join( "" );
     },
 
     registerClickHandler: function() {
         document.querySelectorAll(".avorg-page-playlist__list li").forEach((item) => {
             item.addEventListener("click", (e) => {
                 const id = e.target.getAttribute("data-id");
+                const index = this.recordings.findIndex((recording) => {
+                    return recording.id === parseInt(id);
+                });
 
-                Player.load(avorg.recordings[id]);
+                this.loadRecordingAtIndex(index);
             }, false)
         });
     },
@@ -108,11 +113,13 @@ const Playlist = {
 
         document.querySelectorAll(".avorg-page-playlist__list li")
             .forEach((e) => {e.classList.remove("active")});
-        document.querySelector(`.avorg-page-playlist__list li[data-id="${recording.id}"]`).classList.add("active");
+        document.querySelector(`.avorg-page-playlist__list li[data-id="${recording.id}"]`)
+            .classList.add("active");
     },
 
     next: function() {
         this.loadRecordingAtIndex(this.index + 1);
+        this.player.play();
     },
 
     init: function ( player, recordings) {
@@ -126,7 +133,5 @@ const Playlist = {
 };
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    const recordingsArray = Object.values(avorg.recordings);
-
-    Playlist.init(Player, recordingsArray);
+    Playlist.init(Player, Object.values( avorg.recordings ));
 });
