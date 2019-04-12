@@ -28,7 +28,7 @@ final class TestContentBits extends Avorg\TestCase
 	
 	public function testAddMetaBoxMethod()
 	{
-		$this->contentBits->addIdentifierMetaBox();
+		$this->contentBits->addMetaBoxes();
 		
 		$this->mockWordPress->assertMethodCalled("add_meta_box");
 	}
@@ -48,7 +48,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->renderIdentifierMetaBox();
 		
-		$this->mockTwig->assertTwigTemplateRenderedWithData("identifierMetaBox.twig", ["savedIdentifier" => "saved_value"]);
+		$this->mockTwig->assertTwigTemplateRenderedWithData("molecule-identifierMetaBox.twig", ["savedIdentifier" => "saved_value"]);
 		
 	}
 	
@@ -187,5 +187,19 @@ final class TestContentBits extends Avorg\TestCase
 		$this->contentBits->renderShortcode([]);
 
 		$this->mockPhp->assertMethodNotCalled("array_rand");
+	}
+
+	public function testAddsTwoMetaBoxes()
+	{
+		$this->contentBits->addMetaBoxes();
+
+		$this->mockWordPress->assertCallCount("add_meta_box", 2);
+	}
+
+	public function testDocumentationMetaBoxRenderMethod()
+	{
+		$this->contentBits->renderDocumentationMetaBox();
+
+		$this->mockTwig->assertTwigTemplateRendered("molecule-contentBitsDocs.html");
 	}
 }

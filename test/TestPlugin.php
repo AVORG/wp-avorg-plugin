@@ -199,7 +199,7 @@ final class TestPlugin extends Avorg\TestCase
 			[
 				"add_meta_boxes",
 				"ContentBits",
-				"addIdentifierMetaBox"
+				"addMetaBoxes"
 			],
 			[
 				"init",
