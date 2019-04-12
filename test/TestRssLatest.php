@@ -29,4 +29,14 @@ final class TestRssLatest extends Avorg\TestCase
 			return $call->recordings[0] instanceof \Avorg\Presentation;
 		});
 	}
+
+	public function testAccessors()
+	{
+		$this->rssLatest->getOutput();
+
+		$this->mockTwig->assertTwigTemplateRenderedWithData("page-feed.twig", [
+			"title" => "AudioVerse Latest Recordings",
+			"subtitle" => "The latest recordings at AudioVerse"
+		]);
+	}
 }
