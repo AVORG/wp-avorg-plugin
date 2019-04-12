@@ -2,7 +2,7 @@
 
 namespace Avorg;
 
-if ( !\defined( 'ABSPATH' ) ) exit;
+if (!\defined('ABSPATH')) exit;
 
 /**
  * @method add_action($string, array $array)
@@ -35,14 +35,31 @@ if ( !\defined( 'ABSPATH' ) ) exit;
  * @method register_post_type($string, array $args)
  * @method get_posts(array $param)
  */
-class WordPress {
-	public function __call( $function, $arguments ) {
-		$result = call_user_func_array( $function, $arguments );
-		
-		if ( \is_wp_error( $result ) && WP_DEBUG ) {
-			die( $result->get_error_message() );
+class WordPress
+{
+	public function __call($function, $arguments)
+	{
+		$result = call_user_func_array($function, $arguments);
+
+		if (\is_wp_error($result) && WP_DEBUG) {
+			die($result->get_error_message());
 		}
-		
+
 		return $result;
+	}
+
+	public function get_all_meta_values($key)
+	{
+		global $wpdb;
+
+		$safeKey = $this->sanitize_key($key);
+
+		$result = $wpdb->get_results(
+			"SELECT $wpdb->postmeta.meta_value 
+    FROM $wpdb->posts, $wpdb->postmeta
+    WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id AND meta_key = '$safeKey'"
+		);
+
+		return array_map(function($row) { return $row->meta_value; }, $result);
 	}
 }

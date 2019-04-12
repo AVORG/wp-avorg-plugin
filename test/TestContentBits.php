@@ -202,4 +202,26 @@ final class TestContentBits extends Avorg\TestCase
 
 		$this->mockTwig->assertTwigTemplateRendered("molecule-contentBitsDocs.html");
 	}
+
+	public function testGetsIdentifiers()
+	{
+		$this->contentBits->renderIdentifierMetaBox();
+
+		$this->mockWordPress->assertMethodCalledWith("get_all_meta_values", "_avorgBitIdentifier");
+	}
+
+	public function testPassesIdentifiersToView()
+	{
+		$this->mockWordPress->setReturnValue("get_all_meta_values", [
+			"identifier_1",
+			"identifier_2"
+		]);
+
+		$this->contentBits->renderIdentifierMetaBox();
+
+		$this->mockTwig->assertTwigTemplateRenderedWithData(
+			"molecule-identifierMetaBox.twig",
+			["allIdentifiers" => ["identifier_1", "identifier_2"]]
+		);
+	}
 }

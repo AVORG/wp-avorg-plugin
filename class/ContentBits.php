@@ -172,8 +172,11 @@ class ContentBits
 	{
 		$postId = $this->wp->get_the_ID();
 		$savedValue = $this->wp->get_post_meta( $postId, "_avorgBitIdentifier", true);
-		
-		$this->twig->render("molecule-identifierMetaBox.twig", ["savedIdentifier" => $savedValue]);
+
+		$this->twig->render("molecule-identifierMetaBox.twig", [
+			"savedIdentifier" => $savedValue,
+			"allIdentifiers" => $this->wp->get_all_meta_values("_avorgBitIdentifier")
+		]);
 	}
 	
 	public function saveIdentifierMetaBox()
@@ -184,7 +187,8 @@ class ContentBits
 		$this->wp->update_post_meta(
 			$postId,
 			"_avorgBitIdentifier",
-			$_POST["avorgBitIdentifier"]);
+			$_POST["avorgBitIdentifier"]
+		);
 	}
 	
 	private function addShortcode()
