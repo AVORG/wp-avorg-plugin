@@ -21,6 +21,11 @@ class AdminPanel
 		$this->renderer = $renderer;
 		$this->wp = $wp;
 	}
+
+	public function registerCallbacks()
+	{
+		$this->wp->add_action("admin_menu", [$this, "register"]);
+	}
 	
 	public function register()
 	{

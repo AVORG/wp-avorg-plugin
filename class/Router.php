@@ -41,6 +41,12 @@ class Router
 		$this->registerRoutes();
 		$this->wp->flush_rewrite_rules();
 	}
+
+	public function registerCallbacks()
+	{
+		$this->wp->add_filter("locale", array($this, "setLocale"));
+		$this->wp->add_filter("redirect_canonical", array($this, "filterRedirect"));
+	}
 	
 	public function registerRoutes()
 	{

@@ -27,6 +27,13 @@ if ( !\defined( 'ABSPATH' ) ) exit;
  * @method settings_errors()
  * @method wp_create_nonce($id)
  * @method wp_localize_script($id, $string, $nonces)
+ * @method add_meta_box(array $args)
+ * @method register_taxonomy($string, array $array, array $args)
+ * @method get_post_meta($postId, $string, $true)
+ * @method update_post_meta($postId, $string, $avorgBitIdentifier)
+ * @method add_shortcode($string, array $array)
+ * @method register_post_type($string, array $args)
+ * @method get_posts(array $param)
  */
 class WordPress {
 	public function __call( $function, $arguments ) {

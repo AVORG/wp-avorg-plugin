@@ -21,6 +21,12 @@ class ContentBits
 		$this->twig = $twig;
 		$this->wp = $wp;
 	}
+
+	public function registerCallbacks()
+	{
+		$this->wp->add_action("add_meta_boxes", array($this, "addIdentifierMetaBox"));
+		$this->wp->add_action("save_post", array($this, "saveIdentifierMetaBox"));
+	}
 	
 	public function init()
 	{

@@ -88,6 +88,8 @@ const Playlist = {
     },
 
     renderList: function() {
+        if (this.recordings.length < 2) return;
+
         document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML
             = this.recordings.map( this.listItemTemplate ).join( "" );
     },
@@ -100,12 +102,14 @@ const Playlist = {
                     return recording.id === parseInt(id);
                 });
 
-                this.loadRecordingAtIndex(index);
+                this.playRecordingAtIndex(index)
             }, false)
         });
     },
 
     loadRecordingAtIndex: function(i) {
+        if (typeof this.recordings[i] === 'undefined') return;
+
         const recording = this.recordings[i];
         this.index = i;
 
@@ -117,9 +121,15 @@ const Playlist = {
             .classList.add("active");
     },
 
-    next: function() {
-        this.loadRecordingAtIndex(this.index + 1);
+    playRecordingAtIndex: function(i) {
+        if (typeof this.recordings[i] === 'undefined') return;
+
+        this.loadRecordingAtIndex(i);
         this.player.play();
+    },
+
+    next: function() {
+        this.playRecordingAtIndex(this.index + 1)
     },
 
     init: function ( player, recordings) {
