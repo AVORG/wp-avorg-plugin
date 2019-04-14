@@ -44,7 +44,8 @@ abstract class RssEndpoint extends Endpoint
 		return $this->renderer->render("page-feed.twig", [
 			"recordings" => $this->getRecordings(),
 			"title" => $this->getTitle(),
-			"subtitle" => $this->getSubtitle()
+			"subtitle" => $this->getSubtitle(),
+			"image" => AVORG_LOGO_URL
 		], TRUE ) ?: "";
 	}
 

@@ -14,19 +14,6 @@ final class TestPresentation extends Avorg\TestCase
         return new \Avorg\Presentation($apiResponseObject, $this->factory->get("LanguageFactory"));
     }
 
-    public function testIncludesPresenterPhotos()
-    {
-        $presentation = $this->getPresentationForApiResponse([
-            "presenters" => [
-                [
-                    "photo86" => "photo_url"
-                ]
-            ]
-        ]);
-
-        $this->assertEquals("photo_url", $presentation->getPresenters()[0]["photo"]);
-    }
-
     public function testIncludesPresenterName()
     {
         $presentation = $this->getPresentationForApiResponse([
@@ -167,7 +154,7 @@ final class TestPresentation extends Avorg\TestCase
 		$presentation = $this->getPresentationForApiResponse($apiRecording);
 
 		$this->assertEquals(
-			"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
+			"http://localhost:8080/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
 			$presentation->getUrl()
 		);
 	}
@@ -220,7 +207,7 @@ final class TestPresentation extends Avorg\TestCase
 					"title" => 'E.P. Daniels and True Revival'
 				],
 				"url",
-				"/english/sermons/recordings/1836/ep-daniels-and-true-revival.html"
+				"http://localhost:8080/english/sermons/recordings/1836/ep-daniels-and-true-revival.html"
 			],
 			"audio files" => [
 				[
@@ -274,7 +261,7 @@ final class TestPresentation extends Avorg\TestCase
 				[
 					"presenters" => [
 						[
-							"photo86" => "photo_url",
+							"photo256" => "photo_url",
 							"givenName" => "first_name",
 							"surname" => "last_name",
 							"suffix" => "suffix"
@@ -292,6 +279,67 @@ final class TestPresentation extends Avorg\TestCase
 						]
 					]
 				]
+			],
+			"image" => [
+				[
+					"photo86" => "photo_url"
+				],
+				"image",
+				"photo_url"
+			],
+			"image fallback to presenter" => [
+				[
+					"presenters" => [
+						[
+							"photo256" => "photo_url",
+							"givenName" => "first_name",
+							"surname" => "last_name",
+							"suffix" => "suffix"
+						]
+					]
+				],
+				"image",
+				"photo_url"
+			],
+			"image fallback to AudioVerse logo" => [
+				[],
+				"image",
+				"https://s.audioverse.org/english/gallery/sponsors/_/600/600/default-logo.png"
+			],
+			"no description" => [
+				[
+					"presenters" => [
+						[
+							"photo256" => "photo_url",
+							"givenName" => "first_name",
+							"surname" => "last_name",
+							"suffix" => "suffix"
+						],
+						[
+							"photo256" => "photo_url",
+							"givenName" => "first_name",
+							"surname" => "last_name",
+							"suffix" => "suffix"
+						]
+					]
+				],
+				"description",
+				"Presenters: first_name last_name suffix, first_name last_name suffix"
+			],
+			"description" => [
+				[
+					"presenters" => [
+						[
+							"photo256" => "photo_url",
+							"givenName" => "first_name",
+							"surname" => "last_name",
+							"suffix" => "suffix"
+						]
+					],
+					"description" => "This is the description."
+				],
+				"description",
+				"This is the description. Presenters: first_name last_name suffix"
 			]
 		];
 	}

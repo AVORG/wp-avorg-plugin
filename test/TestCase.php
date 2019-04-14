@@ -25,6 +25,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	protected function setUp()
 	{
 		define( "ABSPATH", "/" );
+		define( "AVORG_LOGO_URL", "https://s.audioverse.org/english/gallery/sponsors/_/600/600/default-logo.png" );
+
+		$_SERVER["HTTP_HOST"] = "localhost:8080";
 
 		$this->factory = new Factory();
 
@@ -42,6 +45,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
      */
     protected function convertArrayToObjectRecursively($array)
     {
+    	if ($array == []) return new \stdClass();
+
         return json_decode(json_encode($array), FALSE);
     }
 }
