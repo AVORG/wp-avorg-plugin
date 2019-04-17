@@ -115,10 +115,15 @@ const Playlist = {
 
         this.player.load(recording, this.next.bind(this));
 
-        document.querySelectorAll(".avorg-page-playlist__list li")
-            .forEach((e) => {e.classList.remove("active")});
-        document.querySelector(`.avorg-page-playlist__list li[data-id="${recording.id}"]`)
-            .classList.add("active");
+        this.setActiveClass(recording.id);
+    },
+
+    setActiveClass: function(id) {
+        const listItems = document.querySelectorAll(".avorg-page-playlist__list li");
+        const activeItem = document.querySelector(`.avorg-page-playlist__list li[data-id="${id}"]`);
+
+        if (listItems) listItems.forEach((e) => {e.classList.remove("active")});
+        if (activeItem) activeItem.classList.add("active");
     },
 
     playRecordingAtIndex: function(i) {
