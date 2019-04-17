@@ -41,7 +41,12 @@ final class TestMediaFile extends Avorg\TestCase
 				["fileId" => "123"],
 				"getId",
 				123
-			]
+			],
+			"durationString" => [
+				["duration" => "111.5"],
+				"getDurationString",
+				"00:01:51"
+			],
 		];
 	}
 }

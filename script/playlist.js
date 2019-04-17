@@ -1,18 +1,8 @@
-console.log("avorg", avorg);
-
-function listItemTemplate(recording) {
-    return `
-    <li data-id="${recording.id}">
-    ${recording.title} ${recording.videoFiles.length ? "(video)" : ""}<br/>
-    ${recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")}
-    </li>
-    `;
-}
-
 const Player = {
     player: null,
     recording: null,
     showingVideo: null,
+    endHandler: null,
 
     hasVideo: function() {
         return this.recording.videoFiles.length > 0;
@@ -50,7 +40,17 @@ const Player = {
         this.showingVideo = this.hasVideo();
     },
 
-    load: function (recording = this.recording) {
+    log: function() {
+        if (! this.recording.logUrl) { return; }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', this.recording.logUrl, true);
+        xhr.send();
+    },
+
+    load: function (recording = this.recording, endHandler = null) {
+        this.endHandler = endHandler;
+
         if (recording !== this.recording) this.init(recording);
 
         if (this.player !== null) this.player.dispose();
@@ -63,22 +63,90 @@ const Player = {
         this.setClickHandlers();
 
         this.player = videojs(playerId);
+        this.player.on("ended", this.endHandler);
+
+        this.log()
+    },
+
+    play: function () {
+        this.player.play();
+    }
+};
+
+const Playlist = {
+    player: null,
+    recordings: null,
+    index: 0,
+
+    listItemTemplate: function (recording) {
+        return `
+        <li data-id="${recording.id}">
+        ${recording.title} ${recording.videoFiles.length ? "(video)" : ""}<br/>
+        ${recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")}
+        </li>
+        `;
+    },
+
+    renderList: function() {
+        if (this.recordings.length < 2) return;
+
+        document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML
+            = this.recordings.map( this.listItemTemplate ).join( "" );
+    },
+
+    registerClickHandler: function() {
+        document.querySelectorAll(".avorg-page-playlist__list li").forEach((item) => {
+            item.addEventListener("click", (e) => {
+                const id = e.target.getAttribute("data-id");
+                const index = this.recordings.findIndex((recording) => {
+                    return recording.id === parseInt(id);
+                });
+
+                this.playRecordingAtIndex(index)
+            }, false)
+        });
+    },
+
+    loadRecordingAtIndex: function(i) {
+        if (typeof this.recordings[i] === 'undefined') return;
+
+        const recording = this.recordings[i];
+        this.index = i;
+
+        this.player.load(recording, this.next.bind(this));
+
+        this.setActiveClass(recording.id);
+    },
+
+    setActiveClass: function(id) {
+        const listItems = document.querySelectorAll(".avorg-page-playlist__list li");
+        const activeItem = document.querySelector(`.avorg-page-playlist__list li[data-id="${id}"]`);
+
+        if (listItems) listItems.forEach((e) => {e.classList.remove("active")});
+        if (activeItem) activeItem.classList.add("active");
+    },
+
+    playRecordingAtIndex: function(i) {
+        if (typeof this.recordings[i] === 'undefined') return;
+
+        this.loadRecordingAtIndex(i);
+        this.player.play();
+    },
+
+    next: function() {
+        this.playRecordingAtIndex(this.index + 1)
+    },
+
+    init: function ( player, recordings) {
+        this.player = player;
+        this.recordings = recordings;
+
+        this.renderList();
+        this.registerClickHandler();
+        this.loadRecordingAtIndex(0);
     }
 };
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    const recordingsArray = Object.values(avorg.recordings),
-        listHtml = recordingsArray.map(listItemTemplate).join("");
-
-    Player.load(recordingsArray[0]);
-
-    document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML = listHtml;
-
-    document.querySelectorAll(".avorg-page-playlist__list li").forEach((item) => {
-        item.addEventListener("click", (e) => {
-            const id = e.target.getAttribute("data-id");
-
-            Player.load(avorg.recordings[id]);
-        }, false)
-    });
+    Playlist.init(Player, Object.values( avorg.recordings ));
 });

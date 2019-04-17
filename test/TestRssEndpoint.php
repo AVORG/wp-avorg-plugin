@@ -25,7 +25,8 @@ final class TestRssEndpoint extends Avorg\TestCase
 
 		$redirect = $route->getRewriteRules()["English"]["redirect"];
 
-		$this->assertStringStartsWith("endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest", $redirect);
+		$this->assertStringStartsWith(
+			"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest", $redirect);
 	}
 
 	public function testRouteFormatSet()
@@ -57,6 +58,16 @@ final class TestRssEndpoint extends Avorg\TestCase
 	{
 		$this->rssEndpoint->getOutput();
 
-		$this->mockPhp->assertMethodCalledWith("header", 'Content-Type: application/rss+xml; charset=utf-8');
+		$this->mockPhp->assertMethodCalledWith(
+			"header", 'Content-Type: application/rss+xml; charset=utf-8');
+	}
+
+	public function testSetsImage()
+	{
+		$this->rssEndpoint->getOutput();
+
+		$this->mockTwig->assertTwigTemplateRenderedWithData("page-feed.twig", [
+			"image" => AVORG_LOGO_URL
+		]);
 	}
 }

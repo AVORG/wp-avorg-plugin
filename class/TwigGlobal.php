@@ -8,15 +8,19 @@ class TwigGlobal
 {
 	/** @var Localization $localization */
 	private $localization;
+
+	/** @var Router $router */
+	private $router;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
 	private $data = [];
 	
-	public function __construct(Localization $localization, WordPress $wordPress)
+	public function __construct(Localization $localization, Router $router, WordPress $wordPress)
 	{
 		$this->localization = $localization;
+		$this->router = $router;
 		$this->wp = $wordPress;
 	}
 	
@@ -43,5 +47,15 @@ class TwigGlobal
 	public function loadData($data)
 	{
 		$this->data = array_merge($this->data, $data);
+	}
+
+	public function getLanguage()
+	{
+		return $this->router->getRequestLanguage();
+	}
+
+	public function getRequestUri()
+	{
+		return $this->router->getFullRequestUri();
 	}
 }

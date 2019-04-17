@@ -84,14 +84,6 @@ final class TestPlugin extends Avorg\TestCase
 		);
 	}
 	
-	public function testSubscribesToAdminNoticeActionUsingAppropriateCallBackMethod()
-	{
-		$this->mockWordPress->assertActionAdded(
-			"admin_notices",
-			[$this->plugin, "renderAdminNotices"]
-		);
-	}
-	
 	public function testRenderAdminNoticesOutputsDefaultNotices()
 	{
 		$this->plugin->renderAdminNotices();
@@ -166,34 +158,65 @@ final class TestPlugin extends Avorg\TestCase
 		];
 	}
 
-	public function testRegistersPwaCallbacks()
+	/**
+	 * @param $action
+	 * @param $callbackClass
+	 * @param $callbackMethod
+	 * @throws ReflectionException
+	 * @dataProvider actionCallbackProvider
+	 */
+	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod)
 	{
-		$pwa = $this->factory->get("Pwa");
-
-		$this->mockWordPress->assertActionAdded(
-			"wp_front_service_worker",
-			[$pwa, "registerServiceWorker"]
-		);
+		$this->mockWordPress->assertActionAdded($action, [
+			$this->factory->get($callbackClass),
+			$callbackMethod
+		]);
 	}
 
-	public function testRegistersLocalizationCallbacks()
+	public function actionCallbackProvider()
 	{
-		$localization = $this->factory->get("Localization");
-
-		$this->mockWordPress->assertActionAdded(
-			"init",
-			[$localization, "loadLanguages"]
-		);
-	}
-
-	public function testRegistersActionCallbacks()
-	{
-		$action = $this->factory->get("AjaxAction\\Presentation");
-
-		$this->mockWordPress->assertActionAdded(
-			"wp_ajax_Avorg_AjaxAction_Presentation",
-			[$action, "run"]
-		);
+		return [
+			[
+				"wp_ajax_Avorg_AjaxAction_Presentation",
+				"AjaxAction\\Presentation",
+				"run"
+			],
+			[
+				"init",
+				"Localization",
+				"loadLanguages"
+			],
+			[
+				"wp_front_service_worker",
+				"Pwa",
+				"registerServiceWorker"
+			],
+			[
+				"admin_notices",
+				"Plugin",
+				"renderAdminNotices"
+			],
+			[
+				"add_meta_boxes",
+				"ContentBits",
+				"addMetaBoxes"
+			],
+			[
+				"init",
+				"Plugin",
+				"init"
+			],
+			[
+				"save_post",
+				"ContentBits",
+				"saveIdentifierMetaBox"
+			],
+			[
+				"wp_enqueue_scripts",
+				"Plugin",
+				"enqueueScripts"
+			]
+		];
 	}
 
 	/**
@@ -239,9 +262,40 @@ final class TestPlugin extends Avorg\TestCase
 		return [
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
-			"don't load playlist.js on other pages" => ["script/playlist.js", false, true],
-			"load playlist.js on playlist page" => ["script/playlist.js", true, true, "Page\\Playlist"],
+			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
+			"init playlist.js on playlist page" => ["script/playlist.js", true, true, "Page\\Playlist"],
 			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
+		];
+	}
+
+	/**
+	 * @param $filter
+	 * @param $callbackClass
+	 * @param $callbackMethod
+	 * @throws ReflectionException
+	 * @dataProvider filterCallbackProvider
+	 */
+	public function testFilterCallbacksRegistered($filter, $callbackClass, $callbackMethod)
+	{
+		$this->mockWordPress->assertFilterAdded($filter, [
+			$this->factory->get($callbackClass),
+			$callbackMethod
+		]);
+	}
+
+	public function filterCallbackProvider()
+	{
+		return [
+			[
+				"locale",
+				"Router",
+				"setLocale"
+			],
+			[
+				"redirect_canonical",
+				"Router",
+				"filterRedirect"
+			]
 		];
 	}
 }

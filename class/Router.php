@@ -17,10 +17,10 @@ class Router
 
 	/** @var RouteFactory $routeFactory */
 	private $routeFactory;
-	
+
 	/** @var WordPress $wp */
 	private $wp;
-	
+
 	public function __construct(
 		EndpointFactory $endpointFactory,
 		LanguageFactory $languageFactory,
@@ -35,17 +35,23 @@ class Router
 		$this->routeFactory = $routeFactory;
 		$this->wp = $WordPress;
 	}
-	
+
 	public function activate()
 	{
 		$this->registerRoutes();
 		$this->wp->flush_rewrite_rules();
 	}
-	
+
+	public function registerCallbacks()
+	{
+		$this->wp->add_filter("locale", array($this, "setLocale"));
+		$this->wp->add_filter("redirect_canonical", array($this, "filterRedirect"));
+	}
+
 	public function registerRoutes()
 	{
 		$routes = $this->getRoutes();
-		array_walk($routes, function($route) {
+		array_walk($routes, function ($route) {
 			$this->addRewriteTags($route);
 			$this->addRewriteRules($route);
 		});
@@ -65,14 +71,14 @@ class Router
 
 	private function getLanguageRoutes()
 	{
-		return array_map(function(Language $language) {
+		return array_map(function (Language $language) {
 			return $language->getRoute();
 		}, $this->languageFactory->getLanguages());
 	}
 
 	private function getPageRoutes()
 	{
-		return array_map(function(Page $page) {
+		return array_map(function (Page $page) {
 			return $page->getRoute();
 		}, $this->pageFactory->getPages());
 	}
@@ -82,7 +88,7 @@ class Router
 	 */
 	private function getEndpointRoutes()
 	{
-		return array_map(function(Endpoint $endpoint) {
+		return array_map(function (Endpoint $endpoint) {
 			return $endpoint->getRoute();
 		}, $this->endpointFactory->getEndpoints());
 	}
@@ -104,36 +110,51 @@ class Router
 	{
 		$rules = $route->getRewriteRules();
 
-		Logger::log(var_export($rules,true));
+		Logger::log(var_export($rules, true));
 
-		array_walk($rules, function($rule) {
-			$this->wp->add_rewrite_rule( $rule["regex"], $rule["redirect"], "top");
+		array_walk($rules, function ($rule) {
+			$this->wp->add_rewrite_rule($rule["regex"], $rule["redirect"], "top");
 		});
 	}
-	
+
 	public function setLocale($previous)
 	{
-		$requestUri = $_SERVER["REQUEST_URI"];
-		$baseRoute  = explode("/", trim($requestUri, "/"))[0];
-		$language   = $this->languageFactory->getLanguageByBaseRoute($baseRoute);
+		$language = $this->getRequestLanguage();
 
 		return ($language) ? $language->getLangCode() : $previous;
 	}
 
-	public function filterRedirect($redirectUrl) {
-	    $host           = $_SERVER["HTTP_HOST"];
-		$requestUri     = $_SERVER["REQUEST_URI"];
-		$path           = parse_url($requestUri, PHP_URL_PATH);
-		$baseRoute      = explode("/", trim($path, "/"))[0];
-		$language       = $this->languageFactory->getLanguageByBaseRoute($baseRoute);
-		$fullRequestUri = $host . $path;
+	public function filterRedirect($redirectUrl)
+	{
+		$language = $this->getRequestLanguage();
 
 		Logger::log(
 			"Filter redirect. " .
 			"Request: " . var_export($redirectUrl, TRUE) . "; " .
-			"Should cancel: " . var_export((bool) $language, TRUE)
+			"Should cancel: " . var_export((bool)$language, TRUE)
 		);
 
-	    return $language ? "http://$fullRequestUri" : $redirectUrl;
-    }
+		return $language ? $this->getFullRequestUri() : $redirectUrl;
+	}
+
+	public function getRequestLanguage()
+	{
+
+		$baseRoute = explode("/", trim($this->getRequestPath(), "/"))[0];
+
+		return $this->languageFactory->getLanguageByBaseRoute($baseRoute);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getFullRequestUri()
+	{
+		return "http://" . $_SERVER["HTTP_HOST"] . $this->getRequestPath();
+	}
+
+	private function getRequestPath()
+	{
+		return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+	}
 }

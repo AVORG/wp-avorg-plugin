@@ -19,7 +19,12 @@ class StubWordPress extends WordPress
 		$this->factory = $factory;
 	}
 
-	public function __call( $function, $arguments )
+	public function __call($function, $arguments)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function get_all_meta_values($key)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -40,7 +45,7 @@ class StubWordPress extends WordPress
 		$optionName = $this->getPageIdOptionName($page);
 
 		$this->setMappedReturnValues("get_option", [
-			[ $optionName, $id ]
+			[$optionName, $id]
 		]);
 	}
 
@@ -113,7 +118,7 @@ class StubWordPress extends WordPress
 
 	public function runActions(...$actions)
 	{
-		array_walk($actions, function($action) {
+		array_walk($actions, function ($action) {
 			$this->runAction($action);
 		});
 	}

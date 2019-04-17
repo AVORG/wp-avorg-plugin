@@ -7,6 +7,7 @@ use Avorg\Endpoint\RssEndpoint;
 use Avorg\Factory;
 use Avorg\Php;
 use Avorg\PresentationRepository;
+use Avorg\Renderer;
 use Avorg\RouteFactory;
 
 if (!\defined('ABSPATH')) exit;
@@ -22,10 +23,11 @@ class RssLatest extends RssEndpoint
 		Factory $factory,
 		Php $php,
 		PresentationRepository $presentationRepository,
+		Renderer $renderer,
 		RouteFactory $routeFactory
 	)
 	{
-		parent::__construct($factory, $php, $routeFactory);
+		parent::__construct($factory, $php, $renderer, $routeFactory);
 
 		$this->presentationRepository = $presentationRepository;
 	}
@@ -33,5 +35,15 @@ class RssLatest extends RssEndpoint
 	protected function getRecordings()
 	{
 		return $this->presentationRepository->getPresentations();
+	}
+
+	protected function getTitle()
+	{
+		return "AudioVerse Latest Recordings";
+	}
+
+	protected function getSubtitle()
+	{
+		return "The latest recordings at AudioVerse";
 	}
 }

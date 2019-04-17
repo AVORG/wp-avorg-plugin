@@ -32,7 +32,7 @@ final class TestPresentationRepository extends Avorg\TestCase
             "recordings" => [
                 "presenters" => [
                     [
-                        "photo86" => "photo_url"
+                        "photo256" => "photo_url"
                     ]
                 ]
             ]
@@ -62,7 +62,7 @@ final class TestPresentationRepository extends Avorg\TestCase
         $result = $this->presentationRepository->getPresentations();
 
         $this->assertEquals(
-            "/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
+            "http://localhost:8080/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
             $result[0]->getUrl()
         );
     }

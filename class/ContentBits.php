@@ -21,6 +21,12 @@ class ContentBits
 		$this->twig = $twig;
 		$this->wp = $wp;
 	}
+
+	public function registerCallbacks()
+	{
+		$this->wp->add_action("add_meta_boxes", array($this, "addMetaBoxes"));
+		$this->wp->add_action("save_post", array($this, "saveIdentifierMetaBox"));
+	}
 	
 	public function init()
 	{
@@ -124,17 +130,40 @@ class ContentBits
 		
 		$this->wp->register_taxonomy( "avorgMediaIds", array('avorgcontentbits'), $args);
 	}
-	
-	public function addIdentifierMetaBox()
+
+	public function addMetaBoxes()
 	{
-		$args = array(
-			'avorgMetaBox',
+		$this->addIdentifierMetaBox();
+		$this->addDocumentationMetaBox();
+	}
+
+	private function addDocumentationMetaBox()
+	{
+		$args = [
+			'avorg_contentBits_docs',
+			'Documentation',
+			[$this, "renderDocumentationMetaBox"],
+			'avorgcontentbits'
+		];
+
+		$this->wp->add_meta_box( ...$args);
+	}
+
+	public function renderDocumentationMetaBox()
+	{
+		$this->twig->render("molecule-contentBitsDocs.html");
+	}
+	
+	private function addIdentifierMetaBox()
+	{
+		$args = [
+			'avorg_contentBits_identifier',
 			'Identifier',
-			array($this, "renderIdentifierMetaBox"),
+			[$this, "renderIdentifierMetaBox"],
 			'avorgcontentbits',
 			'side',
 			'default'
-		);
+		];
 		
 		$this->wp->add_meta_box( ...$args);
 	}
@@ -143,8 +172,11 @@ class ContentBits
 	{
 		$postId = $this->wp->get_the_ID();
 		$savedValue = $this->wp->get_post_meta( $postId, "_avorgBitIdentifier", true);
-		
-		$this->twig->render("identifierMetaBox.twig", ["savedIdentifier" => $savedValue]);
+
+		$this->twig->render("molecule-identifierMetaBox.twig", [
+			"savedIdentifier" => $savedValue,
+			"allIdentifiers" => $this->wp->get_all_meta_values("_avorgBitIdentifier")
+		]);
 	}
 	
 	public function saveIdentifierMetaBox()
@@ -155,7 +187,8 @@ class ContentBits
 		$this->wp->update_post_meta(
 			$postId,
 			"_avorgBitIdentifier",
-			$_POST["avorgBitIdentifier"]);
+			$_POST["avorgBitIdentifier"]
+		);
 	}
 	
 	private function addShortcode()

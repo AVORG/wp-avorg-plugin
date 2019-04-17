@@ -28,6 +28,11 @@ abstract class MediaFile
 		return $this->getFloatAttribute("duration");
 	}
 
+	public function getDurationString()
+	{
+		return gmdate("H:i:s", $this->getDuration());
+	}
+
 	public function getBitrate()
 	{
 		return $this->getFloatAttribute("bitrate");

@@ -15,4 +15,14 @@ class RssSpeaker extends RssEndpoint
 	{
 		// TODO: Implement getRecordings() method.
 	}
+
+	protected function getTitle()
+	{
+		// TODO: Implement getTitle() method.
+	}
+
+	protected function getSubtitle()
+	{
+		// TODO: Implement getSubtitle() method.
+	}
 }

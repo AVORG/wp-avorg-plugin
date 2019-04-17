@@ -66,11 +66,15 @@ class Plugin
 	private function registerCallbacks()
 	{
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
+		$this->wp->add_action("init", [$this, "init"]);
+		$this->wp->add_action("wp_enqueue_scripts", [$this, "enqueueScripts"]);
 
 		$toRegister = array_merge(
 			[
 				$this->pwa,
-				$this->localization
+				$this->localization,
+				$this->contentBits,
+				$this->router
 			],
 			$this->pageFactory->getPages(),
 			$this->ajaxActionFactory->getActions(),
