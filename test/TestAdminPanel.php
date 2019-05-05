@@ -15,7 +15,7 @@ final class TestAdminPanel extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->adminPanel = $this->factory->get("AdminPanel");
+		$this->adminPanel = $this->factory->secure("AdminPanel");
 	}
 	
 	public function testRendersPage()

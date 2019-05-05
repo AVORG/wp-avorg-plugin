@@ -21,7 +21,7 @@ class AjaxActionFactory
 	public function getActions()
 	{
 		return array_map(function($actionName) {
-			return $this->factory->get("AjaxAction\\$actionName");
+			return $this->factory->secure("AjaxAction\\$actionName");
 		}, $this->actionNames);
 	}
 }

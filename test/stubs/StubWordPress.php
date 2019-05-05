@@ -75,7 +75,7 @@ class StubWordPress extends WordPress
 	 */
 	public function assertPageRegistered($pageName)
 	{
-		$pageObject = $this->factory->get("Page\\$pageName");
+		$pageObject = $this->factory->secure("Page\\$pageName");
 
 		$this->assertFilterAdded("the_content", [$pageObject, "addUi"]);
 	}

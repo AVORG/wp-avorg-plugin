@@ -9,7 +9,7 @@ final class TestPwa extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->pwa = $this->factory->get("Pwa");
+		$this->pwa = $this->factory->secure("Pwa");
 	}
 
 	public function testExists()
@@ -27,18 +27,4 @@ final class TestPwa extends Avorg\TestCase
 			[$this->pwa, "registerServiceWorker"]
 		);
 	}
-
-//	public function testRegistersServiceWorker()
-//	{
-//		$this->pwa->registerServiceWorker();
-//
-//		$this->mockWordPress->assertMethodCalledWith(
-//			"call",
-//			"wp_register_service_worker_script",
-//			"avorgServiceWorker",
-//			[
-//				"src" => AVORG_BASE_PATH . "/serviceWorker.js"
-//			]
-//		);
-//	}
 }

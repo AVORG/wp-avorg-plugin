@@ -10,12 +10,12 @@ final class TestPlugin extends Avorg\TestCase
 		parent::setUp();
 		
 		$this->mockWordPress->setReturnValue("call", 5);
-		$this->plugin = $this->factory->get("Plugin");
+		$this->plugin = $this->factory->secure("Plugin");
 	}
 	
 	public function testInitInitsContentBits()
 	{
-		$contentBits = $this->factory->get("ContentBits");
+		$contentBits = $this->factory->secure("ContentBits");
 		
 		$this->plugin->init();
 
@@ -62,7 +62,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testInitsListShortcode()
 	{
-		$listShortcode = $this->factory->get("ListShortcode");
+		$listShortcode = $this->factory->secure("ListShortcode");
 		
 		$this->plugin->init();
 		
@@ -146,16 +146,22 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testRegistersPageCallbacks($pageName)
 	{
+		$this->factory->make("Plugin");
+
 		$this->mockWordPress->assertPageRegistered($pageName);
 	}
 
 	public function pageNameProvider()
 	{
-		return [
-			"Media Page" => ["Media"],
-			"Topic Page" => ["Topic"],
-			"Playlist Page" => ["Playlist"]
+		$pages = [
+			"Media",
+			"Topic",
+			"Playlist"
 		];
+
+		$data = array_map(function($page) { return [$page]; }, $pages);
+
+		return array_combine($pages, $data);
 	}
 
 	/**
@@ -168,7 +174,7 @@ final class TestPlugin extends Avorg\TestCase
 	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod)
 	{
 		$this->mockWordPress->assertActionAdded($action, [
-			$this->factory->get($callbackClass),
+			$this->factory->secure($callbackClass),
 			$callbackMethod
 		]);
 	}
@@ -231,7 +237,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		if ($pageClass) {
 			/** @var Avorg\Page $page */
-			$page = $this->factory->get($pageClass);
+			$page = $this->factory->secure($pageClass);
 
 			$this->mockWordPress->setCurrentPageToPage(
 				$page
@@ -278,7 +284,7 @@ final class TestPlugin extends Avorg\TestCase
 	public function testFilterCallbacksRegistered($filter, $callbackClass, $callbackMethod)
 	{
 		$this->mockWordPress->assertFilterAdded($filter, [
-			$this->factory->get($callbackClass),
+			$this->factory->secure($callbackClass),
 			$callbackMethod
 		]);
 	}

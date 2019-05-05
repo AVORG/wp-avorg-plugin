@@ -16,7 +16,7 @@ class ScriptFactory
 
 	public function getScript($path, ...$actions) {
 		/** @var Script $script */
-		$script = $this->factory->make("Script");
+		$script = $this->factory->obtain("Script");
 
 		$script->setPath($path)->setActions(...$actions);
 

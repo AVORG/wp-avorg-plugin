@@ -9,7 +9,7 @@ final class TestPageRoute extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->pageRoute = $this->factory->make("Route\\PageRoute");
+		$this->pageRoute = $this->factory->obtain("Route\\PageRoute");
 	}
 
 	public function testExists()

@@ -9,7 +9,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->global = $this->factory->make("TwigGlobal");
+		$this->global = $this->factory->obtain("TwigGlobal");
 	}
 
 	public function test__Function()

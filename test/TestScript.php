@@ -9,7 +9,7 @@ final class TestScript extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->script = $this->factory->make("Script");
+		$this->script = $this->factory->obtain("Script");
 	}
 
 	public function testTheScript()
@@ -39,7 +39,7 @@ final class TestScript extends Avorg\TestCase
 	public function testAddsNonce()
 	{
 		$this->script->setPath("the_path");
-		$this->script->setActions($this->factory->make("AjaxAction\\Presentation"));
+		$this->script->setActions($this->factory->obtain("AjaxAction\\Presentation"));
 
 		$this->script->enqueue();
 
@@ -64,7 +64,7 @@ final class TestScript extends Avorg\TestCase
 
 		$this->script
 			->setPath("//the_path")
-			->setActions($this->factory->make("AjaxAction\\Presentation"))
+			->setActions($this->factory->obtain("AjaxAction\\Presentation"))
 			->enqueue();
 
 		$this->mockWordPress->assertMethodCalledWith(

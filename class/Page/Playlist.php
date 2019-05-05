@@ -2,14 +2,12 @@
 
 namespace Avorg\Page;
 
-use Avorg\AvorgApi;
 use function Avorg\avorgLog;
 use Avorg\Page;
 use Avorg\Presentation;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
-use Avorg\Script;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;
 

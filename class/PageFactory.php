@@ -9,15 +9,13 @@ class PageFactory
 	/** @var Factory $factory */
 	private $factory;
 
-	private $pageNames = [
-		"Media",
-		"Topic",
-		"Playlist"
-	];
+	/** @var Filesystem $filesystem */
+	private $filesystem;
 
-	public function __construct(Factory $factory)
+	public function __construct(Factory $factory, Filesystem $filesystem)
 	{
 		$this->factory = $factory;
+		$this->filesystem = $filesystem;
 	}
 
 	/**
@@ -25,8 +23,20 @@ class PageFactory
 	 */
 	public function getPages()
 	{
-		return array_map(function($pageName) {
-			return $this->factory->get("Page\\$pageName");
-		}, $this->pageNames);
+		$paths = $this->filesystem->getMatchingPathsRecursive("class/Page", "/\.php/") ?: [];
+		$classes = array_map([$this, "pathToClassname"], $paths);
+
+		return array_map(function ($class) {
+			return $this->factory->secure($class);
+		}, $classes);
+	}
+
+	public function pathToClassname($path)
+	{
+		$relativePath = str_replace(AVORG_BASE_PATH . "/class", "", $path);
+		$pathMinusExtension = explode(".", $relativePath)[0];
+		$classname = str_replace("/", "\\", $pathMinusExtension);
+
+		return trim($classname, "\\");
 	}
 }

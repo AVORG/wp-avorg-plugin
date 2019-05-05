@@ -9,7 +9,7 @@ final class TestEndpointFactory extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->endpointFactory = $this->factory->get("EndpointFactory");
+		$this->endpointFactory = $this->factory->secure("EndpointFactory");
 	}
 
 	public function testGetEndpointById()

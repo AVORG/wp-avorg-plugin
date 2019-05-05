@@ -23,7 +23,7 @@ class EndpointFactory
 	public function getEndpoints()
 	{
 		return array_map(function($endpointName) {
-			return $this->factory->get("Endpoint\\$endpointName");
+			return $this->factory->secure("Endpoint\\$endpointName");
 		}, $this->endpointNames);
 	}
 
@@ -35,6 +35,6 @@ class EndpointFactory
 
 		if (!class_exists($class)) return null;
 
-		return $this->factory->get($class);
+		return $this->factory->secure($class);
 	}
 }

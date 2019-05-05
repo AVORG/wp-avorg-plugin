@@ -21,6 +21,6 @@ include_once(AVORG_BASE_PATH . "/vendor/autoload.php");
 
 $factory = new Factory();
 
-$factory->get("AdminPanel")->registerCallbacks();
+$factory->secure("AdminPanel")->registerCallbacks();
 
-\register_activation_hook(__FILE__, [$factory->get("Plugin"), "activate"]);
+\register_activation_hook(__FILE__, [$factory->secure("Plugin"), "activate"]);

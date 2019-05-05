@@ -22,22 +22,35 @@ class Factory
 
 	/**
 	 * @param $class
-	 * @return null
+	 * @return mixed
 	 * @throws \ReflectionException
 	 */
-	public function get($class)
+	public function secure($class)
 	{
 		if (is_a($this, $class)) return $this;
 
 		$qualifiedName = $this->getQualifiedName($class);
 		$dependencies = $this->getDependencies($qualifiedName);
 
-		return $this->getObject($qualifiedName, ...$dependencies);
+		return $this->secureObject($qualifiedName, ...$dependencies);
 	}
 
 	/**
 	 * @param $class
-	 * @return null
+	 * @return mixed
+	 * @throws \ReflectionException
+	 */
+	public function obtain($class)
+	{
+		$qualifiedName = $this->getQualifiedName($class);
+		$dependencies = $this->getDependencies($qualifiedName);
+
+		return $this->obtainObject($qualifiedName, ...$dependencies);
+	}
+
+	/**
+	 * @param $class
+	 * @return mixed
 	 * @throws \ReflectionException
 	 */
 	public function make($class)
@@ -57,7 +70,7 @@ class Factory
 	{
 		$dependencyNames = $this->getDependencyNames($qualifiedName);
 
-		return array_map([$this, "get"], $dependencyNames);
+		return array_map([$this, "secure"], $dependencyNames);
 	}
 
 	/**
@@ -93,7 +106,7 @@ class Factory
 	 * @param array ...$dependencies
 	 * @return mixed
 	 */
-	private function getObject($class, ...$dependencies)
+	private function secureObject($class, ...$dependencies)
 	{
 		return $this->getSavedObject($class) ?:
 			$this->objects[] = new $class(...$dependencies);
@@ -104,10 +117,20 @@ class Factory
 	 * @param array ...$dependencies
 	 * @return mixed
 	 */
-	private function makeObject($class, ...$dependencies)
+	private function obtainObject($class, ...$dependencies)
 	{
 		return $this->getSavedObject($class) ?:
 			new $class(...$dependencies);
+	}
+
+	/**
+	 * @param string $class
+	 * @param array ...$dependencies
+	 * @return mixed
+	 */
+	private function makeObject($class, ...$dependencies)
+	{
+		return new $class(...$dependencies);
 	}
 
 	/**

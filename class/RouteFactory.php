@@ -21,7 +21,7 @@ class RouteFactory
 	public function getPageRoute($pageId, $routeFormat)
 	{
 		/** @var PageRoute $route */
-		$route = $this->factory->make("Route\\PageRoute");
+		$route = $this->factory->obtain("Route\\PageRoute");
 
 		return $route->setPageId($pageId)->setFormat($routeFormat);
 	}
@@ -29,7 +29,7 @@ class RouteFactory
 	public function getEndpointRoute($endpointId, $routeFormat)
 	{
 		/** @var EndpointRoute $route */
-		$route = $this->factory->make("Route\\EndpointRoute");
+		$route = $this->factory->obtain("Route\\EndpointRoute");
 
 		return $route->setEndpointId($endpointId)->setFormat($routeFormat);
 	}

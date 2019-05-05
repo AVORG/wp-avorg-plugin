@@ -226,10 +226,10 @@ trait Stub
 		$condition = $this->wasMethodCalledWith($method, ...$args);
 
 		if (!$condition) {
-			echo "Needle:\r\n";
-			dump($args);
-			echo "Haystack:\r\n";
-			dump($this->getCalls($method));
+			$this->dumpNeedleAndHaystack(
+				$args,
+				$this->getCalls($method)
+			);
 		}
 
 		$this->testCase->assertTrue(
@@ -257,10 +257,10 @@ trait Stub
 		);
 
 		if ($condition) {
-			echo "Needle:\r\n";
-			dump($args);
-			echo "Haystack:\r\n";
-			dump($this->getCalls($method));
+			$this->dumpNeedleAndHaystack(
+				$args,
+				$this->getCalls($method)
+			);
 		}
 
 		return $this;
@@ -283,7 +283,7 @@ trait Stub
 		$error = $message ?: "Failed asserting any call matches callback.";
 
 		if (!$bool) {
-			dump($calls);
+			$this->safeDump($calls);
 		}
 
 		$this->testCase->assertTrue($bool, $error);
@@ -344,5 +344,30 @@ trait Stub
 	public function getCalls($method)
 	{
 		return (isset($this->calls[$method])) ? $this->calls[$method] : [];
+	}
+
+	private function dumpNeedleAndHaystack($needle, $haystack)
+	{
+		echo "Needle:\r\n";
+		$this->safeDump($needle);
+
+		echo "\r\nHaystack:\r\n";
+		$this->safeDump($haystack);
+	}
+
+	public static function safeDump($content)
+	{
+		var_dump(self::sanitizeDumpContent($content));
+	}
+
+	public static function sanitizeDumpContent($content)
+	{
+		if (is_object($content)) return "OBJECT::".get_class($content);
+
+		if (!is_array($content)) return $content;
+
+		return array_map(function($node) {
+			return self::sanitizeDumpContent($node);
+		}, $content);
 	}
 }

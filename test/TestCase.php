@@ -7,6 +7,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	/** @var AvorgApi|StubAvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
+
+	/** @var Filesystem|StubFilesystem */
+	protected $mockFilesystem;
 	
 	/** @var Php|StubPhp $mockPhp */
 	protected $mockPhp;
@@ -33,6 +36,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 
 		$this->factory->injectObjects(
 			$this->mockAvorgApi = new StubAvorgApi($this),
+			$this->mockFilesystem = new StubFilesystem($this),
 			$this->mockPhp = new StubPhp($this),
 			$this->mockTwig = new StubTwig($this),
 			$this->mockWordPress = new StubWordPress($this, $this->factory)
