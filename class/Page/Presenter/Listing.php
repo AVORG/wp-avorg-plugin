@@ -10,6 +10,7 @@ class Listing extends Page
 {
 	protected $defaultPageTitle = "Presenters";
 	protected $defaultPageContent = "Presenters";
+	protected $twigTemplate = "page-presenters.twig";
 	protected $routeFormat = "{ language }/sermons/presenters";
 
 	public function throw404($query)
