@@ -279,7 +279,7 @@ trait Stub
 	public function assertAnyCallMatches($method, callable $callable, $message = false)
 	{
 		$calls = $this->getCalls($method);
-		$bool = array_reduce($calls, $callable, FALSE);
+		$bool = (bool) array_filter($calls, $callable);
 		$error = $message ?: "Failed asserting any call matches callback.";
 
 		if (!$bool) {

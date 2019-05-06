@@ -85,11 +85,11 @@ final class TestPlaylistPage extends Avorg\TestCase
 		$this->mockWordPress->runActions("wp", "wp_enqueue_scripts");
 
 		$this->mockWordPress->assertMethodCalled("wp_localize_script");
-		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($carry, $call) {
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
 			$data = $call[2];
 			$recording = $data["recordings"][1836];
 
-			return $carry || $recording->id === 1836;
+			return $recording->id === 1836;
 		});
 	}
 }

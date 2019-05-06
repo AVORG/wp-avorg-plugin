@@ -99,10 +99,10 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->contentBits->renderShortcode(['id' => 'passedId']);
 		
-		$this->mockWordPress->assertAnyCallMatches( "get_posts", function ($carry, $call) {
-			if (!isset($call[0]['meta_query'][0]['value'])) return $carry;
+		$this->mockWordPress->assertAnyCallMatches( "get_posts", function ($call) {
+			if (!isset($call[0]['meta_query'][0]['value'])) return FALSE;
 			
-			return $carry || $call[0]['meta_query'][0]['value'] === "passedId";
+			return $call[0]['meta_query'][0]['value'] === "passedId";
 		});
 	}
 	
@@ -135,10 +135,10 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->contentBits->renderShortcode([]);
 		
-		$this->mockWordPress->assertAnyCallMatches( "get_posts", function ($carry, $call) {
-			if (!isset($call[0]['tax_query'][0]['terms'])) return $carry;
+		$this->mockWordPress->assertAnyCallMatches( "get_posts", function ($call) {
+			if (!isset($call[0]['tax_query'][0]['terms'])) return FALSE;
 			
-			return $carry || $call[0]['tax_query'][0]['terms'] === "111";
+			return $call[0]['tax_query'][0]['terms'] === "111";
 		});
 	}
 	

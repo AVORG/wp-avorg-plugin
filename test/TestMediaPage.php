@@ -135,10 +135,10 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->addUi("content");
 
-		$this->mockTwig->assertAnyCallMatches( "render", function($carry, $call) {
+		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
             $callGlobal = $call[1]["avorg"];
 
-		    return $callGlobal->presentation instanceof \Avorg\Presentation || $carry;
+		    return $callGlobal->presentation instanceof \Avorg\Presentation;
         });
 	}
 	
