@@ -18,7 +18,7 @@ if (!\defined('ABSPATH')) exit;
  * @method register_activation_hook($string, array $array)
  * @method status_header($int)
  * @method update_option($pageIdOptionName, $id)
- * @method wp_insert_post(array $array, $true)
+ * @method wp_insert_post(array $postarr, bool $wp_error)
  * @method wp_publish_post($postId)
  * @method check_ajax_referer($string)
  * @method wp_enqueue_style($string, $string1)

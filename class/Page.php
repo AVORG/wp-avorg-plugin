@@ -13,36 +13,38 @@ abstract class Page
 	private $routeFactory;
 
 	/** @var WordPress $wp */
-    protected $wp;
+	protected $wp;
 
-    private $pageIdOptionName;
-    protected $defaultPageContent;
-    protected $defaultPageTitle;
-    protected $twigTemplate;
+	private $pageIdOptionName;
+	protected $defaultPageContent;
+	protected $defaultPageTitle;
+	protected $twigTemplate;
 	protected $routeFormat;
 
 
 	public function __construct(Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
-    {
-    	$this->renderer = $renderer;
-    	$this->routeFactory = $routeFactory;
-        $this->wp = $wp;
+	{
+		$this->renderer = $renderer;
+		$this->routeFactory = $routeFactory;
+		$this->wp = $wp;
 
 		$this->setPageIdOptionName();
 	}
 
-    abstract public function throw404($query);
-    abstract public function setTitle($title);
-    abstract protected function getData();
+	abstract public function throw404($query);
+
+	abstract public function setTitle($title);
+
+	abstract protected function getData();
 
 	public function registerCallbacks()
 	{
 		$this->wp->add_action("wp", [$this, "registerScriptCallbacks"]);
-		$this->wp->add_action( "parse_query", [$this, "throw404"]);
-		$this->wp->add_action( "init", [$this, "createPage"]);
-		$this->wp->add_filter( "pre_get_document_title", [$this, "setTitle"]);
-		$this->wp->add_filter( "the_title", [$this, "setTitle"]);
-		$this->wp->add_filter( "the_content", [$this, "addUi"]);
+		$this->wp->add_action("parse_query", [$this, "throw404"]);
+		$this->wp->add_action("init", [$this, "createPage"]);
+		$this->wp->add_filter("pre_get_document_title", [$this, "setTitle"]);
+		$this->wp->add_filter("the_title", [$this, "setTitle"]);
+		$this->wp->add_filter("the_content", [$this, "addUi"]);
 		$this->wp->register_activation_hook(
 			AVORG_BASE_PATH . "/wp-avorg-plugin.php",
 			[$this, "createPage"]);
@@ -88,26 +90,27 @@ abstract class Page
 	public function createPage()
 	{
 		$postId = $this->getPostId();
-		$postStatus = $this->wp->get_post_status( $postId);
+		$postStatus = $this->wp->get_post_status($postId);
 
 		if ($postId === false || $postStatus === false) {
 			$this->doCreatePage();
 		}
 
 		if ($postStatus === "trash") {
-			$this->wp->wp_publish_post( $postId);
+			$this->wp->wp_publish_post($postId);
 		}
 	}
 
 	private function doCreatePage()
 	{
-		$id = $this->wp->wp_insert_post( array(
+		$id = $this->wp->wp_insert_post([
 			"post_content" => $this->defaultPageContent,
 			"post_title" => $this->defaultPageTitle,
 			"post_status" => "publish",
-			"post_type" => "page"), true);
+			"post_type" => "page"
+		], true);
 
-		$this->wp->update_option( $this->pageIdOptionName, $id);
+		$this->wp->update_option($this->pageIdOptionName, $id);
 	}
 
 	protected function isThisPage()
@@ -123,7 +126,7 @@ abstract class Page
 	 */
 	public function getPostId()
 	{
-		return $this->wp->get_option( $this->pageIdOptionName);
+		return $this->wp->get_option($this->pageIdOptionName);
 	}
 
 	/**
@@ -133,7 +136,7 @@ abstract class Page
 	{
 		unset($query->query_vars["page_id"]);
 		$query->set_404();
-		$this->wp->status_header( 404);
+		$this->wp->status_header(404);
 	}
 
 	private function setPageIdOptionName()
@@ -148,6 +151,6 @@ abstract class Page
 
 	protected function getEntityId()
 	{
-		return $this->wp->get_query_var( "entity_id");
+		return $this->wp->get_query_var("entity_id");
 	}
 }

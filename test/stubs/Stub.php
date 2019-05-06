@@ -291,6 +291,21 @@ trait Stub
 		return $this;
 	}
 
+	public function assertNoCallsMatch($method, callable $callable, $message = false)
+	{
+		$calls = $this->getCalls($method);
+		$bool = (bool) array_filter($calls, $callable);
+		$error = $message ?: "Failed asserting no call matches callback.";
+
+		if ($bool) {
+			$this->safeDump($calls);
+		}
+
+		$this->testCase->assertFalse($bool, $error);
+
+		return $this;
+	}
+
 	/**
 	 * @param string $method
 	 * @param string $needle

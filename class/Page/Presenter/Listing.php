@@ -8,6 +8,8 @@ if (!\defined('ABSPATH')) exit;
 
 class Listing extends Page
 {
+	protected $defaultPageTitle = "Presenters";
+	protected $defaultPageContent = "Presenters";
 	protected $routeFormat = "{ language }/sermons/presenters";
 
 	public function throw404($query)

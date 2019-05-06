@@ -20,4 +20,21 @@ final class TestPageFactory extends Avorg\TestCase
 			return $carry || $page instanceof Avorg\Page\Media;
 		}, False));
 	}
+
+	public function testHasDefaultTitleAndContent()
+	{
+		$this->mockWordPress->setReturnValue("get_option", 7);
+		$this->mockWordPress->setReturnValue("get_post_status", false);
+
+		$pages = $this->pageFactory->getPages();
+
+		array_walk($pages, function(\Avorg\Page $page) {
+			$page->createPage();
+		});
+
+		$this->mockWordPress->assertNoCallsMatch("wp_insert_post", function($call) {
+			$postArray = $call[0];
+			return (! $postArray["post_content"]) || (! $postArray["post_title"]);
+		});
+	}
 }
