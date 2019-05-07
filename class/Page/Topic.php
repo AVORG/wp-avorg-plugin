@@ -41,7 +41,7 @@ class Topic extends Page
 
 	}
 
-	public function setTitle($title)
+	public function filterTitle($title)
 	{
 		return $title;
 	}

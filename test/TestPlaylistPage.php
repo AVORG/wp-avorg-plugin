@@ -40,7 +40,7 @@ final class TestPlaylistPage extends Avorg\TestCase
 
 	public function testPassesTitleThrough()
 	{
-		$title = $this->playlistPage->setTitle("Title");
+		$title = $this->playlistPage->filterTitle("Title");
 
 		$this->assertEquals("Title", $title);
 	}

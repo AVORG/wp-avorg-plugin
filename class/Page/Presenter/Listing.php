@@ -18,11 +18,6 @@ class Listing extends Page
 		// TODO: Implement throw404() method.
 	}
 
-	public function setTitle($title)
-	{
-		// TODO: Implement setTitle() method.
-	}
-
 	protected function getData()
 	{
 		// TODO: Implement getData() method.

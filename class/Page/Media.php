@@ -51,7 +51,7 @@ class Media extends Page
 	 * @param $title
 	 * @return string
 	 */
-	public function setTitle($title)
+	public function filterTitle($title)
 	{
 		$presentation = $this->getEntitySafe();
 

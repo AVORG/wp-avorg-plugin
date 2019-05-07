@@ -33,17 +33,20 @@ abstract class Page
 
 	abstract public function throw404($query);
 
-	abstract public function setTitle($title);
-
 	abstract protected function getData();
+
+	public function filterTitle($title)
+	{
+		return $title;
+	}
 
 	public function registerCallbacks()
 	{
 		$this->wp->add_action("wp", [$this, "registerScriptCallbacks"]);
 		$this->wp->add_action("parse_query", [$this, "throw404"]);
 		$this->wp->add_action("init", [$this, "createPage"]);
-		$this->wp->add_filter("pre_get_document_title", [$this, "setTitle"]);
-		$this->wp->add_filter("the_title", [$this, "setTitle"]);
+		$this->wp->add_filter("pre_get_document_title", [$this, "filterTitle"]);
+		$this->wp->add_filter("the_title", [$this, "filterTitle"]);
 		$this->wp->add_filter("the_content", [$this, "addUi"]);
 		$this->wp->register_activation_hook(
 			AVORG_BASE_PATH . "/wp-avorg-plugin.php",

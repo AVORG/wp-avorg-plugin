@@ -45,7 +45,7 @@ class Playlist extends Page
 		// TODO: Implement throw404() method.
 	}
 
-	public function setTitle($title)
+	public function filterTitle($title)
 	{
 		return $title;
 	}

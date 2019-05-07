@@ -57,7 +57,7 @@ final class TestTopicPage extends Avorg\TestCase
 
 	public function testSetTitleReturnsTitle()
 	{
-		$title = $this->topicPage->setTitle("title");
+		$title = $this->topicPage->filterTitle("title");
 
 		$this->assertEquals("title", $title);
 	}

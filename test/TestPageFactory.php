@@ -5,29 +5,31 @@ final class TestPageFactory extends Avorg\TestCase
 	/** @var \Avorg\PageFactory $pageFactory */
 	protected $pageFactory;
 
+	protected $pages;
+
 	public function setUp()
 	{
 		parent::setUp();
 
+		$this->mockWordPress->setReturnValue("get_option", 5);
+		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+
 		$this->pageFactory = $this->factory->obtain("PageFactory");
+		$this->pages = $this->pageFactory->getPages();
 	}
 
-	public function testGetsAllPages()
+	private function assertPagesExist()
 	{
-		$pages = $this->pageFactory->getPages();
-
-		$this->assertTrue(array_reduce($pages, function($carry, $page) {
-			return $carry || $page instanceof Avorg\Page\Media;
-		}, False));
+		$this->assertTrue((bool) array_filter($this->pages, function($page) {
+			return $page instanceof Avorg\Page\Media;
+		}), "PageFactory did not return pages");
 	}
 
 	public function testPagesHaveDefaultTitleAndContent()
 	{
-		$pages = $this->pageFactory->getPages();
+		$this->assertPagesExist();
 
-		$this->assertNotEmpty($pages, "No pages to test");
-
-		array_walk($pages, function(\Avorg\Page $page) {
+		array_walk($this->pages, function(\Avorg\Page $page) {
 			$page->createPage();
 		});
 
@@ -39,14 +41,9 @@ final class TestPageFactory extends Avorg\TestCase
 
 	public function testPagesHaveTwigTemplate()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->assertPagesExist();
 
-		$pages = $this->pageFactory->getPages();
-
-		$this->assertNotEmpty($pages, "No pages to test");
-
-		array_walk($pages, function(\Avorg\Page $page) {
+		array_walk($this->pages, function(\Avorg\Page $page) {
 			$page->addUi("Hello World");
 		});
 
@@ -57,14 +54,9 @@ final class TestPageFactory extends Avorg\TestCase
 
 	public function testPageTemplatesExist()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->assertPagesExist();
 
-		$pages = $this->pageFactory->getPages();
-
-		$this->assertNotEmpty($pages, "No pages to test");
-
-		array_walk($pages, function(\Avorg\Page $page) {
+		array_walk($this->pages, function(\Avorg\Page $page) {
 			$page->addUi("Hello World");
 		});
 
@@ -73,6 +65,20 @@ final class TestPageFactory extends Avorg\TestCase
 
 		array_walk($templates, function($template) {
 			$this->assertFileExists(AVORG_BASE_PATH . "/view/$template");
+		});
+	}
+
+	public function testReturnsTitleWhenNoEntity()
+	{
+		$this->assertPagesExist();
+
+		array_walk($this->pages, function(\Avorg\Page $page) {
+			$class = get_class($page);
+			$this->assertEquals(
+				"fake_title",
+				$page->filterTitle("fake_title"),
+				"$class page did not return provided title"
+			);
 		});
 	}
 }

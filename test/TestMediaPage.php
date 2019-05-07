@@ -225,7 +225,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mockAvorgApi->setReturnValue("getPresentation", $presentation);
 		
-		$result = $this->mediaPage->setTitle("old title");
+		$result = $this->mediaPage->filterTitle("old title");
 		
 		$this->assertEquals("Presentation Title - AudioVerse", $result);
 	}
@@ -236,7 +236,7 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_the_ID", 7);
 		$this->mockWordPress->setReturnValues("get_query_var",  7);
 		
-		$this->mediaPage->setTitle("old title");
+		$this->mediaPage->filterTitle("old title");
 		
 		$this->mockAvorgApi->assertMethodCalledWith( "getPresentation", 7);
 	}
@@ -245,7 +245,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockAvorgApi->setReturnValue("getPresentation", null);
 		
-		$result = $this->mediaPage->setTitle("old title");
+		$result = $this->mediaPage->filterTitle("old title");
 		
 		$this->assertEquals("old title", $result);
 	}
@@ -273,12 +273,12 @@ final class TestMediaPage extends Avorg\TestCase
 			"Tab Title" => [
 				"add_filter",
 				"pre_get_document_title",
-				"setTitle"
+				"filterTitle"
 			],
 			"Content Title" => [
 				"add_filter",
 				"the_title",
-				"setTitle"
+				"filterTitle"
 			],
 			"Throw 404" => [
 				"add_action",
