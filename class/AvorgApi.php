@@ -31,6 +31,25 @@ class AvorgApi
 			return false;
 		}
 	}
+
+	/**
+	 * @param int $page
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function getPresenters($page = 0)
+	{
+		$start = $page * 25;
+		$url = "$this->apiBaseUrl/presenters?start=$start";
+
+		try {
+			$response = $this->getResponse($url);
+
+			return json_decode($response)->result;
+		} catch (\Exception $e) {
+			throw new \Exception("Couldn't retrieve presentations at page $page", 0, $e);
+		}
+	}
 	
 	/**
 	 * @param $id
@@ -48,7 +67,7 @@ class AvorgApi
 
 			return json_decode($response)->result[0];
 		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve presentation with ID $id");
+			throw new \Exception("Couldn't retrieve presentation with ID $id", 0, $e);
 		}
 	}
 	
@@ -90,7 +109,7 @@ class AvorgApi
 
 			return (isset($responseObject->result)) ? $responseObject->result : null;
 		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve list of presentations");
+			throw new \Exception("Couldn't retrieve list of presentations", 0, $e);
 		}
 	}
 	
