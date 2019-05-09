@@ -1,0 +1,21 @@
+.avorg-molecule-mediaObject {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .avorg-molecule-mediaObject__image {
+    border-radius: 100%;
+    max-width: 3.5rem;
+    box-shadow: -2px 3px .5em rgba(0,0,0,.15);
+  }
+
+  .avorg-molecule-mediaObject__text {
+    margin-left: 1rem;
+  }
+
+  .avorg-molecule-mediaObject__title {
+    font-weight: bold;
+    margin-bottom: 0;
+    font-size: 1.5rem;
+  }
+}
