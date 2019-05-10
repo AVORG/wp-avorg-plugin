@@ -29,13 +29,18 @@ final class TestPageFactory extends Avorg\TestCase
 	{
 		$this->assertPagesExist();
 
+		$this->mockWordPress->setReturnValue("get_post_status", FALSE);
+
 		array_walk($this->pages, function(\Avorg\Page $page) {
 			$page->createPage();
 		});
 
+		$this->mockWordPress->assertCallCount("wp_insert_post", count($this->pages));
+
 		$this->mockWordPress->assertNoCallsMatch("wp_insert_post", function($call) {
 			$postArray = $call[0];
-			return (! $postArray["post_content"]) || (! $postArray["post_title"]);
+
+			return empty($postArray["post_content"]) || empty($postArray["post_title"]);
 		});
 	}
 
