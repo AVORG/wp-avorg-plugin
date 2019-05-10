@@ -153,7 +153,7 @@ class Router
 		return "http://" . $_SERVER["HTTP_HOST"] . $this->getRequestPath();
 	}
 
-	private function getRequestPath()
+	public function getRequestPath()
 	{
 		return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 	}

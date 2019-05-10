@@ -18,7 +18,7 @@ class Listing extends Page
 	protected $defaultPageTitle = "Presenters";
 	protected $defaultPageContent = "Presenters";
 	protected $twigTemplate = "page-presenters.twig";
-	protected $routeFormat = "{ language }/sermons/presenters";
+	protected $routeFormat = "{ language }/sermons/presenters[/{ letter }]";
 
 	public function __construct(AvorgApi $api, Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
 	{
@@ -34,6 +34,8 @@ class Listing extends Page
 
 	protected function getData()
 	{
+		$this->wp->get_query_var("letter");
+
 		return [
 			"presenters" => $this->api->getPresenters() ?: []
 		];

@@ -98,4 +98,14 @@ final class TestTwigGlobal extends Avorg\TestCase
 
 		$this->assertEquals("http://localhost:8080/espanol", $result);
 	}
+
+	public function testGetRequestPath()
+	{
+		$_SERVER["HTTP_HOST"] = "localhost:8080";
+		$_SERVER["REQUEST_URI"] = "localhost:8080/espanol";
+
+		$result = $this->global->getRequestPath();
+
+		$this->assertEquals("/espanol", $result);
+	}
 }

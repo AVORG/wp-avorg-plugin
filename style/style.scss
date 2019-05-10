@@ -2,7 +2,7 @@
   display: none;
 }
 
-@import "_molecule-mediaObject";
+@import "molecule-mediaObject";
 @import "molecule-player";
 @import "molecule-recordingMeta";
 @import "molecule-recordingsList";
@@ -10,3 +10,4 @@
 @import "organism-recording";
 
 @import "page-playlist";
+@import "page-presenters";

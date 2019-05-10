@@ -34,4 +34,11 @@ final class TestPresenterListing extends Avorg\TestCase
 			return $data->presenters === ["PRESENTERS"];
 		});
 	}
+
+	public function testGetsLetter()
+	{
+		$this->presenterListing->addUi("hello world");
+
+		$this->mockWordPress->assertMethodCalledWith("get_query_var", "letter");
+	}
 }
