@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Stub;
+
 class StubFilesystem extends Filesystem
 {
 	use Stub;

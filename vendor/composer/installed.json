@@ -114,11 +114,18 @@
         "dist": {
             "type": "path",
             "url": "../natlib",
-            "reference": "e2189d20443421cb329bf6649326b6983365e1d7",
+            "reference": "9582b5378471bff04f168695b6596b968c125aa1",
             "shasum": null
         },
         "type": "library",
         "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "natlib\\": [
+                    "src/"
+                ]
+            }
+        },
         "license": [
             "MIT"
         ],
@@ -128,6 +135,7 @@
                 "email": "nathan@nathanarthur.com"
             }
         ],
+        "description": "Library of oft-used classes and helpers",
         "transport-options": {
             "symlink": true
         }

@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Stub;
+
 class StubTwig extends Twig
 {
 	use Stub;

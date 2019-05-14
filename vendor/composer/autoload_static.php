@@ -19,6 +19,10 @@ class ComposerStaticInit577af4de92784c29a85f077623373e5a
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
+        'n' => 
+        array (
+            'natlib\\' => 7,
+        ),
         'W' => 
         array (
             'Webmozart\\Assert\\' => 17,
@@ -51,6 +55,10 @@ class ComposerStaticInit577af4de92784c29a85f077623373e5a
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'natlib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/narthur/natlib/src',
         ),
         'Webmozart\\Assert\\' => 
         array (

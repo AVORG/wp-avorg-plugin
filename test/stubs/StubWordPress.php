@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Stub;
+
 class StubWordPress extends WordPress
 {
 	/** @var Factory $factory */

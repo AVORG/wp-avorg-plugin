@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Stub;
+
 class StubAvorgApi extends AvorgApi
 {
 	use Stub;
