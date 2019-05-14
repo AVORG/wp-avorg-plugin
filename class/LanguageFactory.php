@@ -72,7 +72,7 @@ class LanguageFactory {
 		if (!$languageConfig) return null;
 
 		/** @var Language $language */
-		$language = $this->factory->obtain("Language");
+		$language = $this->factory->obtain("Avorg\\Language");
 
 		$language->setBaseRoute($languageConfig["baseRoute"]);
 		$language->setUrlFragments($languageConfig["urlFragments"]);

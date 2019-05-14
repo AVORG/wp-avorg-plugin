@@ -9,7 +9,7 @@ final class TestRssEndpoint extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->rssEndpoint = $this->factory->secure("Endpoint\\RssEndpoint\\RssLatest");
+		$this->rssEndpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssLatest");
 	}
 
 	public function testGetRouteFormat()

@@ -12,7 +12,7 @@ final class TestPresenterListing extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_option", 5);
 		$this->mockWordPress->setReturnValue("get_the_ID", 5);
 
-		$this->presenterListing = $this->factory->secure("Page\\Presenter\\Listing");
+		$this->presenterListing = $this->factory->secure("Avorg\\Page\\Presenter\\Listing");
 	}
 
 	public function testHasPresentersArray()

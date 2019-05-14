@@ -9,7 +9,7 @@ final class TestRouter extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->router = $this->factory->secure("Router");
+		$this->router = $this->factory->secure("Avorg\\Router");
 	}
 
 	public function testAssignsHighPriority()

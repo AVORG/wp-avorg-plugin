@@ -9,7 +9,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->contentBits = $this->factory->secure("ContentBits");
+		$this->contentBits = $this->factory->secure("Avorg\\ContentBits");
 	}
 	
 	public function testInitMethodRegistersPostType()

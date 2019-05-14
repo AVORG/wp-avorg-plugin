@@ -39,6 +39,6 @@ class PageFactory
 		$pathMinusExtension = explode(".", $relativePath)[0];
 		$classname = str_replace("/", "\\", $pathMinusExtension);
 
-		return trim($classname, "\\");
+		return "Avorg\\" . trim($classname, "\\");
 	}
 }

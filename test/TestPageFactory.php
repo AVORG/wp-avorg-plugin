@@ -14,7 +14,7 @@ final class TestPageFactory extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_option", 5);
 		$this->mockWordPress->setReturnValue("get_the_ID", 5);
 
-		$this->pageFactory = $this->factory->obtain("PageFactory");
+		$this->pageFactory = $this->factory->obtain("Avorg\\PageFactory");
 		$this->pages = $this->pageFactory->getPages();
 	}
 

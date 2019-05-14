@@ -23,7 +23,7 @@ class AjaxActionFactory
 	public function getActions()
 	{
 		return array_map(function($actionName) {
-			return $this->factory->secure("AjaxAction\\$actionName");
+			return $this->factory->secure("Avorg\\AjaxAction\\$actionName");
 		}, $this->actionNames);
 	}
 }

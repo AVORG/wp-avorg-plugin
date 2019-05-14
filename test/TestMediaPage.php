@@ -32,14 +32,14 @@ final class TestMediaPage extends Avorg\TestCase
 			$this->mockWordPress
 		);
 		
-		return $factory->secure("Page\\Media");
+		return $factory->secure("Avorg\\Page\\Media");
 	}
 	
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->mediaPage = $this->factory->secure("Page\\Media");
+		$this->mediaPage = $this->factory->secure("Avorg\\Page\\Media");
 	}
 	
 	public function testSavesMediaPageId()

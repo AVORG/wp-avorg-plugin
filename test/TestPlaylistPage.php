@@ -9,7 +9,7 @@ final class TestPlaylistPage extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->playlistPage = $this->factory->secure("Page\\Playlist");
+		$this->playlistPage = $this->factory->secure("Avorg\\Page\\Playlist");
 	}
 
 	public function testExist()

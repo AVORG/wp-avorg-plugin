@@ -9,7 +9,7 @@ final class TestPwa extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->pwa = $this->factory->secure("Pwa");
+		$this->pwa = $this->factory->secure("Avorg\\Pwa");
 	}
 
 	public function testExists()

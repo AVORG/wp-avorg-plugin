@@ -11,7 +11,7 @@ $endpointId = get_query_var("endpoint_id");
 if (!$endpointId) throw new Exception("Can't access endpoint id");
 
 /** @var \Avorg\EndpointFactory $endpointFactory */
-$endpointFactory = $factory->secure("EndpointFactory");
+$endpointFactory = $factory->secure("Avorg\\EndpointFactory");
 
 /** @var \Avorg\Endpoint $endpoint */
 $endpoint = $endpointFactory->getEndpoint($endpointId);

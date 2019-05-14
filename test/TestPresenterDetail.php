@@ -12,7 +12,7 @@ final class TestPresenterDetail extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_option", 5);
 		$this->mockWordPress->setReturnValue("get_the_ID", 5);
 
-		$this->presenterDetail = $this->factory->secure("Page\\Presenter\\Detail");
+		$this->presenterDetail = $this->factory->secure("Avorg\\Page\\Presenter\\Detail");
 	}
 
 	public function testExists()

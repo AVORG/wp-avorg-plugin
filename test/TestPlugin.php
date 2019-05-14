@@ -10,12 +10,12 @@ final class TestPlugin extends Avorg\TestCase
 		parent::setUp();
 		
 		$this->mockWordPress->setReturnValue("call", 5);
-		$this->plugin = $this->factory->secure("Plugin");
+		$this->plugin = $this->factory->secure("Avorg\\Plugin");
 	}
 	
 	public function testInitInitsContentBits()
 	{
-		$contentBits = $this->factory->secure("ContentBits");
+		$contentBits = $this->factory->secure("Avorg\\ContentBits");
 		
 		$this->plugin->init();
 
@@ -62,7 +62,7 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testInitsListShortcode()
 	{
-		$listShortcode = $this->factory->secure("ListShortcode");
+		$listShortcode = $this->factory->secure("Avorg\\ListShortcode");
 		
 		$this->plugin->init();
 		
@@ -146,7 +146,7 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testRegistersPageCallbacks($pageName)
 	{
-		$this->factory->make("Plugin");
+		$this->factory->make("Avorg\\Plugin");
 
 		$this->mockWordPress->assertPageRegistered($pageName);
 	}
@@ -174,7 +174,7 @@ final class TestPlugin extends Avorg\TestCase
 	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod)
 	{
 		$this->mockWordPress->assertActionAdded($action, [
-			$this->factory->secure($callbackClass),
+			$this->factory->secure("Avorg\\$callbackClass"),
 			$callbackMethod
 		]);
 	}
@@ -237,7 +237,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		if ($pageClass) {
 			/** @var Avorg\Page $page */
-			$page = $this->factory->secure($pageClass);
+			$page = $this->factory->secure("Avorg\\$pageClass");
 
 			$this->mockWordPress->setCurrentPageToPage(
 				$page
@@ -284,7 +284,7 @@ final class TestPlugin extends Avorg\TestCase
 	public function testFilterCallbacksRegistered($filter, $callbackClass, $callbackMethod)
 	{
 		$this->mockWordPress->assertFilterAdded($filter, [
-			$this->factory->secure($callbackClass),
+			$this->factory->secure("Avorg\\$callbackClass"),
 			$callbackMethod
 		]);
 	}

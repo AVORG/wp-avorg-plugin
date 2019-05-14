@@ -9,7 +9,7 @@ final class TestPresentationRepository extends Avorg\TestCase
     {
         parent::setUp();
 
-        $this->presentationRepository = $this->factory->secure("PresentationRepository");
+        $this->presentationRepository = $this->factory->secure("Avorg\\PresentationRepository");
     }
 
     /**

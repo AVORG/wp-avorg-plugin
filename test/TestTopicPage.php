@@ -19,7 +19,7 @@ final class TestTopicPage extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_option", 5);
 		$this->mockWordPress->setReturnValue("get_the_ID", 5);
 		$this->mockWordPress->setReturnValues("get_query_var",  5);
-		$this->topicPage = $this->factory->secure("Page\\Topic");
+		$this->topicPage = $this->factory->secure("Avorg\\Page\\Topic");
 	}
 
 	public function testExists()
