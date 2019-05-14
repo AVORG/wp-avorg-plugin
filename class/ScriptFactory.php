@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+
 if (!\defined('ABSPATH')) exit;
 
 class ScriptFactory

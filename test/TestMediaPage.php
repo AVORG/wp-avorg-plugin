@@ -23,7 +23,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$avorgApi = new \Avorg\AvorgApi_exceptions();
 
-		$factory = new \Avorg\Factory();
+		$factory = new \natlib\Factory("Avorg");
 
 		$factory->injectObjects(
 			$avorgApi,

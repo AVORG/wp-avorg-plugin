@@ -4,11 +4,10 @@ namespace Avorg\Endpoint;
 
 
 use Avorg\Endpoint;
-use Avorg\Factory;
-use Avorg\Feed;
 use Avorg\Php;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
+use natlib\Factory;
 
 if (!\defined('ABSPATH')) exit;
 

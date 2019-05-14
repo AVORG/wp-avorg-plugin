@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+
 class LanguageFactory {
 	/** @var Factory $factory */
 	private $factory;
