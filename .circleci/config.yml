@@ -28,6 +28,12 @@ jobs:
 
     - run: composer install -n --prefer-dist
 
+    - run: apt-get update && apt-get install zip
+    - run: zip -r wp-avorg-plugin .
+
+    - store_artifacts:
+        path: wp-avorg-plugin.zip
+
     - save_cache:
         paths:
         - ./vendor
