@@ -24,6 +24,8 @@ class Listing extends Page
 	{
 		parent::__construct($renderer, $routeFactory, $wp);
 
+		$this->setPageIdOptionName();
+
 		$this->api = $api;
 	}
 

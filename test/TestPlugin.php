@@ -140,31 +140,6 @@ final class TestPlugin extends Avorg\TestCase
 	}
 
 	/**
-	 * @dataProvider pageNameProvider
-	 * @param $pageName
-	 * @throws ReflectionException
-	 */
-	public function testRegistersPageCallbacks($pageName)
-	{
-		$this->factory->make("Avorg\\Plugin");
-
-		$this->mockWordPress->assertPageRegistered($pageName);
-	}
-
-	public function pageNameProvider()
-	{
-		$pages = [
-			"Media",
-			"Topic",
-			"Playlist"
-		];
-
-		$data = array_map(function($page) { return [$page]; }, $pages);
-
-		return array_combine($pages, $data);
-	}
-
-	/**
 	 * @param $action
 	 * @param $callbackClass
 	 * @param $callbackMethod

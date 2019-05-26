@@ -4,7 +4,7 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
-abstract class Page
+class Page
 {
 	/** @var Renderer $renderer */
 	protected $renderer;
@@ -21,23 +21,58 @@ abstract class Page
 	protected $twigTemplate;
 	protected $routeFormat;
 
+	/** @var iDataProvider $dataProvider */
+	private $dataProvider;
+
+	/** @var iDataProvider $dataProvider */
+	private $titleProvider;
+
 
 	public function __construct(Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
 	{
 		$this->renderer = $renderer;
 		$this->routeFactory = $routeFactory;
 		$this->wp = $wp;
-
-		$this->setPageIdOptionName();
 	}
 
-	abstract public function throw404($query);
+	public function throw404($query) {
+		try {
+			$this->getData();
+		} catch (\Exception $e) {
+			$this->set404($query);
+		}
+	}
 
-	abstract protected function getData();
+	/**
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	protected function getData() {
+		$route = $this->getRoute();
+		$tags = $route->getRewriteTags();
+		$tagNames = array_keys($tags);
+		$values = array_map(function($tag) {
+			return $this->wp->get_query_var($tag);
+		}, $tagNames);
+		$queryData = array_combine($tagNames, $values);
 
+		return $this->dataProvider->getData($queryData);
+	}
+
+	/**
+	 * @param $title
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function filterTitle($title)
 	{
-		return $title;
+		if (! $this->titleProvider) {
+			return $title;
+		}
+
+		$entityTitle = $this->titleProvider->getTitle($this->getData());
+
+		return $entityTitle ? "$entityTitle - AudioVerse" : $title;
 	}
 
 	public function registerCallbacks()
@@ -132,6 +167,36 @@ abstract class Page
 		return $this->wp->get_option($this->pageIdOptionName);
 	}
 
+	public function setDefaultTitle($title)
+	{
+		$this->defaultPageTitle = $title;
+	}
+
+	public function setDefaultContent($content)
+	{
+		$this->defaultPageContent = $content;
+	}
+
+	public function setTwigTemplate($template)
+	{
+		$this->twigTemplate = $template;
+	}
+
+	public function setRouteFormat($format)
+	{
+		$this->routeFormat = $format;
+	}
+
+	public function setDataProvider(iDataProvider $dataProvider)
+	{
+		$this->dataProvider = $dataProvider;
+	}
+
+	public function setPageIdentifier($id)
+	{
+		$this->pageIdOptionName = $id;
+	}
+
 	/**
 	 * @param $query
 	 */
@@ -142,7 +207,7 @@ abstract class Page
 		$this->wp->status_header(404);
 	}
 
-	private function setPageIdOptionName()
+	protected function setPageIdOptionName()
 	{
 		$prefix = "avorg_page_id_";
 		$class = get_class($this);
@@ -150,6 +215,11 @@ abstract class Page
 		$slashToUnderscore = str_replace("\\", "_", $lowercase);
 
 		$this->pageIdOptionName = $prefix . $slashToUnderscore;
+	}
+
+	public function setTitleProvider($dataProvider)
+	{
+		$this->titleProvider = $dataProvider;
 	}
 
 	protected function getEntityId()
