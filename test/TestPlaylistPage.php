@@ -9,7 +9,7 @@ final class TestPlaylistPage extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->playlistPage = $this->factory->get("Page\\Playlist");
+		$this->playlistPage = $this->factory->secure("Avorg\\Page\\Playlist");
 	}
 
 	public function testExist()
@@ -40,7 +40,7 @@ final class TestPlaylistPage extends Avorg\TestCase
 
 	public function testPassesTitleThrough()
 	{
-		$title = $this->playlistPage->setTitle("Title");
+		$title = $this->playlistPage->filterTitle("Title");
 
 		$this->assertEquals("Title", $title);
 	}
@@ -85,11 +85,11 @@ final class TestPlaylistPage extends Avorg\TestCase
 		$this->mockWordPress->runActions("wp", "wp_enqueue_scripts");
 
 		$this->mockWordPress->assertMethodCalled("wp_localize_script");
-		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($carry, $call) {
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
 			$data = $call[2];
 			$recording = $data["recordings"][1836];
 
-			return $carry || $recording->id === 1836;
+			return $recording->id === 1836;
 		});
 	}
 }

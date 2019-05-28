@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+
 if (!\defined('ABSPATH')) exit;
 
 class Renderer
@@ -23,7 +25,7 @@ class Renderer
 	public function render($template, $data = [], $shouldReturn = false)
 	{
 		try {
-			$twigGlobal = $this->factory->make("TwigGlobal");
+			$twigGlobal = $this->factory->obtain("Avorg\\TwigGlobal");
 			$twigGlobal->loadData($data);
 			$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $twigGlobal];
 			$output = $this->twig->render($template, $data);

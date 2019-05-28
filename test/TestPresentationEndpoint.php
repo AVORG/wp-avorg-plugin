@@ -9,7 +9,7 @@ final class TestPresentationEndpoint extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->presentationEndpoint = $this->factory->get("Endpoint\\PresentationEndpoint");
+		$this->presentationEndpoint = $this->factory->secure("Avorg\\Endpoint\\PresentationEndpoint");
 	}
 
 	public function testEndpoint()

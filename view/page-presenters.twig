@@ -1,0 +1,25 @@
+<div class="avorg-page-presenters">
+	<ul>
+		{% for presenter in avorg.presenters %}
+			{% set data = presenter.presenters %}
+			{% set name = "#{data.givenName} #{data.surname} #{data.suffix}" %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					image: data.photo256,
+					imageAlt: "presenter",
+					title: name,
+					titleUrl: null,
+					description: "Something will go here probably."
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
+
+	<ul class="avorg-page-presenters__pagination">
+		{% for i in 0..26 %}
+			{% set letter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'|slice(i, 1) %}
+			{% set basePath = avorg.requestPath|split("/")|slice(1, 3)|join("/") %}
+			<li><a href="/{{ basePath }}/{{ letter }}">{{ letter }}</a></li>
+		{% endfor %}
+	</ul>
+</div>

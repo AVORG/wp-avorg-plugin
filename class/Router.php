@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Stub;
+
 if (!\defined('ABSPATH')) exit;
 
 class Router
@@ -78,9 +80,11 @@ class Router
 
 	private function getPageRoutes()
 	{
+		$pages = $this->pageFactory->getPages();
+
 		return array_map(function (Page $page) {
 			return $page->getRoute();
-		}, $this->pageFactory->getPages());
+		}, $pages);
 	}
 
 	/**
@@ -153,7 +157,7 @@ class Router
 		return "http://" . $_SERVER["HTTP_HOST"] . $this->getRequestPath();
 	}
 
-	private function getRequestPath()
+	public function getRequestPath()
 	{
 		return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 	}

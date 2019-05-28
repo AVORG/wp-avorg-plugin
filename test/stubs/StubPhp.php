@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Stub;
+
 class StubPhp extends Php
 {
 	use Stub;

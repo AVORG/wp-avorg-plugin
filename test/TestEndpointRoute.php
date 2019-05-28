@@ -9,7 +9,7 @@ final class TestEndpointRoute extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->fileRoute = $this->factory->make("Route\\EndpointRoute");
+		$this->fileRoute = $this->factory->obtain("Avorg\\Route\\EndpointRoute");
 	}
 
 	public function testExists()

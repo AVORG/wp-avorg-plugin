@@ -1,6 +1,21 @@
 .avorg-utility-prototype {
   display: none; }
 
+.avorg-molecule-mediaObject {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem; }
+  .avorg-molecule-mediaObject .avorg-molecule-mediaObject__image {
+    border-radius: 100%;
+    max-width: 3.5rem;
+    box-shadow: -2px 3px 0.5em rgba(0, 0, 0, 0.15); }
+  .avorg-molecule-mediaObject .avorg-molecule-mediaObject__text {
+    margin-left: 1rem; }
+  .avorg-molecule-mediaObject .avorg-molecule-mediaObject__title {
+    font-weight: bold;
+    margin-bottom: 0;
+    font-size: 1.5rem; }
+
 .avorg-molecule-player .avorg-molecule-player__wrapper {
   position: relative; }
 .avorg-molecule-player .avorg-molecule-player__wrapper .avorg-molecule-player__toggle {
@@ -13,39 +28,26 @@
 .avorg-molecule-player .avorg-molecule-player__wrapper:hover .avorg-molecule-player__toggle {
   opacity: 1; }
 
-.avorg-molecule-recordingMeta {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__photo {
-    border-radius: 100%;
-    max-width: 3.5rem; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__text {
-    margin-left: 1rem; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__title {
-    font-weight: bold;
-    margin-bottom: 0;
-    font-size: 1.5rem; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters {
-    margin-bottom: 0;
-    display: inline-block; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters li {
-    list-style-type: none;
-    font-style: italic;
-    opacity: .7;
-    display: inline-block;
-    margin-right: .2rem; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters li:not(:last-child):after {
-    content: ",";
-    position: relative;
-    left: -.1rem; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters li a {
-    box-shadow: none; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__additionalInfo {
-    display: inline-block;
-    opacity: .7; }
-  .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__additionalInfo:before {
-    content: "| "; }
+.avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters {
+  margin-bottom: 0;
+  display: inline-block; }
+.avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters li {
+  list-style-type: none;
+  font-style: italic;
+  opacity: .7;
+  display: inline-block;
+  margin-right: .2rem; }
+.avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters li:not(:last-child):after {
+  content: ",";
+  position: relative;
+  left: -.1rem; }
+.avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters li a {
+  box-shadow: none; }
+.avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__additionalInfo {
+  display: inline-block;
+  opacity: .7; }
+.avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__additionalInfo:before {
+  content: "| "; }
 
 .avorg-molecule-recordingsList li {
   list-style-type: none; }
@@ -55,5 +57,11 @@
 
 .avorg-page-playlist .avorg-page-playlist__list li.active {
   background-color: yellow; }
+
+.avorg-page-presenters li {
+  list-style-type: none; }
+.avorg-page-presenters .avorg-page-presenters__pagination li {
+  display: inline-block;
+  padding: .5em; }
 
 /*# sourceMappingURL=style.css.map */

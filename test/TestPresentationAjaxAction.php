@@ -9,7 +9,7 @@ final class TestPresentationAjaxAction extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->action = $this->factory->get("AjaxAction\\Presentation");
+		$this->action = $this->factory->secure("Avorg\\AjaxAction\\Presentation");
 	}
 
 	public function testActionReturnsSuccessFalseWhenFailsToRetrievePresentation()

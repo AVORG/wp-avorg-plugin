@@ -27,7 +27,7 @@ abstract class Route
 	{
 		$this->filesystem = $filesystem;
 
-		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"), TRUE);
+		$this->languages = json_decode($this->filesystem->getFile("languages.json"), TRUE);
 	}
 
 	/**

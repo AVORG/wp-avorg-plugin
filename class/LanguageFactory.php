@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+
 class LanguageFactory {
 	/** @var Factory $factory */
 	private $factory;
@@ -19,7 +21,7 @@ class LanguageFactory {
 		$this->factory = $factory;
 		$this->filesystem = $filesystem;
 
-		$this->languages = json_decode($this->filesystem->getFile(AVORG_BASE_PATH . "/languages.json"), TRUE);
+		$this->languages = json_decode($this->filesystem->getFile("languages.json"), TRUE);
 	}
 
 	public function getLanguages()
@@ -70,7 +72,7 @@ class LanguageFactory {
 		if (!$languageConfig) return null;
 
 		/** @var Language $language */
-		$language = $this->factory->make("Language");
+		$language = $this->factory->obtain("Avorg\\Language");
 
 		$language->setBaseRoute($languageConfig["baseRoute"]);
 		$language->setUrlFragments($languageConfig["urlFragments"]);

@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+
 if (!\defined('ABSPATH')) exit;
 
 class AjaxActionFactory
@@ -21,7 +23,7 @@ class AjaxActionFactory
 	public function getActions()
 	{
 		return array_map(function($actionName) {
-			return $this->factory->get("AjaxAction\\$actionName");
+			return $this->factory->secure("Avorg\\AjaxAction\\$actionName");
 		}, $this->actionNames);
 	}
 }

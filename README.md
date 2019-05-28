@@ -8,7 +8,7 @@ PHP 7.2
 
 0. `git clone https://github.com/AVORG/wp-avorg-dev.git`
 0. Follow [`wp-avorg-dev` readme instructions](https://github.com/AVORG/wp-avorg-dev)
-0. Optional: Update dependencies: `cd wp-avorg-dev/wp-avorg-plugin && composer install`
+0. Optional: Update dependencies: `cd wp-avorg-dev/wp-avorg-plugin && composer install --prefer-source`
 
 If you edit the Composer auto-load rules, you'll need to run `composer dump-autoload` to make them go into effect.
 

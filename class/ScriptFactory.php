@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+
 if (!\defined('ABSPATH')) exit;
 
 class ScriptFactory
@@ -16,7 +18,7 @@ class ScriptFactory
 
 	public function getScript($path, ...$actions) {
 		/** @var Script $script */
-		$script = $this->factory->make("Script");
+		$script = $this->factory->obtain("Avorg\\Script");
 
 		$script->setPath($path)->setActions(...$actions);
 

@@ -9,7 +9,7 @@ final class TestRouter extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->router = $this->factory->get("Router");
+		$this->router = $this->factory->secure("Avorg\\Router");
 	}
 
 	public function testAssignsHighPriority()
@@ -117,7 +117,11 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"english/playlists/lists/14/how-to-be-saved.html",
 				"index.php?page_id=PLAYLIST_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
-			]
+			],
+//			[
+//				"english/sermons/presenters",
+//				"index.php?page_id=PRESENTERSLIST_PAGE_ID&language=english"
+//			]
 		];
 	}
 
@@ -274,8 +278,7 @@ final class TestRouter extends Avorg\TestCase
 
 		$this->router->activate();
 
-		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
-		return $addRewriteCalls;
+		return $this->mockWordPress->getCalls("add_rewrite_rule");
 	}
 
 	/**

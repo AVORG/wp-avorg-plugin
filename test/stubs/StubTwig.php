@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use natlib\Stub;
+
 class StubTwig extends Twig
 {
 	use Stub;
@@ -31,14 +33,14 @@ class StubTwig extends Twig
 
 	public function assertTwigTemplateRenderedWithDataMatching($template, $callable, ...$params)
 	{
-		$this->assertAnyCallMatches("render", function($carry, $call) use($template, $callable, $params) {
+		$this->assertAnyCallMatches("render", function($call) use($template, $callable, $params) {
 			$callTemplate = $call[0];
 			$callDataObject = $call[1]["avorg"];
 
 			$doesTemplateMatch = $callTemplate === $template;
 			$doesMatch = call_user_func($callable, $callDataObject, ...$params);
 
-			return $carry || ($doesTemplateMatch && $doesMatch);
+			return $doesTemplateMatch && $doesMatch;
 		});
 	}
 

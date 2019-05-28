@@ -9,7 +9,7 @@ final class TestRssLatest extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->rssLatest = $this->factory->get("Endpoint\\RssEndpoint\\RssLatest");
+		$this->rssLatest = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssLatest");
 	}
 
 	public function testGetsLatestRecordings()

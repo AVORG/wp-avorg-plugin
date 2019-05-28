@@ -2,14 +2,12 @@
 
 namespace Avorg\Page;
 
-use Avorg\AvorgApi;
 use function Avorg\avorgLog;
 use Avorg\Page;
 use Avorg\Presentation;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
-use Avorg\Script;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;
 
@@ -38,6 +36,8 @@ class Playlist extends Page
 	{
 		parent::__construct($renderer, $routeFactory, $wp);
 
+		$this->setPageIdOptionName();
+
 		$this->presentationRepository = $presentationRepository;
 		$this->scriptFactory = $scriptFactory;
 	}
@@ -47,7 +47,7 @@ class Playlist extends Page
 		// TODO: Implement throw404() method.
 	}
 
-	public function setTitle($title)
+	public function filterTitle($title)
 	{
 		return $title;
 	}

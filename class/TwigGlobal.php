@@ -58,4 +58,9 @@ class TwigGlobal
 	{
 		return $this->router->getFullRequestUri();
 	}
+
+	public function getRequestPath()
+	{
+		return $this->router->getRequestPath();
+	}
 }

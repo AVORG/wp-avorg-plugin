@@ -9,7 +9,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->global = $this->factory->make("TwigGlobal");
+		$this->global = $this->factory->obtain("Avorg\\TwigGlobal");
 	}
 
 	public function test__Function()
@@ -97,5 +97,15 @@ final class TestTwigGlobal extends Avorg\TestCase
 		$result = $this->global->getRequestUri();
 
 		$this->assertEquals("http://localhost:8080/espanol", $result);
+	}
+
+	public function testGetRequestPath()
+	{
+		$_SERVER["HTTP_HOST"] = "localhost:8080";
+		$_SERVER["REQUEST_URI"] = "localhost:8080/espanol";
+
+		$result = $this->global->getRequestPath();
+
+		$this->assertEquals("/espanol", $result);
 	}
 }

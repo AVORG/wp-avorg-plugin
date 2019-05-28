@@ -9,7 +9,7 @@ final class TestRenderer extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->renderer = $this->factory->get("Renderer");
+		$this->renderer = $this->factory->secure("Avorg\\Renderer");
 	}
 	
 	public function testUsesTwigToRender()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<phpunit backupGlobals="true" bootstrap="test/bootstrap.php" strict="true">
+<phpunit backupGlobals="true" bootstrap="test/bootstrap.php">
 	<testsuite name='Tests'>
 		<directory prefix="Test" suffix=".php">./test</directory>
 	</testsuite>

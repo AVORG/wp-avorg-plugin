@@ -2,11 +2,16 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/* Mock Objects */
 	
 	/** @var AvorgApi|StubAvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
+
+	/** @var Filesystem|StubFilesystem */
+	protected $mockFilesystem;
 	
 	/** @var Php|StubPhp $mockPhp */
 	protected $mockPhp;
@@ -29,10 +34,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 
 		$_SERVER["HTTP_HOST"] = "localhost:8080";
 
-		$this->factory = new Factory();
+		$this->factory = new Factory(__NAMESPACE__);
 
 		$this->factory->injectObjects(
 			$this->mockAvorgApi = new StubAvorgApi($this),
+			$this->mockFilesystem = new StubFilesystem($this),
 			$this->mockPhp = new StubPhp($this),
 			$this->mockTwig = new StubTwig($this),
 			$this->mockWordPress = new StubWordPress($this, $this->factory)

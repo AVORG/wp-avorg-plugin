@@ -4,11 +4,11 @@ namespace Avorg\Endpoint\RssEndpoint;
 
 
 use Avorg\Endpoint\RssEndpoint;
-use Avorg\Factory;
 use Avorg\Php;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
+use natlib\Factory;
 
 if (!\defined('ABSPATH')) exit;
 

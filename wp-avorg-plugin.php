@@ -11,6 +11,8 @@ Domain Path: /languages
 
 namespace Avorg;
 
+use natlib\Factory;
+
 if (!\defined('ABSPATH')) exit;
 
 define( "AVORG_BASE_PATH", dirname(__FILE__) );
@@ -21,6 +23,6 @@ include_once(AVORG_BASE_PATH . "/vendor/autoload.php");
 
 $factory = new Factory();
 
-$factory->get("AdminPanel")->registerCallbacks();
+$factory->secure("Avorg\\AdminPanel")->registerCallbacks();
 
-\register_activation_hook(__FILE__, [$factory->get("Plugin"), "activate"]);
+\register_activation_hook(__FILE__, [$factory->secure("Avorg\\Plugin"), "activate"]);

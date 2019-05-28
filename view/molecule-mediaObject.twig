@@ -1,0 +1,13 @@
+<div class="avorg-molecule-mediaObject {{ classes }}">
+	<img class="avorg-molecule-mediaObject__image" src="{{ image }}" alt="{{ imageAlt }}">
+
+	<div class="avorg-molecule-mediaObject__text">
+		{% if titleUrl %}<a href="{{ titleUrl }}">{% endif %}
+			<h1 class="avorg-molecule-mediaObject__title">{{ title }}</h1>
+		{% if titleUrl %}</a>{% endif %}
+
+		<div class="avorg-molecule-mediaObject__description">
+			{{ description }}
+		</div>
+	</div>
+</div>

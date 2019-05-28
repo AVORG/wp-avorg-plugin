@@ -2,6 +2,9 @@
 
 namespace Avorg;
 
+use natlib\Factory;
+use natlib\Stub;
+
 class StubWordPress extends WordPress
 {
 	/** @var Factory $factory */
@@ -75,7 +78,7 @@ class StubWordPress extends WordPress
 	 */
 	public function assertPageRegistered($pageName)
 	{
-		$pageObject = $this->factory->get("Page\\$pageName");
+		$pageObject = $this->factory->secure("Avorg\\Page\\$pageName");
 
 		$this->assertFilterAdded("the_content", [$pageObject, "addUi"]);
 	}
