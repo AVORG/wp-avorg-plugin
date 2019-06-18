@@ -24,7 +24,7 @@ class Topic extends Page
 	protected $routeFormat = "{ language }/topics/{ entity_id:[0-9]+ }[/{ slug }]";
 
 	public function __construct(
-		PresentationRepository $presentationRepository,
+		PresentationRepository $presenterRepository,
 		Renderer $renderer,
 		RouteFactory $routeFactory,
 		WordPress $wp
@@ -32,7 +32,7 @@ class Topic extends Page
 	{
 		parent::__construct($renderer, $routeFactory, $wp);
 
-		$this->presentationRepository = $presentationRepository;
+		$this->presentationRepository = $presenterRepository;
 		$this->wp = $wp;
 	}
 

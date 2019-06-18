@@ -32,6 +32,21 @@ class AvorgApi
 		}
 	}
 
+	public function getPresenter($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$url = "$this->apiBaseUrl/presenters/{$id}";
+
+		try {
+			$response = $this->getResponse($url);
+
+			return json_decode($response)->result[0];
+		} catch (\Exception $e) {
+			throw new \Exception("Couldn't retrieve presentation with ID $id", 0, $e);
+		}
+	}
+
 	/**
 	 * @param int $page
 	 * @return mixed
@@ -45,7 +60,7 @@ class AvorgApi
 		try {
 			$response = $this->getResponse($url);
 
-			return json_decode($response)->result;
+			return json_decode($response)->result[0]->presenters;
 		} catch (\Exception $e) {
 			throw new \Exception("Couldn't retrieve presentations at page $page", 0, $e);
 		}

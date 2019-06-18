@@ -4,10 +4,12 @@ namespace Avorg\Page;
 
 use Avorg\AvorgApi;
 use Avorg\Page;
+use Avorg\Presentation;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
 use Avorg\WordPress;
+use Exception;
 
 if (!\defined('ABSPATH')) exit;
 
@@ -42,7 +44,7 @@ class Media extends Page
 	{
 		try {
 			$this->getEntity();
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->set404($query);
 		}
 	}
@@ -69,20 +71,20 @@ class Media extends Page
 	}
 
 	/**
-	 * @return \Avorg\Presentation|null
+	 * @return Presentation|null
 	 */
 	private function getEntitySafe()
 	{
 		try {
 			return $this->getEntity();
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			return null;
 		}
 	}
 
 	/**
-	 * @return \Avorg\Presentation|null
-	 * @throws \Exception
+	 * @return Presentation|null
+	 * @throws Exception
 	 */
 	private function getEntity()
 	{

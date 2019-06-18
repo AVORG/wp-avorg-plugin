@@ -27,7 +27,7 @@ class Playlist extends Page
 	protected $routeFormat = "{ language }/playlists/lists/{ entity_id:[0-9]+ }[/{ slug }]";
 
 	public function __construct(
-		PresentationRepository $presentationRepository,
+		PresentationRepository $presenterRepository,
 		Renderer $renderer,
 		RouteFactory $routeFactory,
 		ScriptFactory $scriptFactory,
@@ -36,7 +36,7 @@ class Playlist extends Page
 	{
 		parent::__construct($renderer, $routeFactory, $wp);
 
-		$this->presentationRepository = $presentationRepository;
+		$this->presentationRepository = $presenterRepository;
 		$this->scriptFactory = $scriptFactory;
 	}
 

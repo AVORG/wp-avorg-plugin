@@ -1,8 +1,14 @@
 <?php
 
+use Avorg\AvorgApi_exceptions;
+use Avorg\Page\Media;
+use Avorg\Presentation;
+use Avorg\WP_Query;
+use natlib\Factory;
+
 final class TestMediaPage extends Avorg\TestCase
 {
-	/** @var \Avorg\Page\Media $mediaPage */
+	/** @var Media $mediaPage */
 	protected $mediaPage;
 	
 	private function assertPlayerUiInjected()
@@ -21,9 +27,9 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	protected function make404ThrowingMediaPage()
 	{
-		$avorgApi = new \Avorg\AvorgApi_exceptions();
+		$avorgApi = new AvorgApi_exceptions();
 
-		$factory = new \natlib\Factory("Avorg");
+		$factory = new Factory("Avorg");
 
 		$factory->injectObjects(
 			$avorgApi,
@@ -138,7 +144,7 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
             $callGlobal = $call[1]["avorg"];
 
-		    return $callGlobal->presentation instanceof \Avorg\Presentation;
+		    return $callGlobal->presentation instanceof Presentation;
         });
 	}
 	
@@ -173,7 +179,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testUsesPresentationIdToGetPresentation()
 	{
-		$wp_query = new \Avorg\WP_Query();
+		$wp_query = new WP_Query();
 
 		$this->mockWordPress->setReturnValue("get_query_var", 42);
 		
@@ -184,7 +190,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testDoesNotSet404IfPresentationExists()
 	{
-		$wp_query = new \Avorg\WP_Query();
+		$wp_query = new WP_Query();
 		$this->mockAvorgApi->setReturnValue("getPresentation", new StdClass());
 		
 		$this->mediaPage->throw404($wp_query);
@@ -195,7 +201,7 @@ final class TestMediaPage extends Avorg\TestCase
 	public function testHandlesExceptionAndThrows404()
 	{
 		$mediaPage = $this->make404ThrowingMediaPage();
-		$wp_query = new \Avorg\WP_Query();
+		$wp_query = new WP_Query();
 		
 		$mediaPage->throw404($wp_query);
 		
@@ -206,7 +212,7 @@ final class TestMediaPage extends Avorg\TestCase
 	public function testThrowing404UnsetsPageId()
 	{
 		$mediaPage = $this->make404ThrowingMediaPage();
-		$wp_query = new \Avorg\WP_Query();
+		$wp_query = new WP_Query();
 		
 		$wp_query->query_vars["page_id"] = 7;
 		
