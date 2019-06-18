@@ -46,4 +46,13 @@ final class TestPresenterListing extends Avorg\TestCase
 			return $callGlobal->presenters[0] instanceof Presenter;
 		});
 	}
+
+	public function testSearchesWithLetter()
+	{
+		$this->mockWordPress->setReturnValue("get_query_var", "w");
+
+		$this->presenterListing->addUi("hello world");
+
+		$this->mockAvorgApi->assertMethodCalledWith("getPresenters", "w");
+	}
 }

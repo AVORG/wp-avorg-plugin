@@ -39,9 +39,14 @@ class PresenterRepository
 		return $this->buildPresenter($rawPresenter);
 	}
 
-	public function getPresenters()
+	/**
+	 * @param null $search
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getPresenters($search = null)
 	{
-		$rawPresenters = $this->api->getPresenters() ?: [];
+		$rawPresenters = $this->api->getPresenters($search) ?: [];
 
 		return array_map([$this, "buildPresenter"], $rawPresenters);
 	}

@@ -35,10 +35,10 @@ class Listing extends Page
 
 	protected function getData()
 	{
-		$this->wp->get_query_var("letter");
+		$letter = $this->wp->get_query_var("letter");
 
 		return [
-			"presenters" => $this->presenterRepository->getPresenters()
+			"presenters" => $this->presenterRepository->getPresenters($letter)
 		];
 	}
 

@@ -51,14 +51,13 @@ class AvorgApi
 	}
 
 	/**
-	 * @param int $page
+	 * @param null $search
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function getPresenters($page = 0)
+	public function getPresenters($search = null)
 	{
-		$start = $page * 25;
-		$url = "$this->apiBaseUrl/presenters?start=$start";
+		$url = "$this->apiBaseUrl/presenters?search=$search";
 
 		try {
 			$response = $this->getResponse($url);
@@ -67,7 +66,7 @@ class AvorgApi
 				return $item->presenters;
 			}, json_decode($response)->result);
 		} catch (Exception $e) {
-			throw new Exception("Couldn't retrieve presentations at page $page", 0, $e);
+			throw new Exception("Couldn't retrieve presenters with search `$search`", 0, $e);
 		}
 	}
 	
