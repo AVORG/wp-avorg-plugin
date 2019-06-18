@@ -50,17 +50,6 @@ class Media extends Page
 	}
 
 	/**
-	 * @param $title
-	 * @return string
-	 */
-	public function filterTitle($title)
-	{
-		$presentation = $this->getEntitySafe();
-
-		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : $title;
-	}
-
-	/**
 	 * @return array
 	 */
 	protected function getData()
@@ -94,4 +83,10 @@ class Media extends Page
 	}
 
 
+	protected function getEntityTitle()
+	{
+		$presentation = $this->getEntitySafe();
+
+		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : null;
+	}
 }

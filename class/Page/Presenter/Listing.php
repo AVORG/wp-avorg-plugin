@@ -40,4 +40,9 @@ class Listing extends Page
 			"presenters" => $this->api->getPresenters() ?: []
 		];
 	}
+
+	protected function getEntityTitle()
+	{
+		// TODO: Implement getEntityTitle() method.
+	}
 }

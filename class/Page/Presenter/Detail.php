@@ -3,6 +3,7 @@
 namespace Avorg\Page\Presenter;
 
 use Avorg\Page;
+use Avorg\Presenter;
 use Avorg\PresenterRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
@@ -44,11 +45,29 @@ class Detail extends Page
 	 */
 	protected function getData()
 	{
-		$entityId = $this->getEntityId();
-		$presenter = $this->presenterRepository->getPresenter($entityId);
+		$presenter = $this->getEntity();
 
 		return [
 			"presenter" => $presenter ? $presenter : null
 		];
+	}
+
+	/**
+	 * @return Presenter|null
+	 * @throws Exception
+	 */
+	protected function getEntity()
+	{
+		$entityId = $this->getEntityId();
+
+		return $this->presenterRepository->getPresenter($entityId);
+	}
+
+	protected function getEntityTitle()
+	{
+		/** @var Presenter $presenter */
+		$presenter = $this->getEntity();
+
+		return $presenter ? "{$presenter->getName()} - AudioVerse" : null;
 	}
 }

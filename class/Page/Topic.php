@@ -41,11 +41,6 @@ class Topic extends Page
 
 	}
 
-	public function filterTitle($title)
-	{
-		return $title;
-	}
-
 	/**
 	 * @return array
 	 * @throws \Exception
@@ -57,5 +52,10 @@ class Topic extends Page
 		$presentations = $this->presentationRepository->getTopicPresentations($topicId);
 
 		return [ "recordings" => $presentations ];
+	}
+
+	protected function getEntityTitle()
+	{
+		// TODO: Implement getEntityTitle() method.
 	}
 }

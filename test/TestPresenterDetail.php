@@ -45,4 +45,19 @@ final class TestPresenterDetail extends Avorg\TestCase
 			return $callGlobal->presenter instanceof Presenter;
 		});
 	}
+
+	public function testFilterTitle()
+	{
+		$apiPresenter = new stdClass();
+		$apiPresenter->givenName = "first";
+		$apiPresenter->surname = "last";
+		$apiPresenter->suffix = "suffix";
+
+		$this->mockAvorgApi->setReturnValue("getPresenter", $apiPresenter);
+
+		$this->assertEquals(
+			"first last suffix - AudioVerse",
+			$this->presenterDetail->filterTitle("previous title")
+		);
+	}
 }

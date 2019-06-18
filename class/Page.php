@@ -37,8 +37,16 @@ abstract class Page
 
 	public function filterTitle($title)
 	{
-		return $title;
+		if (!$this->isThisPage()) {
+			return $title;
+		}
+
+		$newTitle = $this->getEntityTitle();
+
+		return $newTitle ? $newTitle : $title;
 	}
+
+	abstract protected function getEntityTitle();
 
 	public function registerCallbacks()
 	{

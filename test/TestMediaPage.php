@@ -223,6 +223,9 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testSetTitleMethod()
 	{
+		$this->mockWordPress->setReturnValue("get_option", 7);
+		$this->mockWordPress->setReturnValue("get_the_ID", 7);
+
 		$presentation = $this->convertArrayToObjectRecursively([
 		    "recordings" => [
 		        "title" => "Presentation Title"
@@ -327,5 +330,20 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mediaPage->createPage();
 
 		$this->mockWordPress->assertPageNotCreated("Media Detail", "Media Detail");
+	}
+
+	public function testFilterTitleTerminates()
+	{
+		$presentation = $this->convertArrayToObjectRecursively([
+			"recordings" => [
+				"title" => "Presentation Title"
+			]
+		]);
+
+		$this->mockAvorgApi->setReturnValue("getPresentation", $presentation);
+
+		$result = $this->mediaPage->filterTitle("old title");
+
+		$this->assertEquals("old title", $result);
 	}
 }

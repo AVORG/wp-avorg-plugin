@@ -45,11 +45,6 @@ class Playlist extends Page
 		// TODO: Implement throw404() method.
 	}
 
-	public function filterTitle($title)
-	{
-		return $title;
-	}
-
 	protected function getScripts()
 	{
 		return [
@@ -89,5 +84,10 @@ class Playlist extends Page
 		}, []);
 
 		return $array_reduce;
+	}
+
+	protected function getEntityTitle()
+	{
+		// TODO: Implement getEntityTitle() method.
 	}
 }
