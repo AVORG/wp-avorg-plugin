@@ -1,13 +1,11 @@
 <div class="avorg-page-presenters">
 	<ul>
 		{% for presenter in avorg.presenters %}
-			{% set data = presenter.presenters %}
-			{% set name = "#{data.givenName} #{data.surname} #{data.suffix}" %}
 			<li>
 				{% include "molecule-mediaObject.twig" with {
-					image: data.photo256,
+					image: presenter.photo256,
 					imageAlt: "presenter",
-					title: name,
+					title: presenter.name,
 					titleUrl: null,
 					description: "Something will go here probably."
 				} only %}

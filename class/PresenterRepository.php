@@ -34,4 +34,13 @@ class PresenterRepository
 
 		return new Presenter($rawPresenter, $this->presentationRepository);
 	}
+
+	public function getPresenters()
+	{
+		$rawPresenters = $this->api->getPresenters() ?: [];
+
+		return array_map(function($rawPresenter) {
+			return new Presenter($rawPresenter, $this->presentationRepository);
+		}, $rawPresenters);
+	}
 }

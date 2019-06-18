@@ -19,15 +19,7 @@ class Presenter
 		$this->presentationRepository = $presentationRepository;
 	}
 
-	public function __isset($property)
-	{
-		return property_exists($this->apiPresenter, $property);
-	}
 
-	public function __get($property)
-	{
-		return $this->apiPresenter->$property;
-	}
 
 	public function getPresentations()
 	{
@@ -36,15 +28,25 @@ class Presenter
 
 	public function getName()
 	{
-		return implode(" ", [
-			$this->apiPresenter->givenName,
-			$this->apiPresenter->surname,
-			$this->apiPresenter->suffix
-		]);
+		return trim(implode(" ", [
+			$this->__get("givenName"),
+			$this->__get("surname"),
+			$this->__get("suffix"),
+		]));
 	}
 
 	private function getId()
 	{
 		return intval($this->apiPresenter->id);
+	}
+
+	public function __get($property)
+	{
+		return $this->__isset($property) ? $this->apiPresenter->$property : null;
+	}
+
+	public function __isset($property)
+	{
+		return property_exists($this->apiPresenter, $property);
 	}
 }

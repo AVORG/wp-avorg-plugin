@@ -147,16 +147,11 @@ class Presentation
 
 		if (!$language) return null;
 
-		$fragments = [
-			"http://" . $_SERVER["HTTP_HOST"],
-			$language->getBaseRoute(),
-			$language->translateUrlFragment("sermons"),
-			$language->translateUrlFragment("recordings"),
-			$this->apiPresentation->id,
-			$this->formatTitleForUrl($this->apiPresentation->title) . ".html"
-		];
+		$presentationId = $this->apiPresentation->id;
+		$tail = $this->formatTitleForUrl($this->apiPresentation->title) . ".html";
+		$path = "sermons/recordings/$presentationId/$tail";
 
-		return implode("/", $fragments);
+		return $language->getTranslatedUrl($path);
 	}
 
 	/**

@@ -20,14 +20,6 @@ class Language {
 	}
 
 	/**
-	 * @return mixed
-	 */
-	public function getBaseRoute()
-	{
-		return $this->baseRoute;
-	}
-
-	/**
 	 * @param mixed $baseRoute
 	 * @return Language
 	 */
@@ -47,9 +39,26 @@ class Language {
 		return $this;
 	}
 
+	public function getTranslatedUrl($path)
+	{
+		$fragments = explode("/", $path);
+		$translatedFragments = array_map([$this, "translateUrlFragment"], $fragments);
+		$translatedPath = implode("/", $translatedFragments);
+
+		return $this->getBaseUrl() . "/$translatedPath";
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getBaseUrl()
+	{
+		return "http://${_SERVER['HTTP_HOST']}/$this->baseRoute";
+	}
+
 	public function translateUrlFragment($fragment)
 	{
-		return $this->urlFragments[$fragment];
+		return $this->urlFragments[$fragment] ?: $fragment;
 	}
 
 	public function getLangCode()

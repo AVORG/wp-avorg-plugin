@@ -63,7 +63,9 @@ class AvorgApi
 		try {
 			$response = $this->getResponse($url);
 
-			return json_decode($response)->result;
+			return array_map(function($item) {
+				return $item->presenters;
+			}, json_decode($response)->result);
 		} catch (Exception $e) {
 			throw new Exception("Couldn't retrieve presentations at page $page", 0, $e);
 		}

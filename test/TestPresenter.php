@@ -7,19 +7,21 @@ final class TestPresenter extends Avorg\TestCase
 	/** @var Presenter $presenter */
 	private $presenter;
 
+	private $apiPresenter;
+
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$apiPresenter = new stdClass();
-		$apiPresenter->description = "hello world";
-		$apiPresenter->id = "131";
-		$apiPresenter->givenName = "first";
-		$apiPresenter->surname = "last";
-		$apiPresenter->suffix = "suffix";
+		$this->apiPresenter = new stdClass();
+		$this->apiPresenter->description = "hello world";
+		$this->apiPresenter->id = "131";
+		$this->apiPresenter->givenName = "first";
+		$this->apiPresenter->surname = "last";
+		$this->apiPresenter->suffix = "suffix";
 
 		$presentationRepository = $this->factory->secure("Avorg\\PresentationRepository");
-		$this->presenter = new Avorg\Presenter($apiPresenter, $presentationRepository);
+		$this->presenter = new Avorg\Presenter($this->apiPresenter, $presentationRepository);
 	}
 
 	public function testGetPresentations()
@@ -44,5 +46,12 @@ final class TestPresenter extends Avorg\TestCase
 	public function testGetName()
 	{
 		$this->assertEquals("first last suffix", $this->presenter->getName());
+	}
+
+	public function testGetNameWithNoGivenName()
+	{
+		unset($this->apiPresenter->givenName);
+
+		$this->assertEquals("last suffix", $this->presenter->getName());
 	}
 }
