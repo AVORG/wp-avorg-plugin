@@ -2,7 +2,7 @@
 
 final class TestMediaPage extends Avorg\TestCase
 {
-	/** @var \Avorg\Page $mediaPage */
+	/** @var \Avorg\Page\Media $mediaPage */
 	protected $mediaPage;
 	
 	private function assertPlayerUiInjected()
@@ -32,14 +32,14 @@ final class TestMediaPage extends Avorg\TestCase
 			$this->mockWordPress
 		);
 		
-		return $factory->secure("Avorg\\PageFactory")->getMediaPage();
+		return $factory->secure("Avorg\\Page\\Media");
 	}
 	
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->mediaPage = $this->factory->secure("Avorg\\PageFactory")->getMediaPage();
+		$this->mediaPage = $this->factory->secure("Avorg\\Page\\Media");
 	}
 	
 	public function testSavesMediaPageId()
@@ -156,7 +156,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("get_option", 7);
 		$this->mockWordPress->setReturnValue("get_the_ID", 7);
-		$this->mockWordPress->setReturnValue("get_query_var",  "54321");
+		$this->mockWordPress->setReturnValues("get_query_var",  "54321");
 		
 		$this->mediaPage->addUi("content");
 		
@@ -234,7 +234,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("get_option", 7);
 		$this->mockWordPress->setReturnValue("get_the_ID", 7);
-		$this->mockWordPress->setReturnValue("get_query_var",  7);
+		$this->mockWordPress->setReturnValues("get_query_var",  7);
 		
 		$this->mediaPage->filterTitle("old title");
 		

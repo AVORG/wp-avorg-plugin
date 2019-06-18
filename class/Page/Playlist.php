@@ -36,8 +36,6 @@ class Playlist extends Page
 	{
 		parent::__construct($renderer, $routeFactory, $wp);
 
-		$this->setPageIdOptionName();
-
 		$this->presentationRepository = $presentationRepository;
 		$this->scriptFactory = $scriptFactory;
 	}

@@ -16,5 +16,5 @@ return array(
     'Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
-    'Avorg\\' => array($baseDir . '/class', $baseDir . '/test', $baseDir . '/test/stubs', $baseDir . '/interface'),
+    'Avorg\\' => array($baseDir . '/class', $baseDir . '/test', $baseDir . '/test/stubs'),
 );

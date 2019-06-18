@@ -24,8 +24,7 @@
       "Avorg\\": [
         "class/",
         "test/",
-        "test/stubs/",
-        "interface"
+        "test/stubs/"
       ]
     }
   }

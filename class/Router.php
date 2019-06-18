@@ -2,8 +2,6 @@
 
 namespace Avorg;
 
-use natlib\Stub;
-
 if (!\defined('ABSPATH')) exit;
 
 class Router
@@ -80,11 +78,9 @@ class Router
 
 	private function getPageRoutes()
 	{
-		$pages = $this->pageFactory->getPages();
-
 		return array_map(function (Page $page) {
 			return $page->getRoute();
-		}, $pages);
+		}, $this->pageFactory->getPages());
 	}
 
 	/**
