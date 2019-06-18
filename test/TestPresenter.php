@@ -19,9 +19,11 @@ final class TestPresenter extends Avorg\TestCase
 		$this->apiPresenter->givenName = "first";
 		$this->apiPresenter->surname = "last";
 		$this->apiPresenter->suffix = "suffix";
+		$this->apiPresenter->lang = "en";
 
+		$languageFactory = $this->factory->secure("Avorg\\LanguageFactory");
 		$presentationRepository = $this->factory->secure("Avorg\\PresentationRepository");
-		$this->presenter = new Avorg\Presenter($this->apiPresenter, $presentationRepository);
+		$this->presenter = new Avorg\Presenter($this->apiPresenter, $languageFactory, $presentationRepository);
 	}
 
 	public function testGetPresentations()
@@ -33,9 +35,7 @@ final class TestPresenter extends Avorg\TestCase
 
 	public function testGetDescription()
 	{
-		$result = $this->presenter->description;
-
-		$this->assertEquals("hello world", $result);
+		$this->assertEquals("hello world", $this->presenter->description);
 	}
 
 	public function testIssetDescription()
@@ -53,5 +53,13 @@ final class TestPresenter extends Avorg\TestCase
 		unset($this->apiPresenter->givenName);
 
 		$this->assertEquals("last suffix", $this->presenter->getName());
+	}
+
+	public function testGetUrl()
+	{
+		$this->assertEquals(
+			"http://${_SERVER['HTTP_HOST']}/english/sermons/presenters/131/first-last-suffix.html",
+			$this->presenter->getUrl()
+		);
 	}
 }

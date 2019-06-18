@@ -148,23 +148,10 @@ class Presentation
 		if (!$language) return null;
 
 		$presentationId = $this->apiPresentation->id;
-		$tail = $this->formatTitleForUrl($this->apiPresentation->title) . ".html";
+		$tail = $language->formatStringForUrl($this->apiPresentation->title) . ".html";
 		$path = "sermons/recordings/$presentationId/$tail";
 
 		return $language->getTranslatedUrl($path);
-	}
-
-	/**
-	 * @param $title
-	 * @return string
-	 */
-	private function formatTitleForUrl($title)
-	{
-		$titleLowerCase = strtolower($title);
-		$titleNoPunctuation = preg_replace("/[^\w ]/", "", $titleLowerCase);
-		$titleHyphenated = str_replace(" ", "-", $titleNoPunctuation);
-
-		return $titleHyphenated;
 	}
 
 	/**

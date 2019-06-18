@@ -58,7 +58,16 @@ class Language {
 
 	public function translateUrlFragment($fragment)
 	{
-		return $this->urlFragments[$fragment] ?: $fragment;
+		return key_exists($fragment, $this->urlFragments) ? $this->urlFragments[$fragment] : $fragment;
+	}
+
+	public function formatStringForUrl($string)
+	{
+		$stringLowerCase = strtolower($string);
+		$stringNoPunctuation = preg_replace("/[^\w ]/", "", $stringLowerCase);
+		$stringHyphenated = str_replace(" ", "-", $stringNoPunctuation);
+
+		return $stringHyphenated;
 	}
 
 	public function getLangCode()

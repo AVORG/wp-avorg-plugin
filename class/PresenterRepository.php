@@ -12,12 +12,16 @@ class PresenterRepository
 	/** @var AvorgApi $api */
 	private $api;
 
+	/** @var LanguageFactory $languageFactory */
+	private $languageFactory;
+
 	/** @var PresentationRepository $presentationRepository */
 	private $presentationRepository;
 
-	public function __construct(AvorgApi $api, PresentationRepository $presentationRepository)
+	public function __construct(AvorgApi $api, LanguageFactory $languageFactory, PresentationRepository $presentationRepository)
 	{
 		$this->api = $api;
+		$this->languageFactory = $languageFactory;
 		$this->presentationRepository = $presentationRepository;
 	}
 
@@ -32,15 +36,22 @@ class PresenterRepository
 
 		if (!$rawPresenter) return null;
 
-		return new Presenter($rawPresenter, $this->presentationRepository);
+		return $this->buildPresenter($rawPresenter);
 	}
 
 	public function getPresenters()
 	{
 		$rawPresenters = $this->api->getPresenters() ?: [];
 
-		return array_map(function($rawPresenter) {
-			return new Presenter($rawPresenter, $this->presentationRepository);
-		}, $rawPresenters);
+		return array_map([$this, "buildPresenter"], $rawPresenters);
+	}
+
+	/**
+	 * @param $rawPresenter
+	 * @return Presenter
+	 */
+	private function buildPresenter($rawPresenter)
+	{
+		return new Presenter($rawPresenter, $this->languageFactory, $this->presentationRepository);
 	}
 }

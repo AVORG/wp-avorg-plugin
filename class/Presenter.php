@@ -8,18 +8,24 @@ if (!defined('ABSPATH')) exit;
 
 class Presenter
 {
+	/** @var LanguageFactory $languageFactory */
+	private $languageFactory;
+
 	/** @var PresentationRepository $presentationRepository */
 	private $presentationRepository;
 
 	private $apiPresenter;
 
-	public function __construct($apiPresenter, PresentationRepository $presentationRepository)
+	public function __construct(
+		$apiPresenter,
+		LanguageFactory $languageFactory,
+		PresentationRepository $presentationRepository
+	)
 	{
 		$this->apiPresenter = $apiPresenter;
+		$this->languageFactory = $languageFactory;
 		$this->presentationRepository = $presentationRepository;
 	}
-
-
 
 	public function getPresentations()
 	{
@@ -48,5 +54,18 @@ class Presenter
 	public function __isset($property)
 	{
 		return property_exists($this->apiPresenter, $property);
+	}
+
+	public function getUrl()
+	{
+		$language = $this->languageFactory->getLanguageByLangCode($this->apiPresenter->lang);
+
+		if (!$language) return null;
+
+		$presentationId = $this->apiPresenter->id;
+		$tail = $language->formatStringForUrl($this->getName()) . ".html";
+		$path = "sermons/presenters/$presentationId/$tail";
+
+		return $language->getTranslatedUrl($path);
 	}
 }
