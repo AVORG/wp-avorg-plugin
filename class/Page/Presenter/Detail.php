@@ -68,6 +68,6 @@ class Detail extends Page
 		/** @var Presenter $presenter */
 		$presenter = $this->getEntity();
 
-		return $presenter ? "{$presenter->getName()} - AudioVerse" : null;
+		return $presenter ? $presenter->getName() : null;
 	}
 }

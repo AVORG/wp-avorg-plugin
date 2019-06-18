@@ -87,6 +87,6 @@ class Media extends Page
 	{
 		$presentation = $this->getEntitySafe();
 
-		return $presentation ? "{$presentation->getTitle()} - AudioVerse" : null;
+		return $presentation ? $presentation->getTitle() : null;
 	}
 }

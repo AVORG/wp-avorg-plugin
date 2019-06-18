@@ -41,9 +41,9 @@ abstract class Page
 			return $title;
 		}
 
-		$newTitle = $this->getEntityTitle();
+		$entityTitle = $this->getEntityTitle();
 
-		return $newTitle ? $newTitle : $title;
+		return $entityTitle ? "$entityTitle - AudioVerse" : $title;
 	}
 
 	abstract protected function getEntityTitle();
