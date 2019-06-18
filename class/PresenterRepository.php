@@ -4,7 +4,6 @@ namespace Avorg;
 
 use function defined;
 use Exception;
-use natlib\Factory;
 
 if (!defined('ABSPATH')) exit;
 
@@ -13,13 +12,13 @@ class PresenterRepository
 	/** @var AvorgApi $api */
 	private $api;
 
-	/** @var Factory $factory */
-	private $factory;
+	/** @var PresentationRepository $presentationRepository */
+	private $presentationRepository;
 
-	public function __construct(AvorgApi $api, Factory $factory)
+	public function __construct(AvorgApi $api, PresentationRepository $presentationRepository)
 	{
 		$this->api = $api;
-		$this->factory = $factory;
+		$this->presentationRepository = $presentationRepository;
 	}
 
 	/**
@@ -31,6 +30,8 @@ class PresenterRepository
 	{
 		$rawPresenter = $this->api->getPresenter($id);
 
-		return $rawPresenter ? $this->factory->make("Avorg\\Presenter") : null;
+		if (!$rawPresenter) return null;
+
+		return new Presenter($rawPresenter, $this->presentationRepository);
 	}
 }

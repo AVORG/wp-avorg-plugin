@@ -2,6 +2,9 @@
 
 namespace Avorg;
 
+use Exception;
+use function get_option;
+
 if (!\defined('ABSPATH')) exit;
 
 class AvorgApi
@@ -13,8 +16,8 @@ class AvorgApi
 	
 	public function __construct()
 	{
-		$this->apiUser = \get_option("avorgApiUser");
-		$this->apiPass = \get_option("avorgApiPass");
+		$this->apiUser = get_option("avorgApiUser");
+		$this->apiPass = get_option("avorgApiPass");
 	}
 
 	public function getPlaylist($id)
@@ -27,7 +30,7 @@ class AvorgApi
 			$responseObject = json_decode($response);
 
 			return $responseObject->result;
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			return false;
 		}
 	}
@@ -41,16 +44,16 @@ class AvorgApi
 		try {
 			$response = $this->getResponse($url);
 
-			return json_decode($response)->result[0];
-		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve presentation with ID $id", 0, $e);
+			return json_decode($response)->result[0]->presenters;
+		} catch (Exception $e) {
+			throw new Exception("Couldn't retrieve presentation with ID $id", 0, $e);
 		}
 	}
 
 	/**
 	 * @param int $page
 	 * @return mixed
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getPresenters($page = 0)
 	{
@@ -60,16 +63,16 @@ class AvorgApi
 		try {
 			$response = $this->getResponse($url);
 
-			return json_decode($response)->result[0]->presenters;
-		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve presentations at page $page", 0, $e);
+			return json_decode($response)->result;
+		} catch (Exception $e) {
+			throw new Exception("Couldn't retrieve presentations at page $page", 0, $e);
 		}
 	}
 	
 	/**
 	 * @param $id
 	 * @return bool
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getPresentation($id)
 	{
@@ -81,15 +84,15 @@ class AvorgApi
 			$response = $this->getResponse($url);
 
 			return json_decode($response)->result[0];
-		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve presentation with ID $id", 0, $e);
+		} catch (Exception $e) {
+			throw new Exception("Couldn't retrieve presentation with ID $id", 0, $e);
 		}
 	}
 	
 	/**
 	 * @param string $list
 	 * @return null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getPresentations($list = "")
 	{
@@ -102,7 +105,7 @@ class AvorgApi
 	/**
 	 * @param $topicId
 	 * @return null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getTopicPresentations($topicId)
 	{
@@ -111,10 +114,19 @@ class AvorgApi
 		return $this->getPresentationsResponse($url);
 	}
 
+	public function getPresenterPresentations($presenterId)
+	{
+		if (!is_numeric($presenterId)) return false;
+
+		$url = "$this->apiBaseUrl/recordings/presenter/$presenterId";
+
+		return $this->getPresentationsResponse($url);
+	}
+
 	/**
 	 * @param $apiUrl
 	 * @return null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function getPresentationsResponse($apiUrl)
 	{
@@ -123,15 +135,15 @@ class AvorgApi
 			$responseObject = json_decode($response);
 
 			return (isset($responseObject->result)) ? $responseObject->result : null;
-		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve list of presentations", 0, $e);
+		} catch (Exception $e) {
+			throw new Exception("Couldn't retrieve list of presentations", 0, $e);
 		}
 	}
 	
 	/**
 	 * @param $url
 	 * @return bool|string
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function getResponse($url)
 	{
@@ -140,7 +152,7 @@ class AvorgApi
 		if ($result = @file_get_contents($url, false, $this->context)) {
 			return $result;
 		} else {
-			throw new \Exception("Failed to get response from network");
+			throw new Exception("Failed to get response from network");
 		}
 	}
 	

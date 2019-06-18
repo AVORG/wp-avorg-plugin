@@ -34,6 +34,13 @@ class PresentationRepository
 		return $this->buildPresentations($apiResponse);
     }
 
+    public function getPresenterPresentations($presenterId)
+	{
+		$apiResponse = $this->api->getPresenterPresentations($presenterId);
+
+		return $this->buildPresentations($apiResponse);
+	}
+
 	/**
 	 * @param $presentationId
 	 * @return Presentation|null

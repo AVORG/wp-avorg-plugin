@@ -38,6 +38,11 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function getPresenterPresentations($presenterId)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	/* Helper Methods */
 
 	public function loadPresentation($dataArray) {
