@@ -2,14 +2,14 @@
 
 namespace Avorg\Page\Presenter;
 
-use Avorg\AvorgApi;
 use Avorg\Page;
 use Avorg\PresenterRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
 use Avorg\WordPress;
+use function defined;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class Listing extends Page
 {
