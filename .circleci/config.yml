@@ -28,7 +28,7 @@ jobs:
 
     - run: composer install -n --prefer-dist
 
-    - run: apt-get update && apt-get install zip
+    - run: sudo apt-get update && sudo apt-get install zip
     - run: zip -r wp-avorg-plugin .
 
     - store_artifacts:
