@@ -12,10 +12,22 @@
   },
   "repositories": [
     {
-      "type": "path",
-      "url": "../natlib",
-      "options": {
-        "symlink": true
+      "type": "package",
+      "package": {
+        "name": "narthur/natlib",
+        "version": "2019.06.20",
+        "dist": {
+          "type": "vcs",
+          "url": "https://github.com/avorg/wp-avorg-plugin"
+        },
+        "source": {
+          "type": "path",
+          "url": "../natlib",
+          "reference": "master",
+          "options": {
+            "symlink": true
+          }
+        }
       }
     }
   ],
