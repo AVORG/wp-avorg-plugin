@@ -17,17 +17,14 @@ class RssLatest extends RssEndpoint
 	/** @var PresentationRepository $presentationRepository */
 	private $presentationRepository;
 
-	protected $routeFormat = "{ language }/podcasts/latest";
-
 	public function __construct(
 		Factory $factory,
 		Php $php,
 		PresentationRepository $presentationRepository,
-		Renderer $renderer,
-		RouteFactory $routeFactory
+		Renderer $renderer
 	)
 	{
-		parent::__construct($factory, $php, $renderer, $routeFactory);
+		parent::__construct($factory, $php, $renderer);
 
 		$this->presentationRepository = $presentationRepository;
 	}

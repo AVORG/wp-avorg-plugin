@@ -4,13 +4,10 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
-abstract class Page
+abstract class Page implements iRoutable
 {
 	/** @var Renderer $renderer */
 	protected $renderer;
-
-	/** @var RouteFactory $routeFactory */
-	private $routeFactory;
 
 	/** @var WordPress $wp */
 	protected $wp;
@@ -22,10 +19,9 @@ abstract class Page
 	protected $routeFormat;
 
 
-	public function __construct(Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
+	public function __construct(Renderer $renderer, WordPress $wp)
 	{
 		$this->renderer = $renderer;
-		$this->routeFactory = $routeFactory;
 		$this->wp = $wp;
 
 		$this->setPageIdOptionName();
@@ -81,11 +77,6 @@ abstract class Page
 		return ($this->isThisPage()) ? $this->buildUi() . $content : $content;
 	}
 
-	public function getRoute()
-	{
-		return $this->routeFactory->getPageRoute($this->getPostId(), $this->routeFormat);
-	}
-
 	/**
 	 * @return string
 	 */
@@ -100,7 +91,7 @@ abstract class Page
 
 	public function createPage()
 	{
-		$postId = $this->getPostId();
+		$postId = $this->getRouteId();
 		$postStatus = $this->wp->get_post_status($postId);
 
 		if ($postId === false || $postStatus === false) {
@@ -126,7 +117,7 @@ abstract class Page
 
 	protected function isThisPage()
 	{
-		$postId = intval($this->getPostId(), 10);
+		$postId = intval($this->getRouteId(), 10);
 		$thisPageId = $this->wp->get_the_ID();
 
 		return $postId === $thisPageId;
@@ -135,7 +126,7 @@ abstract class Page
 	/**
 	 * @return mixed
 	 */
-	public function getPostId()
+	public function getRouteId()
 	{
 		return $this->wp->get_option($this->pageIdOptionName);
 	}

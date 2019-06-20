@@ -13,7 +13,6 @@ class Listing extends Page
 	protected $defaultPageTitle = "Playlists";
 	protected $defaultPageContent = "Playlists";
 	protected $twigTemplate = "page-playlists.twig";
-	protected $routeFormat = "{ language }/playlists/lists";
 
 	public function throw404($query)
 	{

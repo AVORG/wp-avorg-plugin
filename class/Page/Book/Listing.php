@@ -3,17 +3,29 @@
 
 namespace Avorg\Page\Book;
 
+use Avorg\AvorgApi;
 use Avorg\Page;
+use Avorg\Renderer;
+use Avorg\RouteFactory;
+use Avorg\WordPress;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
 
 class Listing extends Page
 {
+	private $avorgApi;
+
 	protected $defaultPageTitle = "Books";
 	protected $defaultPageContent = "Books";
 	protected $twigTemplate = "page-books.twig";
-	protected $routeFormat = "{ language }/audiobooks/books";
+
+	public function __construct(AvorgApi $avorgApi, Renderer $renderer, WordPress $wp)
+	{
+		parent::__construct($renderer, $wp);
+
+		$this->avorgApi = $avorgApi;
+	}
 
 	public function throw404($query)
 	{
@@ -22,7 +34,7 @@ class Listing extends Page
 
 	protected function getData()
 	{
-		// TODO: Implement getData() method.
+		$this->avorgApi->getBooks();
 	}
 
 	protected function getEntityTitle()

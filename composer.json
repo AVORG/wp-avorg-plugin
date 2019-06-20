@@ -23,6 +23,7 @@
     "psr-4": {
       "Avorg\\": [
         "class/",
+        "interface/",
         "test/",
         "test/stubs/"
       ]

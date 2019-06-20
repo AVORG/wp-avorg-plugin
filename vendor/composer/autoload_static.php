@@ -95,8 +95,9 @@ class ComposerStaticInit577af4de92784c29a85f077623373e5a
         'Avorg\\' => 
         array (
             0 => __DIR__ . '/../..' . '/class',
-            1 => __DIR__ . '/../..' . '/test',
-            2 => __DIR__ . '/../..' . '/test/stubs',
+            1 => __DIR__ . '/../..' . '/interface',
+            2 => __DIR__ . '/../..' . '/test',
+            3 => __DIR__ . '/../..' . '/test/stubs',
         ),
     );
 

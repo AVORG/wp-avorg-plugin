@@ -19,11 +19,10 @@ class Listing extends Page
 	protected $defaultPageTitle = "Presenters";
 	protected $defaultPageContent = "Presenters";
 	protected $twigTemplate = "page-presenters.twig";
-	protected $routeFormat = "{ language }/sermons/presenters[/{ letter }]";
 
-	public function __construct(PresenterRepository $presenterRepository, Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
+	public function __construct(PresenterRepository $presenterRepository, Renderer $renderer, WordPress $wp)
 	{
-		parent::__construct($renderer, $routeFactory, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->presenterRepository = $presenterRepository;
 	}

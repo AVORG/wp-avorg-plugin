@@ -20,6 +20,25 @@ class AvorgApi
 		$this->apiPass = get_option("avorgApiPass");
 	}
 
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBooks()
+	{
+		$url = "$this->apiBaseUrl/audiobooks";
+
+		try {
+			$response = $this->getResponse($url);
+
+			return array_map(function($item) {
+				return $item->audiobooks;
+			}, json_decode($response)->result);
+		} catch (Exception $e) {
+			throw new Exception("Couldn't retrieve books", 0, $e);
+		}
+	}
+
 	public function getPlaylist($id)
 	{
 		if (!is_numeric($id)) return false;
@@ -35,6 +54,11 @@ class AvorgApi
 		}
 	}
 
+	/**
+	 * @param $id
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function getPresenter($id)
 	{
 		if (!is_numeric($id)) return false;

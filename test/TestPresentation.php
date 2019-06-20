@@ -1,17 +1,19 @@
 <?php
 
+use Avorg\Presentation;
+
 final class TestPresentation extends Avorg\TestCase
 {
 	/**
 	 * @param $apiResponse
-	 * @return \Avorg\Presentation
+	 * @return Presentation
 	 * @throws ReflectionException
 	 */
     protected function getPresentationForApiResponse($apiResponse)
     {
         $apiResponseObject = $this->convertArrayToObjectRecursively($apiResponse);
 
-        return new \Avorg\Presentation($apiResponseObject, $this->factory->secure("Avorg\\LanguageFactory"));
+        return new Presentation($apiResponseObject, $this->factory->secure("Avorg\\LanguageFactory"));
     }
 
     public function testIncludesPresenterName()

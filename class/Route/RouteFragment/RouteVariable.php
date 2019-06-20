@@ -9,6 +9,12 @@ if (!\defined('ABSPATH')) exit;
 class RouteVariable extends RouteFragment
 {
 	private $defaultTokenRegex = "([\w-\.]+)";
+	private $value;
+
+	public function setVariables($values)
+	{
+		$this->value = array_key_exists($this->getName(), $values) ? $values[$this->getName()] : null;
+	}
 
 	/**
 	 * @return string
@@ -16,6 +22,11 @@ class RouteVariable extends RouteFragment
 	public function getRegex()
 	{
 		return $this->getPattern();
+	}
+
+	public function getUrlFragment()
+	{
+		return $this->value ? $this->value : "{{".$this->getName()."}}";
 	}
 
 	public function getRewriteTags()

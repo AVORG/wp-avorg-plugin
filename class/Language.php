@@ -39,6 +39,12 @@ class Language {
 		return $this;
 	}
 
+	public function getUrlFragments()
+	{
+		return $this->urlFragments;
+	}
+
+	// KILL IT
 	public function getTranslatedUrl($path)
 	{
 		$fragments = explode("/", $path);
@@ -48,19 +54,22 @@ class Language {
 		return $this->getBaseUrl() . "/$translatedPath";
 	}
 
+	// KILL IT
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getBaseUrl()
 	{
 		return "http://${_SERVER['HTTP_HOST']}/$this->baseRoute";
 	}
 
+	// KILL IT
 	public function translateUrlFragment($fragment)
 	{
 		return key_exists($fragment, $this->urlFragments) ? $this->urlFragments[$fragment] : $fragment;
 	}
 
+	// KILL IT
 	public function formatStringForUrl($string)
 	{
 		$stringLowerCase = strtolower($string);

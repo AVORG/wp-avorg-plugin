@@ -2,7 +2,9 @@
 
 namespace Avorg;
 
-if (!\defined('ABSPATH')) exit;
+use function defined;
+
+if (!defined('ABSPATH')) exit;
 
 class Router
 {
@@ -64,8 +66,7 @@ class Router
 	{
 		return array_merge(
 			$this->getLanguageRoutes(),
-			$this->getPageRoutes(),
-			$this->getEndpointRoutes()
+			$this->routeFactory->getRoutes()
 		);
 	}
 
@@ -74,23 +75,6 @@ class Router
 		return array_map(function (Language $language) {
 			return $language->getRoute();
 		}, $this->languageFactory->getLanguages());
-	}
-
-	private function getPageRoutes()
-	{
-		return array_map(function (Page $page) {
-			return $page->getRoute();
-		}, $this->pageFactory->getPages());
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getEndpointRoutes()
-	{
-		return array_map(function (Endpoint $endpoint) {
-			return $endpoint->getRoute();
-		}, $this->endpointFactory->getEndpoints());
 	}
 
 	/**

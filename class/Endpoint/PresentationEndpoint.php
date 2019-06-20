@@ -18,16 +18,11 @@ class PresentationEndpoint extends Endpoint
 	/** @var WordPress $wp */
 	private $wp;
 
-	protected $routeFormat = "api/presentation/{ entity_id:[0-9]+ }";
-
 	public function __construct(
 		PresentationRepository $presentationRepository,
-		RouteFactory $routeFactory,
 		WordPress $wp
 	)
 	{
-		parent::__construct($routeFactory);
-
 		$this->presentationRepository = $presentationRepository;
 		$this->wp = $wp;
 	}

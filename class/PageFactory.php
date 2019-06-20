@@ -3,6 +3,7 @@
 namespace Avorg;
 
 use natlib\Factory;
+use ReflectionException;
 
 if (!\defined('ABSPATH')) exit;
 
@@ -28,9 +29,17 @@ class PageFactory
 		$paths = $this->filesystem->getMatchingPathsRecursive("class/Page", "/\.php/") ?: [];
 		$classes = array_map([$this, "pathToClassname"], $paths);
 
-		return array_map(function ($class) {
-			return $this->factory->secure($class);
-		}, $classes);
+		return array_map([$this, "getPage"], $classes);
+	}
+
+	/**
+	 * @param $class
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	public function getPage($class)
+	{
+		return $this->factory->secure($class);
 	}
 
 	public function pathToClassname($path)

@@ -13,6 +13,15 @@ abstract class RouteFragment
 		$this->content = $content;
 	}
 
+	public function setVariables($values)
+	{
+		if (!is_array($this->content)) return;
+
+		array_walk($this->content, function(RouteFragment $child) use($values) {
+			$child->setVariables($values);
+		});
+	}
+
 	/**
 	 * @return mixed
 	 */
@@ -20,6 +29,13 @@ abstract class RouteFragment
 	{
 		return array_reduce($this->content, function ($carry, RouteFragment $child) {
 			return $carry . $child->getRegex();
+		}, "");
+	}
+
+	protected function getChildUrlFragment()
+	{
+		return array_reduce($this->content, function ($carry, RouteFragment $child) {
+			return $carry . $child->getUrlFragment();
 		}, "");
 	}
 
@@ -32,4 +48,5 @@ abstract class RouteFragment
 	}
 
 	abstract public function getRegex();
+	abstract public function getUrlFragment();
 }

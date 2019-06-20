@@ -2,7 +2,9 @@
 
 namespace Avorg;
 
-if (!\defined('ABSPATH')) exit;
+use function defined;
+
+if (!defined('ABSPATH')) exit;
 
 class Presentation
 {

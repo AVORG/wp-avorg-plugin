@@ -14,7 +14,7 @@ final class TestEndpointFactory extends Avorg\TestCase
 
 	public function testGetEndpointById()
 	{
-		$endpoint = $this->endpointFactory->getEndpoint("Avorg_Endpoint_RssEndpoint_RssLatest");
+		$endpoint = $this->endpointFactory->getEndpointById("Avorg_Endpoint_RssEndpoint_RssLatest");
 
 		$this->assertInstanceOf("Avorg\\Endpoint\\RssEndpoint\\RssLatest", $endpoint);
 	}
@@ -25,7 +25,7 @@ final class TestEndpointFactory extends Avorg\TestCase
 	 */
 	public function testIgnoresInvalidEndpointNames($badId)
 	{
-		$result = $this->endpointFactory->getEndpoint($badId);
+		$result = $this->endpointFactory->getEndpointById($badId);
 
 		$this->assertNull($result);
 	}

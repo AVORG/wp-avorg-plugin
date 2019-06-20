@@ -4,6 +4,7 @@ namespace Avorg;
 
 use Avorg\Route\RouteFragment;
 use Avorg\Route\RouteFragment\RouteOption;
+use Exception;
 
 if (!\defined('ABSPATH')) exit;
 
@@ -12,9 +13,12 @@ abstract class Route
 	/** @var Filesystem $filesystem */
 	private $filesystem;
 
-	private $languages;
-	private $routeFormat;
+	/** @var LanguageFactory $languageFactory */
+	protected $languageFactory;
+
+	protected $routeFormat;
 	protected $routeTree;
+	protected $id;
 
 	private $fragmentPatterns = [
 		"variable" => "/^{(.+?)}/",
@@ -23,11 +27,20 @@ abstract class Route
 		"option" => "/^\[/"
 	];
 
-	public function __construct(Filesystem $filesystem)
+	public function __construct(Filesystem $filesystem, LanguageFactory $languageFactory)
 	{
 		$this->filesystem = $filesystem;
+		$this->languageFactory = $languageFactory;
+	}
 
-		$this->languages = json_decode($this->filesystem->getFile("languages.json"), TRUE);
+	/**
+	 * @param mixed $id
+	 * @return Route
+	 */
+	public function setId($id)
+	{
+		$this->id = $id;
+		return $this;
 	}
 
 	/**
@@ -44,7 +57,7 @@ abstract class Route
 
 	/**
 	 * @return mixed
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getRewriteTags()
 	{
@@ -63,7 +76,7 @@ abstract class Route
 
 	/**
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getRewriteRules()
 	{
@@ -71,18 +84,19 @@ abstract class Route
 
 		$baseRegex = $this->getRegex();
 		$baseRedirect = $this->getRedirect();
+		$languages = $this->languageFactory->getLanguages();
 
 		return array_map(function($language) use($baseRegex, $baseRedirect) {
 			return [
 				"regex" => $this->translateFormat($language, $baseRegex),
 				"redirect" => $baseRedirect
 			];
-		}, $this->languages ?: []);
+		}, $languages);
 	}
 
 	private function validateRoute()
 	{
-		if (!$this->routeFormat) throw new \Exception("No route format provided");
+		if (!$this->routeFormat) throw new Exception("No route format provided");
 	}
 
 	/**
@@ -90,11 +104,12 @@ abstract class Route
 	 * @param $routeFormat
 	 * @return mixed
 	 */
-	private function translateFormat($language, $routeFormat)
+	private function translateFormat(Language $language, $routeFormat)
 	{
-		return array_reduce(array_keys($language["urlFragments"]), function ($carry, $key) use ($language) {
+		$fragments = $language->getUrlFragments();
+		return array_reduce(array_keys($fragments), function ($carry, $key) use ($fragments) {
 			$pattern = "/\b$key\b/";
-			$replace = $language["urlFragments"][$key];
+			$replace = $fragments[$key];
 
 			if (!$replace) return $carry;
 
@@ -165,7 +180,7 @@ abstract class Route
 	/**
 	 * @param $route
 	 * @return RouteOption
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function getOption($route)
 	{
@@ -240,11 +255,11 @@ abstract class Route
 
 	/**
 	 * @param $route
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function throwInvalidRouteException($route)
 	{
-		throw new \Exception("Invalid route $this->routeFormat. Failed to continue at $route");
+		throw new Exception("Invalid route $this->routeFormat. Failed to continue at $route");
 	}
 
 	/**

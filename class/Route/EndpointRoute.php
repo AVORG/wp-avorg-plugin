@@ -3,6 +3,7 @@
 namespace Avorg\Route;
 
 use Avorg\Filesystem;
+use Avorg\LanguageFactory;
 use Avorg\Route;
 use Avorg\WordPress;
 
@@ -12,23 +13,11 @@ class EndpointRoute extends Route
 {
 	private $wp;
 
-	private $id;
-
-	public function __construct(Filesystem $filesystem, WordPress $wp)
+	public function __construct(Filesystem $filesystem, LanguageFactory $languageFactory, WordPress $wp)
 	{
-		parent::__construct($filesystem);
+		parent::__construct($filesystem, $languageFactory);
 
 		$this->wp = $wp;
-	}
-
-	/**
-	 * @param mixed $id
-	 * @return EndpointRoute
-	 */
-	public function setEndpointId($id)
-	{
-		$this->id = $id;
-		return $this;
 	}
 
 	function getBaseRoute()

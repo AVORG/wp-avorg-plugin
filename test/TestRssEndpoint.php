@@ -1,41 +1,20 @@
 <?php
 
+use Avorg\Endpoint\RssEndpoint;
+
 final class TestRssEndpoint extends Avorg\TestCase
 {
-	/** @var \Avorg\Endpoint\RssEndpoint $rssEndpoint */
+	/** @var RssEndpoint $rssEndpoint */
 	protected $rssEndpoint;
 
+	/**
+	 * @throws ReflectionException
+	 */
 	public function setUp()
 	{
 		parent::setUp();
 
 		$this->rssEndpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssLatest");
-	}
-
-	public function testGetRouteFormat()
-	{
-		$result = $this->rssEndpoint->getRoute();
-
-		$this->assertInstanceOf("Avorg\\Route\\EndpointRoute", $result);
-	}
-
-	public function testRouteRedirect()
-	{
-		$route = $this->rssEndpoint->getRoute();
-
-		$redirect = $route->getRewriteRules()["English"]["redirect"];
-
-		$this->assertStringStartsWith(
-			"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest", $redirect);
-	}
-
-	public function testRouteFormatSet()
-	{
-		$route = $this->rssEndpoint->getRoute();
-
-		$regex = $route->getRewriteRules()["English"]["regex"];
-
-		$this->assertContains("podcast", $regex);
 	}
 
 	public function testGetOutput()

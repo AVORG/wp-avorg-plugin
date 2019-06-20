@@ -1,10 +1,11 @@
 <?php
 
+use Avorg\Page\Presenter\Listing;
 use Avorg\Presenter;
 
 final class TestPresenterListing extends Avorg\TestCase
 {
-	/** @var \Avorg\Page\Presenter\Listing $presenterListing */
+	/** @var Listing $presenterListing */
 	protected $presenterListing;
 
 	protected function setUp()

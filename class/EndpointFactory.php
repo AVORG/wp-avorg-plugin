@@ -3,6 +3,7 @@
 namespace Avorg;
 
 use natlib\Factory;
+use ReflectionException;
 
 if (!\defined('ABSPATH')) exit;
 
@@ -11,10 +12,10 @@ class EndpointFactory
 	/** @var Factory $factory */
 	private $factory;
 
-	private $endpointNames = [
-		"PresentationEndpoint",
-		"RssEndpoint\\RssLatest",
-		"RssEndpoint\\RssSpeaker"
+	private $classes = [
+		"Avorg\\Endpoint\\PresentationEndpoint",
+		"Avorg\\Endpoint\\RssEndpoint\\RssLatest",
+		"Avorg\\Endpoint\\RssEndpoint\\RssSpeaker"
 	];
 
 	public function __construct(Factory $factory)
@@ -22,14 +23,25 @@ class EndpointFactory
 		$this->factory = $factory;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getEndpoints()
 	{
-		return array_map(function($endpointName) {
-			return $this->factory->secure("Avorg\\Endpoint\\$endpointName");
-		}, $this->endpointNames);
+		return array_map([$this, "getEndpointByClass"], $this->classes);
 	}
 
-	public function getEndpoint($id)
+	/**
+	 * @param $class
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	public function getEndpointByClass($class)
+	{
+		return $this->factory->secure($class);
+	}
+
+	public function getEndpointById($id)
 	{
 		if (strpos($id, "Avorg_Endpoint_") !== 0) return null;
 

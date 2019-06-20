@@ -19,4 +19,9 @@ class RouteSeparator extends RouteFragment
 	{
 		return "\/";
 	}
+
+	public function getUrlFragment()
+	{
+		return "/";
+	}
 }

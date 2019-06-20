@@ -21,16 +21,14 @@ class Detail extends Page
 	protected $defaultPageTitle = "Presenter Detail";
 	protected $defaultPageContent = "Presenter Detail";
 	protected $twigTemplate = "page-presenter.twig";
-	protected $routeFormat = "{ language }/sermons/presenters/{ entity_id:[0-9]+ }[/{ slug }]";
 
 	public function __construct(
 		PresenterRepository $presenterRepository,
 		Renderer $renderer,
-		RouteFactory $routeFactory,
 		WordPress $wordPress
 	)
 	{
-		parent::__construct($renderer, $routeFactory, $wordPress);
+		parent::__construct($renderer, $wordPress);
 
 		$this->presenterRepository = $presenterRepository;
 	}

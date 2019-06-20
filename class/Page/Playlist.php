@@ -24,17 +24,15 @@ class Playlist extends Page
 	protected $defaultPageTitle = "Playlist Detail";
 	protected $defaultPageContent = "Playlist Detail";
 	protected $twigTemplate = "page-playlist.twig";
-	protected $routeFormat = "{ language }/playlists/lists/{ entity_id:[0-9]+ }[/{ slug }]";
 
 	public function __construct(
 		PresentationRepository $presenterRepository,
 		Renderer $renderer,
-		RouteFactory $routeFactory,
 		ScriptFactory $scriptFactory,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $routeFactory, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->presentationRepository = $presenterRepository;
 		$this->scriptFactory = $scriptFactory;
