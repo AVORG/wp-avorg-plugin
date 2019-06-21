@@ -8,13 +8,15 @@ PHP 7.2
 
 0. `git clone https://github.com/AVORG/wp-avorg-dev.git`
 0. Follow [`wp-avorg-dev` readme instructions](https://github.com/AVORG/wp-avorg-dev)
-0. Optional: Update dependencies: `cd wp-avorg-dev/wp-avorg-plugin && composer install --prefer-source`
+0. Optional: Update dependencies: `cd wp-avorg-dev/wp-avorg-plugin && composer install`
 
 If you edit the Composer auto-load rules, you'll need to run `composer dump-autoload` to make them go into effect.
 
 ### Production
 
-0. [Download the plugin as a zip file](https://github.com/AVORG/wp-avorg-plugin/archive/master.zip)
+0. [Open CircleCI](https://circleci.com/gh/avorg/wp-avorg-plugin) and select the latest build
+0. Select the "Artifacts" tab
+0. Drill down until you see a file named `wp-avorg-plugin.zip` and click it to download
 0. In the WordPress admin panel, navigate to "Plugins > Add New" and click the "Upload Plugin" button
 0. Upload the zip file you downloaded
 0. Activate the plugin
