@@ -20,14 +20,14 @@ jobs:
     - checkout
 
     # Install ctype to avoid relying on symfony/polyfill-ctype
-    - run: sudo docker-php-ext-install ctype
+#    - run: sudo docker-php-ext-install ctype
 
     # Download and cache dependencies
     - restore_cache:
         keys:
-        - v2-dependencies-{{ checksum "composer.json" }}
+        - v3-dependencies-{{ checksum "composer.json" }}
         # fallback to using the latest cache if no exact match is found
-        - v2-dependencies-
+        - v3-dependencies-
 
     - run: composer install -n --prefer-dist && composer dump-autoload
 
@@ -46,7 +46,7 @@ jobs:
     - save_cache:
         paths:
         - ./vendor
-        key: v2-dependencies-{{ checksum "composer.json" }}
+        key: v3-dependencies-{{ checksum "composer.json" }}
 
     # run tests!
     - run: vendor/phpunit/phpunit/phpunit
