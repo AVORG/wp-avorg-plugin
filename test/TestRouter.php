@@ -255,6 +255,41 @@ final class TestRouter extends Avorg\TestCase
 		];
 	}
 
+	public function testBuildUrlIncludesHost()
+	{
+		$result = $this->router->buildUrl("Avorg\Page\Playlist\Listing");
+
+		$this->assertStringStartsWith("http://localhost:8080", $result);
+	}
+
+	public function testBuildUrlIncludesLanguage()
+	{
+		$result = $this->router->buildUrl("Avorg\Page\Playlist\Listing");
+
+		$this->assertStringEndsWith("english/playlists/lists", $result);
+	}
+
+	public function testBuildUrlIncludesVariables()
+	{
+		$result = $this->router->buildUrl("Avorg\Page\Topic", [
+			"entity_id" => 3,
+			"slug" => "my-slug.html"
+		]);
+
+		$this->assertStringEndsWith("english/topics/3/my-slug.html", $result);
+	}
+
+	public function testLocalizesUrls()
+	{
+		$this->mockWordPress->setReturnValue("get_locale", "es_ES");
+
+		$result = $this->router->buildUrl("Avorg\Page\Presenter\Listing", [
+			"letter" => "D"
+		]);
+
+		$this->assertStringEndsWith("espanol/sermones/presenters/D", $result);
+	}
+
 	/**
 	 * @return array
 	 */

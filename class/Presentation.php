@@ -11,12 +11,21 @@ class Presentation
 	/** @var LanguageFactory $languageFactory */
 	private $languageFactory;
 
+	/** @var Router $router */
+	private $router;
+
 	private $apiPresentation;
 
-	public function __construct($apiPresentation, LanguageFactory $languageFactory)
+	public function __construct(LanguageFactory $languageFactory, Router $router)
+	{
+		$this->languageFactory = $languageFactory;
+		$this->router = $router;
+	}
+
+	public function setPresentation($apiPresentation)
 	{
 		$this->apiPresentation = $apiPresentation;
-		$this->languageFactory = $languageFactory;
+		return $this;
 	}
 
 	public function toJson()
@@ -145,15 +154,10 @@ class Presentation
 
 	public function getUrl()
 	{
-		$language = $this->languageFactory->getLanguageByLangCode($this->apiPresentation->lang);
-
-		if (!$language) return null;
-
-		$presentationId = $this->apiPresentation->id;
-		$tail = $language->formatStringForUrl($this->apiPresentation->title) . ".html";
-		$path = "sermons/recordings/$presentationId/$tail";
-
-		return $language->getTranslatedUrl($path);
+		return $this->router->buildUrl("Avorg\Page\Media", [
+			"entity_id" => $this->apiPresentation->id,
+			"slug" => $this->router->formatStringForUrl($this->apiPresentation->title) . ".html"
+		]);
 	}
 
 	/**

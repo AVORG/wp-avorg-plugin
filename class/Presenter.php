@@ -14,17 +14,26 @@ class Presenter
 	/** @var PresentationRepository $presentationRepository */
 	private $presentationRepository;
 
+	/** @var Router $router */
+	private $router;
+
 	private $apiPresenter;
 
 	public function __construct(
-		$apiPresenter,
 		LanguageFactory $languageFactory,
-		PresentationRepository $presentationRepository
+		PresentationRepository $presentationRepository,
+		Router $router
 	)
 	{
-		$this->apiPresenter = $apiPresenter;
 		$this->languageFactory = $languageFactory;
 		$this->presentationRepository = $presentationRepository;
+		$this->router = $router;
+	}
+
+	public function setPresenter($apiPresenter)
+	{
+		$this->apiPresenter = $apiPresenter;
+		return $this;
 	}
 
 	public function getPresentations()
@@ -58,14 +67,9 @@ class Presenter
 
 	public function getUrl()
 	{
-		$language = $this->languageFactory->getLanguageByLangCode($this->apiPresenter->lang);
-
-		if (!$language) return null;
-
-		$presentationId = $this->apiPresenter->id;
-		$tail = $language->formatStringForUrl($this->getName()) . ".html";
-		$path = "sermons/presenters/$presentationId/$tail";
-
-		return $language->getTranslatedUrl($path);
+		return $this->router->buildUrl("Avorg\Page\Presenter\Detail", [
+			"entity_id" => $this->apiPresenter->id,
+			"slug" => $this->router->formatStringForUrl($this->getName()) . ".html"
+		]);
 	}
 }

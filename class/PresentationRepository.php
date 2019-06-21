@@ -2,6 +2,9 @@
 
 namespace Avorg;
 
+use Exception;
+use natlib\Factory;
+
 if (!\defined('ABSPATH')) exit;
 
 class PresentationRepository
@@ -9,15 +12,24 @@ class PresentationRepository
     /** @var AvorgApi $api */
     private $api;
 
+    /** @var Factory $factory */
+    private $factory;
+
     /** @var LanguageFactory $languageFactory */
     private $languageFactory;
 
     /** @var Router $router */
     private $router;
 
-    public function __construct(AvorgApi $api, LanguageFactory $languageFactory, Router $router)
+    public function __construct(
+    	AvorgApi $api,
+		Factory $factory,
+		LanguageFactory $languageFactory,
+		Router $router
+	)
     {
         $this->api = $api;
+        $this->factory = $factory;
         $this->languageFactory = $languageFactory;
         $this->router = $router;
     }
@@ -25,7 +37,7 @@ class PresentationRepository
     /**
      * @param string $list
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPresentations($list = "")
     {
@@ -44,7 +56,7 @@ class PresentationRepository
 	/**
 	 * @param $presentationId
 	 * @return Presentation|null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getPresentation($presentationId)
     {
@@ -56,7 +68,7 @@ class PresentationRepository
 	/**
 	 * @param $topicId
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getTopicPresentations($topicId)
 	{
@@ -70,7 +82,7 @@ class PresentationRepository
 		$apiResponse = $this->api->getPlaylist($playlistId);
 
 		return array_map(function ($recording) {
-			return new Presentation($recording, $this->languageFactory);
+			return $this->factory->make("Avorg\\Presentation")->setPresentation($recording);
 		}, $apiResponse->recordings ?: []);
 	}
 
@@ -86,12 +98,13 @@ class PresentationRepository
 	/**
 	 * @param $apiRecording
 	 * @return Presentation
+	 * @throws \ReflectionException
 	 */
 	private function buildPresentation($apiRecording)
 	{
 		$unwrappedRecording = $apiRecording->recordings;
 
-		return new Presentation($unwrappedRecording, $this->languageFactory);
+		return $this->factory->make("Avorg\\Presentation")->setPresentation($unwrappedRecording);
 	}
 
 }

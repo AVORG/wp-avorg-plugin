@@ -14,18 +14,16 @@ class PageRoute extends Route
 		return "index.php?page_id=$this->id";
 	}
 
-	public function getUrl($langCode, $variables)
+	public function getPath($variables)
 	{
-		$language = $this->languageFactory->getLanguageByLangCode($langCode);
-
 		array_walk($this->routeTree, function(RouteFragment $fragment) use($variables) {
 			$fragment->setVariables($variables);
 		});
 
-		return $language->getBaseUrl() . "/" . $this->getUrlFromFragments();
+		return $this->getPathFromFragments();
 	}
 
-	private function getUrlFromFragments()
+	private function getPathFromFragments()
 	{
 		return array_reduce((array) $this->routeTree, function ($carry, RouteFragment $trunk) {
 			return $carry . $trunk->getUrlFragment();

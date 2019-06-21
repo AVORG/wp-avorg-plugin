@@ -17,8 +17,14 @@ class RouteFactory
 	/** @var Factory $factory */
 	private $factory;
 
+	/** @var LanguageFactory $languageFactory */
+	private $languageFactory;
+
 	/** @var PageFactory $pageFactory */
 	private $pageFactory;
+
+	/** @var WordPress $wp */
+	private $wp;
 
 	private $pageRouteFormats = [
 		"Avorg\Page\Presenter\Listing" => "{ language }/sermons/presenters[/{ letter }]",
@@ -39,19 +45,34 @@ class RouteFactory
 	public function __construct(
 		EndpointFactory $endpointFactory,
 		Factory $factory,
-		PageFactory $pageFactory
+		LanguageFactory $languageFactory,
+		PageFactory $pageFactory,
+		WordPress $wp
 	)
 	{
 		$this->endpointFactory = $endpointFactory;
 		$this->factory = $factory;
+		$this->languageFactory = $languageFactory;
 		$this->pageFactory = $pageFactory;
+		$this->wp = $wp;
+	}
+
+	public function getPageRouteByClass($class)
+	{
+		/** @var Page $page */
+		$page = $this->pageFactory->getPage($class);
+		$routeId = $page->getRouteId();
+		$format = $this->pageRouteFormats[$class];
+
+		return $this->getPageRoute($routeId, $format);
 	}
 
 	public function getRoutes()
 	{
 		return array_merge(
 			$this->getPageRoutes(),
-			$this->getEndpointRoutes()
+			$this->getEndpointRoutes(),
+			$this->getLanguageRoutes()
 		);
 	}
 
@@ -76,20 +97,14 @@ class RouteFactory
 		return $this->buildRoutes($classFormatPairs, $objectFactoryMethod, $routeFactoryMethod);
 	}
 
-	public function getPageRoute($routeId, $routeFormat)
+	private function getLanguageRoutes()
 	{
-		/** @var PageRoute $route */
-		$route = $this->factory->obtain("Avorg\\Route\\PageRoute");
+		$pageId = $this->wp->get_option("page_on_front");
+		$languages = $this->languageFactory->getLanguages();
 
-		return $route->setId($routeId)->setFormat($routeFormat);
-	}
-
-	public function getEndpointRoute($routeId, $routeFormat)
-	{
-		/** @var EndpointRoute $route */
-		$route = $this->factory->obtain("Avorg\\Route\\EndpointRoute");
-
-		return $route->setId($routeId)->setFormat($routeFormat);
+		return array_map(function (Language $language) use ($pageId) {
+			return $this->getPageRoute($pageId, $language->getBaseRoute());
+		}, $languages);
 	}
 
 	/**
@@ -108,5 +123,22 @@ class RouteFactory
 		$formats = array_values($classFormatPairs);
 
 		return array_map($routeFactoryMethod, $routeIds, $formats);
+	}
+
+	private function getPageRoute($routeId, $routeFormat)
+	{
+		/** @var PageRoute $route */
+		$route = $this->factory->obtain("Avorg\\Route\\PageRoute");
+
+		return $route->setId($routeId)->setFormat($routeFormat);
+	}
+
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function getEndpointRoute($routeId, $routeFormat)
+	{
+		/** @var EndpointRoute $route */
+		$route = $this->factory->obtain("Avorg\\Route\\EndpointRoute");
+
+		return $route->setId($routeId)->setFormat($routeFormat);
 	}
 }

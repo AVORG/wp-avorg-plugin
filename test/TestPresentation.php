@@ -13,7 +13,7 @@ final class TestPresentation extends Avorg\TestCase
     {
         $apiResponseObject = $this->convertArrayToObjectRecursively($apiResponse);
 
-        return new Presentation($apiResponseObject, $this->factory->secure("Avorg\\LanguageFactory"));
+        return $this->factory->make("Avorg\\Presentation")->setPresentation($apiResponseObject);
     }
 
     public function testIncludesPresenterName()

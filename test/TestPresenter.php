@@ -21,9 +21,8 @@ final class TestPresenter extends Avorg\TestCase
 		$this->apiPresenter->suffix = "suffix";
 		$this->apiPresenter->lang = "en";
 
-		$languageFactory = $this->factory->secure("Avorg\\LanguageFactory");
-		$presentationRepository = $this->factory->secure("Avorg\\PresentationRepository");
-		$this->presenter = new Avorg\Presenter($this->apiPresenter, $languageFactory, $presentationRepository);
+		$this->presenter = $this->factory->make("Avorg\\Presenter");
+		$this->presenter->setPresenter($this->apiPresenter);
 	}
 
 	public function testGetPresentations()

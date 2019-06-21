@@ -183,14 +183,14 @@ final class TestPageRoute extends Avorg\TestCase
 		$this->pageRoute->getRewriteTags();
 	}
 
-	public function testGetUrl()
+	public function testGetPath()
 	{
 		$this->pageRoute->setFormat("item/{ id:[0-9]+ }");
 
-		$url = $this->pageRoute->getUrl("en", [
+		$url = $this->pageRoute->getPath([
 			"id" => 5
 		]);
 
-		$this->assertEquals("http://localhost:8080/english/item/5", $url);
+		$this->assertEquals("item/5", $url);
 	}
 }

@@ -3,21 +3,9 @@
 namespace Avorg;
 
 class Language {
-	/** @var RouteFactory $routeFactory */
-	private $routeFactory;
-
-	/** @var WordPress $wp */
-	protected $wp;
-
 	private $baseRoute;
 	private $langCode;
 	private $urlFragments;
-
-	public function __construct(RouteFactory $routeFactory, WordPress $wp)
-	{
-		$this->routeFactory = $routeFactory;
-		$this->wp = $wp;
-	}
 
 	/**
 	 * @param mixed $baseRoute
@@ -44,39 +32,22 @@ class Language {
 		return $this->urlFragments;
 	}
 
-	// KILL IT
-	public function getTranslatedUrl($path)
+	public function translatePath($path)
 	{
 		$fragments = explode("/", $path);
 		$translatedFragments = array_map([$this, "translateUrlFragment"], $fragments);
-		$translatedPath = implode("/", $translatedFragments);
 
-		return $this->getBaseUrl() . "/$translatedPath";
+		return implode("/", $translatedFragments);
 	}
 
-	// KILL IT
-	/**
-	 * @return string
-	 */
-	public function getBaseUrl()
-	{
-		return "http://${_SERVER['HTTP_HOST']}/$this->baseRoute";
-	}
-
-	// KILL IT
-	public function translateUrlFragment($fragment)
+	private function translateUrlFragment($fragment)
 	{
 		return key_exists($fragment, $this->urlFragments) ? $this->urlFragments[$fragment] : $fragment;
 	}
 
-	// KILL IT
-	public function formatStringForUrl($string)
+	public function getBaseRoute()
 	{
-		$stringLowerCase = strtolower($string);
-		$stringNoPunctuation = preg_replace("/[^\w ]/", "", $stringLowerCase);
-		$stringHyphenated = str_replace(" ", "-", $stringNoPunctuation);
-
-		return $stringHyphenated;
+		return $this->baseRoute;
 	}
 
 	public function getLangCode()
@@ -88,13 +59,5 @@ class Language {
 	{
 		$this->langCode = $langCode;
 		return $this;
-	}
-
-	public function getRoute()
-	{
-		return $this->routeFactory->getPageRoute(
-			$this->wp->get_option( "page_on_front"),
-			$this->baseRoute
-		);
 	}
 }
