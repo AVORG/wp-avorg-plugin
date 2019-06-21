@@ -17,8 +17,8 @@
         "name": "narthur/natlib",
         "version": "2019.06.20",
         "dist": {
-          "type": "vcs",
-          "url": "https://github.com/narthur/natlib"
+          "type": "zip",
+          "url": "https://github.com/narthur/natlib/archive/master.zip"
         },
         "source": {
           "type": "path",
