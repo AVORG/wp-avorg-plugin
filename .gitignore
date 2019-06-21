@@ -1,5 +1,4 @@
-/vendor/**/.git
-/vendor/narthur
+/vendor
 /cache/
 !/cache/empty
 /logs/*.log
