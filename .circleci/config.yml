@@ -25,9 +25,9 @@ jobs:
     # Download and cache dependencies
     - restore_cache:
         keys:
-        - v3-dependencies-{{ checksum "composer.json" }}
+        - v4-dependencies-{{ checksum "composer.json" }}
         # fallback to using the latest cache if no exact match is found
-        - v3-dependencies-
+        - v4-dependencies-
 
     - run: composer install -n --prefer-dist && composer dump-autoload
 
@@ -46,7 +46,7 @@ jobs:
     - save_cache:
         paths:
         - ./vendor
-        key: v3-dependencies-{{ checksum "composer.json" }}
+        key: v4-dependencies-{{ checksum "composer.json" }}
 
     # run tests!
     - run: vendor/phpunit/phpunit/phpunit
