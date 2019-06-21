@@ -4,18 +4,18 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ca1e3f52fdb4e70e5f0b211236a7967",
+    "content-hash": "c875e0545b2924db0210cd0c2924767c",
     "packages": [
         {
             "name": "narthur/natlib",
-            "version": "2019.06.20",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/narthur/natlib/archive/master.zip",
-                "reference": null,
-                "shasum": null
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/narthur/natlib",
+                "reference": "master"
             },
-            "type": "library"
+            "type": "library",
+            "time": "2019-05-14T17:49:57+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

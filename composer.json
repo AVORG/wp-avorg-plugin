@@ -15,18 +15,12 @@
       "type": "package",
       "package": {
         "name": "narthur/natlib",
-        "version": "2019.06.20",
-        "dist": {
-          "type": "zip",
-          "url": "https://github.com/narthur/natlib/archive/master.zip"
+        "version": "master",
+        "source": {
+          "url": "https://github.com/narthur/natlib",
+          "type": "git",
+          "reference": "master"
         }
-      }
-    },
-    {
-      "type": "path",
-      "url": "../natlib",
-      "options": {
-        "symlink": true
       }
     }
   ],

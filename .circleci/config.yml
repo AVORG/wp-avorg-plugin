@@ -26,11 +26,7 @@ jobs:
         # fallback to using the latest cache if no exact match is found
         - v7-dependencies-
 
-    - run: composer install -n --prefer-dist
-
-    - run: ls vendor/narthur
-    - run: ls vendor/narthur/natlib
-    - run: ls vendor/narthur/natlib/src
+    - run: composer install -n
 
     - run: sudo apt-get update && sudo apt-get install zip
     - run: zip -r wp-avorg-plugin .
