@@ -12,16 +12,8 @@
   },
   "repositories": [
     {
-      "type": "package",
-      "package": {
-        "name": "narthur/natlib",
-        "version": "master",
-        "source": {
-          "url": "https://github.com/narthur/natlib",
-          "type": "git",
-          "reference": "master"
-        }
-      }
+      "type": "vcs",
+      "url": "https://github.com/narthur/natlib"
     }
   ],
   "autoload": {
