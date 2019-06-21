@@ -31,6 +31,8 @@ jobs:
     - run: ls vendor
     - run: ls vendor/symfony
     - run: ls vendor/symfony/polyfill-ctype
+    - run: ls vendor/symfony/polyfill-mbstring
+    - run: ls vendor/symfony/polyfill-php72
 
     - run: sudo apt-get update && sudo apt-get install zip
     - run: zip -r wp-avorg-plugin .
