@@ -12,6 +12,13 @@
   },
   "repositories": [
     {
+      "type": "path",
+      "url": "../natlib",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
       "type": "package",
       "package": {
         "name": "narthur/natlib",
@@ -19,14 +26,6 @@
         "dist": {
           "type": "zip",
           "url": "https://github.com/narthur/natlib/archive/master.zip"
-        },
-        "source": {
-          "type": "path",
-          "url": "../natlib",
-          "reference": "master",
-          "options": {
-            "symlink": true
-          }
         }
       }
     }
