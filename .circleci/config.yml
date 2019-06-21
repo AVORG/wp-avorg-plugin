@@ -28,6 +28,8 @@ jobs:
 
     - run: composer install -n --prefer-dist && composer dump-autoload
 
+    - run: ls vendor && ls vendor/symfony && ls vendor/symfony/polyfill-ctype
+
     - run: sudo apt-get update && sudo apt-get install zip
     - run: zip -r wp-avorg-plugin .
 
