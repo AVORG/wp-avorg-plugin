@@ -19,9 +19,6 @@ jobs:
     steps:
     - checkout
 
-    # Install ctype to avoid relying on symfony/polyfill-ctype
-#    - run: sudo docker-php-ext-install ctype
-
     # Download and cache dependencies
     - restore_cache:
         keys:
@@ -29,13 +26,7 @@ jobs:
         # fallback to using the latest cache if no exact match is found
         - v4-dependencies-
 
-    - run: composer install -n --prefer-dist && composer dump-autoload
-
-    - run: ls vendor
-    - run: ls vendor/symfony
-    - run: ls vendor/symfony/polyfill-ctype
-    - run: ls vendor/symfony/polyfill-mbstring
-    - run: ls vendor/symfony/polyfill-php72
+    - run: composer install -n --prefer-dist
 
     - run: sudo apt-get update && sudo apt-get install zip
     - run: zip -r wp-avorg-plugin .
