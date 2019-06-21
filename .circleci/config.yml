@@ -30,6 +30,7 @@ jobs:
 
     - run: ls vendor/narthur
     - run: ls vendor/narthur/natlib
+    - run: ls vendor/narthur/natlib/src
 
     - run: sudo apt-get update && sudo apt-get install zip
     - run: zip -r wp-avorg-plugin .
