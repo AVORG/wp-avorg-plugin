@@ -19,6 +19,9 @@ jobs:
     steps:
     - checkout
 
+    # Install ctype to avoid relying on symfony/polyfill-ctype
+    - run: sudo docker-php-ext-install ctype
+
     # Download and cache dependencies
     - restore_cache:
         keys:
