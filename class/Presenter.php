@@ -8,9 +8,6 @@ if (!defined('ABSPATH')) exit;
 
 class Presenter
 {
-	/** @var LanguageFactory $languageFactory */
-	private $languageFactory;
-
 	/** @var PresentationRepository $presentationRepository */
 	private $presentationRepository;
 
@@ -20,12 +17,10 @@ class Presenter
 	private $apiPresenter;
 
 	public function __construct(
-		LanguageFactory $languageFactory,
 		PresentationRepository $presentationRepository,
 		Router $router
 	)
 	{
-		$this->languageFactory = $languageFactory;
 		$this->presentationRepository = $presentationRepository;
 		$this->router = $router;
 	}

@@ -8,17 +8,13 @@ if (!defined('ABSPATH')) exit;
 
 class Presentation
 {
-	/** @var LanguageFactory $languageFactory */
-	private $languageFactory;
-
 	/** @var Router $router */
 	private $router;
 
 	private $apiPresentation;
 
-	public function __construct(LanguageFactory $languageFactory, Router $router)
+	public function __construct(Router $router)
 	{
-		$this->languageFactory = $languageFactory;
 		$this->router = $router;
 	}
 
