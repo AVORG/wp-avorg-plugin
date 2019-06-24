@@ -16,7 +16,7 @@ final class TestBookRepository extends Avorg\TestCase
 
 	public function testUsesApi()
 	{
-		$this->mockAvorgApi->setReturnValue("getBooks", [[
+		$this->mockAvorgApi->setReturnValue("getBooks", [(object) [
 			"title" => "A Call to Medical Evangelism"
 		]]);
 
@@ -27,7 +27,7 @@ final class TestBookRepository extends Avorg\TestCase
 
 	public function testIsSet()
 	{
-		$this->mockAvorgApi->setReturnValue("getBooks", [[
+		$this->mockAvorgApi->setReturnValue("getBooks", [(object) [
 			"title" => "A Call to Medical Evangelism"
 		]]);
 

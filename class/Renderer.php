@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use Exception;
 use natlib\Factory;
 
 if (!\defined('ABSPATH')) exit;
@@ -24,13 +25,15 @@ class Renderer
 	
 	public function render($template, $data = [], $shouldReturn = false)
 	{
+		$output = "Oops! Something went wrong while rendering this page.";
+
 		try {
 			$twigGlobal = $this->factory->obtain("Avorg\\TwigGlobal");
 			$twigGlobal->loadData($data);
 			$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $twigGlobal];
 			$output = $this->twig->render($template, $data);
-		} catch (\Exception $e) {
-			$output = "Oops! Something went wrong while rendering this page.";
+
+		} catch (Exception $e) {
 			if (WP_DEBUG) {
 				$separator = (defined("STDIN")) ? "\r\n" : "<br/>";
 				$output .= $separator . $e->getMessage();

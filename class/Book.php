@@ -21,11 +21,13 @@ class Book
 
 	public function __isset($name)
 	{
-		return array_key_exists($name, $this->data);
+		return isset($this->data->$name);
 	}
 
 	public function __get($name)
 	{
-		return $this->data[$name];
+		if (!$this->__isset($name)) return null;
+
+		return $this->data->$name;
 	}
 }
