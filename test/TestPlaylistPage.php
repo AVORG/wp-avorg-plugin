@@ -2,19 +2,19 @@
 
 final class TestPlaylistPage extends Avorg\TestCase
 {
-	/** @var \Avorg\Page\Playlist $playlistPage */
+	/** @var \Avorg\Page\Playlist\Detail $playlistPage */
 	protected $playlistPage;
 
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->playlistPage = $this->factory->secure("Avorg\\Page\\Playlist");
+		$this->playlistPage = $this->factory->secure("Avorg\\Page\\Playlist\\Detail");
 	}
 
 	public function testExist()
 	{
-		$this->assertInstanceOf("\\Avorg\\Page\\Playlist", $this->playlistPage);
+		$this->assertInstanceOf("\\Avorg\\Page\\Playlist\\Detail", $this->playlistPage);
 	}
 
 	public function testRendersCorrectTemplate()

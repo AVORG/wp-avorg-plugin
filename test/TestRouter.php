@@ -116,7 +116,7 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"english/playlists/lists/14/how-to-be-saved.html",
-				"index.php?page_id=PLAYLIST_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
+				"index.php?page_id=PLAYLIST_DETAIL_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
 			],
 //			[
 //				"english/sermons/presenters",
@@ -306,7 +306,7 @@ final class TestRouter extends Avorg\TestCase
 
 			if (!$isPageIdOption) return STUB_NULL;
 
-			$pageName = end(explode("_", $optionId));
+			$pageName = str_replace($pageIdOptionPrefix, "", $optionId);
 
 			return strtoupper($pageName . "_PAGE_ID");
 		});
@@ -324,7 +324,18 @@ final class TestRouter extends Avorg\TestCase
 	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results)
 	{
 		$resultsExport = var_export($results, true);
-		$errorMessage = "Input: $inputUrl\r\nExpected Output: $outputUrl\r\nHaystack:\r\n$resultsExport";
+		$getOptionCalls = var_export($this->mockWordPress->getCalls("get_option"), true);
+		$errorMessage = <<<EOM
+Input: $inputUrl
+
+Expected Output: $outputUrl
+
+Haystack:
+$resultsExport
+
+Calls to wp->get_option():
+$getOptionCalls
+EOM;
 
 		$this->assertContains(
 			$outputUrl,

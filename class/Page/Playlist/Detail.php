@@ -1,19 +1,18 @@
 <?php
 
-namespace Avorg\Page;
+namespace Avorg\Page\Playlist;
 
 use function Avorg\avorgLog;
 use Avorg\Page;
 use Avorg\Presentation;
 use Avorg\PresentationRepository;
 use Avorg\Renderer;
-use Avorg\RouteFactory;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;
 
 if (!\defined('ABSPATH')) exit;
 
-class Playlist extends Page
+class Detail extends Page
 {
 	/** @var PresentationRepository $presentationRepository */
 	private $presentationRepository;

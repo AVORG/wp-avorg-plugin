@@ -156,7 +156,7 @@ final class TestPlugin extends Avorg\TestCase
 		$pages = [
 			"Media",
 			"Topic",
-			"Playlist"
+			"Playlist\\Detail"
 		];
 
 		$data = array_map(function($page) { return [$page]; }, $pages);
@@ -269,7 +269,7 @@ final class TestPlugin extends Avorg\TestCase
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
 			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
-			"init playlist.js on playlist page" => ["script/playlist.js", true, true, "Page\\Playlist"],
+			"init playlist.js on playlist page" => ["script/playlist.js", true, true, "Page\\Playlist\\Detail"],
 			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
 		];
 	}
