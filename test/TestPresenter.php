@@ -13,13 +13,14 @@ final class TestPresenter extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->apiPresenter = new stdClass();
-		$this->apiPresenter->description = "hello world";
-		$this->apiPresenter->id = "131";
-		$this->apiPresenter->givenName = "first";
-		$this->apiPresenter->surname = "last";
-		$this->apiPresenter->suffix = "suffix";
-		$this->apiPresenter->lang = "en";
+		$this->apiPresenter = (object) [
+			"description" => "hello world",
+			"id" => "131",
+			"givenName" => "first",
+			"surname" => "last",
+			"suffix" => "suffix",
+			"lang" => "en"
+		];
 
 		$this->presenter = $this->factory->make("Avorg\\Presenter");
 		$this->presenter->setPresenter($this->apiPresenter);
