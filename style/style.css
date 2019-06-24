@@ -28,6 +28,9 @@
 .avorg-molecule-player .avorg-molecule-player__wrapper:hover .avorg-molecule-player__toggle {
   opacity: 1; }
 
+.avorg-molecule-playlist .avorg-molecule-playlist__list li.active {
+  background-color: yellow; }
+
 .avorg-molecule-recordingMeta .avorg-molecule-recordingMeta__presenters {
   margin-bottom: 0;
   display: inline-block; }
@@ -57,9 +60,6 @@
 
 .avorg-page-books li {
   list-style-type: none; }
-
-.avorg-page-playlist .avorg-page-playlist__list li.active {
-  background-color: yellow; }
 
 .avorg-page-presenters li {
   list-style-type: none; }

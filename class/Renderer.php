@@ -28,8 +28,9 @@ class Renderer
 		$output = "Oops! Something went wrong while rendering this page.";
 
 		try {
+			/** @var TwigGlobal $twigGlobal */
 			$twigGlobal = $this->factory->obtain("Avorg\\TwigGlobal");
-			$twigGlobal->loadData($data);
+			$twigGlobal->setData($data);
 			$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $twigGlobal];
 			$output = $this->twig->render($template, $data);
 

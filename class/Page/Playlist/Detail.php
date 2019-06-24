@@ -9,8 +9,9 @@ use Avorg\PresentationRepository;
 use Avorg\Renderer;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;
+use function defined;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class Detail extends Page
 {
