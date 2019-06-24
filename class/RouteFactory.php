@@ -33,6 +33,7 @@ class RouteFactory
 		"Avorg\Page\Playlist" => "{ language }/playlists/lists/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Topic" => "{ language }/topics/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Book\Listing" => "{ language }/audiobooks/books",
+		"Avorg\Page\Book\Detail" => "{ language }/audiobooks/books/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Playlist\Listing" => "{ language }/playlists/lists"
 	];
 
