@@ -26,4 +26,19 @@ final class TestBookListing extends Avorg\TestCase
 
 		$this->mockAvorgApi->assertMethodCalled("getBooks");
 	}
+
+	public function testReturnsBooks()
+	{
+		$this->mockAvorgApi->setReturnValue("getBooks", [[
+			"title" => "A Call to Medical Evangelism"
+		]]);
+
+		$this->bookListing->addUi("");
+
+		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
+			$callGlobal = $call[1]["avorg"];
+
+			return $callGlobal->books[0] instanceof \Avorg\Book;
+		});
+	}
 }

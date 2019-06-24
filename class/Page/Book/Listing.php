@@ -4,6 +4,7 @@
 namespace Avorg\Page\Book;
 
 use Avorg\AvorgApi;
+use Avorg\BookRepository;
 use Avorg\Page;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
@@ -14,17 +15,18 @@ if (!defined('ABSPATH')) exit;
 
 class Listing extends Page
 {
-	private $avorgApi;
+	/** @var BookRepository $bookRepository */
+	private $bookRepository;
 
 	protected $defaultPageTitle = "Books";
 	protected $defaultPageContent = "Books";
 	protected $twigTemplate = "page-books.twig";
 
-	public function __construct(AvorgApi $avorgApi, Renderer $renderer, WordPress $wp)
+	public function __construct(BookRepository $bookRepository, Renderer $renderer, WordPress $wp)
 	{
 		parent::__construct($renderer, $wp);
 
-		$this->avorgApi = $avorgApi;
+		$this->bookRepository = $bookRepository;
 	}
 
 	public function throw404($query)
@@ -34,7 +36,9 @@ class Listing extends Page
 
 	protected function getData()
 	{
-		$this->avorgApi->getBooks();
+		return [
+			"books" => $this->bookRepository->getBooks()
+		];
 	}
 
 	protected function getEntityTitle()

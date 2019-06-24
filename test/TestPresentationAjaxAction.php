@@ -94,6 +94,8 @@ final class TestPresentationAjaxAction extends Avorg\TestCase
 	{
 		$this->action->run();
 
-		return json_decode(ob_get_contents(), true);
+		$calls = $this->mockPhp->getCalls('doEcho');
+
+		return json_decode($calls[0][0], true);
 	}
 }
