@@ -1,16 +1,17 @@
 <?php
 
-namespace Avorg\Page;
+namespace Avorg\Page\Topic;
 
 use Avorg\Page;
 use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
 use Avorg\WordPress;
+use function defined;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
-class Topic extends Page
+class Detail extends Page
 {
 	/** @var RecordingRepository $recordingRepository */
 	private $recordingRepository;

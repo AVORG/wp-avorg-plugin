@@ -46,6 +46,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
+	protected function assertTwigGlobalMatchesCallback(Page $page, callable $callback)
+	{
+		$this->mockWordPress->passCurrentPageCheck();
+
+		$page->addUi("");
+
+		$this->mockTwig->assertAnyCallMatches( "render", function($call) use($callback) {
+			$avorg = $call[1]["avorg"];
+
+			return call_user_func($callback, $avorg);
+		});
+	}
+
 	/**
 	 * @param $recordingData
 	 * @return Recording

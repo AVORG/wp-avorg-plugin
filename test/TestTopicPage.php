@@ -19,12 +19,12 @@ final class TestTopicPage extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_option", 5);
 		$this->mockWordPress->setReturnValue("get_the_ID", 5);
 		$this->mockWordPress->setReturnValues("get_query_var",  5);
-		$this->topicPage = $this->factory->secure("Avorg\\Page\\Topic");
+		$this->topicPage = $this->factory->secure("Avorg\\Page\\Topic\\Detail");
 	}
 
 	public function testExists()
 	{
-		$this->assertInstanceOf("\\Avorg\\Page\\Topic", $this->topicPage);
+		$this->assertInstanceOf("\\Avorg\\Page\\Topic\\Detail", $this->topicPage);
 	}
 
 	public function testHasPageIdOptionName()
@@ -37,7 +37,7 @@ final class TestTopicPage extends Avorg\TestCase
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"update_option",
-			"avorg_page_id_avorg_page_topic",
+			"avorg_page_id_avorg_page_topic_detail",
 			false
 		);
 	}

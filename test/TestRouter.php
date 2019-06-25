@@ -112,11 +112,15 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"english/topics/102/great-controversy.html",
-				"index.php?page_id=TOPIC_PAGE_ID&language=english&entity_id=102&slug=great-controversy.html"
+				"index.php?page_id=TOPIC_DETAIL_PAGE_ID&language=english&entity_id=102&slug=great-controversy.html"
 			],
 			[
 				"english/playlists/lists/14/how-to-be-saved.html",
 				"index.php?page_id=PLAYLIST_DETAIL_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
+			],
+			[
+				"english/topics",
+				"index.php?page_id=TOPIC_LISTING_PAGE_ID&language=english"
 			],
 //			[
 //				"english/sermons/presenters",
@@ -271,7 +275,7 @@ final class TestRouter extends Avorg\TestCase
 
 	public function testBuildUrlIncludesVariables()
 	{
-		$result = $this->router->buildUrl("Avorg\Page\Topic", [
+		$result = $this->router->buildUrl("Avorg\Page\Topic\Detail", [
 			"entity_id" => 3,
 			"slug" => "my-slug.html"
 		]);

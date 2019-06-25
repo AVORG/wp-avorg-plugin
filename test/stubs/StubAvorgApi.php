@@ -8,6 +8,11 @@ class StubAvorgApi extends AvorgApi
 {
 	use Stub;
 
+	public function getTopics()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getBook($id)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -59,6 +64,13 @@ class StubAvorgApi extends AvorgApi
 	}
 
 	/* Helper Methods */
+
+	public function loadTopics(...$dataArrays)
+	{
+		$objects = array_map([$this, "convertArrayToObjectRecursively"], $dataArrays);
+
+		$this->setReturnValue("getTopics", $objects);
+	}
 
 	public function loadBook($data)
 	{

@@ -155,7 +155,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		$pages = [
 			"Media",
-			"Topic",
+			"Topic\\Detail",
 			"Playlist\\Detail"
 		];
 

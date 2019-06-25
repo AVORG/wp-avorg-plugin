@@ -20,6 +20,21 @@ class AvorgApi
 		$this->apiPass = get_option("avorgApiPass");
 	}
 
+	public function getTopics()
+	{
+		$url = "$this->apiBaseUrl/topics";
+
+		try {
+			$response = $this->getResponse($url);
+
+			return array_map(function($item) {
+				return $item->topics;
+			}, json_decode($response)->result);
+		} catch (Exception $e) {
+			throw new Exception("Couldn't retrieve topics", 0, $e);
+		}
+	}
+
 	/**
 	 * @param $id
 	 * @return mixed
