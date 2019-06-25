@@ -2,10 +2,12 @@
 
 namespace Avorg;
 
+use function defined;
 use Exception;
 use natlib\Factory;
+use ReflectionException;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class RecordingRepository
 {
@@ -87,6 +89,18 @@ class RecordingRepository
 	}
 
 	/**
+	 * @param $bookId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBookRecordings($bookId)
+	{
+		$apiResponse = $this->api->getBookRecordings($bookId);
+
+		return $this->buildRecordings($apiResponse);
+	}
+
+	/**
 	 * @param $apiResponse
 	 * @return array
 	 */
@@ -98,7 +112,7 @@ class RecordingRepository
 	/**
 	 * @param $apiRecording
 	 * @return Recording
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	private function buildRecording($apiRecording)
 	{

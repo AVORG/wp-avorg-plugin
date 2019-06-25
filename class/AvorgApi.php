@@ -21,6 +21,25 @@ class AvorgApi
 	}
 
 	/**
+	 * @param $id
+	 * @return mixed
+	 */
+	public function getBook($id)
+	{
+		if (!is_numeric($id)) return false;
+		$url = "$this->apiBaseUrl/audiobooks/$id";
+
+		try {
+			$response = $this->getResponse($url);
+			$responseObject = json_decode($response);
+
+			return $responseObject->result[0]->audiobooks;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+
+	/**
 	 * @return array
 	 * @throws Exception
 	 */
@@ -70,7 +89,7 @@ class AvorgApi
 
 			return json_decode($response)->result[0]->presenters;
 		} catch (Exception $e) {
-			throw new Exception("Couldn't retrieve presentation with ID $id", 0, $e);
+			throw new Exception("Couldn't retrieve recording with ID $id", 0, $e);
 		}
 	}
 
@@ -110,7 +129,7 @@ class AvorgApi
 
 			return json_decode($response)->result[0];
 		} catch (Exception $e) {
-			throw new Exception("Couldn't retrieve presentation with ID $id", 0, $e);
+			throw new Exception("Couldn't retrieve recording with ID $id", 0, $e);
 		}
 	}
 	
@@ -121,10 +140,9 @@ class AvorgApi
 	 */
 	public function getRecordings($list = "")
 	{
-		$url = "$this->apiBaseUrl/recordings/$list";
-		$trimmedUrl = trim($url, "/");
+		$endpoint = trim("recordings/$list", "/");
 
-		return $this->getRecordingsResponse($trimmedUrl);
+		return $this->getRecordingsResponse($endpoint);
 	}
 
 	/**
@@ -134,34 +152,49 @@ class AvorgApi
 	 */
 	public function getTopicRecordings($topicId)
 	{
-		$url = "$this->apiBaseUrl/recordings/topic/$topicId";
-
-		return $this->getRecordingsResponse($url);
+		return $this->getRecordingsResponse("recordings/topic/$topicId");
 	}
 
+	/**
+	 * @param $presenterId
+	 * @return bool|null
+	 * @throws Exception
+	 */
 	public function getPresenterRecordings($presenterId)
 	{
 		if (!is_numeric($presenterId)) return false;
 
-		$url = "$this->apiBaseUrl/recordings/presenter/$presenterId";
-
-		return $this->getRecordingsResponse($url);
+		return $this->getRecordingsResponse("recordings/presenter/$presenterId");
 	}
 
 	/**
-	 * @param $apiUrl
+	 * @param $bookId
+	 * @return bool|null
+	 * @throws Exception
+	 */
+	public function getBookRecordings($bookId)
+	{
+		if (!is_numeric($bookId)) return false;
+
+		return $this->getRecordingsResponse("recordings/audiobook/$bookId");
+	}
+
+	/**
+	 * @param $endpoint
 	 * @return null
 	 * @throws Exception
 	 */
-	private function getRecordingsResponse($apiUrl)
+	private function getRecordingsResponse($endpoint)
 	{
+		$url = "$this->apiBaseUrl/$endpoint";
+		
 		try {
-			$response = $this->getResponse($apiUrl);
+			$response = $this->getResponse($url);
 			$responseObject = json_decode($response);
 
 			return (isset($responseObject->result)) ? $responseObject->result : null;
 		} catch (Exception $e) {
-			throw new Exception("Couldn't retrieve list of presentations", 0, $e);
+			throw new Exception("Couldn't retrieve list of recordings", 0, $e);
 		}
 	}
 	

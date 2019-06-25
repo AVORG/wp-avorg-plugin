@@ -8,6 +8,11 @@ class StubAvorgApi extends AvorgApi
 {
 	use Stub;
 
+	public function getBook($id)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getBooks()
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -44,6 +49,11 @@ class StubAvorgApi extends AvorgApi
 	}
 
 	public function getPresenterRecordings($presenterId)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getBookRecordings($bookId)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}

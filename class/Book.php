@@ -3,17 +3,23 @@
 namespace Avorg;
 
 
+use Exception;
+
 if (!defined('ABSPATH')) exit;
 
 class Book
 {
+	/** @var RecordingRepository $recordingRepository */
+	private $recordingRepository;
+
 	/** @var Router $router */
 	private $router;
 
 	private $data;
 
-	public function __construct(Router $router)
+	public function __construct(RecordingRepository $recordingRepository, Router $router)
 	{
+		$this->recordingRepository = $recordingRepository;
 		$this->router = $router;
 	}
 
@@ -45,5 +51,18 @@ class Book
 			"entity_id" => $this->data->id,
 			"slug" => $this->router->formatStringForUrl($this->data->title) . ".html"
 		]);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function getRecordings()
+	{
+		return $this->recordingRepository->getBookRecordings($this->getId());
+	}
+
+	private function getId()
+	{
+		return intval($this->__get("id"));
 	}
 }
