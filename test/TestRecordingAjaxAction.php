@@ -1,18 +1,18 @@
 <?php
 
-final class TestPresentationAjaxAction extends Avorg\TestCase
+final class TestRecordingAjaxAction extends Avorg\TestCase
 {
-	/** @var \Avorg\AjaxAction\Presentation $action */
+	/** @var \Avorg\AjaxAction\Recording $action */
 	protected $action;
 
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->action = $this->factory->secure("Avorg\\AjaxAction\\Presentation");
+		$this->action = $this->factory->secure("Avorg\\AjaxAction\\Recording");
 	}
 
-	public function testActionReturnsSuccessFalseWhenFailsToRetrievePresentation()
+	public function testActionReturnsSuccessFalseWhenFailsToRetrieveRecording()
 	{
 		$response = $this->getResponse();
 
@@ -23,34 +23,34 @@ final class TestPresentationAjaxAction extends Avorg\TestCase
 	{
 		$this->action->run();
 
-		$this->mockWordPress->assertMethodCalledWith("check_ajax_referer", "Avorg_AjaxAction_Presentation");
+		$this->mockWordPress->assertMethodCalledWith("check_ajax_referer", "Avorg_AjaxAction_Recording");
 	}
 
-	public function testGetsPresentation()
+	public function testGetsRecording()
 	{
-		$this->mockAvorgApi->loadPresentation(["title" => "My Recording"]);
+		$this->mockAvorgApi->loadRecording(["title" => "My Recording"]);
 
-		$presentation = $this->getResponsePresentation();
+		$recording = $this->getResponseRecording();
 
-		$this->assertEquals("My Recording", $presentation["title"]);
+		$this->assertEquals("My Recording", $recording["title"]);
 	}
 
 	public function testReturnsSuccessTrueOnSuccess()
 	{
-		$this->mockAvorgApi->loadPresentation(["title" => "My Recording"]);
+		$this->mockAvorgApi->loadRecording(["title" => "My Recording"]);
 
 		$response = $this->getResponse();
 
 		$this->assertTrue($response["success"]);
 	}
 
-	public function testUsesPassedPresentationId()
+	public function testUsesPassedRecordingId()
 	{
 		$_POST["entity_id"] = 7;
 
 		$this->action->run();
 
-		$this->mockAvorgApi->assertMethodCalledWith("getPresentation", 7);
+		$this->mockAvorgApi->assertMethodCalledWith("getRecording", 7);
 	}
 
 	public function testDiesOnCompletion()
@@ -66,13 +66,13 @@ final class TestPresentationAjaxAction extends Avorg\TestCase
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"add_action",
-			"wp_ajax_Avorg_AjaxAction_Presentation",
+			"wp_ajax_Avorg_AjaxAction_Recording",
 			[$this->action, "run"]
 		);
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"add_action",
-			"wp_ajax_nopriv_Avorg_AjaxAction_Presentation",
+			"wp_ajax_nopriv_Avorg_AjaxAction_Recording",
 			[$this->action, "run"]
 		);
 	}
@@ -80,7 +80,7 @@ final class TestPresentationAjaxAction extends Avorg\TestCase
 	/**
 	 * @return mixed
 	 */
-	private function getResponsePresentation()
+	private function getResponseRecording()
 	{
 		$response = $this->getResponse();
 

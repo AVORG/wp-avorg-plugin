@@ -28,45 +28,45 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getPresentation($id)
+	public function getRecording($id)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getPresentations($list = "")
+	public function getRecordings($list = "")
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getTopicPresentations($topicId)
+	public function getTopicRecordings($topicId)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getPresenterPresentations($presenterId)
+	public function getPresenterRecordings($presenterId)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
 	/* Helper Methods */
 
-	public function loadPresentation($dataArray) {
-		$responseObject = $this->convertPresentationArrayToResponseObject($dataArray);
+	public function loadRecording($dataArray) {
+		$responseObject = $this->convertRecordingArrayToResponseObject($dataArray);
 
-		$this->setReturnValue("getPresentation", $responseObject);
+		$this->setReturnValue("getRecording", $responseObject);
 	}
 
-	public function loadPresentations(...$dataArrays) {
-		$objects = array_map([$this, "convertPresentationArrayToResponseObject"], $dataArrays);
+	public function loadRecordings(...$dataArrays) {
+		$objects = array_map([$this, "convertRecordingArrayToResponseObject"], $dataArrays);
 
-		$this->setReturnValue("getPresentations", $objects);
+		$this->setReturnValue("getRecordings", $objects);
 	}
 
 	/**
 	 * @param $dataArray
 	 * @return mixed
 	 */
-	private function convertPresentationArrayToResponseObject($dataArray)
+	private function convertRecordingArrayToResponseObject($dataArray)
 	{
 		return $this->convertArrayToObjectRecursively([
 			"recordings" => $dataArray

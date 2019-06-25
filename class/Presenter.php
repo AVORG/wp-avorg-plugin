@@ -8,8 +8,8 @@ if (!defined('ABSPATH')) exit;
 
 class Presenter
 {
-	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
+	/** @var RecordingRepository $recordingRepository */
+	private $recordingRepository;
 
 	/** @var Router $router */
 	private $router;
@@ -17,11 +17,11 @@ class Presenter
 	private $apiPresenter;
 
 	public function __construct(
-		PresentationRepository $presentationRepository,
+		RecordingRepository $recordingRepository,
 		Router $router
 	)
 	{
-		$this->presentationRepository = $presentationRepository;
+		$this->recordingRepository = $recordingRepository;
 		$this->router = $router;
 	}
 
@@ -31,9 +31,9 @@ class Presenter
 		return $this;
 	}
 
-	public function getPresentations()
+	public function getRecordings()
 	{
-		return $this->presentationRepository->getPresenterPresentations($this->getId());
+		return $this->recordingRepository->getPresenterRecordings($this->getId());
 	}
 
 	public function getName()

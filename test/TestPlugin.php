@@ -183,8 +183,8 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		return [
 			[
-				"wp_ajax_Avorg_AjaxAction_Presentation",
-				"AjaxAction\\Presentation",
+				"wp_ajax_Avorg_AjaxAction_Recording",
+				"AjaxAction\\Recording",
 				"run"
 			],
 			[

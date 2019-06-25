@@ -199,21 +199,21 @@ class ContentBits
 	public function renderShortcode($attributes)
 	{
 		$shortcodeId = $attributes['id'];
-		$presentationId = $this->wp->get_query_var( 'presentation_id');
-		$posts = $this->getBits($shortcodeId, $presentationId)
+		$recordingId = $this->wp->get_query_var( 'entity_id');
+		$posts = $this->getBits($shortcodeId, $recordingId)
 			?: $this->getBits($shortcodeId);
 		
 		return $posts ? $this->randomChoice($posts)->post_content : null;
 	}
 	
-	private function getBits($identifier, $presentationId = null)
+	private function getBits($identifier, $recordingId = null)
 	{
 		$taxQuery = [
 			'tax_query' => [
 				[
 					'taxonomy' => 'avorgMediaIds',
 					'field' => 'slug',
-					'terms' => $presentationId
+					'terms' => $recordingId
 				]
 			]
 		];

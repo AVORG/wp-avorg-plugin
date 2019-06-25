@@ -1,29 +1,29 @@
 <?php
 
-final class TestPresentationRepository extends Avorg\TestCase
+final class TestRecordingRepository extends Avorg\TestCase
 {
-    /** @var \Avorg\PresentationRepository $plugin */
-    protected $presentationRepository;
+    /** @var \Avorg\RecordingRepository $plugin */
+    protected $recordingRepository;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->presentationRepository = $this->factory->secure("Avorg\\PresentationRepository");
+        $this->recordingRepository = $this->factory->secure("Avorg\\RecordingRepository");
     }
 
     /**
      * @throws Exception
      */
-    public function testReturnsPresentations()
+    public function testReturnsRecordings()
     {
         $entry = new stdClass();
         $entry->recordings = "item";
-        $this->mockAvorgApi->setReturnValue("getPresentations", [$entry]);
+        $this->mockAvorgApi->setReturnValue("getRecordings", [$entry]);
 
-        $result = $this->presentationRepository->getPresentations();
+        $result = $this->recordingRepository->getRecordings();
 
-        $this->assertInstanceOf("\\Avorg\\Presentation", $result[0]);
+        $this->assertInstanceOf("\\Avorg\\Recording", $result[0]);
     }
 
     public function testUsesUnwrappedRecordingWhenInstantiatingRecording()
@@ -40,14 +40,14 @@ final class TestPresentationRepository extends Avorg\TestCase
 
         $entryObject = json_decode(json_encode($entry), FALSE);
 
-        $this->mockAvorgApi->setReturnValue("getPresentations", [$entryObject]);
+        $this->mockAvorgApi->setReturnValue("getRecordings", [$entryObject]);
 
-        $result = $this->presentationRepository->getPresentations();
+        $result = $this->recordingRepository->getRecordings();
 
         $this->assertEquals("photo_url", $result[0]->getPresenters()[0]["photo"]);
     }
 
-    public function testLoadsPresentationsWithPresentationUrl()
+    public function testLoadsRecordingsWithRecordingUrl()
     {
         $apiRecording = $this->convertArrayToObjectRecursively([
             "recordings" => [
@@ -57,9 +57,9 @@ final class TestPresentationRepository extends Avorg\TestCase
             ]
         ]);
 
-        $this->mockAvorgApi->setReturnValue("getPresentations", [$apiRecording]);
+        $this->mockAvorgApi->setReturnValue("getRecordings", [$apiRecording]);
 
-        $result = $this->presentationRepository->getPresentations();
+        $result = $this->recordingRepository->getRecordings();
 
         $this->assertEquals(
             "http://localhost:8080/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",

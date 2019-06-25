@@ -1,7 +1,7 @@
-<div class="avorg-molecule-recordingMeta {{ classes }}" data-id="{{ presentation.id }}">
+<div class="avorg-molecule-recordingMeta {{ classes }}" data-id="{{ recording.id }}">
     {% set description %}
         <ul class="avorg-molecule-recordingMeta__presenters">
-            {% for presenter in presentation.presenters %}
+            {% for presenter in recording.presenters %}
                 <li>
                     <a href="#">{{ presenter.name.first }} {{ presenter.name.last }} {{ presenter.name.suffix }}</a>
                 </li>
@@ -16,10 +16,10 @@
     {% endset %}
 
     {% include "molecule-mediaObject.twig" with {
-        image: presentation.presenters[0].photo,
+        image: recording.presenters[0].photo,
         imageAlt: "presenter",
-        title: presentation.title,
-        titleUrl: shouldLinkTitle ? presentation.url : null,
+        title: recording.title,
+        titleUrl: shouldLinkTitle ? recording.url : null,
         description: description
     } only %}
 </div>

@@ -142,9 +142,9 @@ final class TestTwigGlobal extends Avorg\TestCase
 	 */
 	public function testJsonRecodes()
 	{
-		$presentation = $this->makePresentation(["title" => "sermon_title"]);
+		$recording = $this->makeRecording(["title" => "sermon_title"]);
 
-		$this->global->setData([$presentation])->loadScript("script.js");
+		$this->global->setData([$recording])->loadScript("script.js");
 
 		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
 			return $call[2][0]->title === "sermon_title";

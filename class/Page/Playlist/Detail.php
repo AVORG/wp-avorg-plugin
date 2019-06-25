@@ -4,8 +4,8 @@ namespace Avorg\Page\Playlist;
 
 use function Avorg\avorgLog;
 use Avorg\Page;
-use Avorg\Presentation;
-use Avorg\PresentationRepository;
+use Avorg\Recording;
+use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;
@@ -15,8 +15,8 @@ if (!defined('ABSPATH')) exit;
 
 class Detail extends Page
 {
-	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
+	/** @var RecordingRepository $recordingRepository */
+	private $recordingRepository;
 
 	/** @var ScriptFactory $scriptFactory */
 	private $scriptFactory;
@@ -26,7 +26,7 @@ class Detail extends Page
 	protected $twigTemplate = "page-playlist.twig";
 
 	public function __construct(
-		PresentationRepository $presenterRepository,
+		RecordingRepository $presenterRepository,
 		Renderer $renderer,
 		ScriptFactory $scriptFactory,
 		WordPress $wp
@@ -34,7 +34,7 @@ class Detail extends Page
 	{
 		parent::__construct($renderer, $wp);
 
-		$this->presentationRepository = $presenterRepository;
+		$this->recordingRepository = $presenterRepository;
 		$this->scriptFactory = $scriptFactory;
 	}
 
@@ -46,19 +46,19 @@ class Detail extends Page
 	protected function getData()
 	{
 		return [
-			"recordings" => $this->getPresentations()
+			"recordings" => $this->getRecordings()
 		];
 	}
 
 	/**
 	 * @return array
 	 */
-	private function getPresentations()
+	private function getRecordings()
 	{
-		$presentations = $this->presentationRepository->getPlaylistPresentations($this->getEntityId());
+		$recordings = $this->recordingRepository->getPlaylistRecordings($this->getEntityId());
 
-		$array_reduce = array_reduce($presentations, function ($carry, Presentation $presentation) {
-			$carry[$presentation->getId()] = $presentation;
+		$array_reduce = array_reduce($recordings, function ($carry, Recording $recording) {
+			$carry[$recording->getId()] = $recording;
 
 			return $carry;
 		}, []);

@@ -55,7 +55,7 @@ final class TestPlaylistDetail extends Avorg\TestCase
 		$this->mockAvorgApi->assertMethodCalledWith("getPlaylist", 7);
 	}
 
-	public function testReturnsPresentations()
+	public function testReturnsRecordings()
 	{
 		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
 		$this->mockAvorgApi->setReturnValue("getPlaylist", json_decode(json_encode([
@@ -67,7 +67,7 @@ final class TestPlaylistDetail extends Avorg\TestCase
 		$this->playlistPage->addUi("");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-playlist.twig", function($data) {
-			return is_a($data->recordings[0], "\\Avorg\\Presentation");
+			return is_a($data->recordings[0], "\\Avorg\\Recording");
 		});
 	}
 }

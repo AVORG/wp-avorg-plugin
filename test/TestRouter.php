@@ -153,7 +153,7 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"api/presentation/123",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_PresentationEndpoint&entity_id=123"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_Recording&entity_id=123"
 			],
 			[
 				"english/podcasts/latest",

@@ -3,7 +3,7 @@
 namespace Avorg\Page;
 
 use Avorg\Page;
-use Avorg\PresentationRepository;
+use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
 use Avorg\WordPress;
@@ -12,8 +12,8 @@ if (!\defined('ABSPATH')) exit;
 
 class Topic extends Page
 {
-	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
+	/** @var RecordingRepository $recordingRepository */
+	private $recordingRepository;
 
 	/** @var WordPress $wp */
 	protected $wp;
@@ -23,14 +23,14 @@ class Topic extends Page
 	protected $twigTemplate = "organism-topic.twig";
 
 	public function __construct(
-		PresentationRepository $presenterRepository,
+		RecordingRepository $presenterRepository,
 		Renderer $renderer,
 		WordPress $wp
 	)
 	{
 		parent::__construct($renderer, $wp);
 
-		$this->presentationRepository = $presenterRepository;
+		$this->recordingRepository = $presenterRepository;
 		$this->wp = $wp;
 	}
 
@@ -47,9 +47,9 @@ class Topic extends Page
 	{
 		$topicId = $this->wp->get_query_var( "entity_id");
 
-		$presentations = $this->presentationRepository->getTopicPresentations($topicId);
+		$recordings = $this->recordingRepository->getTopicRecordings($topicId);
 
-		return [ "recordings" => $presentations ];
+		return [ "recordings" => $recordings ];
 	}
 
 	protected function getEntityTitle()

@@ -47,15 +47,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * @param $presentationData
-	 * @return Presentation
+	 * @param $recordingData
+	 * @return Recording
 	 * @throws ReflectionException
 	 */
-	protected function makePresentation($presentationData)
+	protected function makeRecording($recordingData)
 	{
-		$apiResponseObject = $this->convertArrayToObjectRecursively($presentationData);
+		$apiResponseObject = $this->convertArrayToObjectRecursively($recordingData);
 
-		return $this->factory->make("Avorg\\Presentation")->setPresentation($apiResponseObject);
+		return $this->factory->make("Avorg\\Recording")->setData($apiResponseObject);
 	}
 
     /**

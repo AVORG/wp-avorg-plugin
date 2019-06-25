@@ -9,12 +9,12 @@ class AvorgApi_exceptions extends \Avorg\AvorgApi
 		// override
 	}
 	
-	public function getPresentation($id)
+	public function getRecording($id)
 	{
 		throw new \Exception();
 	}
 	
-	public function getPresentations($list = "")
+	public function getRecordings($list = "")
 	{
 		throw new \Exception();
 	}

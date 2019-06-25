@@ -13,7 +13,7 @@ class EndpointFactory
 	private $factory;
 
 	private $classes = [
-		"Avorg\\Endpoint\\PresentationEndpoint",
+		"Avorg\\Endpoint\\Recording",
 		"Avorg\\Endpoint\\RssEndpoint\\RssLatest",
 		"Avorg\\Endpoint\\RssEndpoint\\RssSpeaker"
 	];

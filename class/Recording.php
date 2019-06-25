@@ -6,27 +6,27 @@ use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Presentation implements iJsonEncodable
+class Recording implements iJsonEncodable
 {
 	/** @var Router $router */
 	private $router;
 
-	private $apiPresentation;
+	private $data;
 
 	public function __construct(Router $router)
 	{
 		$this->router = $router;
 	}
 
-	public function setPresentation($apiPresentation)
+	public function setData($data)
 	{
-		$this->apiPresentation = $apiPresentation;
+		$this->data = $data;
 		return $this;
 	}
 
 	public function toJson()
 	{
-		$data = array_merge((array)$this->apiPresentation, [
+		$data = array_merge((array)$this->data, [
 			"id" => $this->getId(),
 			"url" => $this->getUrl(),
 			"audioFiles" => $this->convertMediaFilesToArrays($this->getAudioFiles()),
@@ -51,19 +51,19 @@ class Presentation implements iJsonEncodable
 			]);
 		}, $this->getPresenters());
 
-		return trim($this->apiPresentation->description . " Presenters: " . implode(", ", $presenterNames));
+		return trim($this->data->description . " Presenters: " . implode(", ", $presenterNames));
 	}
 
 	public function getImage()
 	{
-		if (!$this->apiPresentation) return null;
+		if (!$this->data) return null;
 
 		$presenters = $this->getPresenters();
-		$recordingHasImage = property_exists($this->apiPresentation, "photo86") && $this->apiPresentation->photo86;
+		$recordingHasImage = property_exists($this->data, "photo86") && $this->data->photo86;
 		$presenterHasImage = $presenters && array_key_exists("photo", $presenters[0]);
 
 		if ($recordingHasImage) {
-			return $this->apiPresentation->photo86;
+			return $this->data->photo86;
 		} elseif ($presenterHasImage) {
 			return $presenters[0]["photo"];
 		} else {
@@ -73,7 +73,7 @@ class Presentation implements iJsonEncodable
 
 	public function getAudioFiles()
 	{
-		$apiMediaFiles = (isset($this->apiPresentation->mediaFiles)) ? $this->apiPresentation->mediaFiles : [];
+		$apiMediaFiles = (isset($this->data->mediaFiles)) ? $this->data->mediaFiles : [];
 
 		return $this->wrapItems(
 			"\\Avorg\\MediaFile\\AudioFile",
@@ -83,7 +83,7 @@ class Presentation implements iJsonEncodable
 
 	public function getVideoFiles()
 	{
-		$apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
+		$apiMediaFiles = (isset($this->data->videoFiles)) ? $this->data->videoFiles : [];
 		$filteredFiles = array_filter($apiMediaFiles, function ($file) {
 			return $file->container === "m3u8_ios";
 		});
@@ -96,18 +96,18 @@ class Presentation implements iJsonEncodable
 
 	public function getDatePublished()
 	{
-		return $this->apiPresentation->publishDate;
+		return $this->data->publishDate;
 	}
 
 	public function getId()
 	{
 
-		return intval($this->apiPresentation->id);
+		return intval($this->data->id);
 	}
 
 	public function getLogUrl()
 	{
-		$apiMediaFiles = (isset($this->apiPresentation->videoFiles)) ? $this->apiPresentation->videoFiles : [];
+		$apiMediaFiles = (isset($this->data->videoFiles)) ? $this->data->videoFiles : [];
 
 		return array_reduce($apiMediaFiles, function ($carry, $file) {
 			if (!isset($file->logURL)) return $carry;
@@ -129,7 +129,7 @@ class Presentation implements iJsonEncodable
 
 	public function getPresenters()
 	{
-		$apiPresenters = (isset($this->apiPresentation->presenters)) ? $this->apiPresentation->presenters : [];
+		$apiPresenters = (isset($this->data->presenters)) ? $this->data->presenters : [];
 
 		return array_map(function ($presenter) {
 			return [
@@ -145,14 +145,14 @@ class Presentation implements iJsonEncodable
 
 	public function getTitle()
 	{
-		return $this->apiPresentation->title;
+		return $this->data->title;
 	}
 
 	public function getUrl()
 	{
 		return $this->router->buildUrl("Avorg\Page\Media", [
-			"entity_id" => $this->apiPresentation->id,
-			"slug" => $this->router->formatStringForUrl($this->apiPresentation->title) . ".html"
+			"entity_id" => $this->data->id,
+			"slug" => $this->router->formatStringForUrl($this->data->title) . ".html"
 		]);
 	}
 

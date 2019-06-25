@@ -76,7 +76,7 @@ final class TestTopicPage extends Avorg\TestCase
 		$this->mockWordPress->assertMethodCalledWith( "get_query_var", "entity_id");
 	}
 
-	public function testGetsPresentations()
+	public function testGetsRecordings()
 	{
 		$this->mockWordPress->setReturnValue("get_option", 10);
 		$this->mockWordPress->setReturnValue("get_the_ID", 10);
@@ -84,12 +84,12 @@ final class TestTopicPage extends Avorg\TestCase
 
 		$this->topicPage->addUi("content");
 
-		$this->mockAvorgApi->assertMethodCalledWith( "getTopicPresentations", 10);
+		$this->mockAvorgApi->assertMethodCalledWith( "getTopicRecordings", 10);
 	}
 
-	public function testUsesPresentationsToRender()
+	public function testUsesRecordingsToRender()
 	{
-		$this->mockAvorgApi->setReturnValue("getTopicPresentations", []);
+		$this->mockAvorgApi->setReturnValue("getTopicRecordings", []);
 
 		$this->topicPage->addUi("content");
 
@@ -101,7 +101,7 @@ final class TestTopicPage extends Avorg\TestCase
 
 	public function testGetsWrappedRecordings()
 	{
-		$this->mockAvorgApi->setReturnValue("getTopicPresentations", [
+		$this->mockAvorgApi->setReturnValue("getTopicRecordings", [
 			[ "recordings" => "RECORDING" ]
 		]);
 
@@ -113,6 +113,6 @@ final class TestTopicPage extends Avorg\TestCase
 		$recordings = $dataObject->recordings;
 		$recording = $recordings[0];
 
-		$this->assertInstanceOf("\\Avorg\\Presentation", $recording);
+		$this->assertInstanceOf("\\Avorg\\Recording", $recording);
 	}
 }

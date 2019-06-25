@@ -5,7 +5,7 @@ namespace Avorg\Endpoint\RssEndpoint;
 
 use Avorg\Endpoint\RssEndpoint;
 use Avorg\Php;
-use Avorg\PresentationRepository;
+use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
 use natlib\Factory;
@@ -14,24 +14,24 @@ if (!\defined('ABSPATH')) exit;
 
 class RssLatest extends RssEndpoint
 {
-	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
+	/** @var RecordingRepository $recordingRepository */
+	private $recordingRepository;
 
 	public function __construct(
 		Factory $factory,
 		Php $php,
-		PresentationRepository $presentationRepository,
+		RecordingRepository $recordingRepository,
 		Renderer $renderer
 	)
 	{
 		parent::__construct($factory, $php, $renderer);
 
-		$this->presentationRepository = $presentationRepository;
+		$this->recordingRepository = $recordingRepository;
 	}
 
 	protected function getRecordings()
 	{
-		return $this->presentationRepository->getPresentations();
+		return $this->recordingRepository->getRecordings();
 	}
 
 	protected function getTitle()

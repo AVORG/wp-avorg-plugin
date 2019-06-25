@@ -7,7 +7,7 @@
 			{% set days = date("now").diff(date(recording.datePublished)).days %}
 			{% set agePhrase = avorg._n("%1$d day ago", "%1$d days ago", days)|format(days) %}
 			{% include "molecule-recordingMeta.twig" with {
-				presentation: recording,
+				recording: recording,
 				additionalInfo: agePhrase,
 				shouldLinkTitle: shouldLinkTitles
 			} only %}

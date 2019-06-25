@@ -46,13 +46,13 @@ Bits page in the admin interface that specify the previously-used id in the "Ide
 ### List Shortcode
 
 Place the following usages in the content of a page or a post to retrieve a list of recent, featured, or popular 
-presentations.
+recordings.
 
 Usage                        | Result
 -----------------------------|--------------------------------
-`[avorg-list]`               | List of recent presentations
-`[avorg-list list=featured]` | List of featured presentations
-`[avorg-list list=popular]`  | List of popular presentations
+`[avorg-list]`               | List of recent recordings
+`[avorg-list list=featured]` | List of featured recordings
+`[avorg-list list=popular]`  | List of popular recordings
 
 ## Testing
 

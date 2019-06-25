@@ -99,7 +99,7 @@ class AvorgApi
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function getPresentation($id)
+	public function getRecording($id)
 	{
 		if (!is_numeric($id)) return false;
 		
@@ -119,12 +119,12 @@ class AvorgApi
 	 * @return null
 	 * @throws Exception
 	 */
-	public function getPresentations($list = "")
+	public function getRecordings($list = "")
 	{
 		$url = "$this->apiBaseUrl/recordings/$list";
 		$trimmedUrl = trim($url, "/");
 
-		return $this->getPresentationsResponse($trimmedUrl);
+		return $this->getRecordingsResponse($trimmedUrl);
 	}
 
 	/**
@@ -132,20 +132,20 @@ class AvorgApi
 	 * @return null
 	 * @throws Exception
 	 */
-	public function getTopicPresentations($topicId)
+	public function getTopicRecordings($topicId)
 	{
 		$url = "$this->apiBaseUrl/recordings/topic/$topicId";
 
-		return $this->getPresentationsResponse($url);
+		return $this->getRecordingsResponse($url);
 	}
 
-	public function getPresenterPresentations($presenterId)
+	public function getPresenterRecordings($presenterId)
 	{
 		if (!is_numeric($presenterId)) return false;
 
 		$url = "$this->apiBaseUrl/recordings/presenter/$presenterId";
 
-		return $this->getPresentationsResponse($url);
+		return $this->getRecordingsResponse($url);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class AvorgApi
 	 * @return null
 	 * @throws Exception
 	 */
-	private function getPresentationsResponse($apiUrl)
+	private function getRecordingsResponse($apiUrl)
 	{
 		try {
 			$response = $this->getResponse($apiUrl);

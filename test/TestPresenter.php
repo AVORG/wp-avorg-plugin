@@ -26,11 +26,11 @@ final class TestPresenter extends Avorg\TestCase
 		$this->presenter->setPresenter($this->apiPresenter);
 	}
 
-	public function testGetPresentations()
+	public function testGetRecordings()
 	{
-		$this->presenter->getPresentations();
+		$this->presenter->getRecordings();
 
-		$this->mockAvorgApi->assertMethodCalledWith("getPresenterPresentations", 131);
+		$this->mockAvorgApi->assertMethodCalledWith("getPresenterRecordings", 131);
 	}
 
 	public function testGetDescription()

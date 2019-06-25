@@ -156,7 +156,7 @@ final class TestContentBits extends Avorg\TestCase
 		$this->mockPhp->assertMethodCalledWith( "array_rand", $posts);
 	}
 	
-	public function testSecondCallDoesntIncludePresentationId()
+	public function testSecondCallDoesntIncludeRecordingId()
 	{
 		$post = new stdClass();
 		$post->post_content = "hello world";

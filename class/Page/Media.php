@@ -4,8 +4,8 @@ namespace Avorg\Page;
 
 use Avorg\AvorgApi;
 use Avorg\Page;
-use Avorg\Presentation;
-use Avorg\PresentationRepository;
+use Avorg\Recording;
+use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
 use Avorg\WordPress;
@@ -18,16 +18,16 @@ class Media extends Page
     /** @var AvorgApi $avorgApi */
     protected $avorgApi;
 
-    /** @var PresentationRepository $presentationRepository */
-    protected $presentationRepository;
+    /** @var RecordingRepository $recordingRepository */
+    protected $recordingRepository;
 
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
     protected $twigTemplate = "organism-recording.twig";
 
     public function __construct(
-    	AvorgApi $avorgApi,
-		PresentationRepository $presentationRepository,
+		AvorgApi $avorgApi,
+		RecordingRepository $recordingRepository,
 		Renderer $renderer,
 		WordPress $wordPress
 	)
@@ -35,7 +35,7 @@ class Media extends Page
         parent::__construct($renderer, $wordPress);
 
         $this->avorgApi = $avorgApi;
-        $this->presentationRepository = $presentationRepository;
+        $this->recordingRepository = $recordingRepository;
     }
 	
 	public function throw404($query)
@@ -52,13 +52,11 @@ class Media extends Page
 	 */
 	protected function getData()
 	{
-		$entity = $this->getEntitySafe();
-
-		return ["presentation" => $entity];
+		return ["recording" => $this->getEntitySafe()];
 	}
 
 	/**
-	 * @return Presentation|null
+	 * @return Recording|null
 	 */
 	private function getEntitySafe()
 	{
@@ -70,21 +68,21 @@ class Media extends Page
 	}
 
 	/**
-	 * @return Presentation|null
+	 * @return Recording|null
 	 * @throws Exception
 	 */
 	private function getEntity()
 	{
 		$entityId = $this->getEntityId();
 
-		return $this->presentationRepository->getPresentation($entityId);
+		return $this->recordingRepository->getRecording($entityId);
 	}
 
 
 	protected function getEntityTitle()
 	{
-		$presentation = $this->getEntitySafe();
+		$recording = $this->getEntitySafe();
 
-		return $presentation ? $presentation->getTitle() : null;
+		return $recording ? $recording->getTitle() : null;
 	}
 }
