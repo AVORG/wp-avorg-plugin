@@ -40,7 +40,7 @@ final class TestBook extends Avorg\TestCase
 	{
 		$book = $this->makeBook();
 
-		$this->assertContains("Avorg\\iArrayEncodable", class_implements($book));
+		$this->assertContains("Avorg\\iEntity", class_implements($book));
 	}
 
 	public function testToJsonIncludesRecordingsKey()

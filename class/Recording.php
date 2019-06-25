@@ -6,7 +6,7 @@ use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Recording implements iArrayEncodable
+class Recording implements iEntity
 {
 	/** @var Router $router */
 	private $router;

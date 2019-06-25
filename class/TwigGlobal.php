@@ -95,7 +95,7 @@ class TwigGlobal
 	{
 		return $this->array_map_recursive(function($leaf) {
 			$isRecodable = is_object($leaf) &&
-				in_array("Avorg\\iArrayEncodable", class_implements($leaf));
+				in_array("Avorg\\iEntity", class_implements($leaf));
 
 			return $isRecodable ? $leaf->toArray() : $leaf;
 		}, $this->data);

@@ -385,6 +385,6 @@ final class TestRecording extends Avorg\TestCase
 	{
 		$recording = $this->makeRecording(["presenters" => [[]]]);
 
-		$this->assertContains("Avorg\\iArrayEncodable", class_implements($recording));
+		$this->assertContains("Avorg\\iEntity", class_implements($recording));
 	}
 }

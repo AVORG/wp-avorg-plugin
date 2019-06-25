@@ -7,7 +7,7 @@ use Exception;
 
 if (!defined('ABSPATH')) exit;
 
-class Book implements iArrayEncodable
+class Book implements iEntity
 {
 	/** @var RecordingRepository $recordingRepository */
 	private $recordingRepository;

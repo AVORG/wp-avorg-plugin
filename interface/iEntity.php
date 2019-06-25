@@ -7,7 +7,9 @@ use function defined;
 if (!defined('ABSPATH')) exit;
 
 
-interface iArrayEncodable
+interface iEntity
 {
+	public function toJson();
+
 	public function toArray();
 }
