@@ -37,20 +37,34 @@ final class TestBook extends Avorg\TestCase
 
 	public function testGetRecordingsReturnsRecordings()
 	{
-		$apiRecording = $this->convertArrayToObjectRecursively([
-			"recordings" => [
-				"lang" => "en",
-				"id" => "1836",
-				"title" => 'E.P. Daniels and True Revival'
-			]
-		]);
-
-		$this->mockAvorgApi->setReturnValue("getBookRecordings", [$apiRecording]);
+		$this->mockAvorgApi->loadBookRecordings([]);
 
 		$this->setBookData([ "id" => "7" ]);
 
 		$recordings = $this->book->getRecordings();
 
 		$this->assertInstanceOf("Avorg\\Recording", $recordings[0]);
+	}
+
+	public function testJsonEncodable()
+	{
+		$this->assertContains("Avorg\\iJsonEncodable", class_implements($this->book));
+	}
+
+	public function testToJsonIncludesRecordingsKey()
+	{
+		$this->assertObjectHasAttribute("recordings", json_decode($this->book->toJson()));
+	}
+
+	public function testToJsonIncludesRecordings()
+	{
+		$this->mockAvorgApi->loadBookRecordings([
+			"title" => "Chapter 0 - Foreword"
+		]);
+
+		$decodedJson = json_decode($this->book->toJson());
+		$decodedBook = $decodedJson->recordings[0];
+
+		$this->assertEquals("Chapter 0 - Foreword", $decodedBook->title);
 	}
 }

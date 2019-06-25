@@ -72,6 +72,12 @@ class StubAvorgApi extends AvorgApi
 		$this->setReturnValue("getRecordings", $objects);
 	}
 
+	public function loadBookRecordings(...$dataArrays) {
+		$objects = array_map([$this, "convertRecordingArrayToResponseObject"], $dataArrays);
+
+		$this->setReturnValue("getBookRecordings", $objects);
+	}
+
 	/**
 	 * @param $dataArray
 	 * @return mixed

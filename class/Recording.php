@@ -26,19 +26,7 @@ class Recording implements iJsonEncodable
 
 	public function toJson()
 	{
-		$data = array_merge((array)$this->data, [
-			"id" => $this->getId(),
-			"url" => $this->getUrl(),
-			"audioFiles" => $this->convertMediaFilesToArrays($this->getAudioFiles()),
-			"videoFiles" => $this->convertMediaFilesToArrays($this->getVideoFiles()),
-			"logUrl" => $this->getLogUrl(),
-			"datePublished" => $this->getDatePublished(),
-			"presenters" => $this->getPresenters(),
-			"image" => $this->getImage(),
-			"description" => $this->getDescription()
-		]);
-
-		return json_encode($data);
+		return json_encode($this->toData());
 	}
 
 	public function getDescription()
@@ -180,5 +168,23 @@ class Recording implements iJsonEncodable
 				"type" => $mediaFile->getType()
 			];
 		}, $mediaFiles);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function toData()
+	{
+		return array_merge((array)$this->data, [
+			"id" => $this->getId(),
+			"url" => $this->getUrl(),
+			"audioFiles" => $this->convertMediaFilesToArrays($this->getAudioFiles()),
+			"videoFiles" => $this->convertMediaFilesToArrays($this->getVideoFiles()),
+			"logUrl" => $this->getLogUrl(),
+			"datePublished" => $this->getDatePublished(),
+			"presenters" => $this->getPresenters(),
+			"image" => $this->getImage(),
+			"description" => $this->getDescription()
+		]);
 	}
 }
