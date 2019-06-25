@@ -1,6 +1,18 @@
+{#
+	jsVariable : string; reference to list of recordings in js context; ex, avorg.recordings
+#}
+
 <div class="avorg-molecule-playlist">
 	<div class="avorg-molecule-playlist__player"></div>
 	<ul class="avorg-molecule-playlist__list"></ul>
 
 	{{ avorg.loadScript("playlist.js") }}
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function (event) {
+			console.log('Loading playlist', avorg);
+
+			Playlist.init(Player, Object.values( {{ jsVariable }} ));
+		});
+	</script>
 </div>

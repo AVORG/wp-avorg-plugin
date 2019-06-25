@@ -146,8 +146,3 @@ const Playlist = {
         this.loadRecordingAtIndex(0);
     }
 };
-
-document.addEventListener("DOMContentLoaded", function (event) {
-    console.log('Loading playlist', avorg);
-    Playlist.init(Player, Object.values( avorg.recordings ));
-});
