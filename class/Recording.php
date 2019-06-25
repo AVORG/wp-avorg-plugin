@@ -6,7 +6,7 @@ use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Recording implements iJsonEncodable
+class Recording implements iArrayEncodable
 {
 	/** @var Router $router */
 	private $router;
@@ -26,7 +26,7 @@ class Recording implements iJsonEncodable
 
 	public function toJson()
 	{
-		return json_encode($this->toData());
+		return json_encode($this->toArray());
 	}
 
 	public function getDescription()
@@ -173,7 +173,7 @@ class Recording implements iJsonEncodable
 	/**
 	 * @return array
 	 */
-	public function toData()
+	public function toArray()
 	{
 		return array_merge((array)$this->data, [
 			"id" => $this->getId(),

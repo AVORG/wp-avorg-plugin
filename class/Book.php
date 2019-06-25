@@ -7,7 +7,7 @@ use Exception;
 
 if (!defined('ABSPATH')) exit;
 
-class Book implements iJsonEncodable
+class Book implements iArrayEncodable
 {
 	/** @var RecordingRepository $recordingRepository */
 	private $recordingRepository;
@@ -64,8 +64,17 @@ class Book implements iJsonEncodable
 	 */
 	public function toJson()
 	{
-		return json_encode([
-			"recordings" => $this->getDataRecordings()
+		return json_encode($this->toArray());
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function toArray()
+	{
+		return array_merge((array) $this->data, [
+			"recordings" => $this->getRecordingArrays()
 		]);
 	}
 
@@ -73,10 +82,10 @@ class Book implements iJsonEncodable
 	 * @return array
 	 * @throws Exception
 	 */
-	private function getDataRecordings()
+	private function getRecordingArrays()
 	{
 		return array_map(function (Recording $recording) {
-			return $recording->toData();
+			return $recording->toArray();
 		}, $this->getRecordings());
 	}
 

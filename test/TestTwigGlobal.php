@@ -140,14 +140,30 @@ final class TestTwigGlobal extends Avorg\TestCase
 	 * @throws ReflectionException
 	 * @throws Exception
 	 */
-	public function testJsonRecodes()
+	public function testUsesArrayData()
 	{
 		$recording = $this->makeRecording(["title" => "sermon_title"]);
 
 		$this->global->setData([$recording])->loadScript("script.js");
 
 		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
-			return $call[2][0]->title === "sermon_title";
+			return $call[2][0]['title'] === "sermon_title";
+		});
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function testPassesBookToScript()
+	{
+		$book = $this->makeBook([
+			"title" => "A Call to Medical Evangelism"
+		]);
+
+		$this->global->setData([$book])->loadScript("script.js");
+
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
+			return $call[2][0]['title'] === "A Call to Medical Evangelism";
 		});
 	}
 }

@@ -58,6 +58,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		return $this->factory->make("Avorg\\Recording")->setData($apiResponseObject);
 	}
 
+	protected function makeBook($data = [])
+	{
+		$book = $this->factory->make("Avorg\\Book");
+
+		$book->setData((object) $data);
+
+		return $book;
+	}
+
     /**
      * @param $array
      * @return mixed

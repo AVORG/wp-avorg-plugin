@@ -2,35 +2,25 @@
 
 final class TestBook extends Avorg\TestCase
 {
-	/** @var \Avorg\Book $book */
-	private $book;
-
 	public function setUp()
 	{
 		parent::setUp();
-
-		$this->book = $this->factory->make("Avorg\\Book");
-	}
-
-	private function setBookData($data)
-	{
-		$this->book->setData((object) $data);
 	}
 
 	public function testGetTitle()
 	{
-		$this->setBookData([
+		$book = $this->makeBook([
 			"title" => "A Call to Medical Evangelism"
 		]);
 
-		$this->assertEquals("A Call to Medical Evangelism", $this->book->title);
+		$this->assertEquals("A Call to Medical Evangelism", $book->title);
 	}
 
 	public function testGetRecordings()
 	{
-		$this->setBookData([ "id" => "7" ]);
+		$book = $this->makeBook([ "id" => "7" ]);
 
-		$this->book->getRecordings();
+		$book->getRecordings();
 
 		$this->mockAvorgApi->assertMethodCalledWith("getBookRecordings", 7);
 	}
@@ -39,30 +29,36 @@ final class TestBook extends Avorg\TestCase
 	{
 		$this->mockAvorgApi->loadBookRecordings([]);
 
-		$this->setBookData([ "id" => "7" ]);
+		$book = $this->makeBook([ "id" => "7" ]);
 
-		$recordings = $this->book->getRecordings();
+		$recordings = $book->getRecordings();
 
 		$this->assertInstanceOf("Avorg\\Recording", $recordings[0]);
 	}
 
 	public function testJsonEncodable()
 	{
-		$this->assertContains("Avorg\\iJsonEncodable", class_implements($this->book));
+		$book = $this->makeBook();
+
+		$this->assertContains("Avorg\\iArrayEncodable", class_implements($book));
 	}
 
 	public function testToJsonIncludesRecordingsKey()
 	{
-		$this->assertObjectHasAttribute("recordings", json_decode($this->book->toJson()));
+		$book = $this->makeBook();
+
+		$this->assertObjectHasAttribute("recordings", json_decode($book->toJson()));
 	}
 
 	public function testToJsonIncludesRecordings()
 	{
+		$book = $this->makeBook();
+
 		$this->mockAvorgApi->loadBookRecordings([
 			"title" => "Chapter 0 - Foreword"
 		]);
 
-		$decodedJson = json_decode($this->book->toJson());
+		$decodedJson = json_decode($book->toJson());
 		$decodedBook = $decodedJson->recordings[0];
 
 		$this->assertEquals("Chapter 0 - Foreword", $decodedBook->title);

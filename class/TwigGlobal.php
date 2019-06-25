@@ -94,9 +94,10 @@ class TwigGlobal
 	private function prepareDataForScript()
 	{
 		return $this->array_map_recursive(function($leaf) {
-			$isRecodable = is_object($leaf) && in_array("Avorg\\iJsonEncodable", class_implements($leaf));
+			$isRecodable = is_object($leaf) &&
+				in_array("Avorg\\iArrayEncodable", class_implements($leaf));
 
-			return $isRecodable ? json_decode($leaf->toJson()) : $leaf;
+			return $isRecodable ? $leaf->toArray() : $leaf;
 		}, $this->data);
 	}
 
