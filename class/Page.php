@@ -46,7 +46,6 @@ abstract class Page implements iRoutable
 
 	public function registerCallbacks()
 	{
-		$this->wp->add_action("wp", [$this, "registerScriptCallbacks"]);
 		$this->wp->add_action("parse_query", [$this, "throw404"]);
 		$this->wp->add_action("init", [$this, "createPage"]);
 		$this->wp->add_filter("pre_get_document_title", [$this, "filterTitle"]);
@@ -55,21 +54,6 @@ abstract class Page implements iRoutable
 		$this->wp->register_activation_hook(
 			AVORG_BASE_PATH . "/wp-avorg-plugin.php",
 			[$this, "createPage"]);
-	}
-
-	public function registerScriptCallbacks()
-	{
-		if (!$this->isThisPage()) return;
-
-		$scripts = $this->getScripts();
-		array_walk($scripts, function (Script $script) {
-			$script->registerCallbacks();
-		});
-	}
-
-	protected function getScripts()
-	{
-		return [];
 	}
 
 	public function addUi($content)

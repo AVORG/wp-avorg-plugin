@@ -1,24 +1,13 @@
 <?php
 
-use Avorg\Presentation;
-
 final class TestPresentation extends Avorg\TestCase
 {
 	/**
-	 * @param $apiResponse
-	 * @return Presentation
 	 * @throws ReflectionException
 	 */
-    protected function getPresentationForApiResponse($apiResponse)
+	public function testIncludesPresenterName()
     {
-        $apiResponseObject = $this->convertArrayToObjectRecursively($apiResponse);
-
-        return $this->factory->make("Avorg\\Presentation")->setPresentation($apiResponseObject);
-    }
-
-    public function testIncludesPresenterName()
-    {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "presenters" => [
                 [
                     "givenName" => "first_name",
@@ -37,27 +26,36 @@ final class TestPresentation extends Avorg\TestCase
         $this->assertEquals($expected, $presentation->getPresenters()[0]["name"]);
     }
 
-    public function testIncludesTitle()
+	/**
+	 * @throws ReflectionException
+	 */
+	public function testIncludesTitle()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "title" => "sermon_title"
         ]);
 
         $this->assertEquals("sermon_title", $presentation->getTitle());
     }
 
-    public function testIncludesRecordings()
+	/**
+	 * @throws ReflectionException
+	 */
+	public function testIncludesRecordings()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "mediaFiles" => [[]]
         ]);
 
         $this->assertInstanceOf("\\Avorg\\MediaFile", $presentation->getAudioFiles()[0]);
     }
 
-    public function testPassesThroughStreamUrl()
+	/**
+	 * @throws ReflectionException
+	 */
+	public function testPassesThroughStreamUrl()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "mediaFiles" => [[
                 "streamURL" => "stream_url"
             ]]
@@ -66,9 +64,12 @@ final class TestPresentation extends Avorg\TestCase
         $this->assertEquals("stream_url", $presentation->getAudioFiles()[0]->getStreamUrl());
     }
 
-    public function testPassesThroughStreamUrlForVideoFiles()
+	/**
+	 * @throws ReflectionException
+	 */
+	public function testPassesThroughStreamUrlForVideoFiles()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "videoFiles" => [[
                 "downloadURL" => "stream_url",
                 "container" => "m3u8_ios"
@@ -78,9 +79,12 @@ final class TestPresentation extends Avorg\TestCase
         $this->assertEquals("stream_url", $presentation->getVideoFiles()[0]->getStreamUrl());
     }
 
-    public function testUsesVideoFileClass()
+	/**
+	 * @throws ReflectionException
+	 */
+	public function testUsesVideoFileClass()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "videoFiles" => [[
                 "container" => "m3u8_ios"
             ]]
@@ -89,9 +93,12 @@ final class TestPresentation extends Avorg\TestCase
         $this->assertInstanceOf("\\Avorg\\MediaFile\\VideoFile", $presentation->getVideoFiles()[0]);
     }
 
-    public function testOnlyReturnsM3u8Videos()
+	/**
+	 * @throws ReflectionException
+	 */
+	public function testOnlyReturnsM3u8Videos()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "videoFiles" => [
                 [
                     "container" => "m3u8_ios"
@@ -107,7 +114,7 @@ final class TestPresentation extends Avorg\TestCase
 
     public function testGetLogUrl()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "videoFiles" => [
                 [
                     "logURL" => "log_url",
@@ -125,7 +132,7 @@ final class TestPresentation extends Avorg\TestCase
 
     public function testGetLogUrlWhenNoLogUrl()
     {
-        $presentation = $this->getPresentationForApiResponse([
+        $presentation = $this->makePresentation([
             "videoFiles" => [
                 [
                     "container" => "m3u8_ios"
@@ -138,7 +145,7 @@ final class TestPresentation extends Avorg\TestCase
 
     public function testIncludesPublishDate()
 	{
-		$presentation = $this->getPresentationForApiResponse([
+		$presentation = $this->makePresentation([
 			"publishDate" => "2018-02-19 05:22:17"
 		]);
 
@@ -153,7 +160,7 @@ final class TestPresentation extends Avorg\TestCase
 			"title" => 'E.P. Daniels and True Revival'
 		]);
 
-		$presentation = $this->getPresentationForApiResponse($apiRecording);
+		$presentation = $this->makePresentation($apiRecording);
 
 		$this->assertEquals(
 			"http://localhost:8080/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
@@ -167,7 +174,7 @@ final class TestPresentation extends Avorg\TestCase
 			"id" => "1836"
 		]);
 
-		$presentation = $this->getPresentationForApiResponse($apiRecording);
+		$presentation = $this->makePresentation($apiRecording);
 
 		$this->assertEquals(1836, $presentation->getId());
 	}
@@ -182,7 +189,7 @@ final class TestPresentation extends Avorg\TestCase
 	public function testToJson($recordingArray, $expectedKey, $expectedValue)
 	{
 		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
-		$presentation = $this->getPresentationForApiResponse($apiRecording);
+		$presentation = $this->makePresentation($apiRecording);
 		$json         = $presentation->toJson();
 		$object       = json_decode($json, true);
 
@@ -348,7 +355,7 @@ final class TestPresentation extends Avorg\TestCase
 
 	public function testGetPresenterString()
 	{
-		$presentation = $this->getPresentationForApiResponse([
+		$presentation = $this->makePresentation([
 			"presenters" => [
 				[
 					"givenName" => "first_name",
@@ -372,5 +379,12 @@ final class TestPresentation extends Avorg\TestCase
 			"first_name last_name suffix, first_name last_name, first_name suffix",
 			$presentation->getPresentersString()
 		);
+	}
+
+	public function testImplementsInterface()
+	{
+		$presentation = $this->makePresentation(["presenters" => [[]]]);
+
+		$this->assertContains("Avorg\\iJsonEncodable", class_implements($presentation));
 	}
 }

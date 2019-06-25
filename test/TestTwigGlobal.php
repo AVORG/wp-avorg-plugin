@@ -123,4 +123,31 @@ final class TestTwigGlobal extends Avorg\TestCase
 			return $call[1] === AVORG_BASE_URL . "/script/script.js";
 		});
 	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function testLoadsScriptData()
+	{
+		$this->global->setData(["page_data"])->loadScript("script.js");
+
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
+			return in_array("page_data", $call[2]);
+		});
+	}
+
+	/**
+	 * @throws ReflectionException
+	 * @throws Exception
+	 */
+	public function testJsonRecodes()
+	{
+		$presentation = $this->makePresentation(["title" => "sermon_title"]);
+
+		$this->global->setData([$presentation])->loadScript("script.js");
+
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
+			return $call[2][0]->title === "sermon_title";
+		});
+	}
 }

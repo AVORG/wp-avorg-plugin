@@ -3,6 +3,7 @@
 namespace Avorg;
 
 use natlib\Factory;
+use ReflectionException;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/* Mock Objects */
@@ -43,6 +44,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 			$this->mockTwig = new StubTwig($this),
 			$this->mockWordPress = new StubWordPress($this, $this->factory)
 		);
+	}
+
+	/**
+	 * @param $presentationData
+	 * @return Presentation
+	 * @throws ReflectionException
+	 */
+	protected function makePresentation($presentationData)
+	{
+		$apiResponseObject = $this->convertArrayToObjectRecursively($presentationData);
+
+		return $this->factory->make("Avorg\\Presentation")->setPresentation($apiResponseObject);
 	}
 
     /**

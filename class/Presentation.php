@@ -6,7 +6,7 @@ use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Presentation
+class Presentation implements iJsonEncodable
 {
 	/** @var Router $router */
 	private $router;

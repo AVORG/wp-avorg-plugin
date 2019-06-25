@@ -230,22 +230,9 @@ final class TestPlugin extends Avorg\TestCase
 	 * @param $path
 	 * @param bool $shouldRegister
 	 * @param bool $isRelative
-	 * @param null $pageClass
-	 * @throws ReflectionException
 	 */
-	public function testRegistersScripts($path, $shouldRegister = true, $isRelative = false, $pageClass = null)
+	public function testRegistersScripts($path, $shouldRegister = true, $isRelative = false)
 	{
-		if ($pageClass) {
-			/** @var Avorg\Page $page */
-			$page = $this->factory->secure("Avorg\\$pageClass");
-
-			$this->mockWordPress->setCurrentPageToPage(
-				$page
-			);
-
-			$page->registerCallbacks();
-		}
-
 		$this->mockWordPress->runActions("wp", "wp_enqueue_scripts");
 
 		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
@@ -269,7 +256,6 @@ final class TestPlugin extends Avorg\TestCase
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
 			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
-			"init playlist.js on playlist page" => ["script/playlist.js", true, true, "Page\\Playlist\\Detail"],
 			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
 		];
 	}

@@ -148,6 +148,6 @@ const Playlist = {
 };
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    console.log('Loading playlist');
+    console.log('Loading playlist', avorg);
     Playlist.init(Player, Object.values( avorg.recordings ));
 });

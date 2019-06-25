@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use Exception;
 use Twig\Markup;
 
 if (!\defined('ABSPATH')) exit;
@@ -58,6 +59,7 @@ class TwigGlobal
 	public function setData($data)
 	{
 		$this->data = array_merge($this->data, $data);
+		return $this;
 	}
 
 	public function getLanguage()
@@ -75,10 +77,37 @@ class TwigGlobal
 		return $this->router->getRequestPath();
 	}
 
+	/**
+	 * @param $path
+	 * @return Markup
+	 * @throws Exception
+	 */
 	public function loadScript($path)
 	{
-		$this->scriptFactory->getScript("script/$path")->enqueue();
+		$preparedData = $this->prepareDataForScript();
+
+		$this->scriptFactory->getScript("script/$path")->setData($preparedData)->enqueue();
 
 		return new Markup("<p>Attempted to load script $path</p>", "UTF-8");
+	}
+
+	private function prepareDataForScript()
+	{
+		return $this->array_map_recursive(function($leaf) {
+			$isRecodable = is_object($leaf) && in_array("Avorg\\iJsonEncodable", class_implements($leaf));
+
+			return $isRecodable ? json_decode($leaf->toJson()) : $leaf;
+		}, $this->data);
+	}
+
+	private function array_map_recursive($callback, $array)
+	{
+		// https://stackoverflow.com/a/39637749/937377
+
+		$func = function ($item) use (&$func, &$callback) {
+			return is_array($item) ? array_map($func, $item) : call_user_func($callback, $item);
+		};
+
+		return array_map($func, $array);
 	}
 }
