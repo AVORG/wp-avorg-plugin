@@ -45,4 +45,15 @@ final class TestBookDetail extends Avorg\TestCase
 
 		$this->mockWordPress->assertMethodCalledWith("get_query_var", "entity_id");
 	}
+
+	public function testGetEntityTitle()
+	{
+		$this->mockAvorgApi->loadBook([
+			"title" => "book_title"
+		]);
+
+		$result = $this->bookDetail->filterTitle("");
+
+		$this->assertEquals("book_title - AudioVerse", $result);
+	}
 }

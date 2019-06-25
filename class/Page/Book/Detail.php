@@ -41,13 +41,24 @@ class Detail extends Page
 	 */
 	protected function getData()
 	{
-		$bookId = $this->getEntityId();
-
-		return ["book" => $this->bookRepository->getBook($bookId)];
+		return ["book" => $this->getEntity()];
 	}
 
+	/**
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
 	protected function getEntityTitle()
 	{
-		// TODO: Implement getEntityTitle() method.
+		return $this->getEntity()->title;
+	}
+
+	/**
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	private function getEntity()
+	{
+		return $this->bookRepository->getBook($this->getEntityId());
 	}
 }

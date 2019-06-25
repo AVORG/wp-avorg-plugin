@@ -60,19 +60,29 @@ class StubAvorgApi extends AvorgApi
 
 	/* Helper Methods */
 
-	public function loadRecording($dataArray) {
+	public function loadBook($data)
+	{
+		$responseObject = $this->convertArrayToObjectRecursively($data);
+
+		$this->setReturnValue("getBook", $responseObject);
+	}
+
+	public function loadRecording($dataArray)
+	{
 		$responseObject = $this->convertRecordingArrayToResponseObject($dataArray);
 
 		$this->setReturnValue("getRecording", $responseObject);
 	}
 
-	public function loadRecordings(...$dataArrays) {
+	public function loadRecordings(...$dataArrays)
+	{
 		$objects = array_map([$this, "convertRecordingArrayToResponseObject"], $dataArrays);
 
 		$this->setReturnValue("getRecordings", $objects);
 	}
 
-	public function loadBookRecordings(...$dataArrays) {
+	public function loadBookRecordings(...$dataArrays)
+	{
 		$objects = array_map([$this, "convertRecordingArrayToResponseObject"], $dataArrays);
 
 		$this->setReturnValue("getBookRecordings", $objects);
