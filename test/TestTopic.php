@@ -1,15 +1,17 @@
 <?php
 
+use Avorg\Topic;
+
 final class TestTopic extends Avorg\TestCase
 {
 	/**
 	 * @param array $data
-	 * @return \Avorg\Topic
+	 * @return Topic
 	 * @throws ReflectionException
 	 */
 	private function makeTopic(array $data)
 	{
-		/** @var \Avorg\Topic $topic */
+		/** @var Topic $topic */
 		$topic = $this->factory->make("Avorg\\Topic");
 		$topic->setData((object)$data);
 		return $topic;

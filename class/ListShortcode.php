@@ -26,7 +26,12 @@ class ListShortcode
 	{
 		$this->wp->add_shortcode( "avorg-list", [$this, "renderShortcode"]);
 	}
-	
+
+	/**
+	 * @param $attributes
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function renderShortcode($attributes)
 	{
 		$validListTypes = ["featured","popular"];
