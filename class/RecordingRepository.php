@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use Avorg\DataObject\Recording;
 use function defined;
 use Exception;
 use natlib\Factory;

@@ -25,4 +25,13 @@ final class TestBibleListing extends Avorg\TestCase
 
 		$this->mockAvorgApi->assertMethodCalled("getBibles");
 	}
+
+	public function testReturnsBibles()
+	{
+		$this->mockAvorgApi->loadBibles([[]]);
+
+		$this->assertTwigGlobalMatchesCallback($this->page, function($avorg) {
+			return $avorg->bibles[0] instanceof \Avorg\DataObject\Bible;
+		});
+	}
 }

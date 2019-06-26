@@ -75,46 +75,58 @@ class StubAvorgApi extends AvorgApi
 
 	/* Helper Methods */
 
+	public function loadBibles(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getBibles", $dataArrays);
+	}
+
 	public function loadTopic($data)
 	{
-		$object = $this->convertArrayToObjectRecursively($data);
-
-		$this->setReturnValue("getTopic", $object);
+		$this->setDataObjectReturnValue("getTopic", $data);
 	}
 
 	public function loadTopics(...$dataArrays)
 	{
-		$objects = array_map([$this, "convertArrayToObjectRecursively"], $dataArrays);
-
-		$this->setReturnValue("getTopics", $objects);
+		$this->setDataObjectsReturnValue("getTopics", $dataArrays);
 	}
 
 	public function loadBook($data)
 	{
-		$responseObject = $this->convertArrayToObjectRecursively($data);
-
-		$this->setReturnValue("getBook", $responseObject);
+		$this->setDataObjectReturnValue("getBook", $data);
 	}
 
 	public function loadRecording($dataArray)
 	{
-		$responseObject = $this->convertArrayToObjectRecursively($dataArray);
-
-		$this->setReturnValue("getRecording", $responseObject);
+		$this->setDataObjectReturnValue("getRecording", $dataArray);
 	}
 
 	public function loadRecordings(...$dataArrays)
 	{
-		$objects = array_map([$this, "convertArrayToObjectRecursively"], $dataArrays);
-
-		$this->setReturnValue("getRecordings", $objects);
+		$this->setDataObjectsReturnValue("getRecordings", $dataArrays);
 	}
 
 	public function loadBookRecordings(...$dataArrays)
 	{
-		$objects = array_map([$this, "convertArrayToObjectRecursively"], $dataArrays);
+		$this->setDataObjectsReturnValue("getBookRecordings", $dataArrays);
+	}
 
-		$this->setReturnValue("getBookRecordings", $objects);
+	private function setDataObjectsReturnValue($function, $dataArrays)
+	{
+		$objects = $this->convertArraysToObjectsRecursively($dataArrays);
+
+		$this->setReturnValue($function, $objects);
+	}
+
+	private function setDataObjectReturnValue($function, $dataArray)
+	{
+		$object = $this->convertArrayToObjectRecursively($dataArray);
+
+		$this->setReturnValue($function, $object);
+	}
+
+	private function convertArraysToObjectsRecursively($arrays)
+	{
+		return array_map([$this, "convertArrayToObjectRecursively"], $arrays);
 	}
 
 	/**

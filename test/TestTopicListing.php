@@ -1,5 +1,7 @@
 <?php
 
+use Avorg\DataObject\Topic;
+
 final class TestTopicListing extends Avorg\TestCase
 {
 	/** @var Avorg\Page\Topic\Listing $topicListing */
@@ -19,7 +21,7 @@ final class TestTopicListing extends Avorg\TestCase
 		$this->mockAvorgApi->loadTopics([]);
 
 		$this->assertTwigGlobalMatchesCallback($this->topicListing, function($avorg) {
-			return $avorg->topics[0] instanceof \Avorg\DataObject\Topic;
+			return $avorg->topics[0] instanceof Topic;
 		});
 	}
 
