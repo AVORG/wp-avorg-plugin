@@ -45,6 +45,15 @@ class Presenter
 		]));
 	}
 
+	public function getNameReversed()
+	{
+		$first = $this->__get("givenName");
+		$last = $this->__get("surname");
+		$suffix = $this->__get("suffix");
+
+		return $suffix ? "$last $suffix, $first" : "$last, $first";
+	}
+
 	private function getId()
 	{
 		return intval($this->apiPresenter->id);

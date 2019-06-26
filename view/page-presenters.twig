@@ -5,7 +5,7 @@
 				{% include "molecule-mediaObject.twig" with {
 					image: presenter.photo256,
 					imageAlt: "presenter",
-					title: presenter.name,
+					title: presenter.nameReversed,
 					titleUrl: presenter.url,
 					description: "Something will go here probably."
 				} only %}

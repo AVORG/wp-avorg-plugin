@@ -62,4 +62,16 @@ final class TestPresenter extends Avorg\TestCase
 			$this->presenter->getUrl()
 		);
 	}
+
+	public function testGetNameReversed()
+	{
+		$this->assertEquals("last suffix, first", $this->presenter->getNameReversed());
+	}
+
+	public function testGetNameReversedWithNoSuffix()
+	{
+		unset($this->apiPresenter->suffix);
+
+		$this->assertEquals("last, first", $this->presenter->getNameReversed());
+	}
 }
