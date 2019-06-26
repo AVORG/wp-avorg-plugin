@@ -6,12 +6,14 @@ use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Topic
+abstract class DataObject implements iEntity
 {
 	/** @var Router $router */
-	private $router;
+	protected $router;
 
-	private $data;
+	protected $data;
+
+	protected $detailClass;
 
 	public function __construct(Router $router)
 	{
@@ -20,7 +22,7 @@ class Topic
 
 	/**
 	 * @param mixed $data
-	 * @return Topic
+	 * @return DataObject
 	 */
 	public function setData($data)
 	{
@@ -38,11 +40,28 @@ class Topic
 		return $this->data->$name;
 	}
 
+	public function toJson()
+	{
+		return json_encode($this->toArray());
+	}
+
+	public function toArray()
+	{
+		return $this->data;
+	}
+
 	public function getUrl()
 	{
-		return $this->router->buildUrl("Avorg\Page\Topic\Detail", [
-			"entity_id" => $this->data->id,
-			"slug" => $this->router->formatStringForUrl($this->data->title) . ".html"
+		return $this->router->buildUrl($this->detailClass, [
+			"entity_id" => $this->getId(),
+			"slug" => $this->getSlug()
 		]);
 	}
+
+	public function getId()
+	{
+		return intval($this->__get("id"));
+	}
+
+	abstract protected function getSlug();
 }

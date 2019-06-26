@@ -1,7 +1,6 @@
 <?php
 
 use Avorg\Page\Presenter\Listing;
-use Avorg\Presenter;
 
 final class TestPresenterDetail extends Avorg\TestCase
 {
@@ -42,7 +41,7 @@ final class TestPresenterDetail extends Avorg\TestCase
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
 			$callGlobal = $call[1]["avorg"];
 
-			return $callGlobal->presenter instanceof Presenter;
+			return $callGlobal->presenter instanceof Avorg\DataObject\Presenter;
 		});
 	}
 

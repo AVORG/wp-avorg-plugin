@@ -23,7 +23,7 @@ final class TestRecordingRepository extends Avorg\TestCase
 
         $result = $this->recordingRepository->getRecordings();
 
-        $this->assertInstanceOf("\\Avorg\\Recording", $result[0]);
+        $this->assertInstanceOf("\\Avorg\\DataObject\\Recording", $result[0]);
     }
 
     public function testUsesUnwrappedRecordingWhenInstantiatingRecording()

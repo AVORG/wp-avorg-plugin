@@ -44,7 +44,7 @@ final class TestPresenterListing extends Avorg\TestCase
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
 			$callGlobal = $call[1]["avorg"];
 
-			return $callGlobal->presenters[0] instanceof Presenter;
+			return $callGlobal->presenters[0] instanceof \Avorg\DataObject\Presenter;
 		});
 	}
 

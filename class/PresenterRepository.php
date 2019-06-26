@@ -61,6 +61,6 @@ class PresenterRepository
 	 */
 	private function buildPresenter($rawPresenter)
 	{
-		return $this->factory->make("Avorg\\Presenter")->setPresenter($rawPresenter);
+		return $this->factory->make("Avorg\\DataObject\\Presenter")->setData($rawPresenter);
 	}
 }

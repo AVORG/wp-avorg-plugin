@@ -1,33 +1,16 @@
 <?php
 
-namespace Avorg;
+namespace Avorg\DataObject;
 
+use Avorg\DataObject;
+use Avorg\MediaFile;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Recording implements iEntity
+class Recording extends DataObject
 {
-	/** @var Router $router */
-	private $router;
-
-	private $data;
-
-	public function __construct(Router $router)
-	{
-		$this->router = $router;
-	}
-
-	public function setData($data)
-	{
-		$this->data = $data;
-		return $this;
-	}
-
-	public function toJson()
-	{
-		return json_encode($this->toArray());
-	}
+	protected $detailClass = "Avorg\Page\Media";
 
 	public function getDescription()
 	{
@@ -87,12 +70,6 @@ class Recording implements iEntity
 		return $this->data->publishDate;
 	}
 
-	public function getId()
-	{
-
-		return intval($this->data->id);
-	}
-
 	public function getLogUrl()
 	{
 		$apiMediaFiles = (isset($this->data->videoFiles)) ? $this->data->videoFiles : [];
@@ -131,19 +108,6 @@ class Recording implements iEntity
 		}, $apiPresenters);
 	}
 
-	public function getTitle()
-	{
-		return $this->data->title;
-	}
-
-	public function getUrl()
-	{
-		return $this->router->buildUrl("Avorg\Page\Media", [
-			"entity_id" => $this->data->id,
-			"slug" => $this->router->formatStringForUrl($this->data->title) . ".html"
-		]);
-	}
-
 	/**
 	 * @param $className
 	 * @param $items
@@ -154,20 +118,6 @@ class Recording implements iEntity
 		return array_map(function ($item) use ($className) {
 			return new $className($item);
 		}, $items);
-	}
-
-	/**
-	 * @param $mediaFiles
-	 * @return array
-	 */
-	private function convertMediaFilesToArrays($mediaFiles)
-	{
-		return array_map(function (MediaFile $mediaFile) {
-			return [
-				"streamUrl" => $mediaFile->getStreamUrl(),
-				"type" => $mediaFile->getType()
-			];
-		}, $mediaFiles);
 	}
 
 	/**
@@ -186,5 +136,24 @@ class Recording implements iEntity
 			"image" => $this->getImage(),
 			"description" => $this->getDescription()
 		]);
+	}
+
+	/**
+	 * @param $mediaFiles
+	 * @return array
+	 */
+	private function convertMediaFilesToArrays($mediaFiles)
+	{
+		return array_map(function (MediaFile $mediaFile) {
+			return [
+				"streamUrl" => $mediaFile->getStreamUrl(),
+				"type" => $mediaFile->getType()
+			];
+		}, $mediaFiles);
+	}
+
+	protected function getSlug()
+	{
+		return $this->router->formatStringForUrl($this->data->title) . ".html";
 	}
 }

@@ -37,7 +37,7 @@ final class TestBookListing extends Avorg\TestCase
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
 			$callGlobal = $call[1]["avorg"];
 
-			return $callGlobal->books[0] instanceof \Avorg\Book;
+			return $callGlobal->books[0] instanceof \Avorg\DataObject\Book;
 		});
 	}
 }

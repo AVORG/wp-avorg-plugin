@@ -115,7 +115,7 @@ final class TestTopicDetail extends Avorg\TestCase
 		$recordings = $dataObject->recordings;
 		$recording = $recordings[0];
 
-		$this->assertInstanceOf("\\Avorg\\Recording", $recording);
+		$this->assertInstanceOf("\\Avorg\\DataObject\\Recording", $recording);
 	}
 
 	public function testSetsTitle()

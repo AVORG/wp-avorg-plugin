@@ -2,9 +2,8 @@
 
 namespace Avorg\Page\Playlist;
 
-use function Avorg\avorgLog;
 use Avorg\Page;
-use Avorg\Recording;
+use Avorg\DataObject\Recording;
 use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\ScriptFactory;

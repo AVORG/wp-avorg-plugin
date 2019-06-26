@@ -69,12 +69,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	{
 		$apiResponseObject = $this->convertArrayToObjectRecursively($recordingData);
 
-		return $this->factory->make("Avorg\\Recording")->setData($apiResponseObject);
+		return $this->factory->make("Avorg\\DataObject\\Recording")->setData($apiResponseObject);
 	}
 
 	protected function makeBook($data = [])
 	{
-		$book = $this->factory->make("Avorg\\Book");
+		$book = $this->factory->make("Avorg\\DataObject\\Book");
 
 		$book->setData((object) $data);
 

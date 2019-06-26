@@ -22,8 +22,8 @@ final class TestPresenter extends Avorg\TestCase
 			"lang" => "en"
 		];
 
-		$this->presenter = $this->factory->make("Avorg\\Presenter");
-		$this->presenter->setPresenter($this->apiPresenter);
+		$this->presenter = $this->factory->make("Avorg\\DataObject\\Presenter");
+		$this->presenter->setData($this->apiPresenter);
 	}
 
 	public function testGetRecordings()

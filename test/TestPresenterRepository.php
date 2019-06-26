@@ -30,7 +30,7 @@ final class TestPresenterRepository extends Avorg\TestCase
 
 		$result = $this->presenterRepository->getPresenter(5);
 
-		$this->assertInstanceOf("Avorg\\Presenter", $result);
+		$this->assertInstanceOf("Avorg\\DataObject\\Presenter", $result);
 	}
 
 	public function testReturnsNullIfNoPresenter()

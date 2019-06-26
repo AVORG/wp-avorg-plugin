@@ -83,6 +83,6 @@ class Media extends Page
 	{
 		$recording = $this->getEntitySafe();
 
-		return $recording ? $recording->getTitle() : null;
+		return $recording ? $recording->title : null;
 	}
 }

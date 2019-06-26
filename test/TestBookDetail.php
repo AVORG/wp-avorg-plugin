@@ -22,7 +22,7 @@ final class TestBookDetail extends Avorg\TestCase
 		$this->mockWordPress->setReturnValues("get_query_var",  7);
 
 		$this->assertTwigGlobalMatchesCallback($this->bookDetail, function($avorg) {
-			return $avorg->book instanceof \Avorg\Book;
+			return $avorg->book instanceof \Avorg\DataObject\Book;
 		});
 	}
 

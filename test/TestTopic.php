@@ -12,7 +12,7 @@ final class TestTopic extends Avorg\TestCase
 	private function makeTopic(array $data)
 	{
 		/** @var Topic $topic */
-		$topic = $this->factory->make("Avorg\\Topic");
+		$topic = $this->factory->make("Avorg\\DataObject\\Topic");
 		$topic->setData((object)$data);
 		return $topic;
 	}

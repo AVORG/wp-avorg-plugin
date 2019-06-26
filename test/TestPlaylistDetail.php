@@ -67,7 +67,7 @@ final class TestPlaylistDetail extends Avorg\TestCase
 		$this->playlistPage->addUi("");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-playlist.twig", function($data) {
-			return is_a($data->recordings[0], "\\Avorg\\Recording");
+			return is_a($data->recordings[0], "\\Avorg\\DataObject\\Recording");
 		});
 	}
 }

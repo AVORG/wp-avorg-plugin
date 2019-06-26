@@ -84,7 +84,7 @@ class RecordingRepository
 		$apiResponse = $this->api->getPlaylist($playlistId);
 
 		return array_map(function ($recording) {
-			return $this->factory->make("Avorg\\Recording")->setData($recording);
+			return $this->factory->make("Avorg\\DataObject\\Recording")->setData($recording);
 		}, $apiResponse->recordings ?: []);
 	}
 
@@ -116,7 +116,7 @@ class RecordingRepository
 	 */
 	private function buildRecording($apiRecording)
 	{
-		return $this->factory->make("Avorg\\Recording")->setData($apiRecording);
+		return $this->factory->make("Avorg\\DataObject\\Recording")->setData($apiRecording);
 	}
 
 }

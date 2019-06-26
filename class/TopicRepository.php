@@ -53,6 +53,6 @@ class TopicRepository
 	 */
 	private function makeTopic($rawTopic)
 	{
-		return $this->factory->make("Avorg\\Topic")->setData($rawTopic);
+		return $this->factory->make("Avorg\\DataObject\\Topic")->setData($rawTopic);
 	}
 }

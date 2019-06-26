@@ -26,7 +26,7 @@ final class TestRssLatest extends Avorg\TestCase
 		$this->rssLatest->getOutput();
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-feed.twig", function($call) {
-			return $call->recordings[0] instanceof \Avorg\Recording;
+			return $call->recordings[0] instanceof \Avorg\DataObject\Recording;
 		});
 	}
 

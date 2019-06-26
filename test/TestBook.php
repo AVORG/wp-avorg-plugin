@@ -33,7 +33,7 @@ final class TestBook extends Avorg\TestCase
 
 		$recordings = $book->getRecordings();
 
-		$this->assertInstanceOf("Avorg\\Recording", $recordings[0]);
+		$this->assertInstanceOf("Avorg\\DataObject\\Recording", $recordings[0]);
 	}
 
 	public function testJsonEncodable()

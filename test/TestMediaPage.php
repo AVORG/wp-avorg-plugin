@@ -144,7 +144,7 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
             $callGlobal = $call[1]["avorg"];
 
-		    return $callGlobal->recording instanceof Recording;
+		    return $callGlobal->recording instanceof \Avorg\DataObject\Recording;
         });
 	}
 	

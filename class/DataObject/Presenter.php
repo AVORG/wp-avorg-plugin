@@ -1,34 +1,30 @@
 <?php
 
-namespace Avorg;
+namespace Avorg\DataObject;
 
+use Avorg\DataObject;
+use Avorg\RecordingRepository;
+use Avorg\Router;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Presenter
+class Presenter extends DataObject
 {
 	/** @var RecordingRepository $recordingRepository */
 	private $recordingRepository;
 
-	/** @var Router $router */
-	private $router;
-
-	private $apiPresenter;
+	protected $detailClass = "Avorg\Page\Presenter\Detail";
 
 	public function __construct(
 		RecordingRepository $recordingRepository,
 		Router $router
 	)
 	{
+		parent::__construct($router);
+
 		$this->recordingRepository = $recordingRepository;
 		$this->router = $router;
-	}
-
-	public function setPresenter($apiPresenter)
-	{
-		$this->apiPresenter = $apiPresenter;
-		return $this;
 	}
 
 	public function getRecordings()
@@ -54,26 +50,8 @@ class Presenter
 		return $suffix ? "$last $suffix, $first" : "$last, $first";
 	}
 
-	private function getId()
+	protected function getSlug()
 	{
-		return intval($this->apiPresenter->id);
-	}
-
-	public function __get($property)
-	{
-		return $this->__isset($property) ? $this->apiPresenter->$property : null;
-	}
-
-	public function __isset($property)
-	{
-		return property_exists($this->apiPresenter, $property);
-	}
-
-	public function getUrl()
-	{
-		return $this->router->buildUrl("Avorg\Page\Presenter\Detail", [
-			"entity_id" => $this->apiPresenter->id,
-			"slug" => $this->router->formatStringForUrl($this->getName()) . ".html"
-		]);
+		return $this->router->formatStringForUrl($this->getName()) . ".html";
 	}
 }

@@ -51,6 +51,6 @@ class BookRepository
 	 */
 	private function makeBook($rawBook)
 	{
-		return $this->factory->make("Avorg\\Book")->setData($rawBook);
+		return $this->factory->make("Avorg\\DataObject\\Book")->setData($rawBook);
 	}
 }

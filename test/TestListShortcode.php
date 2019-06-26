@@ -47,7 +47,7 @@ final class TestListShortcode extends Avorg\TestCase
 		$this->listShortcode->renderShortcode("");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function($data) {
-			return $data->recordings[2] instanceof \Avorg\Recording;
+			return $data->recordings[2] instanceof \Avorg\DataObject\Recording;
 		});
 	}
 	

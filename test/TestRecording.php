@@ -35,7 +35,7 @@ final class TestRecording extends Avorg\TestCase
             "title" => "sermon_title"
         ]);
 
-        $this->assertEquals("sermon_title", $recording->getTitle());
+        $this->assertEquals("sermon_title", $recording->title);
     }
 
 	/**
