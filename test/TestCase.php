@@ -4,6 +4,7 @@ namespace Avorg;
 
 use natlib\Factory;
 use ReflectionException;
+use stdClass;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/* Mock Objects */
@@ -86,7 +87,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
      */
     protected function convertArrayToObjectRecursively($array)
     {
-    	if ($array == []) return new \stdClass();
+    	if ($array == []) return new stdClass();
 
         return json_decode(json_encode($array), FALSE);
     }

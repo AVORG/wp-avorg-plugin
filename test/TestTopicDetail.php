@@ -1,8 +1,10 @@
 <?php
 
-final class TestTopicPage extends Avorg\TestCase
+use Avorg\Page\Topic\Detail;
+
+final class TestTopicDetail extends Avorg\TestCase
 {
-	/** @var \Avorg\Page\Topic $topicPage */
+	/** @var Detail $topicPage */
 	protected $topicPage;
 
 	private $topicPageInsertCall = array("wp_insert_post", array(
@@ -66,7 +68,7 @@ final class TestTopicPage extends Avorg\TestCase
 	{
 		$this->topicPage->addUi("content");
 
-		$this->mockTwig->assertTwigTemplateRendered("organism-topic.twig");
+		$this->mockTwig->assertTwigTemplateRendered("page-topic.twig");
 	}
 
 	public function testGetsTopicId()
@@ -94,7 +96,7 @@ final class TestTopicPage extends Avorg\TestCase
 		$this->topicPage->addUi("content");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithData(
-			"organism-topic.twig",
+			"page-topic.twig",
 			["recordings" => []]
 		);
 	}
@@ -114,5 +116,16 @@ final class TestTopicPage extends Avorg\TestCase
 		$recording = $recordings[0];
 
 		$this->assertInstanceOf("\\Avorg\\Recording", $recording);
+	}
+
+	public function testSetsTitle()
+	{
+		$this->mockAvorgApi->loadTopic([
+			"title" => "Agriculture"
+		]);
+
+		$result = $this->topicPage->filterTitle("");
+
+		$this->assertEquals("Agriculture - AudioVerse", $result);
 	}
 }

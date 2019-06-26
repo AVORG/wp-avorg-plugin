@@ -116,9 +116,7 @@ class RecordingRepository
 	 */
 	private function buildRecording($apiRecording)
 	{
-		$unwrappedRecording = $apiRecording->recordings;
-
-		return $this->factory->make("Avorg\\Recording")->setData($unwrappedRecording);
+		return $this->factory->make("Avorg\\Recording")->setData($apiRecording);
 	}
 
 }

@@ -227,9 +227,7 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_the_ID", 7);
 
 		$recording = $this->convertArrayToObjectRecursively([
-		    "recordings" => [
-		        "title" => "Recording Title"
-            ]
+			"title" => "Recording Title"
         ]);
 		
 		$this->mockAvorgApi->setReturnValue("getRecording", $recording);

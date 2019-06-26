@@ -4,8 +4,8 @@ use Avorg\Page\Book\Listing;
 
 final class TestBookListing extends Avorg\TestCase
 {
-	/** @var Listing $bookListing */
-	protected $bookListing;
+	/** @var Listing $page */
+	protected $page;
 
 	/**
 	 * @throws ReflectionException
@@ -14,15 +14,14 @@ final class TestBookListing extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->passCurrentPageCheck();
 
-		$this->bookListing = $this->factory->secure("Avorg\\Page\\Book\\Listing");
+		$this->page = $this->factory->secure("Avorg\\Page\\Book\\Listing");
 	}
 
 	public function testGetsBooks()
 	{
-		$this->bookListing->addUi("");
+		$this->page->addUi("");
 
 		$this->mockAvorgApi->assertMethodCalled("getBooks");
 	}
@@ -33,7 +32,7 @@ final class TestBookListing extends Avorg\TestCase
 			"title" => "A Call to Medical Evangelism"
 		]]);
 
-		$this->bookListing->addUi("");
+		$this->page->addUi("");
 
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
 			$callGlobal = $call[1]["avorg"];

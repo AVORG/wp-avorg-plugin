@@ -6,6 +6,7 @@ use Avorg\Page;
 use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\RouteFactory;
+use Avorg\TopicRepository;
 use Avorg\WordPress;
 use function defined;
 
@@ -16,22 +17,27 @@ class Detail extends Page
 	/** @var RecordingRepository $recordingRepository */
 	private $recordingRepository;
 
+	/** @var TopicRepository $topicRepository */
+	private $topicRepository;
+
 	/** @var WordPress $wp */
 	protected $wp;
 
 	protected $defaultPageTitle = "Topic Detail";
 	protected $defaultPageContent = "Topic Detail";
-	protected $twigTemplate = "organism-topic.twig";
+	protected $twigTemplate = "page-topic.twig";
 
 	public function __construct(
 		RecordingRepository $presenterRepository,
 		Renderer $renderer,
+		TopicRepository $topicRepository,
 		WordPress $wp
 	)
 	{
 		parent::__construct($renderer, $wp);
 
 		$this->recordingRepository = $presenterRepository;
+		$this->topicRepository = $topicRepository;
 		$this->wp = $wp;
 	}
 
@@ -55,6 +61,9 @@ class Detail extends Page
 
 	protected function getEntityTitle()
 	{
-		// TODO: Implement getEntityTitle() method.
+		$topicId = $this->getEntityId();
+		$topic = $this->topicRepository->getTopic($topicId);
+
+		return $topic->title;
 	}
 }

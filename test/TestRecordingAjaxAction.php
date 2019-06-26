@@ -1,8 +1,10 @@
 <?php
 
+use Avorg\AjaxAction\Recording;
+
 final class TestRecordingAjaxAction extends Avorg\TestCase
 {
-	/** @var \Avorg\AjaxAction\Recording $action */
+	/** @var Recording $action */
 	protected $action;
 
 	protected function setUp()

@@ -8,6 +8,16 @@ class StubAvorgApi extends AvorgApi
 {
 	use Stub;
 
+	public function getBibles()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getTopic($id)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getTopics()
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -65,6 +75,13 @@ class StubAvorgApi extends AvorgApi
 
 	/* Helper Methods */
 
+	public function loadTopic($data)
+	{
+		$object = $this->convertArrayToObjectRecursively($data);
+
+		$this->setReturnValue("getTopic", $object);
+	}
+
 	public function loadTopics(...$dataArrays)
 	{
 		$objects = array_map([$this, "convertArrayToObjectRecursively"], $dataArrays);
@@ -81,34 +98,23 @@ class StubAvorgApi extends AvorgApi
 
 	public function loadRecording($dataArray)
 	{
-		$responseObject = $this->convertRecordingArrayToResponseObject($dataArray);
+		$responseObject = $this->convertArrayToObjectRecursively($dataArray);
 
 		$this->setReturnValue("getRecording", $responseObject);
 	}
 
 	public function loadRecordings(...$dataArrays)
 	{
-		$objects = array_map([$this, "convertRecordingArrayToResponseObject"], $dataArrays);
+		$objects = array_map([$this, "convertArrayToObjectRecursively"], $dataArrays);
 
 		$this->setReturnValue("getRecordings", $objects);
 	}
 
 	public function loadBookRecordings(...$dataArrays)
 	{
-		$objects = array_map([$this, "convertRecordingArrayToResponseObject"], $dataArrays);
+		$objects = array_map([$this, "convertArrayToObjectRecursively"], $dataArrays);
 
 		$this->setReturnValue("getBookRecordings", $objects);
-	}
-
-	/**
-	 * @param $dataArray
-	 * @return mixed
-	 */
-	private function convertRecordingArrayToResponseObject($dataArray)
-	{
-		return $this->convertArrayToObjectRecursively([
-			"recordings" => $dataArray
-		]);
 	}
 
 	/**

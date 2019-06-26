@@ -29,10 +29,30 @@ class TopicRepository
 	 */
 	public function getTopics()
 	{
-		$rawTopics = $this->api->getTopics();
+		$rawTopics = $this->api->getTopics() ?: [];
 
-		return array_map(function($rawTopic) {
-			return $this->factory->make("Avorg\\Topic")->setData($rawTopic);
-		}, $rawTopics ?: []);
+		return array_map([$this, "makeTopic"], $rawTopics);
+	}
+
+	/**
+	 * @param $topicId
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	public function getTopic($topicId)
+	{
+		$rawTopic = $this->api->getTopic($topicId);
+
+		return $this->makeTopic($rawTopic);
+	}
+
+	/**
+	 * @param $rawTopic
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	private function makeTopic($rawTopic)
+	{
+		return $this->factory->make("Avorg\\Topic")->setData($rawTopic);
 	}
 }

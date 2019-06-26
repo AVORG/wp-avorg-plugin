@@ -23,11 +23,11 @@ class Detail extends Page
 	protected $defaultPageContent = "Book";
 	protected $twigTemplate = "page-book.twig";
 
-	public function __construct(BookRepository $bookRepository, Renderer $renderer, WordPress $wp)
+	public function __construct(BookRepository $bibleRepository, Renderer $renderer, WordPress $wp)
 	{
 		parent::__construct($renderer, $wp);
 
-		$this->bookRepository = $bookRepository;
+		$this->bookRepository = $bibleRepository;
 	}
 
 	public function throw404($query)

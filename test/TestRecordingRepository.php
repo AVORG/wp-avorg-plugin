@@ -29,13 +29,11 @@ final class TestRecordingRepository extends Avorg\TestCase
     public function testUsesUnwrappedRecordingWhenInstantiatingRecording()
     {
         $entry = [
-            "recordings" => [
-                "presenters" => [
-                    [
-                        "photo256" => "photo_url"
-                    ]
-                ]
-            ]
+			"presenters" => [
+				[
+					"photo256" => "photo_url"
+				]
+			]
         ];
 
         $entryObject = json_decode(json_encode($entry), FALSE);
@@ -50,11 +48,9 @@ final class TestRecordingRepository extends Avorg\TestCase
     public function testLoadsRecordingsWithRecordingUrl()
     {
         $apiRecording = $this->convertArrayToObjectRecursively([
-            "recordings" => [
-                "lang" => "en",
-                "id" => "1836",
-                "title" => 'E.P. Daniels and True Revival'
-            ]
+			"lang" => "en",
+			"id" => "1836",
+			"title" => 'E.P. Daniels and True Revival'
         ]);
 
         $this->mockAvorgApi->setReturnValue("getRecordings", [$apiRecording]);
