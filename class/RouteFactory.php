@@ -4,9 +4,10 @@ namespace Avorg;
 
 use Avorg\Route\EndpointRoute;
 use Avorg\Route\PageRoute;
+use function defined;
 use natlib\Factory;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 
 class RouteFactory
@@ -36,6 +37,7 @@ class RouteFactory
 		"Avorg\Page\Playlist\Detail" => "{ language }/playlists/lists/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Topic\Listing" => "{ language }/topics",
 		"Avorg\Page\Topic\Detail" => "{ language }/topics/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Bible\Listing" => "{ language }/audiobibles/volumes",
 	];
 
 	private $endpointRouteFormats = [

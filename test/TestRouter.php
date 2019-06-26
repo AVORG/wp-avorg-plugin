@@ -122,6 +122,10 @@ final class TestRouter extends Avorg\TestCase
 				"english/topics",
 				"index.php?page_id=TOPIC_LISTING_PAGE_ID&language=english"
 			],
+			[
+				"english/audiobibles/volumes",
+				"index.php?page_id=BIBLE_LISTING_PAGE_ID&language=english"
+			],
 //			[
 //				"english/sermons/presenters",
 //				"index.php?page_id=PRESENTERSLIST_PAGE_ID&language=english"

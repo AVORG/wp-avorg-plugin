@@ -21,7 +21,7 @@ class AvorgApi
 
 	public function getBibles()
 	{
-
+		return $this->getResponse("audiobibles");
 	}
 
 	public function getTopic($id)
@@ -35,11 +35,11 @@ class AvorgApi
 	 */
 	public function getTopics()
 	{
-		$response = $this->getResponse("topics");
+		$endpoint = "topics";
 
 		return array_map(function($item) {
 			return $item->topics;
-		}, $response->result);
+		}, $this->getResponse($endpoint));
 	}
 
 	/**
@@ -53,7 +53,7 @@ class AvorgApi
 
 		$response = $this->getResponse("audiobooks/$id");
 
-		return $response->result[0]->audiobooks;
+		return $response[0]->audiobooks;
 	}
 
 	/**
@@ -62,20 +62,18 @@ class AvorgApi
 	 */
 	public function getBooks()
 	{
-		$response = $this->getResponse("audiobooks");
+		$endpoint = "audiobooks";
 
 		return array_map(function($item) {
 			return $item->audiobooks;
-		}, $response->result);
+		}, $this->getResponse($endpoint));
 	}
 
 	public function getPlaylist($id)
 	{
 		if (!is_numeric($id)) return false;
 
-		$response = $this->getResponse("playlist/$id");
-
-		return $response->result;
+		return $this->getResponse("playlist/$id");
 	}
 
 	/**
@@ -89,7 +87,7 @@ class AvorgApi
 
 		$response = $this->getResponse("presenters/{$id}");
 
-		return $response->result[0]->presenters;
+		return $response[0]->presenters;
 	}
 
 	/**
@@ -99,11 +97,11 @@ class AvorgApi
 	 */
 	public function getPresenters($search = null)
 	{
-		$response = $this->getResponse("presenters?search=$search");
+		$endpoint = "presenters?search=$search";
 
 		return array_map(function($item) {
 			return $item->presenters;
-		}, $response->result);
+		}, $this->getResponse($endpoint));
 	}
 	
 	/**
@@ -117,7 +115,7 @@ class AvorgApi
 
 		$response = $this->getResponse("recordings/{$id}");
 
-		return $response->result[0]->recordings;
+		return $response[0]->recordings;
 	}
 	
 	/**
@@ -173,13 +171,9 @@ class AvorgApi
 	 */
 	private function getRecordingsResponse($endpoint)
 	{
-		$response = $this->getResponse($endpoint);
-
-		if (!isset($response->result)) return null;
-
 		return array_map(function($entry) {
 			return $entry->recordings;
-		}, $response->result);
+		}, $this->getResponse($endpoint));
 	}
 	
 	/**
@@ -191,9 +185,9 @@ class AvorgApi
 	{
 		if (!$this->context) $this->context = $this->createContext();
 
-		if ($result = @file_get_contents(
+		if ($response = @file_get_contents(
 			"https://api2.audioverse.org/$endpoint", false, $this->context)) {
-			return json_decode($result);
+			return json_decode($response)->result;
 		} else {
 			throw new Exception("Failed to get response from url $endpoint");
 		}
