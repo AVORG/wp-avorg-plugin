@@ -2,10 +2,9 @@
 
 namespace Avorg\Page\Presenter;
 
+use Avorg\DataObjectRepository\PresenterRepository;
 use Avorg\Page;
-use Avorg\PresenterRepository;
 use Avorg\Renderer;
-use Avorg\RouteFactory;
 use Avorg\WordPress;
 use function defined;
 

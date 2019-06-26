@@ -1,6 +1,6 @@
 <?php
 
-use Avorg\BookRepository;
+use Avorg\DataObjectRepository\BookRepository;
 
 final class TestBookRepository extends Avorg\TestCase
 {
@@ -13,7 +13,7 @@ final class TestBookRepository extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->bookRepository = $this->factory->secure("Avorg\\BookRepository");
+		$this->bookRepository = $this->factory->secure("Avorg\\DataObjectRepository\\BookRepository");
 
 		$this->apiBooks = [(object) [
 			"title" => "A Call to Medical Evangelism",

@@ -3,14 +3,8 @@
 
 namespace Avorg\Page\Bible;
 
-use Avorg\AvorgApi;
-use Avorg\BookRepository;
 use Avorg\Page;
-use Avorg\Renderer;
-use Avorg\RouteFactory;
-use Avorg\WordPress;
 use function defined;
-use ReflectionException;
 
 if (!defined('ABSPATH')) exit;
 

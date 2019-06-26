@@ -2,11 +2,10 @@
 
 namespace Avorg\Page\Topic;
 
+use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\TopicRepository;
 use Avorg\Page;
-use Avorg\RecordingRepository;
 use Avorg\Renderer;
-use Avorg\RouteFactory;
-use Avorg\TopicRepository;
 use Avorg\WordPress;
 use function defined;
 

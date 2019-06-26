@@ -1,15 +1,17 @@
 <?php
 
+use Avorg\DataObjectRepository\RecordingRepository;
+
 final class TestRecordingRepository extends Avorg\TestCase
 {
-    /** @var \Avorg\RecordingRepository $plugin */
+    /** @var RecordingRepository $plugin */
     protected $recordingRepository;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->recordingRepository = $this->factory->secure("Avorg\\RecordingRepository");
+        $this->recordingRepository = $this->factory->secure("Avorg\\DataObjectRepository\\RecordingRepository");
     }
 
     /**

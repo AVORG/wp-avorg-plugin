@@ -2,8 +2,8 @@
 
 namespace Avorg\AjaxAction;
 
+use Avorg\DataObjectRepository\RecordingRepository;
 use Avorg\Php;
-use Avorg\RecordingRepository;
 use Avorg\WordPress;
 use Avorg\AjaxAction;
 

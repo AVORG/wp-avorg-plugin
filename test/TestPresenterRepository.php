@@ -1,6 +1,6 @@
 <?php
 
-use Avorg\PresenterRepository;
+use Avorg\DataObjectRepository\PresenterRepository;
 
 final class TestPresenterRepository extends Avorg\TestCase
 {
@@ -11,7 +11,7 @@ final class TestPresenterRepository extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->presenterRepository = $this->factory->secure("Avorg\\PresenterRepository");
+		$this->presenterRepository = $this->factory->secure("Avorg\\DataObjectRepository\\PresenterRepository");
 	}
 
 	/**

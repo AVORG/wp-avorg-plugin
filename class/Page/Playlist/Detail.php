@@ -2,9 +2,9 @@
 
 namespace Avorg\Page\Playlist;
 
+use Avorg\DataObjectRepository\RecordingRepository;
 use Avorg\Page;
 use Avorg\DataObject\Recording;
-use Avorg\RecordingRepository;
 use Avorg\Renderer;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;

@@ -3,9 +3,8 @@
 namespace Avorg\Endpoint;
 
 
+use Avorg\DataObjectRepository\RecordingRepository;
 use Avorg\Endpoint;
-use Avorg\RecordingRepository;
-use Avorg\RouteFactory;
 use Avorg\WordPress;
 
 if (!\defined('ABSPATH')) exit;

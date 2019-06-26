@@ -3,11 +3,10 @@
 namespace Avorg\Page;
 
 use Avorg\AvorgApi;
+use Avorg\DataObject;
+use Avorg\DataObjectRepository\RecordingRepository;
 use Avorg\Page;
-use Avorg\Recording;
-use Avorg\RecordingRepository;
 use Avorg\Renderer;
-use Avorg\RouteFactory;
 use Avorg\WordPress;
 use Exception;
 
@@ -56,7 +55,7 @@ class Media extends Page
 	}
 
 	/**
-	 * @return Recording|null
+	 * @return DataObject|null
 	 */
 	private function getEntitySafe()
 	{
@@ -68,7 +67,7 @@ class Media extends Page
 	}
 
 	/**
-	 * @return Recording|null
+	 * @return DataObject|null
 	 * @throws Exception
 	 */
 	private function getEntity()

@@ -3,11 +3,9 @@
 
 namespace Avorg\Page\Book;
 
-use Avorg\AvorgApi;
-use Avorg\BookRepository;
+use Avorg\DataObjectRepository\BookRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\RouteFactory;
 use Avorg\WordPress;
 use function defined;
 

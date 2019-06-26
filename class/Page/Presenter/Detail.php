@@ -2,11 +2,11 @@
 
 namespace Avorg\Page\Presenter;
 
+use Avorg\DataObject;
+use Avorg\DataObject\Presenter;
+use Avorg\DataObjectRepository\PresenterRepository;
 use Avorg\Page;
-use Avorg\Presenter;
-use Avorg\PresenterRepository;
 use Avorg\Renderer;
-use Avorg\RouteFactory;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -51,7 +51,7 @@ class Detail extends Page
 	}
 
 	/**
-	 * @return Presenter|null
+	 * @return DataObject
 	 * @throws Exception
 	 */
 	protected function getEntity()

@@ -3,9 +3,9 @@
 
 namespace Avorg\Page\Topic;
 
+use Avorg\DataObjectRepository\TopicRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\TopicRepository;
 use Avorg\WordPress;
 use function defined;
 

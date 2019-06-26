@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Avorg\DataObjectRepository\RecordingRepository;
+
 if (!\defined('ABSPATH')) exit;
 
 class ListShortcode

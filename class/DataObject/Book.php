@@ -4,7 +4,7 @@ namespace Avorg\DataObject;
 
 
 use Avorg\DataObject;
-use Avorg\RecordingRepository;
+use Avorg\DataObjectRepository\RecordingRepository;
 use Avorg\Router;
 use Exception;
 

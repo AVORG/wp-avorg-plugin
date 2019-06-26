@@ -3,7 +3,7 @@
 
 namespace Avorg\Page\Bible;
 
-use Avorg\BibleRepository;
+use Avorg\DataObjectRepository\BibleRepository;
 use Avorg\Page;
 use Avorg\Renderer;
 use Avorg\WordPress;
