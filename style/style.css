@@ -58,6 +58,9 @@
 .avorg-organism-recording .avorg-molecule-recordingMeta {
   margin-bottom: 3rem; }
 
+.avorg-page-bibles li {
+  list-style-type: none; }
+
 .avorg-page-books li {
   list-style-type: none; }
 

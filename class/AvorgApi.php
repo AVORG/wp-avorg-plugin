@@ -19,6 +19,10 @@ class AvorgApi
 		$this->apiPass = get_option("avorgApiPass");
 	}
 
+	/**
+	 * @return object
+	 * @throws Exception
+	 */
 	public function getBibles()
 	{
 		return $this->getResponse("audiobibles");

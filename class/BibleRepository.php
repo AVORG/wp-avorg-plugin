@@ -23,10 +23,10 @@ class BibleRepository
 
 	public function getBibles()
 	{
-		$rawBibles = $this->api->getBibles();
+		$rawBibles = (array) $this->api->getBibles();
 
 		return array_map(function($rawBible) {
 			return $this->factory->make("Avorg\\DataObject\\Bible")->setData($rawBible);
-		}, $rawBibles ?: []);
+		}, $rawBibles);
 	}
 }

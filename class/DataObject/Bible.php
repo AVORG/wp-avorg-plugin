@@ -11,8 +11,13 @@ class Bible extends DataObject
 {
 	protected $detailClass = "Avorg\Page\Bible\Detail";
 
-	protected function getSlug()
+	public function getUrl()
 	{
-
+		return $this->router->buildUrl($this->detailClass, [
+			"version" => $this->dam_id,
+			"drama" => $this->drama
+		]);
 	}
+
+	protected function getSlug() {}
 }

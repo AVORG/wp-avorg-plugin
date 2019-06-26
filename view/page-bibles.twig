@@ -1,3 +1,12 @@
 <div class="avorg-page-bibles">
-	Bibles
+	<ul>
+		{% for bible in avorg.bibles %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					title: bible.name,
+					titleUrl: bible.url
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
 </div>

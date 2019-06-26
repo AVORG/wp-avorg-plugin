@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use Avorg\DataObject\Recording;
 use natlib\Factory;
 use ReflectionException;
 use stdClass;
@@ -61,24 +62,49 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
-	 * @param $recordingData
+	 * @param $data
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	protected function makeBible($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Bible", $data);
+	}
+
+	/**
+	 * @param $data
 	 * @return Recording
 	 * @throws ReflectionException
 	 */
-	protected function makeRecording($recordingData)
+	protected function makeRecording($data = [])
 	{
-		$apiResponseObject = $this->convertArrayToObjectRecursively($recordingData);
-
-		return $this->factory->make("Avorg\\DataObject\\Recording")->setData($apiResponseObject);
+		return $this->makeDataObject("Avorg\\DataObject\\Recording", $data);
 	}
 
+	/**
+	 * @param array $data
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
 	protected function makeBook($data = [])
 	{
-		$book = $this->factory->make("Avorg\\DataObject\\Book");
+		return $this->makeDataObject("Avorg\\DataObject\\Book", $data);
+	}
 
-		$book->setData((object) $data);
+	/**
+	 * @param $class
+	 * @param array $data
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	private function makeDataObject($class, $data = [])
+	{
+		$object = $this->factory->make($class);
+		$apiResponse = $this->convertArrayToObjectRecursively($data);
 
-		return $book;
+		$object->setData($apiResponse);
+
+		return $object;
 	}
 
     /**
