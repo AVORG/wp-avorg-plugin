@@ -6,144 +6,144 @@ final class TestRecording extends Avorg\TestCase
 	 * @throws ReflectionException
 	 */
 	public function testIncludesPresenterName()
-    {
-        $recording = $this->makeRecording([
-            "presenters" => [
-                [
-                    "givenName" => "first_name",
-                    "surname" => "last_name",
-                    "suffix" => "suffix"
-                ]
-            ]
-        ]);
+	{
+		$recording = $this->makeRecording([
+			"presenters" => [
+				[
+					"givenName" => "first_name",
+					"surname" => "last_name",
+					"suffix" => "suffix"
+				]
+			]
+		]);
 
-        $expected = [
-            "first" => "first_name",
-            "last" => "last_name",
-            "suffix" => "suffix"
-        ];
+		$expected = [
+			"first" => "first_name",
+			"last" => "last_name",
+			"suffix" => "suffix"
+		];
 
-        $this->assertEquals($expected, $recording->getPresenters()[0]["name"]);
-    }
+		$this->assertEquals($expected, $recording->getPresenters()[0]["name"]);
+	}
 
 	/**
 	 * @throws ReflectionException
 	 */
 	public function testIncludesTitle()
-    {
-        $recording = $this->makeRecording([
-            "title" => "sermon_title"
-        ]);
+	{
+		$recording = $this->makeRecording([
+			"title" => "sermon_title"
+		]);
 
-        $this->assertEquals("sermon_title", $recording->title);
-    }
+		$this->assertEquals("sermon_title", $recording->title);
+	}
 
 	/**
 	 * @throws ReflectionException
 	 */
 	public function testIncludesRecordings()
-    {
-        $recording = $this->makeRecording([
-            "mediaFiles" => [[]]
-        ]);
+	{
+		$recording = $this->makeRecording([
+			"mediaFiles" => [[]]
+		]);
 
-        $this->assertInstanceOf("\\Avorg\\MediaFile", $recording->getAudioFiles()[0]);
-    }
+		$this->assertInstanceOf("\\Avorg\\MediaFile", $recording->getAudioFiles()[0]);
+	}
 
 	/**
 	 * @throws ReflectionException
 	 */
 	public function testPassesThroughStreamUrl()
-    {
-        $recording = $this->makeRecording([
-            "mediaFiles" => [[
-                "streamURL" => "stream_url"
-            ]]
-        ]);
+	{
+		$recording = $this->makeRecording([
+			"mediaFiles" => [[
+				"streamURL" => "stream_url"
+			]]
+		]);
 
-        $this->assertEquals("stream_url", $recording->getAudioFiles()[0]->getStreamUrl());
-    }
+		$this->assertEquals("stream_url", $recording->getAudioFiles()[0]->getStreamUrl());
+	}
 
 	/**
 	 * @throws ReflectionException
 	 */
 	public function testPassesThroughStreamUrlForVideoFiles()
-    {
-        $recording = $this->makeRecording([
-            "videoFiles" => [[
-                "downloadURL" => "stream_url",
-                "container" => "m3u8_ios"
-            ]]
-        ]);
+	{
+		$recording = $this->makeRecording([
+			"videoFiles" => [[
+				"downloadURL" => "stream_url",
+				"container" => "m3u8_ios"
+			]]
+		]);
 
-        $this->assertEquals("stream_url", $recording->getVideoFiles()[0]->getStreamUrl());
-    }
+		$this->assertEquals("stream_url", $recording->getVideoFiles()[0]->getStreamUrl());
+	}
 
 	/**
 	 * @throws ReflectionException
 	 */
 	public function testUsesVideoFileClass()
-    {
-        $recording = $this->makeRecording([
-            "videoFiles" => [[
-                "container" => "m3u8_ios"
-            ]]
-        ]);
+	{
+		$recording = $this->makeRecording([
+			"videoFiles" => [[
+				"container" => "m3u8_ios"
+			]]
+		]);
 
-        $this->assertInstanceOf("\\Avorg\\MediaFile\\VideoFile", $recording->getVideoFiles()[0]);
-    }
+		$this->assertInstanceOf("\\Avorg\\MediaFile\\VideoFile", $recording->getVideoFiles()[0]);
+	}
 
 	/**
 	 * @throws ReflectionException
 	 */
 	public function testOnlyReturnsM3u8Videos()
-    {
-        $recording = $this->makeRecording([
-            "videoFiles" => [
-                [
-                    "container" => "m3u8_ios"
-                ],
-                [
-                    "container" => "something_else"
-                ]
-            ]
-        ]);
+	{
+		$recording = $this->makeRecording([
+			"videoFiles" => [
+				[
+					"container" => "m3u8_ios"
+				],
+				[
+					"container" => "something_else"
+				]
+			]
+		]);
 
-        $this->assertCount(1, $recording->getVideoFiles());
-    }
+		$this->assertCount(1, $recording->getVideoFiles());
+	}
 
-    public function testGetLogUrl()
-    {
-        $recording = $this->makeRecording([
-            "videoFiles" => [
-                [
-                    "logURL" => "log_url",
-                    "container" => "m3u8_ios"
-                ],
-                [
-                    "logURL" => null,
-                    "container" => "m3u8_ios"
-                ]
-            ]
-        ]);
+	public function testGetLogUrl()
+	{
+		$recording = $this->makeRecording([
+			"videoFiles" => [
+				[
+					"logURL" => "log_url",
+					"container" => "m3u8_ios"
+				],
+				[
+					"logURL" => null,
+					"container" => "m3u8_ios"
+				]
+			]
+		]);
 
-        $this->assertEquals("log_url", $recording->getLogUrl());
-    }
+		$this->assertEquals("log_url", $recording->getLogUrl());
+	}
 
-    public function testGetLogUrlWhenNoLogUrl()
-    {
-        $recording = $this->makeRecording([
-            "videoFiles" => [
-                [
-                    "container" => "m3u8_ios"
-                ]
-            ]
-        ]);
+	public function testGetLogUrlWhenNoLogUrl()
+	{
+		$recording = $this->makeRecording([
+			"videoFiles" => [
+				[
+					"container" => "m3u8_ios"
+				]
+			]
+		]);
 
-        $this->assertEquals(null, $recording->getLogUrl());
-    }
+		$this->assertEquals(null, $recording->getLogUrl());
+	}
 
-    public function testIncludesPublishDate()
+	public function testIncludesPublishDate()
 	{
 		$recording = $this->makeRecording([
 			"publishDate" => "2018-02-19 05:22:17"
@@ -190,8 +190,8 @@ final class TestRecording extends Avorg\TestCase
 	{
 		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
 		$recording = $this->makeRecording($apiRecording);
-		$json         = $recording->toJson();
-		$object       = json_decode($json, true);
+		$json = $recording->toJson();
+		$object = json_decode($json, true);
 
 		$this->assertEquals($expectedValue, $object[$expectedKey]);
 	}
@@ -386,5 +386,31 @@ final class TestRecording extends Avorg\TestCase
 		$recording = $this->makeRecording(["presenters" => [[]]]);
 
 		$this->assertContains("Avorg\\iEntity", class_implements($recording));
+	}
+
+	public function testMagicGetUsesGetters()
+	{
+		$recording = $this->makeRecording([
+			"presenters" => [
+				[
+					"givenName" => "first_name",
+					"surname" => "last_name",
+					"suffix" => "suffix"
+				]
+			]
+		]);
+
+		$expected = [
+			[
+				"name" => [
+					"first" => "first_name",
+					"last" => "last_name",
+					"suffix" => "suffix"
+				],
+				"photo" => null
+			]
+		];
+
+		$this->assertEquals($expected, $recording->presenters);
 	}
 }

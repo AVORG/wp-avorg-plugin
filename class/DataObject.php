@@ -37,7 +37,9 @@ abstract class DataObject implements iEntity
 
 	public function __get($name)
 	{
-		return $this->data->$name;
+		$getter = "get" . ucfirst($name);
+
+		return method_exists($this, $getter) ? $this->$getter() : $this->data->$name;
 	}
 
 	public function toJson()
@@ -60,7 +62,7 @@ abstract class DataObject implements iEntity
 
 	public function getId()
 	{
-		return intval($this->__get("id"));
+		return intval($this->data->id);
 	}
 
 	abstract protected function getSlug();
