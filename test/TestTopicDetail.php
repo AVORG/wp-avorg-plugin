@@ -80,8 +80,7 @@ final class TestTopicDetail extends Avorg\TestCase
 
 	public function testGetsRecordings()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 10);
-		$this->mockWordPress->setReturnValue("get_the_ID", 10);
+		$this->mockWordPress->passCurrentPageCheck();
 		$this->mockWordPress->setReturnValues("get_query_var",  10);
 
 		$this->topicPage->addUi("content");

@@ -9,15 +9,7 @@ if (!\defined('ABSPATH')) exit;
 
 class AvorgApi
 {
-	private $apiUser;
-	private $apiPass;
 	private $context;
-	
-	public function __construct()
-	{
-		$this->apiUser = get_option("avorgApiUser");
-		$this->apiPass = get_option("avorgApiPass");
-	}
 
 	/**
 	 * @return object
@@ -28,9 +20,18 @@ class AvorgApi
 		return $this->getResponse("audiobibles");
 	}
 
+	/**
+	 * @param $id
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function getTopic($id)
 	{
-		// todo: Implement once Henry adds a topics/{ id } route
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("topics/$id");
+
+		return $response[0]->topics;
 	}
 
 	/**
@@ -41,7 +42,7 @@ class AvorgApi
 	{
 		$endpoint = "topics";
 
-		return array_map(function($item) {
+		return array_map(function ($item) {
 			return $item->topics;
 		}, $this->getResponse($endpoint));
 	}
@@ -68,7 +69,7 @@ class AvorgApi
 	{
 		$endpoint = "audiobooks";
 
-		return array_map(function($item) {
+		return array_map(function ($item) {
 			return $item->audiobooks;
 		}, $this->getResponse($endpoint));
 	}
@@ -103,11 +104,11 @@ class AvorgApi
 	{
 		$endpoint = "presenters?search=$search";
 
-		return array_map(function($item) {
+		return array_map(function ($item) {
 			return $item->presenters;
 		}, $this->getResponse($endpoint));
 	}
-	
+
 	/**
 	 * @param $id
 	 * @return bool
@@ -121,7 +122,7 @@ class AvorgApi
 
 		return $response[0]->recordings;
 	}
-	
+
 	/**
 	 * @param string $list
 	 * @return null
@@ -175,14 +176,14 @@ class AvorgApi
 	 */
 	private function getRecordingsResponse($endpoint)
 	{
-		return array_map(function($entry) {
+		return array_map(function ($entry) {
 			return $entry->recordings;
 		}, $this->getResponse($endpoint));
 	}
-	
+
 	/**
 	 * @param $endpoint
-	 * @return object
+	 * @return object|array
 	 * @throws Exception
 	 */
 	private function getResponse($endpoint)
@@ -196,16 +197,15 @@ class AvorgApi
 			throw new Exception("Failed to get response from url $endpoint");
 		}
 	}
-	
+
 	private function createContext()
 	{
-		$opts = ['http' =>
-			[
-				'header' => "Content-Type: text/xml\r\n" . "Authorization: Basic " .
-					base64_encode("$this->apiUser:$this->apiPass") . "\r\n"
-			]
-		];
-		
+		$apiUser = get_option("avorgApiUser");
+		$apiPass = get_option("avorgApiPass");
+		$auth = "Authorization: Basic " . base64_encode("$apiUser:$apiPass");
+		$header = "Content-Type: text/xml\r\n$auth\r\n";
+		$opts = ['http' => ['header' => $header]];
+
 		return stream_context_create($opts);
 	}
 }

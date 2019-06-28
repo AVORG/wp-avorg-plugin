@@ -33,11 +33,6 @@ class Detail extends Page
 		$this->presenterRepository = $presenterRepository;
 	}
 
-	public function throw404($query)
-	{
-		// TODO: Implement throw404() method.
-	}
-
 	/**
 	 * @throws Exception
 	 */

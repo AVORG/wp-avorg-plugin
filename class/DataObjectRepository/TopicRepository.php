@@ -29,6 +29,7 @@ class TopicRepository extends DataObjectRepository
 	 * @param $topicId
 	 * @return DataObject
 	 * @throws ReflectionException
+	 * @throws Exception
 	 */
 	public function getTopic($topicId)
 	{

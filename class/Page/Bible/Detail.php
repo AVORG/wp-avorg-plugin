@@ -14,11 +14,6 @@ class Detail extends Page
 	protected $defaultPageContent = "Bible";
 	protected $twigTemplate = "page-bible.twig";
 
-	public function throw404($query)
-	{
-		// TODO: Implement throw404() method.
-	}
-
 	protected function getData()
 	{
 		// TODO: Implement getData() method.

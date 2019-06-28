@@ -73,11 +73,13 @@ class Router
 		});
 	}
 
+	/**
+	 * @param Route $route
+	 * @throws \Exception
+	 */
 	private function addRewriteRules(Route $route)
 	{
 		$rules = $route->getRewriteRules();
-
-		Logger::log(var_export($rules, true));
 
 		array_walk($rules, function ($rule) {
 			$this->wp->add_rewrite_rule($rule["regex"], $rule["redirect"], "top");

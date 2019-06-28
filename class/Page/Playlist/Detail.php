@@ -37,11 +37,6 @@ class Detail extends Page
 		$this->scriptFactory = $scriptFactory;
 	}
 
-	public function throw404($query)
-	{
-		// TODO: Implement throw404() method.
-	}
-
 	protected function getData()
 	{
 		return [

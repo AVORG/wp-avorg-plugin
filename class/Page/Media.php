@@ -36,34 +36,25 @@ class Media extends Page
         $this->avorgApi = $avorgApi;
         $this->recordingRepository = $recordingRepository;
     }
-	
-	public function throw404($query)
-	{
-		try {
-			$this->getEntity();
-		} catch (Exception $e) {
-			$this->set404($query);
-		}
-	}
 
 	/**
 	 * @return array
+	 * @throws Exception
 	 */
 	protected function getData()
 	{
-		return ["recording" => $this->getEntitySafe()];
+		return ["recording" => $this->getEntity()];
 	}
 
 	/**
-	 * @return DataObject|null
+	 * @return string|null
+	 * @throws Exception
 	 */
-	private function getEntitySafe()
+	protected function getEntityTitle()
 	{
-		try {
-			return $this->getEntity();
-		} catch (Exception $e) {
-			return null;
-		}
+		$recording = $this->getEntity();
+
+		return $recording ? $recording->title : null;
 	}
 
 	/**
@@ -75,13 +66,5 @@ class Media extends Page
 		$entityId = $this->getEntityId();
 
 		return $this->recordingRepository->getRecording($entityId);
-	}
-
-
-	protected function getEntityTitle()
-	{
-		$recording = $this->getEntitySafe();
-
-		return $recording ? $recording->title : null;
 	}
 }

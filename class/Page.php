@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Exception;
+
 if (!\defined('ABSPATH')) exit;
 
 abstract class Page implements iRoutable
@@ -27,7 +29,16 @@ abstract class Page implements iRoutable
 		$this->setPageIdOptionName();
 	}
 
-	abstract public function throw404($query);
+	public function throw404($query)
+	{
+		if (!$this->isThisPage()) return;
+
+		try {
+			$this->getData();
+		} catch (Exception $e) {
+			$this->set404($query);
+		}
+	}
 
 	abstract protected function getData();
 
@@ -37,9 +48,13 @@ abstract class Page implements iRoutable
 			return $title;
 		}
 
-		$entityTitle = $this->getEntityTitle();
+		try {
+			$entityTitle = $this->getEntityTitle();
 
-		return $entityTitle ? "$entityTitle - AudioVerse" : $title;
+			return $entityTitle ? "$entityTitle - AudioVerse" : $title;
+		} catch (Exception $e) {
+			return $title;
+		}
 	}
 
 	abstract protected function getEntityTitle();
@@ -66,11 +81,15 @@ abstract class Page implements iRoutable
 	 */
 	protected function buildUi()
 	{
-		return $this->renderer->render(
-			$this->twigTemplate,
-			$this->getData() ?: [],
-			true
-		);
+		try {
+			return $this->renderer->render(
+				$this->twigTemplate,
+				$this->getData() ?: [],
+				true
+			);
+		} catch(Exception $e) {
+			return null;
+		}
 	}
 
 	public function createPage()
@@ -102,7 +121,7 @@ abstract class Page implements iRoutable
 	protected function isThisPage()
 	{
 		$postId = intval($this->getRouteId(), 10);
-		$thisPageId = $this->wp->get_the_ID();
+		$thisPageId = $this->wp->get_query_var("page_id");
 
 		return $postId === $thisPageId;
 	}

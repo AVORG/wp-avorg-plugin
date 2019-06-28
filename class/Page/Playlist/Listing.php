@@ -14,11 +14,6 @@ class Listing extends Page
 	protected $defaultPageContent = "Playlists";
 	protected $twigTemplate = "page-playlists.twig";
 
-	public function throw404($query)
-	{
-		// TODO: Implement throw404() method.
-	}
-
 	protected function getData()
 	{
 		// TODO: Implement getData() method.

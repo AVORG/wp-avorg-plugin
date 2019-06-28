@@ -28,11 +28,6 @@ class Detail extends Page
 		$this->bookRepository = $bibleRepository;
 	}
 
-	public function throw404($query)
-	{
-		// TODO: Implement throw404() method.
-	}
-
 	/**
 	 * @return array
 	 * @throws ReflectionException

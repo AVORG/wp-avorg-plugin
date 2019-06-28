@@ -27,11 +27,6 @@ class Listing extends Page
 		$this->bookRepository = $bibleRepository;
 	}
 
-	public function throw404($query)
-	{
-		// TODO: Implement throw404() method.
-	}
-
 	protected function getData()
 	{
 		return [

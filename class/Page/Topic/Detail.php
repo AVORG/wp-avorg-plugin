@@ -40,11 +40,6 @@ class Detail extends Page
 		$this->wp = $wp;
 	}
 
-	public function throw404($query)
-	{
-
-	}
-
 	/**
 	 * @return array
 	 * @throws \Exception
@@ -58,6 +53,10 @@ class Detail extends Page
 		return [ "recordings" => $recordings ];
 	}
 
+	/**
+	 * @return mixed
+	 * @throws \ReflectionException
+	 */
 	protected function getEntityTitle()
 	{
 		$topicId = $this->getEntityId();

@@ -11,8 +11,7 @@ final class TestPresenterDetail extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->passCurrentPageCheck();
 
 		$this->presenterDetail = $this->factory->secure("Avorg\\Page\\Presenter\\Detail");
 	}

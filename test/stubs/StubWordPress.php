@@ -47,6 +47,7 @@ class StubWordPress extends WordPress
 	private function setCurrentPageId($id)
 	{
 		$this->setReturnValue("get_the_ID", $id);
+		$this->setMappedReturnValues("get_query_var", [["page_id", $id]]);
 	}
 
 	public function setSavedPageId(Page $page, $id)
