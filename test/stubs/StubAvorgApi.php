@@ -8,6 +8,11 @@ class StubAvorgApi extends AvorgApi
 {
 	use Stub;
 
+	public function getBibleBooks($id)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getBibles()
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());

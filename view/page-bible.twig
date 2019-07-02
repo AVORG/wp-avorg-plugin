@@ -1,3 +1,13 @@
 <div class="avorg-page-bible">
-	{{dump(avorg.bible)}}
+	<ul>
+		{% for book in avorg.bible.books %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					title: book.name,
+					titleUrl: null,
+					description: "#{book.chapters} chapters"
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
 </div>

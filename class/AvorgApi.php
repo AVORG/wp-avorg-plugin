@@ -12,6 +12,16 @@ class AvorgApi
 	private $context;
 
 	/**
+	 * @param $id
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBibleBooks($id)
+	{
+		return (array) $this->getResponse("audiobibles/$id");
+	}
+
+	/**
 	 * @return array
 	 * @throws Exception
 	 */

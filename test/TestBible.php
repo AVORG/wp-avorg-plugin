@@ -18,4 +18,29 @@ final class TestBible extends Avorg\TestCase
 			$bible->getUrl()
 		);
 	}
+
+	/**
+	 * @throws ReflectionException
+	 */
+	public function testGetBooks()
+	{
+		$this->mockAvorgApi->setReturnValue("getBibleBooks", [[]]);
+
+		$bible = $this->makeBible();
+		$books = $bible->getBooks();
+
+		$this->assertInstanceOf("Avorg\\DataObject\\BibleBook", $books[0]);
+	}
+
+	public function testUsesIdToGetBibleBooks()
+	{
+		$bible = $this->makeBible([
+			"dam_id" => "ENGESV",
+			"drama" => 2
+		]);
+
+		$bible->getBooks();
+
+		$this->mockAvorgApi->assertMethodCalledWith("getBibleBooks", "ENGESV2");
+	}
 }
