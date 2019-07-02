@@ -39,6 +39,7 @@ class RouteFactory
 		"Avorg\Page\Topic\Detail" => "{ language }/topics/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Bible\Listing" => "{ language }/audiobibles/volumes",
 		"Avorg\Page\Bible\Detail" => "{ language }/audiobibles/books/{ version }/{ drama }",
+		"Avorg\Page\Story\Listing" => "{ language }/audiobooks/stories"
 	];
 
 	private $endpointRouteFormats = [

@@ -29,6 +29,7 @@ final class TestRouter extends Avorg\TestCase
 	 */
 	public function testPageRoutes($inputUrl, $outputUrl)
 	{
+		$inputUrl = ltrim($inputUrl, "/");
 		$addRewriteCalls = $this->getRewriteRules();
 
 		$results = array_map(function ($call) use ($inputUrl) {
@@ -134,10 +135,10 @@ final class TestRouter extends Avorg\TestCase
 				"english/topics/887/agriculture.html",
 				"index.php?page_id=TOPIC_DETAIL_PAGE_ID&language=english&entity_id=887&slug=agriculture.html"
 			],
-//			[
-//				"english/sermons/presenters",
-//				"index.php?page_id=PRESENTERSLIST_PAGE_ID&language=english"
-//			]
+			[
+				"/english/audiobooks/stories",
+				"index.php?page_id=STORY_LISTING_PAGE_ID&language=english"
+			]
 		];
 	}
 
