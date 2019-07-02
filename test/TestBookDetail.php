@@ -4,8 +4,8 @@ use Avorg\Page\Book\Detail;
 
 final class TestBookDetail extends Avorg\TestCase
 {
-	/** @var Detail $bookDetail */
-	private $bookDetail;
+	/** @var Detail $page */
+	private $page;
 
 	public function setUp()
 	{
@@ -13,7 +13,7 @@ final class TestBookDetail extends Avorg\TestCase
 
 		$this->mockWordPress->passCurrentPageCheck();
 
-		$this->bookDetail = $this->factory->make("Avorg\\Page\\Book\\Detail");
+		$this->page = $this->factory->make("Avorg\\Page\\Book\\Detail");
 	}
 
 	public function testGetDataIncludesBook()
@@ -21,7 +21,7 @@ final class TestBookDetail extends Avorg\TestCase
 		$this->mockAvorgApi->setReturnValue("getBook", new stdClass());
 		$this->mockWordPress->setReturnValues("get_query_var",  7);
 
-		$this->assertTwigGlobalMatchesCallback($this->bookDetail, function($avorg) {
+		$this->assertTwigGlobalMatchesCallback($this->page, function($avorg) {
 			return $avorg->book instanceof \Avorg\DataObject\Book;
 		});
 	}
@@ -30,14 +30,14 @@ final class TestBookDetail extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValues("get_query_var",  7);
 
-		$this->bookDetail->addUi("");
+		$this->page->addUi("");
 
 		$this->mockAvorgApi->assertMethodCalledWith("getBook", 7);
 	}
 
 	public function testGetsEntityIdWhenRequestingBook()
 	{
-		$this->bookDetail->addUi("");
+		$this->page->addUi("");
 
 		$this->mockWordPress->assertMethodCalledWith("get_query_var", "entity_id");
 	}
@@ -48,7 +48,7 @@ final class TestBookDetail extends Avorg\TestCase
 			"title" => "book_title"
 		]);
 
-		$result = $this->bookDetail->filterTitle("");
+		$result = $this->page->filterTitle("");
 
 		$this->assertEquals("book_title - AudioVerse", $result);
 	}

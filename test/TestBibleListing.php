@@ -28,10 +28,10 @@ final class TestBibleListing extends Avorg\TestCase
 
 	public function testReturnsBibles()
 	{
-		$this->mockAvorgApi->loadBibles([[]]);
+		$this->mockAvorgApi->loadBibles([]);
 
 		$this->assertTwigGlobalMatchesCallback($this->page, function($avorg) {
-			return $avorg->bibles[0] instanceof \Avorg\DataObject\Bible;
+			return reset($avorg->bibles) instanceof \Avorg\DataObject\Bible;
 		});
 	}
 }

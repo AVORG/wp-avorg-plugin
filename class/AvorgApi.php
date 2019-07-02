@@ -12,12 +12,12 @@ class AvorgApi
 	private $context;
 
 	/**
-	 * @return object
+	 * @return array
 	 * @throws Exception
 	 */
 	public function getBibles()
 	{
-		return $this->getResponse("audiobibles");
+		return (array) $this->getResponse("audiobibles");
 	}
 
 	/**

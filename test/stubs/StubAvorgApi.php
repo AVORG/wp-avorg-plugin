@@ -87,7 +87,15 @@ class StubAvorgApi extends AvorgApi
 
 	public function loadBibles(...$dataArrays)
 	{
-		$this->setDataObjectsReturnValue("getBibles", $dataArrays);
+		$objects = array_reduce($dataArrays, function($carry, $dataArray) {
+			$key = array_key_exists("dam_id", $dataArray) ? $dataArray["dam_id"] : rand();
+			$dataArray["dam_id"] = $key;
+			$carry[$key] = $this->testCase->convertArrayToObjectRecursively($dataArray);
+
+			return $carry;
+		}, []);
+
+		$this->setReturnValue("getBibles", $objects);
 	}
 
 	public function loadTopic($data)
