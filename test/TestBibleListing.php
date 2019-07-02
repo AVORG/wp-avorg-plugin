@@ -1,5 +1,6 @@
 <?php
 
+use Avorg\DataObject\Bible;
 use Avorg\Page\Bible\Listing;
 
 final class TestBibleListing extends Avorg\TestCase
@@ -31,7 +32,7 @@ final class TestBibleListing extends Avorg\TestCase
 		$this->mockAvorgApi->loadBibles([]);
 
 		$this->assertTwigGlobalMatchesCallback($this->page, function($avorg) {
-			return reset($avorg->bibles) instanceof \Avorg\DataObject\Bible;
+			return reset($avorg->bibles) instanceof Bible;
 		});
 	}
 }

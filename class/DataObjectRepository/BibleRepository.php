@@ -3,7 +3,7 @@
 namespace Avorg\DataObjectRepository;
 
 
-use Avorg\DataObject\Bible;
+use Avorg\DataObject;
 use Avorg\DataObjectRepository;
 use Exception;
 
@@ -15,14 +15,15 @@ class BibleRepository extends DataObjectRepository
 
 	/**
 	 * @param $id
-	 * @return Bible|null
+	 * @return DataObject|null
 	 * @throws Exception
 	 */
 	public function getBible($id)
 	{
 		$rawBibles = $this->api->getBibles();
+		$rawBible = array_key_exists($id, $rawBibles) ? $rawBibles[$id] : null;
 
-		return array_key_exists($id, $rawBibles) ? $rawBibles[$id] : null;
+		return $rawBible ? $this->makeDataObject($rawBible) : null;
 	}
 
 	/**

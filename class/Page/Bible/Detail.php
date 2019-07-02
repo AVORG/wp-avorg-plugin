@@ -3,6 +3,7 @@
 
 namespace Avorg\Page\Bible;
 
+use Avorg\DataObject\Bible;
 use Avorg\DataObjectRepository\BibleRepository;
 use Avorg\Page;
 use Avorg\Renderer;
@@ -32,9 +33,15 @@ class Detail extends Page
 		$this->bibleRepository = $bibleRepository;
 	}
 
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
 	protected function getData()
 	{
-		// TODO: Implement getData() method.
+		return [
+			"bible" => $this->getEntity()
+		];
 	}
 
 	/**
@@ -43,9 +50,18 @@ class Detail extends Page
 	 */
 	protected function getTitle()
 	{
-		$bible = $this->bibleRepository->getBible($this->getEntityId());
+		$bible = $this->getEntity();
 
 		return $bible ? $bible->name : null;
+	}
+
+	/**
+	 * @return Bible|null
+	 * @throws Exception
+	 */
+	private function getEntity()
+	{
+		return $this->bibleRepository->getBible($this->getEntityId());
 	}
 
 	protected function getEntityId()
