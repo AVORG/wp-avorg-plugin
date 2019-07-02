@@ -3,6 +3,7 @@
 
 namespace Avorg\Page\Story;
 
+use Avorg\DataObject;
 use Avorg\DataObjectRepository\StoryRepository;
 use Avorg\Page;
 use Avorg\Renderer;
@@ -39,12 +40,25 @@ class Detail extends Page
 	protected function getData()
 	{
 		return [
-			"story" => $this->storyRepository->getStory($this->getEntityId())
+			"story" => $this->getEntity()
 		];
 	}
 
+	/**
+	 * @return mixed
+	 * @throws Exception
+	 */
 	protected function getTitle()
 	{
-		// TODO: Implement getTitle() method.
+		return $this->getEntity()->title;
+	}
+
+	/**
+	 * @return DataObject
+	 * @throws Exception
+	 */
+	protected function getEntity()
+	{
+		return $this->storyRepository->getStory($this->getEntityId());
 	}
 }

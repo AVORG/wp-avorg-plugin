@@ -49,7 +49,7 @@ abstract class DataObject implements iEntity
 
 	public function toArray()
 	{
-		return $this->data;
+		return (array) $this->data;
 	}
 
 	public function getUrl()

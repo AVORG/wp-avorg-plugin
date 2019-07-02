@@ -34,4 +34,15 @@ final class TestStoryDetail extends Avorg\TestCase
 			return $avorg->story instanceof Story;
 		});
 	}
+
+	public function testFilterTitle()
+	{
+		$this->mockAvorgApi->loadBook([
+			"title" => "book_title"
+		]);
+
+		$result = $this->page->filterTitle("");
+
+		$this->assertEquals("book_title - AudioVerse", $result);
+	}
 }

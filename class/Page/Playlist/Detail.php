@@ -9,6 +9,7 @@ use Avorg\Renderer;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;
 use function defined;
+use Exception;
 
 if (!defined('ABSPATH')) exit;
 
@@ -46,6 +47,7 @@ class Detail extends Page
 
 	/**
 	 * @return array
+	 * @throws Exception
 	 */
 	private function getRecordings()
 	{

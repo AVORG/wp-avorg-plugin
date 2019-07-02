@@ -64,6 +64,7 @@ class RecordingRepository extends DataObjectRepository
 	/**
 	 * @param $playlistId
 	 * @return array
+	 * @throws Exception
 	 */
 	public function getPlaylistRecordings($playlistId)
 	{
