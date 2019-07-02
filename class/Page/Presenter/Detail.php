@@ -56,7 +56,7 @@ class Detail extends Page
 		return $this->presenterRepository->getPresenter($entityId);
 	}
 
-	protected function getEntityTitle()
+	protected function getTitle()
 	{
 		/** @var Presenter $presenter */
 		$presenter = $this->getEntity();

@@ -41,7 +41,7 @@ class Detail extends Page
 	 * @return mixed
 	 * @throws ReflectionException
 	 */
-	protected function getEntityTitle()
+	protected function getTitle()
 	{
 		return $this->getEntity()->title;
 	}

@@ -50,7 +50,7 @@ class Media extends Page
 	 * @return string|null
 	 * @throws Exception
 	 */
-	protected function getEntityTitle()
+	protected function getTitle()
 	{
 		$recording = $this->getEntity();
 

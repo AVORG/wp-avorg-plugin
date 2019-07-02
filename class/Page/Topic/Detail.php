@@ -57,7 +57,7 @@ class Detail extends Page
 	 * @return mixed
 	 * @throws \ReflectionException
 	 */
-	protected function getEntityTitle()
+	protected function getTitle()
 	{
 		$topicId = $this->getEntityId();
 		$topic = $this->topicRepository->getTopic($topicId);

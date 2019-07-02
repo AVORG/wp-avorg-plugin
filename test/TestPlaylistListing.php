@@ -1,9 +1,12 @@
 <?php
 
+use Avorg\DataObject\Playlist;
+use Avorg\Page\Playlist\Listing;
+
 final class TestPlaylistListing extends Avorg\TestCase
 {
-	/** @var \Avorg\Page\Playlist\Listing $presenterListing */
-	protected $presenterListing;
+	/** @var Listing $page */
+	protected $page;
 
 	/**
 	 * @throws ReflectionException
@@ -12,17 +15,24 @@ final class TestPlaylistListing extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->passCurrentPageCheck();
 
-		$this->presenterListing = $this->factory->secure("Avorg\\Page\\Playlist\\Listing");
+		$this->page = $this->factory->secure("Avorg\\Page\\Playlist\\Listing");
 	}
 
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testExists()
+	public function testGetsRawPlaylists()
 	{
+		$this->page->addUi("");
 
+		$this->mockAvorgApi->assertMethodCalled("getPlaylists");
+	}
+
+	public function testReturnsPlaylistObjects()
+	{
+		$this->mockAvorgApi->loadPlaylists([]);
+
+		$this->assertTwigGlobalMatchesCallback($this->page, function($global) {
+			return $global->playlists[0] instanceof Playlist;
+		});
 	}
 }

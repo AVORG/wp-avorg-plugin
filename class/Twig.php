@@ -2,7 +2,12 @@
 
 namespace Avorg;
 
-if (!\defined('ABSPATH')) exit;
+use function defined;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Loader\FilesystemLoader;
+
+if (!defined('ABSPATH')) exit;
 
 class Twig
 {
@@ -11,15 +16,15 @@ class Twig
 	public function __construct()
 	{
 		$pluginDirectory = dirname(dirname(__FILE__));
-		$loader = new \Twig_Loader_Filesystem($pluginDirectory . "/view");
+		$loader = new FilesystemLoader($pluginDirectory . "/view");
 		
-		$this->twig = new \Twig_Environment($loader, array(
+		$this->twig = new Environment($loader, array(
 			"cache" => $pluginDirectory . "/cache",
 			"debug" => WP_DEBUG
 		));
 		
 		if (WP_DEBUG) {
-			$this->twig->addExtension(new \Twig_Extension_Debug());
+			$this->twig->addExtension(new DebugExtension());
 		}
 	}
 	

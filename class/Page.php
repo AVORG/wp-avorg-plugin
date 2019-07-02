@@ -49,7 +49,7 @@ abstract class Page implements iRoutable
 		}
 
 		try {
-			$entityTitle = $this->getEntityTitle();
+			$entityTitle = $this->getTitle();
 
 			return $entityTitle ? "$entityTitle - AudioVerse" : $title;
 		} catch (Exception $e) {
@@ -57,7 +57,7 @@ abstract class Page implements iRoutable
 		}
 	}
 
-	abstract protected function getEntityTitle();
+	abstract protected function getTitle();
 
 	public function registerCallbacks()
 	{

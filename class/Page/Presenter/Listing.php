@@ -35,7 +35,7 @@ class Listing extends Page
 		];
 	}
 
-	protected function getEntityTitle()
+	protected function getTitle()
 	{
 		// TODO: Implement getEntityTitle() method.
 	}

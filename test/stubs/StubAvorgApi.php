@@ -33,6 +33,11 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function getPlaylists()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getPlaylist($id)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -74,6 +79,11 @@ class StubAvorgApi extends AvorgApi
 	}
 
 	/* Helper Methods */
+
+	public function loadPlaylists(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getPlaylists", $dataArrays);
+	}
 
 	public function loadBibles(...$dataArrays)
 	{
@@ -119,22 +129,13 @@ class StubAvorgApi extends AvorgApi
 
 	private function setDataObjectReturnValue($function, $dataArray)
 	{
-		$object = $this->convertArrayToObjectRecursively($dataArray);
+		$object = $this->testCase->convertArrayToObjectRecursively($dataArray);
 
 		$this->setReturnValue($function, $object);
 	}
 
 	private function convertArraysToObjectsRecursively($arrays)
 	{
-		return array_map([$this, "convertArrayToObjectRecursively"], $arrays);
-	}
-
-	/**
-	 * @param $array
-	 * @return mixed
-	 */
-	private function convertArrayToObjectRecursively($array)
-	{
-		return json_decode(json_encode($array), FALSE);
+		return array_map([$this->testCase, "convertArrayToObjectRecursively"], $arrays);
 	}
 }

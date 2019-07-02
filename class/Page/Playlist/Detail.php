@@ -60,7 +60,7 @@ class Detail extends Page
 		return $array_reduce;
 	}
 
-	protected function getEntityTitle()
+	protected function getTitle()
 	{
 		// TODO: Implement getEntityTitle() method.
 	}

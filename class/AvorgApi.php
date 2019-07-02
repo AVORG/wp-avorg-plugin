@@ -74,6 +74,20 @@ class AvorgApi
 		}, $this->getResponse($endpoint));
 	}
 
+	/**
+	 * @return array|object
+	 * @throws Exception
+	 */
+	public function getPlaylists()
+	{
+		return $this->getResponse("playlist");
+	}
+
+	/**
+	 * @param $id
+	 * @return array|bool|object
+	 * @throws Exception
+	 */
 	public function getPlaylist($id)
 	{
 		if (!is_numeric($id)) return false;
@@ -102,7 +116,7 @@ class AvorgApi
 	 */
 	public function getPresenters($search = null)
 	{
-		$endpoint = "presenters?search=$search";
+		$endpoint = "presenters?search=$search&all=true";
 
 		return array_map(function ($item) {
 			return $item->presenters;

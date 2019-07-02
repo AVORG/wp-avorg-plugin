@@ -4,6 +4,7 @@ namespace Avorg;
 
 use Avorg\Route\PageRoute;
 use function defined;
+use Exception;
 
 if (!defined('ABSPATH')) exit;
 
@@ -129,6 +130,10 @@ class Router
 
 	public function buildUrl($pageClass, $variables = [])
 	{
+		if (!class_exists($pageClass)) {
+			throw new Exception("Class $pageClass does not exist.");
+		}
+
 		/** @var PageRoute $route */
 		$route = $this->routeFactory->getPageRouteByClass($pageClass);
 		$locale = $this->wp->get_locale() ?: "en_US";

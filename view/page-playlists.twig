@@ -1,3 +1,12 @@
 <div class="avorg-page-playlists">
-	Playlists
+	<ul>
+		{% for playlist in avorg.playlists %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					title: playlist.title,
+					titleUrl: playlist.url
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
 </div>

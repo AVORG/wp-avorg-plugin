@@ -61,6 +61,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		});
 	}
 
+	protected function makePlaylist($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Playlist", $data);
+	}
+
 	/**
 	 * @param $data
 	 * @return mixed
@@ -111,7 +116,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
      * @param $array
      * @return mixed
      */
-    protected function convertArrayToObjectRecursively($array)
+    public function convertArrayToObjectRecursively($array)
     {
     	if ($array == []) return new stdClass();
 

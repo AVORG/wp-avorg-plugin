@@ -19,7 +19,7 @@ class Detail extends Page
 		// TODO: Implement getData() method.
 	}
 
-	protected function getEntityTitle()
+	protected function getTitle()
 	{
 		// TODO: Implement getEntityTitle() method.
 	}
