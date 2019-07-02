@@ -46,6 +46,4 @@ class Bible extends DataObject
 			"drama" => $this->drama
 		]);
 	}
-
-	protected function getSlug() {}
 }

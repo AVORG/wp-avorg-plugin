@@ -1,5 +1,7 @@
 <?php
 
+use Avorg\Page;
+
 final class TestPageFactory extends Avorg\TestCase
 {
 	/** @var \Avorg\PageFactory $pageFactory */
@@ -11,8 +13,7 @@ final class TestPageFactory extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->passCurrentPageCheck();
 
 		$this->pageFactory = $this->factory->obtain("Avorg\\PageFactory");
 		$this->pages = $this->pageFactory->getPages();
@@ -31,7 +32,7 @@ final class TestPageFactory extends Avorg\TestCase
 
 		$this->mockWordPress->setReturnValue("get_post_status", FALSE);
 
-		array_walk($this->pages, function(\Avorg\Page $page) {
+		array_walk($this->pages, function(Page $page) {
 			$page->createPage();
 		});
 
@@ -48,7 +49,7 @@ final class TestPageFactory extends Avorg\TestCase
 	{
 		$this->assertPagesExist();
 
-		array_walk($this->pages, function(\Avorg\Page $page) {
+		array_walk($this->pages, function(Page $page) {
 			$page->addUi("Hello World");
 		});
 
@@ -61,7 +62,7 @@ final class TestPageFactory extends Avorg\TestCase
 	{
 		$this->assertPagesExist();
 
-		array_walk($this->pages, function(\Avorg\Page $page) {
+		array_walk($this->pages, function(Page $page) {
 			$page->addUi("Hello World");
 		});
 
@@ -77,7 +78,7 @@ final class TestPageFactory extends Avorg\TestCase
 	{
 		$this->assertPagesExist();
 
-		array_walk($this->pages, function(\Avorg\Page $page) {
+		array_walk($this->pages, function(Page $page) {
 			$class = get_class($page);
 			$this->assertEquals(
 				"fake_title",

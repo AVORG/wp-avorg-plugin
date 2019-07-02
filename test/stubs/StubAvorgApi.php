@@ -8,6 +8,11 @@ class StubAvorgApi extends AvorgApi
 {
 	use Stub;
 
+	public function getStories()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getBibleBooks($id)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -84,6 +89,11 @@ class StubAvorgApi extends AvorgApi
 	}
 
 	/* Helper Methods */
+
+	public function loadStories(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getStories", $dataArrays);
+	}
 
 	public function loadPlaylists(...$dataArrays)
 	{

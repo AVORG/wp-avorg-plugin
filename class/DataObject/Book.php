@@ -53,9 +53,4 @@ class Book extends DataObject
 	{
 		return $this->recordingRepository->getBookRecordings($this->getId());
 	}
-
-	protected function getSlug()
-	{
-		return $this->router->formatStringForUrl($this->data->title) . ".html";
-	}
 }

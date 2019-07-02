@@ -151,9 +151,4 @@ class Recording extends DataObject
 			];
 		}, $mediaFiles);
 	}
-
-	protected function getSlug()
-	{
-		return $this->router->formatStringForUrl($this->data->title) . ".html";
-	}
 }

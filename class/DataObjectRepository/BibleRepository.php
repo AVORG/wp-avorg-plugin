@@ -20,7 +20,7 @@ class BibleRepository extends DataObjectRepository
 	 */
 	public function getBible($id)
 	{
-		$rawBibles = $this->api->getBibles();
+		$rawBibles = (array) $this->api->getBibles();
 		$rawBible = array_key_exists($id, $rawBibles) ? $rawBibles[$id] : null;
 
 		return $rawBible ? $this->makeDataObject($rawBible) : null;

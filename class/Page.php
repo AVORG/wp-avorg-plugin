@@ -2,9 +2,10 @@
 
 namespace Avorg;
 
+use function defined;
 use Exception;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 abstract class Page implements iRoutable
 {
@@ -81,15 +82,11 @@ abstract class Page implements iRoutable
 	 */
 	protected function buildUi()
 	{
-		try {
-			return $this->renderer->render(
-				$this->twigTemplate,
-				$this->getData() ?: [],
-				true
-			);
-		} catch(Exception $e) {
-			return null;
-		}
+		return $this->renderer->render(
+			$this->twigTemplate,
+			$this->getData() ?: [],
+			true
+		);
 	}
 
 	public function createPage()

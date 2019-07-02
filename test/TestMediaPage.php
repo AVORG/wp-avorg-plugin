@@ -368,16 +368,4 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$page->filterTitle("old title");
 	}
-
-	/**
-	 * @doesNotPerformAssertions
-	 */
-	public function testAddUiCatchesExceptions()
-	{
-		$this->mockWordPress->passCurrentPageCheck();
-
-		$page = $this->make404ThrowingMediaPage();
-
-		$page->addUi("content");
-	}
 }

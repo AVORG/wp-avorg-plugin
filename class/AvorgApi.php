@@ -12,6 +12,19 @@ class AvorgApi
 	private $context;
 
 	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getStories()
+	{
+		$endpoint = "audiobooks?story=1";
+
+		return array_map(function($item) {
+			return $item->audiobooks;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
 	 * @param $id
 	 * @return array
 	 * @throws Exception

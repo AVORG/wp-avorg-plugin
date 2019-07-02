@@ -12,14 +12,14 @@ use Exception;
 
 if (!defined('ABSPATH')) exit;
 
-class Listing extends Page
+class Detail extends Page
 {
 	/** @var StoryRepository $storyRepository */
 	private $storyRepository;
 
-	protected $defaultPageTitle = "Stories";
-	protected $defaultPageContent = "Stories";
-	protected $twigTemplate = "page-stories.twig";
+	protected $defaultPageTitle = "Story";
+	protected $defaultPageContent = "Story";
+	protected $twigTemplate = "page-story.twig";
 
 	public function __construct(
 		Renderer $renderer,
@@ -39,7 +39,7 @@ class Listing extends Page
 	protected function getData()
 	{
 		return [
-			"stories" => $this->storyRepository->getStories()
+			"story" => $this->storyRepository->getStory($this->getEntityId())
 		];
 	}
 

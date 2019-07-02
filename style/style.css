@@ -76,6 +76,9 @@
   display: inline-block;
   padding: .5em; }
 
+.avorg-page-stories li {
+  list-style-type: none; }
+
 .avorg-page-topics li {
   list-style-type: none; }
 

@@ -7,7 +7,7 @@ use Avorg\DataObject;
 
 if (!defined('ABSPATH')) exit;
 
-class Playlist extends DataObject
+class Story extends DataObject
 {
-	protected $detailClass = "Avorg\\Page\\Playlist\\Detail";
+	protected $detailClass = "Avorg\\Page\\Story\\Detail";
 }

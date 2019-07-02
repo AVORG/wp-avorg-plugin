@@ -61,6 +61,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		});
 	}
 
+	protected function makeStory($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Story", $data);
+	}
+
 	protected function makePlaylist($data = [])
 	{
 		return $this->makeDataObject("Avorg\\DataObject\\Playlist", $data);

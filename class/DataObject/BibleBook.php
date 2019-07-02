@@ -11,8 +11,4 @@ if (!defined('ABSPATH')) exit;
 class BibleBook extends DataObject
 {
 
-	protected function getSlug()
-	{
-		// TODO: Implement getSlug() method.
-	}
 }

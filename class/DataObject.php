@@ -54,6 +54,8 @@ abstract class DataObject implements iEntity
 
 	public function getUrl()
 	{
+		if (!class_exists($this->detailClass)) return null;
+
 		return $this->router->buildUrl($this->detailClass, [
 			"entity_id" => $this->getId(),
 			"slug" => $this->getSlug()
@@ -65,5 +67,7 @@ abstract class DataObject implements iEntity
 		return intval($this->data->id);
 	}
 
-	abstract protected function getSlug();
+	protected function getSlug() {
+		return $this->router->formatStringForUrl($this->data->title) . ".html";
+	}
 }

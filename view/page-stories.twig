@@ -1,0 +1,15 @@
+<div class="avorg-page-stories">
+	<ul>
+		{% for story in avorg.stories %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					title: story.title,
+					titleUrl: story.url,
+					description: story.summary|striptags,
+					image: story.photo256,
+					imageAlt: story.title
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
+</div>

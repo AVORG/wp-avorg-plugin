@@ -1,7 +1,5 @@
 <?php
 
-use Avorg\TestCase;
-
 final class TestPlaylist extends Avorg\TestCase
 {
 	public function testGetUrl()
