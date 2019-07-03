@@ -62,6 +62,18 @@ class RecordingRepository extends DataObjectRepository
 	}
 
 	/**
+	 * @param $sponsorId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSponsorRecordings($sponsorId)
+	{
+		$rawObjects = $this->api->getSponsorRecordings($sponsorId);
+
+		return $this->makeDataObjects($rawObjects);
+	}
+
+	/**
 	 * @param $topicId
 	 * @return array
 	 * @throws Exception

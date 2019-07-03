@@ -12,6 +12,33 @@ class AvorgApi
 	private $context;
 
 	/**
+	 * @param $id
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function getSponsor($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("sponsors/$id");
+
+		return $response[0]->sponsors;
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSponsors()
+	{
+		$endpoint = "sponsors";
+
+		return array_map(function($item) {
+			return $item->sponsors;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
 	 * @return array
 	 * @throws Exception
 	 */
@@ -208,6 +235,18 @@ class AvorgApi
 	}
 
 	/**
+	 * @param $sponsorId
+	 * @return bool|null
+	 * @throws Exception
+	 */
+	public function getSponsorRecordings($sponsorId)
+	{
+		if (!is_numeric($sponsorId)) return false;
+
+		return $this->getRecordingsResponse("recordings/sponsor/$sponsorId");
+	}
+
+	/**
 	 * @param $conferenceId
 	 * @return bool|array
 	 * @throws Exception
@@ -250,6 +289,11 @@ class AvorgApi
 	 */
 	private function getResponse($endpoint)
 	{
+		if (defined('AVORG_TESTS_RUNNING') && AVORG_TESTS_RUNNING)
+		{
+			throw new Exception("Unmocked API method called");
+		}
+
 		if (!$this->context) $this->context = $this->createContext();
 
 		if ($response = @file_get_contents(

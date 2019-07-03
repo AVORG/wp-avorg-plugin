@@ -150,6 +150,10 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"/english/sermons/conferences/293/acf-institute-2017-never-alone.html",
 				"index.php?page_id=CONFERENCE_DETAIL_PAGE_ID&language=english&entity_id=293&slug=acf-institute-2017-never-alone.html"
+			],
+			[
+				"/english/sponsors",
+				"index.php?page_id=SPONSOR_LISTING_PAGE_ID&language=english"
 			]
 		];
 	}
