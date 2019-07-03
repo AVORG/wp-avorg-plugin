@@ -11,6 +11,28 @@ class AvorgApi
 {
 	private $context;
 
+	public function getOneSeries($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("series/$id");
+
+		return $response[0]->series;
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getAllSeries()
+	{
+		$endpoint = "series";
+
+		return array_map(function($item) {
+			return $item->series;
+		}, $this->getResponse($endpoint));
+	}
+
 	/**
 	 * @param $id
 	 * @return bool
@@ -260,7 +282,7 @@ class AvorgApi
 
 	/**
 	 * @param $bookId
-	 * @return bool|null
+	 * @return bool|array
 	 * @throws Exception
 	 */
 	public function getBookRecordings($bookId)
@@ -268,6 +290,18 @@ class AvorgApi
 		if (!is_numeric($bookId)) return false;
 
 		return $this->getRecordingsResponse("recordings/audiobook/$bookId");
+	}
+
+	/**
+	 * @param $seriesId
+	 * @return bool|array
+	 * @throws Exception
+	 */
+	public function getSeriesRecordings($seriesId)
+	{
+		if (!is_numeric($seriesId)) return false;
+
+		return $this->getRecordingsResponse("recordings/series/$seriesId");
 	}
 
 	/**

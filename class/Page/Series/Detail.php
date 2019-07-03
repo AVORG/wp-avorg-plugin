@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Avorg\Page\Sponsor;
+namespace Avorg\Page\Series;
 
 use Avorg\DataObject;
-use Avorg\DataObjectRepository\SponsorRepository;
+use Avorg\DataObjectRepository\SeriesRepository;
 use Avorg\Page;
 use Avorg\Renderer;
 use Avorg\WordPress;
@@ -15,22 +15,22 @@ if (!defined('ABSPATH')) exit;
 
 class Detail extends Page
 {
-	/** @var SponsorRepository $sponsorRepository */
-	private $sponsorRepository;
+	/** @var SeriesRepository $seriesRepository */
+	private $seriesRepository;
 
-	protected $defaultPageTitle = "Sponsor";
-	protected $defaultPageContent = "Sponsor";
-	protected $twigTemplate = "page-sponsor.twig";
+	protected $defaultPageTitle = "Series Detail";
+	protected $defaultPageContent = "Series Detail";
+	protected $twigTemplate = "page-seriesDetail.twig";
 
 	public function __construct(
 		Renderer $renderer,
-		SponsorRepository $seriesRepository,
+		SeriesRepository $seriesRepository,
 		WordPress $wp
 	)
 	{
 		parent::__construct($renderer, $wp);
 
-		$this->sponsorRepository = $seriesRepository;
+		$this->seriesRepository = $seriesRepository;
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Detail extends Page
 	protected function getData()
 	{
 		return [
-			"sponsor" => $this->getEntity()
+			"series" => $this->getEntity()
 		];
 	}
 
@@ -57,8 +57,8 @@ class Detail extends Page
 	 * @return DataObject
 	 * @throws ReflectionException
 	 */
-	private function getEntity()
+	protected function getEntity()
 	{
-		return $this->sponsorRepository->getSponsor($this->getEntityId());
+		return $this->seriesRepository->getOneSeries($this->getEntityId());
 	}
 }

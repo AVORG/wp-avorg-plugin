@@ -154,6 +154,10 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"/english/sponsors",
 				"index.php?page_id=SPONSOR_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"/english/sermons/series",
+				"index.php?page_id=SERIES_LISTING_PAGE_ID&language=english"
 			]
 		];
 	}

@@ -22,13 +22,13 @@ class Listing extends Page
 
 	public function __construct(
 		Renderer $renderer,
-		SponsorRepository $sponsorRepository,
+		SponsorRepository $seriesRepository,
 		WordPress $wp
 	)
 	{
 		parent::__construct($renderer, $wp);
 
-		$this->sponsorRepository = $sponsorRepository;
+		$this->sponsorRepository = $seriesRepository;
 	}
 
 	protected function getData()

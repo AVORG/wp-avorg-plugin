@@ -79,6 +79,9 @@
   display: inline-block;
   padding: .5em; }
 
+.avorg-page-seriesList li {
+  list-style-type: none; }
+
 .avorg-page-sponsors li {
   list-style-type: none; }
 

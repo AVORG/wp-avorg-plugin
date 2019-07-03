@@ -44,7 +44,9 @@ class RouteFactory
 		"Avorg\Page\Conference\Listing" => "{ language }/sermons/conferences",
 		"Avorg\Page\Conference\Detail" => "{ language }/sermons/conferences/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Sponsor\Listing" => "{ language }/sponsors",
-		"Avorg\Page\Sponsor\Detail" => "{ language }/sponsors/{ entity_id:[0-9]+ }[/{ slug }]"
+		"Avorg\Page\Sponsor\Detail" => "{ language }/sponsors/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Series\Listing" => "{ language }/sermons/series",
+		"Avorg\Page\Series\Detail" => "{ language }/sermons/series/{ entity_id:[0-9]+ }[/{ slug }]",
 	];
 
 	private $endpointRouteFormats = [

@@ -111,4 +111,11 @@ class RecordingRepository extends DataObjectRepository
 		return $this->makeDataObjects($apiResponse);
 	}
 
+	public function getSeriesRecordings($seriesId)
+	{
+		$rawObjects = $this->api->getSeriesRecordings($seriesId);
+
+		return $this->makeDataObjects($rawObjects);
+	}
+
 }
