@@ -18,8 +18,7 @@ final class TestBookDetail extends Avorg\TestCase
 
 	public function testGetDataIncludesBook()
 	{
-		$this->mockAvorgApi->setReturnValue("getBook", new stdClass());
-		$this->mockWordPress->setReturnValues("get_query_var",  7);
+		$this->mockAvorgApi->loadBook([]);
 
 		$this->assertTwigGlobalMatchesCallback($this->page, function($avorg) {
 			return $avorg->book instanceof \Avorg\DataObject\Book;

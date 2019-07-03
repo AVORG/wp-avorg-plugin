@@ -8,6 +8,11 @@ class StubAvorgApi extends AvorgApi
 {
 	use Stub;
 
+	public function getConferences()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getStories()
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -83,12 +88,22 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function getConferenceRecordings($conferenceId)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getBookRecordings($bookId)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
 	/* Helper Methods */
+
+	public function loadConferences(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getConferences", $dataArrays);
+	}
 
 	public function loadStories(...$dataArrays)
 	{
@@ -136,6 +151,11 @@ class StubAvorgApi extends AvorgApi
 	public function loadRecordings(...$dataArrays)
 	{
 		$this->setDataObjectsReturnValue("getRecordings", $dataArrays);
+	}
+
+	public function loadConferenceRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getConferenceRecordings", $dataArrays);
 	}
 
 	public function loadBookRecordings(...$dataArrays)

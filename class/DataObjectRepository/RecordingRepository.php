@@ -50,6 +50,18 @@ class RecordingRepository extends DataObjectRepository
     }
 
 	/**
+	 * @param $conferenceId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getConferenceRecordings($conferenceId)
+	{
+		$rawObjects = $this->api->getConferenceRecordings($conferenceId);
+
+		return $this->makeDataObjects($rawObjects);
+	}
+
+	/**
 	 * @param $topicId
 	 * @return array
 	 * @throws Exception

@@ -15,6 +15,19 @@ class AvorgApi
 	 * @return array
 	 * @throws Exception
 	 */
+	public function getConferences()
+	{
+		$endpoint = "conferences";
+
+		return array_map(function($item) {
+			return $item->conferences;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
 	public function getStories()
 	{
 		$endpoint = "audiobooks?story=1";
@@ -162,7 +175,7 @@ class AvorgApi
 
 	/**
 	 * @param string $list
-	 * @return null
+	 * @return array
 	 * @throws Exception
 	 */
 	public function getRecordings($list = "")
@@ -174,7 +187,7 @@ class AvorgApi
 
 	/**
 	 * @param $topicId
-	 * @return null
+	 * @return array
 	 * @throws Exception
 	 */
 	public function getTopicRecordings($topicId)
@@ -184,7 +197,7 @@ class AvorgApi
 
 	/**
 	 * @param $presenterId
-	 * @return bool|null
+	 * @return bool|array
 	 * @throws Exception
 	 */
 	public function getPresenterRecordings($presenterId)
@@ -192,6 +205,18 @@ class AvorgApi
 		if (!is_numeric($presenterId)) return false;
 
 		return $this->getRecordingsResponse("recordings/presenter/$presenterId");
+	}
+
+	/**
+	 * @param $conferenceId
+	 * @return bool|array
+	 * @throws Exception
+	 */
+	public function getConferenceRecordings($conferenceId)
+	{
+		if (!is_numeric($conferenceId)) return false;
+
+		return $this->getRecordingsResponse("recordings/conference/$conferenceId");
 	}
 
 	/**

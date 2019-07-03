@@ -142,6 +142,14 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"/english/audiobooks/stories/1167/acts-of-the-apostles.html",
 				"index.php?page_id=STORY_DETAIL_PAGE_ID&language=english&entity_id=1167&slug=acts-of-the-apostles.html"
+			],
+			[
+				"/english/sermons/conferences",
+				"index.php?page_id=CONFERENCE_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"/english/sermons/conferences/293/acf-institute-2017-never-alone.html",
+				"index.php?page_id=CONFERENCE_DETAIL_PAGE_ID&language=english&entity_id=293&slug=acf-institute-2017-never-alone.html"
 			]
 		];
 	}

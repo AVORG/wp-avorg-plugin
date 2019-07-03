@@ -40,7 +40,9 @@ class RouteFactory
 		"Avorg\Page\Bible\Listing" => "{ language }/audiobibles/volumes",
 		"Avorg\Page\Bible\Detail" => "{ language }/audiobibles/books/{ version }/{ drama }",
 		"Avorg\Page\Story\Listing" => "{ language }/audiobooks/stories",
-		"Avorg\Page\Story\Detail" => "{ language }/audiobooks/stories/{ entity_id:[0-9]+ }[/{ slug }]"
+		"Avorg\Page\Story\Detail" => "{ language }/audiobooks/stories/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Conference\Listing" => "{ language }/sermons/conferences",
+		"Avorg\Page\Conference\Detail" => "{ language }/sermons/conferences/{ entity_id:[0-9]+ }[/{ slug }]",
 	];
 
 	private $endpointRouteFormats = [
