@@ -20,7 +20,7 @@ final class TestStory extends Avorg\TestCase
 	public function testGetUrl()
 	{
 		$this->assertEquals(
-			"http://${_SERVER['HTTP_HOST']}/english/audiobooks/books/1167/acts-of-the-apostles.html",
+			"http://${_SERVER['HTTP_HOST']}/english/audiobooks/stories/1167/acts-of-the-apostles.html",
 			$this->story->getUrl()
 		);
 	}

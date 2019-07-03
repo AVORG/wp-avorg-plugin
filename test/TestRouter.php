@@ -140,7 +140,7 @@ final class TestRouter extends Avorg\TestCase
 				"index.php?page_id=STORY_LISTING_PAGE_ID&language=english"
 			],
 			[
-				"/english/audiobooks/books/1167/acts-of-the-apostles.html",
+				"/english/audiobooks/stories/1167/acts-of-the-apostles.html",
 				"index.php?page_id=STORY_DETAIL_PAGE_ID&language=english&entity_id=1167&slug=acts-of-the-apostles.html"
 			]
 		];
