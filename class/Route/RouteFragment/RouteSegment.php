@@ -15,4 +15,9 @@ class RouteSegment extends RouteFragment
 	{
 		return is_string($this->content) ? $this->content : $this->getChildRegex();
 	}
+
+	public function getUrlFragment()
+	{
+		return is_string($this->content) ? $this->content : $this->getChildUrlFragment();
+	}
 }

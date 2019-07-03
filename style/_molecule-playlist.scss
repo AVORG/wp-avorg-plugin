@@ -1,0 +1,9 @@
+.avorg-molecule-playlist {
+  .avorg-molecule-playlist__list {
+    li {
+      &.active {
+        background-color: yellow;
+      }
+    }
+  }
+}

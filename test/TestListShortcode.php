@@ -18,7 +18,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->renderShortcode(["list" => $listType]);
 		
-		$this->mockAvorgApi->assertMethodCalledWith( "getPresentations", $listType);
+		$this->mockAvorgApi->assertMethodCalledWith( "getRecordings", $listType);
 	}
 	
 	// tests
@@ -42,12 +42,12 @@ final class TestListShortcode extends Avorg\TestCase
 	public function testRenderFunction()
 	{
 		$entry = ["title" => "Recording Title"];
-		$this->mockAvorgApi->loadPresentations($entry, $entry, $entry);
+		$this->mockAvorgApi->loadRecordings($entry, $entry, $entry);
 		
 		$this->listShortcode->renderShortcode("");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function($data) {
-			return $data->recordings[2] instanceof \Avorg\Presentation;
+			return $data->recordings[2] instanceof \Avorg\DataObject\Recording;
 		});
 	}
 	
@@ -64,7 +64,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		$this->listShortcode->renderShortcode( [ "list" => "nonsense" ] );
 		
-		$this->mockAvorgApi->assertMethodCalledWith( "getPresentations", null );
+		$this->mockAvorgApi->assertMethodCalledWith( "getRecordings", null );
 	}
 	
 	public function testRenderFunctionGetsFeaturedMessages()

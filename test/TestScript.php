@@ -39,13 +39,13 @@ final class TestScript extends Avorg\TestCase
 	public function testAddsNonce()
 	{
 		$this->script->setPath("the_path");
-		$this->script->setActions($this->factory->obtain("Avorg\\AjaxAction\\Presentation"));
+		$this->script->setActions($this->factory->obtain("Avorg\\AjaxAction\\Recording"));
 
 		$this->script->enqueue();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_create_nonce",
-			"Avorg_AjaxAction_Presentation"
+			"Avorg_AjaxAction_Recording"
 		);
 	}
 
@@ -64,7 +64,7 @@ final class TestScript extends Avorg\TestCase
 
 		$this->script
 			->setPath("//the_path")
-			->setActions($this->factory->obtain("Avorg\\AjaxAction\\Presentation"))
+			->setActions($this->factory->obtain("Avorg\\AjaxAction\\Recording"))
 			->enqueue();
 
 		$this->mockWordPress->assertMethodCalledWith(
@@ -73,7 +73,7 @@ final class TestScript extends Avorg\TestCase
 			"avorg",
 			[
 				"nonces" => [
-					"presentation" => "the_nonce"
+					"recording" => "the_nonce"
 				],
 				"ajax_url" => "ajax_url"
 			]

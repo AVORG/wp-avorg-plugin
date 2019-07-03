@@ -1,4 +1,4 @@
-{% set recording = (recording is defined) ? recording : avorg.presentation %}
+{% set recording = (recording is defined) ? recording : avorg.recording %}
 
 <div class="avorg-molecule-player">
 	<div class="avorg-audio-sources">
@@ -32,7 +32,7 @@
 	<script>
 		window.addEventListener("load", function () {
 			var buildPlayerMarkup = function (id, mediaSources) {
-                fetch("/api/presentation/19238")
+                fetch("/api/recording/19238")
 					.then(function(data) { console.log(data) });
 
 				return playerPrototype.replace(/#player_id#/g, id).replace(/#player_sources#/g, mediaSources);

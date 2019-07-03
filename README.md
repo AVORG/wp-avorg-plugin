@@ -8,13 +8,15 @@ PHP 7.2
 
 0. `git clone https://github.com/AVORG/wp-avorg-dev.git`
 0. Follow [`wp-avorg-dev` readme instructions](https://github.com/AVORG/wp-avorg-dev)
-0. Optional: Update dependencies: `cd wp-avorg-dev/wp-avorg-plugin && composer install --prefer-source`
+0. Optional: Update dependencies: `cd wp-avorg-dev/wp-avorg-plugin && composer install`
 
 If you edit the Composer auto-load rules, you'll need to run `composer dump-autoload` to make them go into effect.
 
 ### Production
 
-0. [Download the plugin as a zip file](https://github.com/AVORG/wp-avorg-plugin/archive/master.zip)
+0. [Open CircleCI](https://circleci.com/gh/avorg/wp-avorg-plugin) and select the latest build
+0. Select the "Artifacts" tab
+0. Drill down until you see a file named `wp-avorg-plugin.zip` and click it to download
 0. In the WordPress admin panel, navigate to "Plugins > Add New" and click the "Upload Plugin" button
 0. Upload the zip file you downloaded
 0. Activate the plugin
@@ -44,13 +46,13 @@ Bits page in the admin interface that specify the previously-used id in the "Ide
 ### List Shortcode
 
 Place the following usages in the content of a page or a post to retrieve a list of recent, featured, or popular 
-presentations.
+recordings.
 
 Usage                        | Result
 -----------------------------|--------------------------------
-`[avorg-list]`               | List of recent presentations
-`[avorg-list list=featured]` | List of featured presentations
-`[avorg-list list=popular]`  | List of popular presentations
+`[avorg-list]`               | List of recent recordings
+`[avorg-list list=featured]` | List of featured recordings
+`[avorg-list list=popular]`  | List of popular recordings
 
 ## Testing
 

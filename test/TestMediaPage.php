@@ -1,8 +1,14 @@
 <?php
 
+use Avorg\AvorgApi_exceptions;
+use Avorg\Page\Media;
+use Avorg\Recording;
+use Avorg\WP_Query;
+use natlib\Factory;
+
 final class TestMediaPage extends Avorg\TestCase
 {
-	/** @var \Avorg\Page $mediaPage */
+	/** @var Media $mediaPage */
 	protected $mediaPage;
 	
 	private function assertPlayerUiInjected()
@@ -21,9 +27,9 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	protected function make404ThrowingMediaPage()
 	{
-		$avorgApi = new \Avorg\AvorgApi_exceptions();
+		$avorgApi = new AvorgApi_exceptions();
 
-		$factory = new \natlib\Factory("Avorg");
+		$factory = new Factory("Avorg");
 
 		$factory->injectObjects(
 			$avorgApi,
@@ -32,14 +38,14 @@ final class TestMediaPage extends Avorg\TestCase
 			$this->mockWordPress
 		);
 		
-		return $factory->secure("Avorg\\PageFactory")->getMediaPage();
+		return $factory->secure("Avorg\\Page\\Media");
 	}
 	
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->mediaPage = $this->factory->secure("Avorg\\PageFactory")->getMediaPage();
+		$this->mediaPage = $this->factory->secure("Avorg\\Page\\Media");
 	}
 	
 	public function testSavesMediaPageId()
@@ -95,8 +101,7 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testAddsMediaPageUI()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->passCurrentPageCheck();
 
 		$this->assertPlayerUiInjected();
 	}
@@ -110,12 +115,11 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testUsesTwig()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->passCurrentPageCheck();
 
 		$this->mediaPage->addUi("content");
 		
-		$this->mockTwig->assertTwigTemplateRenderedWithData("organism-recording.twig", ["presentation" => null]);
+		$this->mockTwig->assertTwigTemplateRenderedWithData("organism-recording.twig", ["recording" => null]);
 	}
 	
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
@@ -127,65 +131,66 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->assertNotContains("playerUI", $haystack);
 	}
 	
-	public function testPassesPresentationToTwig()
+	public function testPassesRecordingToTwig()
 	{
-		$this->mockAvorgApi->setReturnValue("getPresentation", "presentation");
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockAvorgApi->setReturnValue("getRecording", "recording");
+		$this->mockWordPress->passCurrentPageCheck();
 		
 		$this->mediaPage->addUi("content");
 
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
             $callGlobal = $call[1]["avorg"];
 
-		    return $callGlobal->presentation instanceof \Avorg\Presentation;
+		    return $callGlobal->recording instanceof \Avorg\DataObject\Recording;
         });
 	}
 	
 	public function testGetsQueryVar()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
+		$this->mockWordPress->passCurrentPageCheck();
 
 		$this->mediaPage->addUi("content");
 		
 		$this->mockWordPress->assertMethodCalledWith( "get_query_var", "entity_id");
 	}
 	
-	public function testGetsPresentation()
+	public function testGetsRecording()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 7);
-		$this->mockWordPress->setReturnValue("get_the_ID", 7);
-		$this->mockWordPress->setReturnValue("get_query_var",  "54321");
+		$this->mockWordPress->passCurrentPageCheck();
+		$this->mockWordPress->setReturnValues("get_query_var",  "54321");
 		
 		$this->mediaPage->addUi("content");
 		
-		$this->mockAvorgApi->assertMethodCalledWith( "getPresentation", "54321");
+		$this->mockAvorgApi->assertMethodCalledWith( "getRecording", "54321");
 	}
 	
 	public function testConvertsMediaPageIdStringToNumber()
 	{
 		$this->mockWordPress->setReturnValue("get_option", "7");
-		$this->mockWordPress->setReturnValue("get_the_ID", 7);
+		$this->mockWordPress->setReturnValue("get_query_var", 7);
 		
 		$this->assertPlayerUiInjected();
 	}
 	
-	public function testUsesPresentationIdToGetPresentation()
+	public function testUsesRecordingIdToGetRecording()
 	{
-		$wp_query = new \Avorg\WP_Query();
+		$this->mockWordPress->passCurrentPageCheck();
+
+		$wp_query = new WP_Query();
 
 		$this->mockWordPress->setReturnValue("get_query_var", 42);
 		
 		$this->mediaPage->throw404($wp_query);
 		
-		$this->mockAvorgApi->assertMethodCalledWith( "getPresentation", 42);
+		$this->mockAvorgApi->assertMethodCalledWith( "getRecording", 42);
 	}
 	
-	public function testDoesNotSet404IfPresentationExists()
+	public function testDoesNotSet404IfRecordingExists()
 	{
-		$wp_query = new \Avorg\WP_Query();
-		$this->mockAvorgApi->setReturnValue("getPresentation", new StdClass());
+		$this->mockWordPress->passCurrentPageCheck();
+
+		$wp_query = new WP_Query();
+		$this->mockAvorgApi->setReturnValue("getRecording", new StdClass());
 		
 		$this->mediaPage->throw404($wp_query);
 		
@@ -194,56 +199,70 @@ final class TestMediaPage extends Avorg\TestCase
 	
 	public function testHandlesExceptionAndThrows404()
 	{
+		$this->mockWordPress->passCurrentPageCheck();
+
 		$mediaPage = $this->make404ThrowingMediaPage();
-		$wp_query = new \Avorg\WP_Query();
+		$wp_query = new WP_Query();
 		
 		$mediaPage->throw404($wp_query);
 		
 		$this->assertTrue($wp_query->was404set);
 		$this->mockWordPress->assertMethodCalledWith("status_header", 404);
 	}
-	
+
 	public function testThrowing404UnsetsPageId()
 	{
+		$this->mockWordPress->passCurrentPageCheck();
+
 		$mediaPage = $this->make404ThrowingMediaPage();
-		$wp_query = new \Avorg\WP_Query();
-		
+		$wp_query = new WP_Query();
+
 		$wp_query->query_vars["page_id"] = 7;
-		
+
 		$mediaPage->throw404($wp_query);
-		
+
 		$this->assertArrayNotHasKey("page_id", $wp_query->query_vars);
+	}
+
+	public function testDoesNotThrow404IfNotCurrentPage()
+	{
+		$mediaPage = $this->make404ThrowingMediaPage();
+		$wp_query = new WP_Query();
+
+		$mediaPage->throw404($wp_query);
+
+		$this->assertFalse($wp_query->was404set);
+		$this->mockWordPress->assertMethodNotCalledWith("status_header", 404);
 	}
 	
 	public function testSetTitleMethod()
 	{
-		$presentation = $this->convertArrayToObjectRecursively([
-		    "recordings" => [
-		        "title" => "Presentation Title"
-            ]
+		$this->mockWordPress->passCurrentPageCheck();
+
+		$recording = $this->convertArrayToObjectRecursively([
+			"title" => "Recording Title"
         ]);
 		
-		$this->mockAvorgApi->setReturnValue("getPresentation", $presentation);
+		$this->mockAvorgApi->setReturnValue("getRecording", $recording);
 		
 		$result = $this->mediaPage->filterTitle("old title");
 		
-		$this->assertEquals("Presentation Title - AudioVerse", $result);
+		$this->assertEquals("Recording Title - AudioVerse", $result);
 	}
 	
-	public function testUsesPresentationIdQueryVar()
+	public function testUsesRecordingIdQueryVar()
 	{
-		$this->mockWordPress->setReturnValue("get_option", 7);
-		$this->mockWordPress->setReturnValue("get_the_ID", 7);
-		$this->mockWordPress->setReturnValue("get_query_var",  7);
+		$this->mockWordPress->passCurrentPageCheck();
+		$this->mockWordPress->setReturnValues("get_query_var",  7);
 		
 		$this->mediaPage->filterTitle("old title");
 		
-		$this->mockAvorgApi->assertMethodCalledWith( "getPresentation", 7);
+		$this->mockAvorgApi->assertMethodCalledWith( "getRecording", 7);
 	}
 	
-	public function testSetTitleWorksWhenNoPresentation()
+	public function testSetTitleWorksWhenNoRecording()
 	{
-		$this->mockAvorgApi->setReturnValue("getPresentation", null);
+		$this->mockAvorgApi->setReturnValue("getRecording", null);
 		
 		$result = $this->mediaPage->filterTitle("old title");
 		
@@ -321,5 +340,32 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mediaPage->createPage();
 
 		$this->mockWordPress->assertPageNotCreated("Media Detail", "Media Detail");
+	}
+
+	public function testFilterTitleTerminates()
+	{
+		$recording = $this->convertArrayToObjectRecursively([
+			"recordings" => [
+				"title" => "Recording Title"
+			]
+		]);
+
+		$this->mockAvorgApi->setReturnValue("getRecording", $recording);
+
+		$result = $this->mediaPage->filterTitle("old title");
+
+		$this->assertEquals("old title", $result);
+	}
+
+	/**
+	 * @doesNotPerformAssertions
+	 */
+	public function testFilterTitleCatchesExceptions()
+	{
+		$this->mockWordPress->passCurrentPageCheck();
+
+		$page = $this->make404ThrowingMediaPage();
+
+		$page->filterTitle("old title");
 	}
 }

@@ -58,7 +58,7 @@ const Player = {
         const playerId = `player_${this.recording.id}_${this.showingVideo ? "video" : "audio"}`,
             sources = this.showingVideo ? this.recording.videoFiles : this.recording.audioFiles;
 
-        document.getElementsByClassName("avorg-page-playlist__player")[0].innerHTML = this.template(playerId, sources);
+        document.getElementsByClassName("avorg-molecule-playlist__player")[0].innerHTML = this.template(playerId, sources);
 
         this.setClickHandlers();
 
@@ -90,12 +90,12 @@ const Playlist = {
     renderList: function() {
         if (this.recordings.length < 2) return;
 
-        document.getElementsByClassName("avorg-page-playlist__list")[0].innerHTML
+        document.getElementsByClassName("avorg-molecule-playlist__list")[0].innerHTML
             = this.recordings.map( this.listItemTemplate ).join( "" );
     },
 
     registerClickHandler: function() {
-        document.querySelectorAll(".avorg-page-playlist__list li").forEach((item) => {
+        document.querySelectorAll(".avorg-molecule-playlist__list li").forEach((item) => {
             item.addEventListener("click", (e) => {
                 const id = e.target.getAttribute("data-id");
                 const index = this.recordings.findIndex((recording) => {
@@ -119,8 +119,8 @@ const Playlist = {
     },
 
     setActiveClass: function(id) {
-        const listItems = document.querySelectorAll(".avorg-page-playlist__list li");
-        const activeItem = document.querySelector(`.avorg-page-playlist__list li[data-id="${id}"]`);
+        const listItems = document.querySelectorAll(".avorg-molecule-playlist__list li");
+        const activeItem = document.querySelector(`.avorg-molecule-playlist__list li[data-id="${id}"]`);
 
         if (listItems) listItems.forEach((e) => {e.classList.remove("active")});
         if (activeItem) activeItem.classList.add("active");
@@ -146,7 +146,3 @@ const Playlist = {
         this.loadRecordingAtIndex(0);
     }
 };
-
-document.addEventListener("DOMContentLoaded", function (event) {
-    Playlist.init(Player, Object.values( avorg.recordings ));
-});

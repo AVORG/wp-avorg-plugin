@@ -16,17 +16,17 @@ final class TestRssLatest extends Avorg\TestCase
 	{
 		$this->rssLatest->getOutput();
 
-		$this->mockAvorgApi->assertMethodCalled("getPresentations");
+		$this->mockAvorgApi->assertMethodCalled("getRecordings");
 	}
 
-	public function testPassesPresentationsToView()
+	public function testPassesRecordingsToView()
 	{
-		$this->mockAvorgApi->loadPresentations(["presentation"]);
+		$this->mockAvorgApi->loadRecordings(["recording"]);
 
 		$this->rssLatest->getOutput();
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-feed.twig", function($call) {
-			return $call->recordings[0] instanceof \Avorg\Presentation;
+			return $call->recordings[0] instanceof \Avorg\DataObject\Recording;
 		});
 	}
 

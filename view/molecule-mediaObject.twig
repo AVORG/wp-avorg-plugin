@@ -1,3 +1,12 @@
+{#
+	classes : space-separated list of classnames
+	image : string
+	imageAlt : string
+	titleUrl : optional, string
+	title : string
+	description : optional, string
+#}
+
 <div class="avorg-molecule-mediaObject {{ classes }}">
 	<img class="avorg-molecule-mediaObject__image" src="{{ image }}" alt="{{ imageAlt }}">
 
@@ -6,8 +15,10 @@
 			<h1 class="avorg-molecule-mediaObject__title">{{ title }}</h1>
 		{% if titleUrl %}</a>{% endif %}
 
-		<div class="avorg-molecule-mediaObject__description">
-			{{ description }}
-		</div>
+		{% if description %}
+			<div class="avorg-molecule-mediaObject__description">
+				{{ description }}
+			</div>
+		{% endif %}
 	</div>
 </div>

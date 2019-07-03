@@ -2,34 +2,65 @@
 
 namespace Avorg\Page\Presenter;
 
+use Avorg\DataObject;
+use Avorg\DataObject\Presenter;
+use Avorg\DataObjectRepository\PresenterRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\RouteFactory;
 use Avorg\WordPress;
+use function defined;
+use Exception;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class Detail extends Page
 {
+	/** @var PresenterRepository $presenterRepository */
+	protected $presenterRepository;
+
 	protected $defaultPageTitle = "Presenter Detail";
 	protected $defaultPageContent = "Presenter Detail";
 	protected $twigTemplate = "page-presenter.twig";
-	protected $routeFormat = "{ language }/sermons/presenters/{ entity_id:[0-9]+ }[/{ slug }]";
 
-	public function __construct(Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
+	public function __construct(
+		PresenterRepository $presenterRepository,
+		Renderer $renderer,
+		WordPress $wordPress
+	)
 	{
-		parent::__construct($renderer, $routeFactory, $wp);
+		parent::__construct($renderer, $wordPress);
 
-		$this->setPageIdOptionName();
+		$this->presenterRepository = $presenterRepository;
 	}
 
-	public function throw404($query)
-	{
-		// TODO: Implement throw404() method.
-	}
-
+	/**
+	 * @throws Exception
+	 */
 	protected function getData()
 	{
-		// TODO: Implement getData() method.
+		$presenter = $this->getEntity();
+
+		return [
+			"presenter" => $presenter ? $presenter : null
+		];
+	}
+
+	/**
+	 * @return DataObject
+	 * @throws Exception
+	 */
+	protected function getEntity()
+	{
+		$entityId = $this->getEntityId();
+
+		return $this->presenterRepository->getPresenter($entityId);
+	}
+
+	protected function getTitle()
+	{
+		/** @var Presenter $presenter */
+		$presenter = $this->getEntity();
+
+		return $presenter ? $presenter->getName() : null;
 	}
 }

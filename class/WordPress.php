@@ -34,6 +34,8 @@ if (!\defined('ABSPATH')) exit;
  * @method add_shortcode($string, array $array)
  * @method register_post_type($string, array $args)
  * @method get_posts(array $param)
+ * @method get_locale()
+ * @method get_queried_object_id()
  */
 class WordPress
 {

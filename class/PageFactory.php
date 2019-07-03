@@ -3,7 +3,7 @@
 namespace Avorg;
 
 use natlib\Factory;
-use natlib\Stub;
+use ReflectionException;
 
 if (!\defined('ABSPATH')) exit;
 
@@ -26,54 +26,28 @@ class PageFactory
 	 */
 	public function getPages()
 	{
-		$classes = [
-			"Avorg\\Page\\Playlist",
-			"Avorg\\Page\\Presenter\\Detail",
-			"Avorg\\Page\\Presenter\\Listing"
-		];
+		$paths = $this->filesystem->getMatchingPathsRecursive("class/Page", "/\.php/") ?: [];
+		$classes = array_map([$this, "pathToClassname"], $paths);
 
-		$objects = array_map(function ($class) {
-			return $this->factory->secure($class);
-		}, $classes);
-
-		$pages = array_merge($objects, [
-			$this->getMediaPage(),
-			$this->getTopicPage()
-		]);
-
-		return $pages;
+		return array_map([$this, "getPage"], $classes);
 	}
 
-	public function getTopicPage()
+	/**
+	 * @param $class
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	public function getPage($class)
 	{
-		/** @var Page $page */
-		$page = $this->factory->make("Avorg\\Page");
-		$dataProvider = $this->factory->secure("Avorg\\TopicDataProvider");
-
-		$page->setPageIdentifier("avorg_page_id_avorg_page_topic");
-		$page->setDefaultTitle("Topic Detail");
-		$page->setDefaultContent("Topic Detail");
-		$page->setTwigTemplate("organism-topic.twig");
-		$page->setRouteFormat("{ language }/topics/{ entity_id:[0-9]+ }[/{ slug }]");
-		$page->setDataProvider($dataProvider);
-
-		return $page;
+		return $this->factory->secure($class);
 	}
 
-	public function getMediaPage()
+	public function pathToClassname($path)
 	{
-		/** @var Page $page */
-		$page = $this->factory->make("Avorg\\Page");
-		$dataProvider = $this->factory->secure("Avorg\\PresentationDataProvider");
+		$relativePath = str_replace(AVORG_BASE_PATH . "/class", "", $path);
+		$pathMinusExtension = explode(".", $relativePath)[0];
+		$classname = str_replace("/", "\\", $pathMinusExtension);
 
-		$page->setPageIdentifier("avorg_page_id_avorg_page_media");
-		$page->setDefaultTitle("Media Detail");
-		$page->setDefaultContent("Media Detail");
-		$page->setTwigTemplate("organism-recording.twig");
-		$page->setRouteFormat("{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]");
-		$page->setDataProvider($dataProvider);
-		$page->setTitleProvider($dataProvider);
-
-		return $page;
+		return "Avorg\\" . trim($classname, "\\");
 	}
 }

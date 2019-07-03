@@ -25,12 +25,9 @@ abstract class RssEndpoint extends Endpoint
 	public function __construct(
 		Factory $factory,
 		Php $php,
-		Renderer $renderer,
-		RouteFactory $routeFactory
+		Renderer $renderer
 	)
 	{
-		parent::__construct($routeFactory);
-
 		$this->factory = $factory;
 		$this->php = $php;
 		$this->renderer = $renderer;

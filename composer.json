@@ -12,20 +12,17 @@
   },
   "repositories": [
     {
-      "type": "path",
-      "url": "../natlib",
-      "options": {
-        "symlink": true
-      }
+      "type": "vcs",
+      "url": "https://github.com/narthur/natlib"
     }
   ],
   "autoload": {
     "psr-4": {
       "Avorg\\": [
         "class/",
+        "interface/",
         "test/",
-        "test/stubs/",
-        "interface"
+        "test/stubs/"
       ]
     }
   }

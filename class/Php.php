@@ -14,6 +14,11 @@ class Php {
 		header($string);
 	}
 
+	public function doEcho($string)
+	{
+		echo $string;
+	}
+
 	public function doDie()
 	{
 		die();

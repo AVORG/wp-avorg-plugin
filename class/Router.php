@@ -2,9 +2,11 @@
 
 namespace Avorg;
 
-use natlib\Stub;
+use Avorg\Route\PageRoute;
+use function defined;
+use Exception;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class Router
 {
@@ -52,49 +54,11 @@ class Router
 
 	public function registerRoutes()
 	{
-		$routes = $this->getRoutes();
+		$routes = $this->routeFactory->getRoutes();
 		array_walk($routes, function ($route) {
 			$this->addRewriteTags($route);
 			$this->addRewriteRules($route);
 		});
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getRoutes()
-	{
-		return array_merge(
-			$this->getLanguageRoutes(),
-			$this->getPageRoutes(),
-			$this->getEndpointRoutes()
-		);
-	}
-
-	private function getLanguageRoutes()
-	{
-		return array_map(function (Language $language) {
-			return $language->getRoute();
-		}, $this->languageFactory->getLanguages());
-	}
-
-	private function getPageRoutes()
-	{
-		$pages = $this->pageFactory->getPages();
-
-		return array_map(function (Page $page) {
-			return $page->getRoute();
-		}, $pages);
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getEndpointRoutes()
-	{
-		return array_map(function (Endpoint $endpoint) {
-			return $endpoint->getRoute();
-		}, $this->endpointFactory->getEndpoints());
 	}
 
 	/**
@@ -110,11 +74,13 @@ class Router
 		});
 	}
 
+	/**
+	 * @param Route $route
+	 * @throws \Exception
+	 */
 	private function addRewriteRules(Route $route)
 	{
 		$rules = $route->getRewriteRules();
-
-		Logger::log(var_export($rules, true));
 
 		array_walk($rules, function ($rule) {
 			$this->wp->add_rewrite_rule($rule["regex"], $rule["redirect"], "top");
@@ -144,7 +110,7 @@ class Router
 	public function getRequestLanguage()
 	{
 
-		$baseRoute = explode("/", trim($this->getRequestPath(), "/"))[0];
+		$baseRoute = $this->getRequestBaseRoute();
 
 		return $this->languageFactory->getLanguageByBaseRoute($baseRoute);
 	}
@@ -154,11 +120,55 @@ class Router
 	 */
 	public function getFullRequestUri()
 	{
-		return "http://" . $_SERVER["HTTP_HOST"] . $this->getRequestPath();
+		return $this->getBaseUrl() . $this->getRequestPath();
 	}
 
 	public function getRequestPath()
 	{
 		return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+	}
+
+	public function buildUrl($pageClass, $variables = [])
+	{
+		if (!class_exists($pageClass)) {
+			throw new Exception("Class $pageClass does not exist.");
+		}
+
+		/** @var PageRoute $route */
+		$route = $this->routeFactory->getPageRouteByClass($pageClass);
+		$locale = $this->wp->get_locale() ?: "en_US";
+		$language = $this->languageFactory->getLanguageByWpLangCode($locale);
+		$vars = array_merge([
+			"language" => $language->getBaseRoute()
+		], $variables);
+		$path = $route->getPath($vars);
+		$translatedPath = $language->translatePath($path);
+
+		return $this->getBaseUrl() . "/$translatedPath";
+	}
+
+	public function formatStringForUrl($string)
+	{
+		$stringLowerCase = strtolower($string);
+		$stringNoPunctuation = preg_replace("/[^\w ]/", "", $stringLowerCase);
+		$stringHyphenated = str_replace(" ", "-", $stringNoPunctuation);
+
+		return $stringHyphenated;
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getBaseUrl()
+	{
+		return "http://${_SERVER['HTTP_HOST']}";
+	}
+
+	/**
+	 * @return mixed
+	 */
+	private function getRequestBaseRoute()
+	{
+		return explode("/", trim($this->getRequestPath(), "/"))[0];
 	}
 }

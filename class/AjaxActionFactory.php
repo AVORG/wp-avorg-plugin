@@ -12,7 +12,7 @@ class AjaxActionFactory
 	private $factory;
 
 	private $actionNames = [
-		"Presentation"
+		"Recording"
 	];
 
 	public function __construct(Factory $factory)

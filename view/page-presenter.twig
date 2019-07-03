@@ -1,3 +1,15 @@
 <div class="avorg-page-presenter">
-	Presenter Detail Page
+	{% include "molecule-mediaObject.twig" with {
+		image: avorg.presenter.photo256,
+		imageAlt: avorg.presenter.name,
+		title: avorg.presenter.name
+	} only %}
+
+	{% if avorg.presenter.description %}
+		<p>{{ avorg.presenter.description }}</p>
+	{% endif %}
+
+	{% include "molecule-recordingsList.twig" with {
+		recordings: avorg.presenter.recordings
+	} only %}
 </div>

@@ -2,7 +2,10 @@
 
 namespace Avorg;
 
+use Avorg\DataObject\Recording;
 use natlib\Factory;
+use ReflectionException;
+use stdClass;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/* Mock Objects */
@@ -45,13 +48,82 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
+	protected function assertTwigGlobalMatchesCallback(Page $page, callable $callback)
+	{
+		$this->mockWordPress->passCurrentPageCheck();
+
+		$page->addUi("");
+
+		$this->mockTwig->assertAnyCallMatches( "render", function($call) use($callback) {
+			$avorg = $call[1]["avorg"];
+
+			return call_user_func($callback, $avorg);
+		});
+	}
+
+	protected function makeStory($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Story", $data);
+	}
+
+	protected function makePlaylist($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Playlist", $data);
+	}
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	protected function makeBible($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Bible", $data);
+	}
+
+	/**
+	 * @param $data
+	 * @return Recording
+	 * @throws ReflectionException
+	 */
+	protected function makeRecording($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Recording", $data);
+	}
+
+	/**
+	 * @param array $data
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	protected function makeBook($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Book", $data);
+	}
+
+	/**
+	 * @param $class
+	 * @param array $data
+	 * @return mixed
+	 * @throws ReflectionException
+	 */
+	private function makeDataObject($class, $data = [])
+	{
+		$object = $this->factory->make($class);
+		$apiResponse = $this->convertArrayToObjectRecursively($data);
+
+		$object->setData($apiResponse);
+
+		return $object;
+	}
+
     /**
      * @param $array
      * @return mixed
      */
-    protected function convertArrayToObjectRecursively($array)
+    public function convertArrayToObjectRecursively($array)
     {
-    	if ($array == []) return new \stdClass();
+    	if ($array == []) return new stdClass();
 
         return json_decode(json_encode($array), FALSE);
     }

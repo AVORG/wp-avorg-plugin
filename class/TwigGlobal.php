@@ -2,6 +2,9 @@
 
 namespace Avorg;
 
+use Exception;
+use Twig\Markup;
+
 if (!\defined('ABSPATH')) exit;
 
 class TwigGlobal
@@ -11,16 +14,25 @@ class TwigGlobal
 
 	/** @var Router $router */
 	private $router;
+
+	/** @var ScriptFactory $scriptFactory */
+	private $scriptFactory;
 	
 	/** @var WordPress $wp */
 	private $wp;
 	
 	private $data = [];
 	
-	public function __construct(Localization $localization, Router $router, WordPress $wordPress)
+	public function __construct(
+		Localization $localization,
+		Router $router,
+		ScriptFactory $scriptFactory,
+		WordPress $wordPress
+	)
 	{
 		$this->localization = $localization;
 		$this->router = $router;
+		$this->scriptFactory = $scriptFactory;
 		$this->wp = $wordPress;
 	}
 	
@@ -44,9 +56,10 @@ class TwigGlobal
 		return $this->localization->_n($single, $plural, $number);
 	}
 	
-	public function loadData($data)
+	public function setData($data)
 	{
 		$this->data = array_merge($this->data, $data);
+		return $this;
 	}
 
 	public function getLanguage()
@@ -62,5 +75,40 @@ class TwigGlobal
 	public function getRequestPath()
 	{
 		return $this->router->getRequestPath();
+	}
+
+	/**
+	 * @param $path
+	 * @return Markup
+	 * @throws Exception
+	 */
+	public function loadScript($path)
+	{
+		$preparedData = $this->prepareDataForScript();
+
+		$this->scriptFactory->getScript("script/$path")->setData($preparedData)->enqueue();
+
+		return new Markup("<p>Attempted to load script $path</p>", "UTF-8");
+	}
+
+	private function prepareDataForScript()
+	{
+		return $this->array_map_recursive(function($leaf) {
+			$isRecodable = is_object($leaf) &&
+				in_array("Avorg\\iEntity", class_implements($leaf));
+
+			return $isRecodable ? $leaf->toArray() : $leaf;
+		}, $this->data);
+	}
+
+	private function array_map_recursive($callback, $array)
+	{
+		// https://stackoverflow.com/a/39637749/937377
+
+		$func = function ($item) use (&$func, &$callback) {
+			return is_array($item) ? array_map($func, $item) : call_user_func($callback, $item);
+		};
+
+		return array_map($func, $array);
 	}
 }

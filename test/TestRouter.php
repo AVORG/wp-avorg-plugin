@@ -29,6 +29,7 @@ final class TestRouter extends Avorg\TestCase
 	 */
 	public function testPageRoutes($inputUrl, $outputUrl)
 	{
+		$inputUrl = ltrim($inputUrl, "/");
 		$addRewriteCalls = $this->getRewriteRules();
 
 		$results = array_map(function ($call) use ($inputUrl) {
@@ -112,16 +113,36 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"english/topics/102/great-controversy.html",
-				"index.php?page_id=TOPIC_PAGE_ID&language=english&entity_id=102&slug=great-controversy.html"
+				"index.php?page_id=TOPIC_DETAIL_PAGE_ID&language=english&entity_id=102&slug=great-controversy.html"
 			],
 			[
 				"english/playlists/lists/14/how-to-be-saved.html",
-				"index.php?page_id=PLAYLIST_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
+				"index.php?page_id=PLAYLIST_DETAIL_PAGE_ID&language=english&entity_id=14&slug=how-to-be-saved.html"
 			],
-//			[
-//				"english/sermons/presenters",
-//				"index.php?page_id=PRESENTERSLIST_PAGE_ID&language=english"
-//			]
+			[
+				"english/topics",
+				"index.php?page_id=TOPIC_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"english/audiobibles/volumes",
+				"index.php?page_id=BIBLE_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"english/audiobibles/books/ENGKJV/1",
+				"index.php?page_id=BIBLE_DETAIL_PAGE_ID&language=english&version=ENGKJV&drama=1"
+			],
+			[
+				"english/topics/887/agriculture.html",
+				"index.php?page_id=TOPIC_DETAIL_PAGE_ID&language=english&entity_id=887&slug=agriculture.html"
+			],
+			[
+				"/english/audiobooks/stories",
+				"index.php?page_id=STORY_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"/english/audiobooks/books/1167/acts-of-the-apostles.html",
+				"index.php?page_id=STORY_DETAIL_PAGE_ID&language=english&entity_id=1167&slug=acts-of-the-apostles.html"
+			]
 		];
 	}
 
@@ -153,7 +174,7 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"api/presentation/123",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_PresentationEndpoint&entity_id=123"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_Recording&entity_id=123"
 			],
 			[
 				"english/podcasts/latest",
@@ -255,6 +276,41 @@ final class TestRouter extends Avorg\TestCase
 		];
 	}
 
+	public function testBuildUrlIncludesHost()
+	{
+		$result = $this->router->buildUrl("Avorg\Page\Playlist\Listing");
+
+		$this->assertStringStartsWith("http://localhost:8080", $result);
+	}
+
+	public function testBuildUrlIncludesLanguage()
+	{
+		$result = $this->router->buildUrl("Avorg\Page\Playlist\Listing");
+
+		$this->assertStringEndsWith("english/playlists/lists", $result);
+	}
+
+	public function testBuildUrlIncludesVariables()
+	{
+		$result = $this->router->buildUrl("Avorg\Page\Topic\Detail", [
+			"entity_id" => 3,
+			"slug" => "my-slug.html"
+		]);
+
+		$this->assertStringEndsWith("english/topics/3/my-slug.html", $result);
+	}
+
+	public function testLocalizesUrls()
+	{
+		$this->mockWordPress->setReturnValue("get_locale", "es_ES");
+
+		$result = $this->router->buildUrl("Avorg\Page\Presenter\Listing", [
+			"letter" => "D"
+		]);
+
+		$this->assertStringEndsWith("espanol/sermones/presenters/D", $result);
+	}
+
 	/**
 	 * @return array
 	 */
@@ -271,7 +327,7 @@ final class TestRouter extends Avorg\TestCase
 
 			if (!$isPageIdOption) return STUB_NULL;
 
-			$pageName = end(explode("_", $optionId));
+			$pageName = str_replace($pageIdOptionPrefix, "", $optionId);
 
 			return strtoupper($pageName . "_PAGE_ID");
 		});
@@ -289,7 +345,18 @@ final class TestRouter extends Avorg\TestCase
 	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results)
 	{
 		$resultsExport = var_export($results, true);
-		$errorMessage = "Input: $inputUrl\r\nExpected Output: $outputUrl\r\nHaystack:\r\n$resultsExport";
+		$getOptionCalls = var_export($this->mockWordPress->getCalls("get_option"), true);
+		$errorMessage = <<<EOM
+Input: $inputUrl
+
+Expected Output: $outputUrl
+
+Haystack:
+$resultsExport
+
+Calls to wp->get_option():
+$getOptionCalls
+EOM;
 
 		$this->assertContains(
 			$outputUrl,

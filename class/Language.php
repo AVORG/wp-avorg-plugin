@@ -3,29 +3,9 @@
 namespace Avorg;
 
 class Language {
-	/** @var RouteFactory $routeFactory */
-	private $routeFactory;
-
-	/** @var WordPress $wp */
-	protected $wp;
-
 	private $baseRoute;
 	private $langCode;
 	private $urlFragments;
-
-	public function __construct(RouteFactory $routeFactory, WordPress $wp)
-	{
-		$this->routeFactory = $routeFactory;
-		$this->wp = $wp;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getBaseRoute()
-	{
-		return $this->baseRoute;
-	}
 
 	/**
 	 * @param mixed $baseRoute
@@ -47,9 +27,27 @@ class Language {
 		return $this;
 	}
 
-	public function translateUrlFragment($fragment)
+	public function getUrlFragments()
 	{
-		return $this->urlFragments[$fragment];
+		return $this->urlFragments;
+	}
+
+	public function translatePath($path)
+	{
+		$fragments = explode("/", $path);
+		$translatedFragments = array_map([$this, "translateUrlFragment"], $fragments);
+
+		return implode("/", $translatedFragments);
+	}
+
+	private function translateUrlFragment($fragment)
+	{
+		return key_exists($fragment, $this->urlFragments) ? $this->urlFragments[$fragment] : $fragment;
+	}
+
+	public function getBaseRoute()
+	{
+		return $this->baseRoute;
 	}
 
 	public function getLangCode()
@@ -61,13 +59,5 @@ class Language {
 	{
 		$this->langCode = $langCode;
 		return $this;
-	}
-
-	public function getRoute()
-	{
-		return $this->routeFactory->getPageRoute(
-			$this->wp->get_option( "page_on_front"),
-			$this->baseRoute
-		);
 	}
 }

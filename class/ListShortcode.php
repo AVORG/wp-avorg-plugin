@@ -2,12 +2,14 @@
 
 namespace Avorg;
 
+use Avorg\DataObjectRepository\RecordingRepository;
+
 if (!\defined('ABSPATH')) exit;
 
 class ListShortcode
 {
-    /** @var PresentationRepository $presentationRepository */
-    private $presentationRepository;
+    /** @var RecordingRepository $recordingRepository */
+    private $recordingRepository;
 
 	/** @var Renderer $twig */
 	private $twig;
@@ -15,9 +17,9 @@ class ListShortcode
 	/** @var WordPress $wp */
 	private $wp;
 	
-	public function __construct(PresentationRepository $presentationRepository, Renderer $twig, WordPress $wp)
+	public function __construct(RecordingRepository $recordingRepository, Renderer $twig, WordPress $wp)
 	{
-	    $this->presentationRepository = $presentationRepository;
+	    $this->recordingRepository = $recordingRepository;
 		$this->twig = $twig;
 		$this->wp = $wp;
 	}
@@ -26,13 +28,18 @@ class ListShortcode
 	{
 		$this->wp->add_shortcode( "avorg-list", [$this, "renderShortcode"]);
 	}
-	
+
+	/**
+	 * @param $attributes
+	 * @return string
+	 * @throws \Exception
+	 */
 	public function renderShortcode($attributes)
 	{
 		$validListTypes = ["featured","popular"];
 		$shouldUseListAttribute = isset($attributes["list"]) && in_array($attributes["list"], $validListTypes);
 		$list = ($shouldUseListAttribute) ? $attributes["list"] : null;
-		$recordings = $this->presentationRepository->getPresentations($list);
+		$recordings = $this->recordingRepository->getRecordings($list);
 
 		return $this->twig->render(
 			"shortcode-list.twig",

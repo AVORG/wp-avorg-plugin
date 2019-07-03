@@ -35,9 +35,7 @@ abstract class AjaxAction
 	public function run()
 	{
 		$this->checkNonce();
-
-		echo json_encode($this->getResponseData());
-
+		$this->php->doEcho(json_encode($this->getResponseData()));
 		$this->php->doDie();
 	}
 

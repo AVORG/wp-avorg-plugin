@@ -41,6 +41,11 @@ class LanguageFactory {
 		return $this->getLanguageByPropertyValue("baseRoute", $baseRoute);
 	}
 
+	public function getLanguageByWpLangCode($code)
+	{
+		return $this->getLanguageByPropertyValue("wpLanguageCode", $code);
+	}
+
 	/**
 	 * @param $name
 	 * @param $value

@@ -32,15 +32,22 @@ class StubWordPress extends WordPress
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function passCurrentPageCheck()
+	{
+		$this->setReturnValue("get_option", 100);
+		$this->setCurrentPageId(100);
+	}
+
 	public function setCurrentPageToPage(Page $page)
 	{
 		$this->setSavedPageId($page, 7);
 		$this->setCurrentPageId(7);
 	}
 
-	public function setCurrentPageId($id)
+	private function setCurrentPageId($id)
 	{
 		$this->setReturnValue("get_the_ID", $id);
+		$this->setMappedReturnValues("get_query_var", [["page_id", $id]]);
 	}
 
 	public function setSavedPageId(Page $page, $id)

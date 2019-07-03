@@ -2,15 +2,15 @@
 
 namespace Avorg;
 
-if (!\defined('ABSPATH')) exit;
+use function defined;
+use Exception;
 
-class Page
+if (!defined('ABSPATH')) exit;
+
+abstract class Page implements iRoutable
 {
 	/** @var Renderer $renderer */
 	protected $renderer;
-
-	/** @var RouteFactory $routeFactory */
-	private $routeFactory;
 
 	/** @var WordPress $wp */
 	protected $wp;
@@ -21,63 +21,47 @@ class Page
 	protected $twigTemplate;
 	protected $routeFormat;
 
-	/** @var iDataProvider $dataProvider */
-	private $dataProvider;
 
-	/** @var iDataProvider $dataProvider */
-	private $titleProvider;
-
-
-	public function __construct(Renderer $renderer, RouteFactory $routeFactory, WordPress $wp)
+	public function __construct(Renderer $renderer, WordPress $wp)
 	{
 		$this->renderer = $renderer;
-		$this->routeFactory = $routeFactory;
 		$this->wp = $wp;
+
+		$this->setPageIdOptionName();
 	}
 
-	public function throw404($query) {
+	public function throw404($query)
+	{
+		if (!$this->isThisPage()) return;
+
 		try {
 			$this->getData();
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->set404($query);
 		}
 	}
 
-	/**
-	 * @return mixed
-	 * @throws \Exception
-	 */
-	protected function getData() {
-		$route = $this->getRoute();
-		$tags = $route->getRewriteTags();
-		$tagNames = array_keys($tags);
-		$values = array_map(function($tag) {
-			return $this->wp->get_query_var($tag);
-		}, $tagNames);
-		$queryData = array_combine($tagNames, $values);
+	abstract protected function getData();
 
-		return $this->dataProvider->getData($queryData);
-	}
-
-	/**
-	 * @param $title
-	 * @return string
-	 * @throws \Exception
-	 */
 	public function filterTitle($title)
 	{
-		if (! $this->titleProvider) {
+		if (!$this->isThisPage()) {
 			return $title;
 		}
 
-		$entityTitle = $this->titleProvider->getTitle($this->getData());
+		try {
+			$entityTitle = $this->getTitle();
 
-		return $entityTitle ? "$entityTitle - AudioVerse" : $title;
+			return $entityTitle ? "$entityTitle - AudioVerse" : $title;
+		} catch (Exception $e) {
+			return $title;
+		}
 	}
+
+	abstract protected function getTitle();
 
 	public function registerCallbacks()
 	{
-		$this->wp->add_action("wp", [$this, "registerScriptCallbacks"]);
 		$this->wp->add_action("parse_query", [$this, "throw404"]);
 		$this->wp->add_action("init", [$this, "createPage"]);
 		$this->wp->add_filter("pre_get_document_title", [$this, "filterTitle"]);
@@ -88,29 +72,9 @@ class Page
 			[$this, "createPage"]);
 	}
 
-	public function registerScriptCallbacks()
-	{
-		if (!$this->isThisPage()) return;
-
-		$scripts = $this->getScripts();
-		array_walk($scripts, function (Script $script) {
-			$script->registerCallbacks();
-		});
-	}
-
-	protected function getScripts()
-	{
-		return [];
-	}
-
 	public function addUi($content)
 	{
 		return ($this->isThisPage()) ? $this->buildUi() . $content : $content;
-	}
-
-	public function getRoute()
-	{
-		return $this->routeFactory->getPageRoute($this->getPostId(), $this->routeFormat);
 	}
 
 	/**
@@ -127,7 +91,7 @@ class Page
 
 	public function createPage()
 	{
-		$postId = $this->getPostId();
+		$postId = $this->getRouteId();
 		$postStatus = $this->wp->get_post_status($postId);
 
 		if ($postId === false || $postStatus === false) {
@@ -153,8 +117,8 @@ class Page
 
 	protected function isThisPage()
 	{
-		$postId = intval($this->getPostId(), 10);
-		$thisPageId = $this->wp->get_the_ID();
+		$postId = intval($this->getRouteId(), 10);
+		$thisPageId = $this->wp->get_query_var("page_id");
 
 		return $postId === $thisPageId;
 	}
@@ -162,39 +126,9 @@ class Page
 	/**
 	 * @return mixed
 	 */
-	public function getPostId()
+	public function getRouteId()
 	{
 		return $this->wp->get_option($this->pageIdOptionName);
-	}
-
-	public function setDefaultTitle($title)
-	{
-		$this->defaultPageTitle = $title;
-	}
-
-	public function setDefaultContent($content)
-	{
-		$this->defaultPageContent = $content;
-	}
-
-	public function setTwigTemplate($template)
-	{
-		$this->twigTemplate = $template;
-	}
-
-	public function setRouteFormat($format)
-	{
-		$this->routeFormat = $format;
-	}
-
-	public function setDataProvider(iDataProvider $dataProvider)
-	{
-		$this->dataProvider = $dataProvider;
-	}
-
-	public function setPageIdentifier($id)
-	{
-		$this->pageIdOptionName = $id;
 	}
 
 	/**
@@ -207,7 +141,7 @@ class Page
 		$this->wp->status_header(404);
 	}
 
-	protected function setPageIdOptionName()
+	private function setPageIdOptionName()
 	{
 		$prefix = "avorg_page_id_";
 		$class = get_class($this);
@@ -215,11 +149,6 @@ class Page
 		$slashToUnderscore = str_replace("\\", "_", $lowercase);
 
 		$this->pageIdOptionName = $prefix . $slashToUnderscore;
-	}
-
-	public function setTitleProvider($dataProvider)
-	{
-		$this->titleProvider = $dataProvider;
 	}
 
 	protected function getEntityId()

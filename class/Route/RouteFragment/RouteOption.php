@@ -17,4 +17,9 @@ class RouteOption extends RouteFragment
 
 		return "(?:$contentRegex)?";
 	}
+
+	public function getUrlFragment()
+	{
+		return is_string($this->content) ? $this->content : $this->getChildUrlFragment();
+	}
 }

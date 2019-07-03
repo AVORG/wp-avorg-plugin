@@ -1,8 +1,11 @@
 <?php
 
+use Avorg\Script;
+use Avorg\TwigGlobal;
+
 final class TestTwigGlobal extends Avorg\TestCase
 {
-	/** @var \Avorg\TwigGlobal $global */
+	/** @var TwigGlobal $global */
 	private $global;
 
 	protected function setUp()
@@ -30,7 +33,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testLoadData()
 	{
-		$this->global->loadData(["foo" => "bar"]);
+		$this->global->setData(["foo" => "bar"]);
 		
 		$result = $this->global->foo;
 		
@@ -39,8 +42,8 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testUpdateData()
 	{
-		$this->global->loadData(["foo" => "bar"]);
-		$this->global->loadData(["foo" => "baz"]);
+		$this->global->setData(["foo" => "bar"]);
+		$this->global->setData(["foo" => "baz"]);
 		
 		$result = $this->global->foo;
 		
@@ -49,8 +52,8 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testAddData()
 	{
-		$this->global->loadData(["foo" => "bar"]);
-		$this->global->loadData(["wibble" => "wobble"]);
+		$this->global->setData(["foo" => "bar"]);
+		$this->global->setData(["wibble" => "wobble"]);
 		
 		$result = $this->global->foo;
 		
@@ -59,7 +62,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	
 	public function testCanCheckIfLoadedDataIsset()
 	{
-		$this->global->loadData(["foo" => "bar"]);
+		$this->global->setData(["foo" => "bar"]);
 		
 		$this->assertTrue(isset($this->global->foo));
 	}
@@ -107,5 +110,60 @@ final class TestTwigGlobal extends Avorg\TestCase
 		$result = $this->global->getRequestPath();
 
 		$this->assertEquals("/espanol", $result);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function testLoadsScriptRelativeToScriptFolder()
+	{
+		$this->global->loadScript("script.js");
+
+		$this->mockWordPress->assertAnyCallMatches("wp_enqueue_script", function($call) {
+			return $call[1] === AVORG_BASE_URL . "/script/script.js";
+		});
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function testLoadsScriptData()
+	{
+		$this->global->setData(["page_data"])->loadScript("script.js");
+
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
+			return in_array("page_data", $call[2]);
+		});
+	}
+
+	/**
+	 * @throws ReflectionException
+	 * @throws Exception
+	 */
+	public function testUsesArrayData()
+	{
+		$recording = $this->makeRecording(["title" => "sermon_title"]);
+
+		$this->global->setData([$recording])->loadScript("script.js");
+
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
+			return $call[2][0]['title'] === "sermon_title";
+		});
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function testPassesBookToScript()
+	{
+		$book = $this->makeBook([
+			"title" => "A Call to Medical Evangelism"
+		]);
+
+		$this->global->setData([$book])->loadScript("script.js");
+
+		$this->mockWordPress->assertAnyCallMatches("wp_localize_script", function($call) {
+			return $call[2][0]['title'] === "A Call to Medical Evangelism";
+		});
 	}
 }

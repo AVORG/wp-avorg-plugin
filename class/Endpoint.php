@@ -3,34 +3,20 @@
 namespace Avorg;
 
 
-if (!\defined('ABSPATH')) exit;
+use function defined;
 
-abstract class Endpoint
+if (!defined('ABSPATH')) exit;
+
+abstract class Endpoint implements iRoutable
 {
-	/** @var RouteFactory $routeFactory */
-	private $routeFactory;
-
 	protected $routeFormat;
 
-	public function __construct(RouteFactory $routeFactory)
-	{
-		$this->routeFactory = $routeFactory;
-	}
-
 	abstract public function getOutput();
-
-	public function getRoute()
-	{
-		return $this->routeFactory->getEndpointRoute(
-			$this->getId(),
-			$this->routeFormat
-		);
-	}
 
 	/**
 	 * @return string
 	 */
-	private function getId()
+	public function getRouteId()
 	{
 		return str_replace("\\", "_", get_class($this));
 	}

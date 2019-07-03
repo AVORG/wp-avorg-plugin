@@ -1,0 +1,15 @@
+<div class="avorg-page-books">
+	<ul>
+		{% for book in avorg.books %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					image: book.photo256,
+					imageAlt: "presenter",
+					title: book.title,
+					titleUrl: book.url,
+					description: book.summary
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
+</div>

@@ -22,6 +22,7 @@ final class TestPageRoute extends Avorg\TestCase
 	 * @param array $matchables
 	 * @param array $missables
 	 * @dataProvider routeAndRequestsProvider
+	 * @throws Exception
 	 */
 	public function testRouteMatchesCorrectRequests($route, $matchables, $missables = [])
 	{
@@ -120,10 +121,11 @@ final class TestPageRoute extends Avorg\TestCase
 	 * @param $routePattern
 	 * @param $inputUrl
 	 * @param $outputUrl
+	 * @throws Exception
 	 */
 	public function testRouteRedirects($routePattern, $inputUrl, $outputUrl)
 	{
-		$this->pageRoute->setFormat($routePattern)->setPageId("PAGE_ID");
+		$this->pageRoute->setFormat($routePattern)->setId("PAGE_ID");
 
 		$pairs = $this->pageRoute->getRewriteRules();
 
@@ -161,6 +163,9 @@ final class TestPageRoute extends Avorg\TestCase
 		];
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function testThrowsExceptionIfNoFormat()
 	{
 		$this->expectException(Exception::class);
@@ -168,10 +173,24 @@ final class TestPageRoute extends Avorg\TestCase
 		$this->pageRoute->getRewriteRules();
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function testThrowsExceptionIfNoFormatWhenGettingRewriteTags()
 	{
 		$this->expectException(Exception::class);
 
 		$this->pageRoute->getRewriteTags();
+	}
+
+	public function testGetPath()
+	{
+		$this->pageRoute->setFormat("item/{ id:[0-9]+ }");
+
+		$url = $this->pageRoute->getPath([
+			"id" => 5
+		]);
+
+		$this->assertEquals("item/5", $url);
 	}
 }

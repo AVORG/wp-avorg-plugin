@@ -22,7 +22,7 @@ final class TestEndpointRoute extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("plugin_dir_url", "http://localhost:8080/plugin/dir/url/");
 
 		$pairs = $this->fileRoute->setFormat("my/route")
-			->setEndpointId("myId")
+			->setId("myId")
 			->getRewriteRules();
 
 		$redirect = $pairs["English"]["redirect"];
@@ -33,7 +33,7 @@ final class TestEndpointRoute extends Avorg\TestCase
 	public function testGetsPluginDirUrlOfBasedir()
 	{
 		$this->fileRoute->setFormat("my/route")
-			->setEndpointId("myId")
+			->setId("myId")
 			->getRewriteRules();
 
 		$this->mockWordPress->assertMethodCalledWith("plugin_dir_url", AVORG_BASE_PATH . "/endpoint.php");
@@ -44,7 +44,7 @@ final class TestEndpointRoute extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("plugin_dir_url", "http://localhost:8080/plugin/dir/url/");
 
 		$pairs = $this->fileRoute->setFormat("my/{route}")
-			->setEndpointId("myId")
+			->setId("myId")
 			->getRewriteRules();
 
 		$redirect = $pairs["English"]["redirect"];

@@ -2,142 +2,247 @@
 
 namespace Avorg;
 
+use Exception;
+use function get_option;
+
 if (!\defined('ABSPATH')) exit;
 
 class AvorgApi
 {
-	private $apiBaseUrl = "https://api2.audioverse.org";
-	private $apiUser;
-	private $apiPass;
 	private $context;
-	
-	public function __construct()
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getStories()
 	{
-		$this->apiUser = \get_option("avorgApiUser");
-		$this->apiPass = \get_option("avorgApiPass");
-	}
+		$endpoint = "audiobooks?story=1";
 
-	public function getPlaylist($id)
-	{
-		if (!is_numeric($id)) return false;
-		$url = "$this->apiBaseUrl/playlist/$id";
-
-		try {
-			$response = $this->getResponse($url);
-			$responseObject = json_decode($response);
-
-			return $responseObject->result;
-		} catch (\Exception $e) {
-			return false;
-		}
+		return array_map(function($item) {
+			return $item->audiobooks;
+		}, $this->getResponse($endpoint));
 	}
 
 	/**
-	 * @param int $page
-	 * @return mixed
-	 * @throws \Exception
+	 * @param $id
+	 * @return array
+	 * @throws Exception
 	 */
-	public function getPresenters($page = 0)
+	public function getBibleBooks($id)
 	{
-		$start = $page * 25;
-		$url = "$this->apiBaseUrl/presenters?start=$start";
-
-		try {
-			$response = $this->getResponse($url);
-
-			return json_decode($response)->result;
-		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve presentations at page $page", 0, $e);
-		}
+		return (array) $this->getResponse("audiobibles/$id");
 	}
-	
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBibles()
+	{
+		return (array) $this->getResponse("audiobibles");
+	}
+
 	/**
 	 * @param $id
 	 * @return bool
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function getPresentation($id)
+	public function getTopic($id)
 	{
 		if (!is_numeric($id)) return false;
-		
-		$url = "$this->apiBaseUrl/recordings/{$id}";
-		
-		try {
-			$response = $this->getResponse($url);
 
-			return json_decode($response)->result[0];
-		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve presentation with ID $id", 0, $e);
-		}
+		$response = $this->getResponse("topics/$id");
+
+		return $response[0]->topics;
 	}
-	
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTopics()
+	{
+		$endpoint = "topics";
+
+		return array_map(function ($item) {
+			return $item->topics;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
+	 * @param $id
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function getBook($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("audiobooks/$id");
+
+		return $response[0]->audiobooks;
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBooks()
+	{
+		$endpoint = "audiobooks";
+
+		return array_map(function ($item) {
+			return $item->audiobooks;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
+	 * @return array|object
+	 * @throws Exception
+	 */
+	public function getPlaylists()
+	{
+		return $this->getResponse("playlist");
+	}
+
+	/**
+	 * @param $id
+	 * @return array|bool|object
+	 * @throws Exception
+	 */
+	public function getPlaylist($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		return $this->getResponse("playlist/$id");
+	}
+
+	/**
+	 * @param $id
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function getPresenter($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("presenters/{$id}");
+
+		return $response[0]->presenters;
+	}
+
+	/**
+	 * @param null $search
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function getPresenters($search = null)
+	{
+		$endpoint = "presenters?search=$search&all=true";
+
+		return array_map(function ($item) {
+			return $item->presenters;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
+	 * @param $id
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function getRecording($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("recordings/{$id}");
+
+		return $response[0]->recordings;
+	}
+
 	/**
 	 * @param string $list
 	 * @return null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function getPresentations($list = "")
+	public function getRecordings($list = "")
 	{
-		$url = "$this->apiBaseUrl/recordings/$list";
-		$trimmedUrl = trim($url, "/");
+		$endpoint = trim("recordings/$list", "/");
 
-		return $this->getPresentationsResponse($trimmedUrl);
+		return $this->getRecordingsResponse($endpoint);
 	}
 
 	/**
 	 * @param $topicId
 	 * @return null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function getTopicPresentations($topicId)
+	public function getTopicRecordings($topicId)
 	{
-		$url = "$this->apiBaseUrl/recordings/topic/$topicId";
-
-		return $this->getPresentationsResponse($url);
+		return $this->getRecordingsResponse("recordings/topic/$topicId");
 	}
 
 	/**
-	 * @param $apiUrl
+	 * @param $presenterId
+	 * @return bool|null
+	 * @throws Exception
+	 */
+	public function getPresenterRecordings($presenterId)
+	{
+		if (!is_numeric($presenterId)) return false;
+
+		return $this->getRecordingsResponse("recordings/presenter/$presenterId");
+	}
+
+	/**
+	 * @param $bookId
+	 * @return bool|null
+	 * @throws Exception
+	 */
+	public function getBookRecordings($bookId)
+	{
+		if (!is_numeric($bookId)) return false;
+
+		return $this->getRecordingsResponse("recordings/audiobook/$bookId");
+	}
+
+	/**
+	 * @param $endpoint
 	 * @return null
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	private function getPresentationsResponse($apiUrl)
+	private function getRecordingsResponse($endpoint)
 	{
-		try {
-			$response = $this->getResponse($apiUrl);
-			$responseObject = json_decode($response);
-
-			return (isset($responseObject->result)) ? $responseObject->result : null;
-		} catch (\Exception $e) {
-			throw new \Exception("Couldn't retrieve list of presentations", 0, $e);
-		}
+		return array_map(function ($entry) {
+			return $entry->recordings;
+		}, $this->getResponse($endpoint));
 	}
-	
+
 	/**
-	 * @param $url
-	 * @return bool|string
-	 * @throws \Exception
+	 * @param $endpoint
+	 * @return object|array
+	 * @throws Exception
 	 */
-	private function getResponse($url)
+	private function getResponse($endpoint)
 	{
 		if (!$this->context) $this->context = $this->createContext();
-		
-		if ($result = @file_get_contents($url, false, $this->context)) {
-			return $result;
+
+		if ($response = @file_get_contents(
+			"https://api2.audioverse.org/$endpoint", false, $this->context)) {
+			return json_decode($response)->result;
 		} else {
-			throw new \Exception("Failed to get response from network");
+			throw new Exception("Failed to get response from url $endpoint");
 		}
 	}
-	
+
 	private function createContext()
 	{
-		$opts = array('http' =>
-			array(
-				'header' => "Content-Type: text/xml\r\n" .
-					"Authorization: Basic " . base64_encode("$this->apiUser:$this->apiPass") . "\r\n"
-			)
-		);
-		
+		$apiUser = get_option("avorgApiUser");
+		$apiPass = get_option("avorgApiPass");
+		$auth = "Authorization: Basic " . base64_encode("$apiUser:$apiPass");
+		$header = "Content-Type: text/xml\r\n$auth\r\n";
+		$opts = ['http' => ['header' => $header]];
+
 		return stream_context_create($opts);
 	}
 }

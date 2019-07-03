@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Exception;
+
 if (!\defined('ABSPATH')) exit;
 
 class Script
@@ -52,7 +54,7 @@ class Script
 
 	public function enqueue()
 	{
-		if (!$this->path) throw new \Exception("Failed to enqueue script. Path not set.");
+		if (!$this->path) throw new Exception("Failed to enqueue script. Path not set.");
 
 		$id = $this->getScriptId();
 
