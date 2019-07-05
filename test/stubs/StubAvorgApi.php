@@ -178,6 +178,11 @@ class StubAvorgApi extends AvorgApi
 		$this->setReturnValue("getBibles", $objects);
 	}
 
+	public function loadPresenter($data)
+	{
+		$this->setDataObjectReturnValue("getPresenter", $data);
+	}
+
 	public function loadTopic($data)
 	{
 		$this->setDataObjectReturnValue("getTopic", $data);
@@ -221,6 +226,16 @@ class StubAvorgApi extends AvorgApi
 	public function loadBookRecordings(...$dataArrays)
 	{
 		$this->setDataObjectsReturnValue("getBookRecordings", $dataArrays);
+	}
+
+	public function loadPresenterRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getPresenterRecordings", $dataArrays);
+	}
+
+	public function loadTopicRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getTopicRecordings", $dataArrays);
 	}
 
 	private function setDataObjectsReturnValue($function, $dataArrays)
