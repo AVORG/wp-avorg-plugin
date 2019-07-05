@@ -195,6 +195,10 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"english/podcasts/latest",
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest&language=english"
+			],
+			[
+				"english/podcasts/trending",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssTrending&language=english"
 			]
 		];
 	}

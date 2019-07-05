@@ -52,7 +52,8 @@ class RouteFactory
 	private $endpointRouteFormats = [
 		"Avorg\Endpoint\RssEndpoint\RssLatest" => "{ language }/podcasts/latest",
 		"Avorg\Endpoint\RssEndpoint\RssSpeaker" => "{ language }/sermons/presenters/podcast/{ entity_id:[0-9]+ }/latest/{ slug }",
-		"Avorg\Endpoint\Recording" => "api/presentation/{ entity_id:[0-9]+ }"
+		"Avorg\Endpoint\Recording" => "api/presentation/{ entity_id:[0-9]+ }",
+		"Avorg\Endpoint\RssEndpoint\RssTrending" => "{ language }/podcasts/trending",
 	];
 
 	public function __construct(

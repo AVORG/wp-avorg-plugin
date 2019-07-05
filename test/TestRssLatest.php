@@ -1,20 +1,23 @@
 <?php
 
+use Avorg\DataObject\Recording;
+use Avorg\Endpoint\RssEndpoint\RssLatest;
+
 final class TestRssLatest extends Avorg\TestCase
 {
-	/** @var \Avorg\Endpoint\RssEndpoint\RssLatest $rssLatest */
-	protected $rssLatest;
+	/** @var RssLatest $endpoint */
+	protected $endpoint;
 
 	public function setUp()
 	{
 		parent::setUp();
 
-		$this->rssLatest = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssLatest");
+		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssLatest");
 	}
 
 	public function testGetsLatestRecordings()
 	{
-		$this->rssLatest->getOutput();
+		$this->endpoint->getOutput();
 
 		$this->mockAvorgApi->assertMethodCalled("getRecordings");
 	}
@@ -23,16 +26,16 @@ final class TestRssLatest extends Avorg\TestCase
 	{
 		$this->mockAvorgApi->loadRecordings(["recording"]);
 
-		$this->rssLatest->getOutput();
+		$this->endpoint->getOutput();
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-feed.twig", function($call) {
-			return $call->recordings[0] instanceof \Avorg\DataObject\Recording;
+			return $call->recordings[0] instanceof Recording;
 		});
 	}
 
 	public function testAccessors()
 	{
-		$this->rssLatest->getOutput();
+		$this->endpoint->getOutput();
 
 		$this->mockTwig->assertTwigTemplateRenderedWithData("page-feed.twig", [
 			"title" => "AudioVerse Latest Recordings",

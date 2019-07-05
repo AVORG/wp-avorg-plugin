@@ -4,8 +4,9 @@ namespace Avorg\Endpoint\RssEndpoint;
 
 
 use Avorg\Endpoint\RssEndpoint;
+use function defined;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class RssSpeaker extends RssEndpoint
 {
