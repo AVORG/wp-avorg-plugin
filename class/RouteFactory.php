@@ -73,14 +73,39 @@ class RouteFactory
 		$this->wp = $wp;
 	}
 
-	public function getPageRouteByClass($class)
+	public function getRouteByClass($class)
 	{
-		/** @var Page $page */
-		$page = $this->pageFactory->getPage($class);
-		$routeId = $page->getRouteId();
-		$format = $this->pageRouteFormats[$class];
+		return $this->getPageRouteByClass($class) ?:
+			$this->getEndpointRouteByClass($class);
+	}
 
-		return $this->getPageRoute($routeId, $format);
+	private function getPageRouteByClass($class)
+	{
+		return $this->findRouteByClass($class, $this->pageRouteFormats,
+			[$this->pageFactory, "getPage"], [$this, "getPageRoute"]);
+	}
+
+	private function getEndpointRouteByClass($class)
+	{
+		return $this->findRouteByClass($class, $this->endpointRouteFormats,
+			[$this->endpointFactory, "getEndpointByClass"], [$this, "getEndpointRoute"]);
+	}
+
+	/**
+	 * @param $class
+	 * @param array $formats
+	 * @param array $entityFactoryMethod
+	 * @param $routeFactoryMethod
+	 * @return Route|null
+	 */
+	private function findRouteByClass($class, array $formats, $entityFactoryMethod, $routeFactoryMethod)
+	{
+		if (!array_key_exists($class, $formats)) return null;
+
+		$endpoint = call_user_func($entityFactoryMethod, $class);
+		$routeId = $endpoint->getRouteId();
+
+		return call_user_func($routeFactoryMethod, $routeId, $formats[$class]);
 	}
 
 	public function getRoutes()
