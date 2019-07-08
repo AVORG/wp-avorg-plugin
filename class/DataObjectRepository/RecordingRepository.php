@@ -6,6 +6,7 @@ use Avorg\DataObject;
 use Avorg\DataObjectRepository;
 use function defined;
 use Exception;
+use natlib\Stub;
 
 if (!defined('ABSPATH')) exit;
 

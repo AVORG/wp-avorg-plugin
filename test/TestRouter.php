@@ -169,6 +169,7 @@ final class TestRouter extends Avorg\TestCase
 	 */
 	public function testEndpointRoutes($inputUrl, $outputUrl)
 	{
+		$inputUrl = ltrim($inputUrl, "/");
 		$addRewriteCalls = $this->getRewriteRules();
 
 		$results = array_map(function ($call) use ($inputUrl) {
@@ -201,8 +202,12 @@ final class TestRouter extends Avorg\TestCase
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssTrending&language=english"
 			],
 			[
-				"english/topics/podcast/887/agriculture.html",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssTopic&language=english&entity_id=887&slug=agriculture.html"
+				"english/topics/podcast/887/agriculture.xml",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssTopic&language=english&entity_id=887&slug=agriculture.xml"
+			],
+			[
+				"/english/sponsors/podcast/49/latest/a-loud-and-clear-call-ministries.xml",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssSponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
 			]
 		];
 	}

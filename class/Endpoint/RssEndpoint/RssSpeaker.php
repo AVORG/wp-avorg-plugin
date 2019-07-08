@@ -25,7 +25,7 @@ class RssSpeaker extends RssEndpoint
 	public function __construct(
 		Factory $factory,
 		Php $php,
-		PresenterRepository $presenterRepository,
+		PresenterRepository $sponsorRepository,
 		RecordingRepository $recordingRepository,
 		Renderer $renderer,
 		WordPress $wp
@@ -33,7 +33,7 @@ class RssSpeaker extends RssEndpoint
 	{
 		parent::__construct($factory, $php, $recordingRepository, $renderer, $wp);
 
-		$this->presenterRepository = $presenterRepository;
+		$this->presenterRepository = $sponsorRepository;
 	}
 
 	/**

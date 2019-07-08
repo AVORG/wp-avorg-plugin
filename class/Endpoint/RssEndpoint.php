@@ -49,11 +49,16 @@ abstract class RssEndpoint extends Endpoint
 		$this->php->header('Content-Type: application/rss+xml; charset=utf-8');
 
 		return $this->renderer->render("page-feed.twig", [
-			"recordings" => $this->getRecordings(),
+			"recordings" => $this->prepareRecordings(),
 			"title" => $this->getTitle(),
 			"subtitle" => $this->getSubtitle(),
 			"image" => $this->getImage() ?: AVORG_LOGO_URL
 		], TRUE ) ?: "";
+	}
+
+	private function prepareRecordings()
+	{
+		return array_slice($this->getRecordings(), 0, 100);
 	}
 
 	abstract protected function getRecordings();
