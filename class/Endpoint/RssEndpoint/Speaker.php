@@ -17,7 +17,7 @@ use natlib\Factory;
 
 if (!defined('ABSPATH')) exit;
 
-class RssSpeaker extends RssEndpoint
+class Speaker extends RssEndpoint
 {
 	/** @var PresenterRepository $presenterRepository */
 	private $presenterRepository;

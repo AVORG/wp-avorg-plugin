@@ -187,7 +187,7 @@ final class TestRouter extends Avorg\TestCase
 		return [
 			[
 				"english/sermons/presenters/podcast/134/latest/david-shin.xml",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssSpeaker&language=english&entity_id=134&slug=david-shin.xml"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Speaker&language=english&entity_id=134&slug=david-shin.xml"
 			],
 			[
 				"api/presentation/123",
@@ -195,19 +195,19 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"english/podcasts/latest",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest&language=english"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Latest&language=english"
 			],
 			[
 				"english/podcasts/trending",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssTrending&language=english"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Trending&language=english"
 			],
 			[
 				"english/topics/podcast/887/agriculture.xml",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssTopic&language=english&entity_id=887&slug=agriculture.xml"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Topic&language=english&entity_id=887&slug=agriculture.xml"
 			],
 			[
 				"/english/sponsors/podcast/49/latest/a-loud-and-clear-call-ministries.xml",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssSponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Sponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
 			]
 		];
 	}

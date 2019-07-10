@@ -58,7 +58,7 @@ class TwigGlobal
 	
 	public function setData($data)
 	{
-		$this->data = array_merge($this->data, $data);
+		$this->data = array_merge($this->data, (array) $data);
 		return $this;
 	}
 

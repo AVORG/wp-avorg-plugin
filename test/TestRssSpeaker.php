@@ -2,7 +2,7 @@
 
 
 use Avorg\DataObject\Recording;
-use Avorg\Endpoint\RssEndpoint\RssSpeaker;
+use Avorg\Endpoint\RssEndpoint\Speaker;
 
 final class TestRssSpeaker extends Avorg\TestCase
 {
@@ -13,7 +13,7 @@ final class TestRssSpeaker extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssSpeaker");
+		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\Speaker");
 	}
 
 	public function testGetsSpeakerId()

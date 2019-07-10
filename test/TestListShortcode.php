@@ -1,12 +1,12 @@
 <?php
 
 use Avorg\DataObject\Recording;
-use Avorg\ListShortcode;
+use Avorg\Shortcode;
 use Avorg\TwigGlobal;
 
 final class TestListShortcode extends Avorg\TestCase
 {
-	/** @var ListShortcode $listShortcode */
+	/** @var Shortcode $listShortcode */
 	protected $listShortcode;
 
 	/**
@@ -16,7 +16,7 @@ final class TestListShortcode extends Avorg\TestCase
 	{
 		parent::setUp();
 		
-		$this->listShortcode = $this->factory->secure("Avorg\\ListShortcode");
+		$this->listShortcode = $this->factory->secure("Avorg\\Shortcode\\Recordings");
 	}
 	
 	// helper functions
@@ -41,7 +41,7 @@ final class TestListShortcode extends Avorg\TestCase
 	
 	public function testAddsShortcode()
 	{
-		$this->listShortcode->addShortcode();
+		$this->listShortcode->init();
 		
 		$this->mockWordPress->assertMethodCalledWith(
 			"add_shortcode",

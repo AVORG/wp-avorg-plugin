@@ -50,12 +50,12 @@ class RouteFactory
 	];
 
 	private $endpointRouteFormats = [
-		"Avorg\Endpoint\RssEndpoint\RssLatest" => "{ language }/podcasts/latest",
-		"Avorg\Endpoint\RssEndpoint\RssSpeaker" => "{ language }/sermons/presenters/podcast/{ entity_id:[0-9]+ }/latest/{ slug }",
+		"Avorg\Endpoint\RssEndpoint\Latest" => "{ language }/podcasts/latest",
+		"Avorg\Endpoint\RssEndpoint\Speaker" => "{ language }/sermons/presenters/podcast/{ entity_id:[0-9]+ }/latest/{ slug }",
 		"Avorg\Endpoint\Recording" => "api/presentation/{ entity_id:[0-9]+ }",
-		"Avorg\Endpoint\RssEndpoint\RssTrending" => "{ language }/podcasts/trending",
-		"Avorg\Endpoint\RssEndpoint\RssTopic" => "{ language }/topics/podcast/{ entity_id:[0-9]+ }[/{ slug }]",
-		"Avorg\Endpoint\RssEndpoint\RssSponsor" => "{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]"
+		"Avorg\Endpoint\RssEndpoint\Trending" => "{ language }/podcasts/trending",
+		"Avorg\Endpoint\RssEndpoint\Topic" => "{ language }/topics/podcast/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Endpoint\RssEndpoint\Sponsor" => "{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]"
 	];
 
 	public function __construct(

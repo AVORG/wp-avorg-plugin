@@ -8,24 +8,30 @@ use Avorg\Endpoint\RssEndpoint;
 use Avorg\Php;
 use Avorg\Renderer;
 use Avorg\WordPress;
+use function defined;
+use Exception;
 use natlib\Factory;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
-class RssLatest extends RssEndpoint
+class Trending extends RssEndpoint
 {
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getRecordings();
+		return $this->recordingRepository->getRecordings("popular");
 	}
 
 	protected function getTitle()
 	{
-		return "AudioVerse Latest Recordings";
+		return "AudioVerse Trending Recordings";
 	}
 
 	protected function getSubtitle()
 	{
-		return "The latest recordings at AudioVerse";
+		return "Recently-popular recordings at AudioVerse";
 	}
 }

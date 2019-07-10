@@ -1,18 +1,18 @@
 <?php
 
 use Avorg\DataObject\Recording;
-use Avorg\Endpoint\RssEndpoint\RssLatest;
+use Avorg\Endpoint\RssEndpoint\Latest;
 
 final class TestRssLatest extends Avorg\TestCase
 {
-	/** @var RssLatest $endpoint */
+	/** @var Latest $endpoint */
 	protected $endpoint;
 
 	public function setUp()
 	{
 		parent::setUp();
 
-		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssLatest");
+		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\Latest");
 	}
 
 	public function testGetsLatestRecordings()

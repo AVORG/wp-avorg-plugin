@@ -1,7 +1,7 @@
 <?php
 
 
-use Avorg\Endpoint\RssEndpoint\RssTrending;
+use Avorg\Endpoint\RssEndpoint\Trending;
 
 final class TestRssTrending extends Avorg\TestCase
 {
@@ -12,7 +12,7 @@ final class TestRssTrending extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssTrending");
+		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\Trending");
 	}
 
 	public function testGetsTrendingRecordings()

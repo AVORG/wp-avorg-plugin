@@ -2,7 +2,7 @@
 
 
 use Avorg\DataObject\Recording;
-use Avorg\Endpoint\RssEndpoint\RssTopic;
+use Avorg\Endpoint\RssEndpoint\Topic;
 
 final class TestRssTopic extends Avorg\TestCase
 {
@@ -13,7 +13,7 @@ final class TestRssTopic extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssTopic");
+		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\Topic");
 	}
 
 	public function testGetsEntityId()

@@ -14,8 +14,8 @@ class EndpointFactory
 
 	private $classes = [
 		"Avorg\\Endpoint\\Recording",
-		"Avorg\\Endpoint\\RssEndpoint\\RssLatest",
-		"Avorg\\Endpoint\\RssEndpoint\\RssSpeaker"
+		"Avorg\\Endpoint\\RssEndpoint\\Latest",
+		"Avorg\\Endpoint\\RssEndpoint\\Speaker"
 	];
 
 	public function __construct(Factory $factory)

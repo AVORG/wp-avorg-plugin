@@ -12,18 +12,30 @@ final class TestPlugin extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("call", 5);
 		$this->plugin = $this->factory->secure("Avorg\\Plugin");
 	}
-	
-	public function testInitInitsContentBits()
+
+	/**
+	 * @dataProvider shortcodeProvider
+	 */
+	public function testInitsShortcodes($handle, $class)
 	{
-		$contentBits = $this->factory->secure("Avorg\\ContentBits");
-		
+		$shortcode = $this->factory->secure($class);
+
 		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"add_shortcode",
-			"avorg-bits",
-			[$contentBits, "renderShortcode"]
+			$handle,
+			[$shortcode, "renderShortcode"]
 		);
+	}
+
+	public function shortcodeProvider()
+	{
+		return [
+			["avorg-bits", "Avorg\\ContentBits"],
+			["avorg-list", "Avorg\\Shortcode\\Recordings"],
+			["avorg-rss", "Avorg\\Shortcode\\Rss"]
+		];
 	}
 	
 	public function testInitInitsRouter()
@@ -57,19 +69,6 @@ final class TestPlugin extends Avorg\TestCase
 			"wp_enqueue_style",
 			"avorgStyle",
 			"path"
-		);
-	}
-	
-	public function testInitsListShortcode()
-	{
-		$listShortcode = $this->factory->secure("Avorg\\ListShortcode");
-		
-		$this->plugin->init();
-		
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_shortcode",
-			"avorg-list",
-			[$listShortcode, "renderShortcode"]
 		);
 	}
 	
