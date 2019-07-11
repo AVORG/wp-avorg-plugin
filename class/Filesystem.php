@@ -2,7 +2,13 @@
 
 namespace Avorg;
 
-if (!\defined('ABSPATH')) exit;
+use function defined;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
+use RegexIterator;
+
+if (!defined('ABSPATH')) exit;
 
 class Filesystem
 {
@@ -17,6 +23,13 @@ class Filesystem
 		return file_get_contents($abs_path);
 	}
 
+	public function getClassesRecursively($rel_dir)
+	{
+		$paths = $this->getMatchingPathsRecursive($rel_dir, "/\.php/") ?: [];
+
+		return array_map([$this, "pathToClassname"], $paths);
+	}
+
 	public function getMatchingPathsRecursive($rel_dir, $pattern)
 	{
 		$abs_dir = $this->toAbsPath($rel_dir);
@@ -25,12 +38,12 @@ class Filesystem
 			return null;
 		}
 
-		$directoryIterator = new \RecursiveDirectoryIterator($abs_dir);
-		$iteratorIterator = new \RecursiveIteratorIterator($directoryIterator);
-		$regexIterator = new \RegexIterator(
+		$directoryIterator = new RecursiveDirectoryIterator($abs_dir);
+		$iteratorIterator = new RecursiveIteratorIterator($directoryIterator);
+		$regexIterator = new RegexIterator(
 			$iteratorIterator,
 			$pattern,
-			\RecursiveRegexIterator::MATCH
+			RecursiveRegexIterator::MATCH
 		);
 
 		return array_keys(iterator_to_array($regexIterator));
@@ -52,5 +65,14 @@ class Filesystem
 	private function isPathSafe($abs_path)
 	{
 		return strstr($abs_path, AVORG_BASE_PATH) !== FALSE;
+	}
+
+	public function pathToClassname($path)
+	{
+		$relativePath = str_replace(AVORG_BASE_PATH . "/class", "", $path);
+		$pathMinusExtension = explode(".", $relativePath)[0];
+		$classname = str_replace("/", "\\", $pathMinusExtension);
+
+		return "Avorg\\" . trim($classname, "\\");
 	}
 }

@@ -67,6 +67,9 @@
 .avorg-page-books li {
   list-style-type: none; }
 
+.avorg-page-conferences li {
+  list-style-type: none; }
+
 .avorg-page-playlists li {
   list-style-type: none; }
 
@@ -75,6 +78,12 @@
 .avorg-page-presenters .avorg-page-presenters__pagination li {
   display: inline-block;
   padding: .5em; }
+
+.avorg-page-seriesList li {
+  list-style-type: none; }
+
+.avorg-page-sponsors li {
+  list-style-type: none; }
 
 .avorg-page-stories li {
   list-style-type: none; }

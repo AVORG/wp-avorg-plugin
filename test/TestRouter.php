@@ -140,8 +140,24 @@ final class TestRouter extends Avorg\TestCase
 				"index.php?page_id=STORY_LISTING_PAGE_ID&language=english"
 			],
 			[
-				"/english/audiobooks/books/1167/acts-of-the-apostles.html",
+				"/english/audiobooks/stories/1167/acts-of-the-apostles.html",
 				"index.php?page_id=STORY_DETAIL_PAGE_ID&language=english&entity_id=1167&slug=acts-of-the-apostles.html"
+			],
+			[
+				"/english/sermons/conferences",
+				"index.php?page_id=CONFERENCE_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"/english/sermons/conferences/293/acf-institute-2017-never-alone.html",
+				"index.php?page_id=CONFERENCE_DETAIL_PAGE_ID&language=english&entity_id=293&slug=acf-institute-2017-never-alone.html"
+			],
+			[
+				"/english/sponsors",
+				"index.php?page_id=SPONSOR_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"/english/sermons/series",
+				"index.php?page_id=SERIES_LISTING_PAGE_ID&language=english"
 			]
 		];
 	}
@@ -153,6 +169,7 @@ final class TestRouter extends Avorg\TestCase
 	 */
 	public function testEndpointRoutes($inputUrl, $outputUrl)
 	{
+		$inputUrl = ltrim($inputUrl, "/");
 		$addRewriteCalls = $this->getRewriteRules();
 
 		$results = array_map(function ($call) use ($inputUrl) {
@@ -170,7 +187,7 @@ final class TestRouter extends Avorg\TestCase
 		return [
 			[
 				"english/sermons/presenters/podcast/134/latest/david-shin.xml",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssSpeaker&language=english&entity_id=134&slug=david-shin.xml"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Speaker&language=english&entity_id=134&slug=david-shin.xml"
 			],
 			[
 				"api/presentation/123",
@@ -178,7 +195,19 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"english/podcasts/latest",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_RssLatest&language=english"
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Latest&language=english"
+			],
+			[
+				"english/podcasts/trending",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Trending&language=english"
+			],
+			[
+				"english/topics/podcast/887/agriculture.xml",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Topic&language=english&entity_id=887&slug=agriculture.xml"
+			],
+			[
+				"/english/sponsors/podcast/49/latest/a-loud-and-clear-call-ministries.xml",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Sponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
 			]
 		];
 	}

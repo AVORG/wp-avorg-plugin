@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Avorg\Shortcode\Recordings;
+
 if (!\defined('ABSPATH')) exit;
 
 class Plugin
@@ -11,9 +13,6 @@ class Plugin
 
 	/** @var ContentBits $contentBits */
 	private $contentBits;
-	
-	/** @var ListShortcode $listShortcode */
-	private $listShortcode;
 
 	/** @var Localization */
 	private $localization;
@@ -33,31 +32,34 @@ class Plugin
 	/** @var ScriptFactory $scriptFactory */
 	private $scriptFactory;
 
+	/** @var ShortcodeFactory $shortcodeFactory */
+	private $shortcodeFactory;
+
 	/** @var WordPress $wp */
 	private $wp;
 	
 	public function __construct(
 		AjaxActionFactory $ajaxActionFactory,
 		ContentBits $contentBits,
-		ListShortcode $listShortcode,
 		Localization $localization,
 		PageFactory $pageFactory,
 		Pwa $pwa,
 		Renderer $renderer,
 		Router $router,
 		ScriptFactory $scriptFactory,
+		ShortcodeFactory $shortcodeFactory,
 		WordPress $WordPress
 	)
 	{
 		$this->ajaxActionFactory = $ajaxActionFactory;
 		$this->contentBits = $contentBits;
-		$this->listShortcode = $listShortcode;
 		$this->localization = $localization;
 		$this->pageFactory = $pageFactory;
 		$this->pwa = $pwa;
 		$this->renderer = $renderer;
 		$this->router = $router;
 		$this->scriptFactory = $scriptFactory;
+		$this->shortcodeFactory = $shortcodeFactory;
 		$this->wp = $WordPress;
 
 		$this->registerCallbacks();
@@ -97,6 +99,17 @@ class Plugin
 		}, $paths);
 	}
 
+	public function init()
+	{
+		$this->router->registerRoutes();
+		$this->contentBits->init();
+
+		$shortcodes = $this->shortcodeFactory->getShortcodes();
+		array_walk($shortcodes, function(Shortcode $shortcode) {
+			$shortcode->init();
+		});
+	}
+
 	private function registerEntityCallbacks($entities)
 	{
 		array_walk($entities, function ($entity) {
@@ -107,13 +120,6 @@ class Plugin
 	public function activate()
 	{
 		$this->router->activate();
-	}
-	
-	public function init()
-	{
-		$this->router->registerRoutes();
-		$this->contentBits->init();
-		$this->listShortcode->addShortcode();
 	}
 	
 	public function enqueueScripts()

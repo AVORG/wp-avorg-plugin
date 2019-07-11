@@ -6,6 +6,8 @@ $wpBasePath = dirname(dirname(dirname(__DIR__)));
 
 require( "$wpBasePath/wp-blog-header.php" );
 
+http_response_code(200);
+
 $endpointId = get_query_var("endpoint_id");
 
 if (!$endpointId) throw new Exception("Can't access endpoint id");

@@ -40,13 +40,22 @@ class RouteFactory
 		"Avorg\Page\Bible\Listing" => "{ language }/audiobibles/volumes",
 		"Avorg\Page\Bible\Detail" => "{ language }/audiobibles/books/{ version }/{ drama }",
 		"Avorg\Page\Story\Listing" => "{ language }/audiobooks/stories",
-		"Avorg\Page\Story\Detail" => "{ language }/audiobooks/books/{ entity_id:[0-9]+ }[/{ slug }]"
+		"Avorg\Page\Story\Detail" => "{ language }/audiobooks/stories/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Conference\Listing" => "{ language }/sermons/conferences",
+		"Avorg\Page\Conference\Detail" => "{ language }/sermons/conferences/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Sponsor\Listing" => "{ language }/sponsors",
+		"Avorg\Page\Sponsor\Detail" => "{ language }/sponsors/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Series\Listing" => "{ language }/sermons/series",
+		"Avorg\Page\Series\Detail" => "{ language }/sermons/series/{ entity_id:[0-9]+ }[/{ slug }]",
 	];
 
 	private $endpointRouteFormats = [
-		"Avorg\Endpoint\RssEndpoint\RssLatest" => "{ language }/podcasts/latest",
-		"Avorg\Endpoint\RssEndpoint\RssSpeaker" => "{ language }/sermons/presenters/podcast/{ entity_id:[0-9]+ }/latest/{ slug }",
-		"Avorg\Endpoint\Recording" => "api/presentation/{ entity_id:[0-9]+ }"
+		"Avorg\Endpoint\RssEndpoint\Latest" => "{ language }/podcasts/latest",
+		"Avorg\Endpoint\RssEndpoint\Speaker" => "{ language }/sermons/presenters/podcast/{ entity_id:[0-9]+ }/latest/{ slug }",
+		"Avorg\Endpoint\Recording" => "api/presentation/{ entity_id:[0-9]+ }",
+		"Avorg\Endpoint\RssEndpoint\Trending" => "{ language }/podcasts/trending",
+		"Avorg\Endpoint\RssEndpoint\Topic" => "{ language }/topics/podcast/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Endpoint\RssEndpoint\Sponsor" => "{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]"
 	];
 
 	public function __construct(
@@ -64,14 +73,39 @@ class RouteFactory
 		$this->wp = $wp;
 	}
 
-	public function getPageRouteByClass($class)
+	public function getRouteByClass($class)
 	{
-		/** @var Page $page */
-		$page = $this->pageFactory->getPage($class);
-		$routeId = $page->getRouteId();
-		$format = $this->pageRouteFormats[$class];
+		return $this->getPageRouteByClass($class) ?:
+			$this->getEndpointRouteByClass($class);
+	}
 
-		return $this->getPageRoute($routeId, $format);
+	private function getPageRouteByClass($class)
+	{
+		return $this->findRouteByClass($class, $this->pageRouteFormats,
+			[$this->pageFactory, "getPage"], [$this, "getPageRoute"]);
+	}
+
+	private function getEndpointRouteByClass($class)
+	{
+		return $this->findRouteByClass($class, $this->endpointRouteFormats,
+			[$this->endpointFactory, "getEndpointByClass"], [$this, "getEndpointRoute"]);
+	}
+
+	/**
+	 * @param $class
+	 * @param array $formats
+	 * @param array $entityFactoryMethod
+	 * @param $routeFactoryMethod
+	 * @return Route|null
+	 */
+	private function findRouteByClass($class, array $formats, $entityFactoryMethod, $routeFactoryMethod)
+	{
+		if (!array_key_exists($class, $formats)) return null;
+
+		$endpoint = call_user_func($entityFactoryMethod, $class);
+		$routeId = $endpoint->getRouteId();
+
+		return call_user_func($routeFactoryMethod, $routeId, $formats[$class]);
 	}
 
 	public function getRoutes()

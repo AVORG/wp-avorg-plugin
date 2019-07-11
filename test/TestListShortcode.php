@@ -1,24 +1,35 @@
 <?php
 
+use Avorg\DataObject\Recording;
+use Avorg\Shortcode;
+use Avorg\TwigGlobal;
+
 final class TestListShortcode extends Avorg\TestCase
 {
-	/** @var \Avorg\ListShortcode $listShortcode */
+	/** @var Shortcode $listShortcode */
 	protected $listShortcode;
-	
+
+	/**
+	 * @throws ReflectionException
+	 */
 	public function setUp()
 	{
 		parent::setUp();
 		
-		$this->listShortcode = $this->factory->secure("Avorg\\ListShortcode");
+		$this->listShortcode = $this->factory->secure("Avorg\\Shortcode\\Recordings");
 	}
 	
 	// helper functions
-	
+
+	/**
+	 * @param $listType
+	 * @throws Exception
+	 */
 	private function assertSupportsListType($listType)
 	{
 		$this->listShortcode->renderShortcode(["list" => $listType]);
 		
-		$this->mockAvorgApi->assertMethodCalledWith( "getRecordings", $listType);
+		$this->mockAvorgApi->assertMethodCalledWith( "getRecordings", strtolower($listType));
 	}
 	
 	// tests
@@ -30,7 +41,7 @@ final class TestListShortcode extends Avorg\TestCase
 	
 	public function testAddsShortcode()
 	{
-		$this->listShortcode->addShortcode();
+		$this->listShortcode->init();
 		
 		$this->mockWordPress->assertMethodCalledWith(
 			"add_shortcode",
@@ -38,7 +49,10 @@ final class TestListShortcode extends Avorg\TestCase
 			[$this->listShortcode, "renderShortcode"]
 		);
 	}
-	
+
+	/**
+	 * @throws Exception
+	 */
 	public function testRenderFunction()
 	{
 		$entry = ["title" => "Recording Title"];
@@ -47,10 +61,13 @@ final class TestListShortcode extends Avorg\TestCase
 		$this->listShortcode->renderShortcode("");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function($data) {
-			return $data->recordings[2] instanceof \Avorg\DataObject\Recording;
+			return $data->recordings[2] instanceof Recording;
 		});
 	}
-	
+
+	/**
+	 * @throws Exception
+	 */
 	public function testRenderFunctionReturnsRenderedView()
 	{
 		$this->mockTwig->setReturnValue("render", "output");
@@ -59,21 +76,65 @@ final class TestListShortcode extends Avorg\TestCase
 		
 		$this->assertEquals("output", $result);
 	}
-	
+
+	/**
+	 * @throws Exception
+	 */
 	public function testRenderFunctionDoesNotPassAlongNonsenseListName()
 	{
 		$this->listShortcode->renderShortcode( [ "list" => "nonsense" ] );
 		
 		$this->mockAvorgApi->assertMethodCalledWith( "getRecordings", null );
 	}
-	
+
+	/**
+	 * @throws Exception
+	 */
 	public function testRenderFunctionGetsFeaturedMessages()
 	{
 		$this->assertSupportsListType("featured");
 	}
-	
+
+	/**
+	 * @throws Exception
+	 */
 	public function testRenderFunctionGetsPopularMessages()
 	{
 		$this->assertSupportsListType("popular");
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function testIncludesPodcastKey()
+	{
+		$this->listShortcode->renderShortcode("");
+
+		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function(TwigGlobal $data) {
+			return $data->__isset("rss") === True;
+		});
+	}
+
+	public function testIncludesRecentPodcastUrl()
+	{
+		$this->listShortcode->renderShortcode( [ "list" => "recent" ] );
+
+		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function(TwigGlobal $data) {
+			return $data->rss === "http://localhost:8080/english/podcasts/latest";
+		});
+	}
+
+	public function testIncludesPopularPodcastUrl()
+	{
+		$this->listShortcode->renderShortcode( [ "list" => "popular" ] );
+
+		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("shortcode-list.twig", function(TwigGlobal $data) {
+			return $data->rss === "http://localhost:8080/english/podcasts/trending";
+		});
+	}
+
+	public function testCaseInsensitive()
+	{
+		$this->assertSupportsListType("POPULAR");
 	}
 }

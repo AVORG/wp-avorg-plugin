@@ -6,6 +6,7 @@ use Avorg\DataObject;
 use Avorg\DataObjectRepository;
 use function defined;
 use Exception;
+use natlib\Stub;
 
 if (!defined('ABSPATH')) exit;
 
@@ -50,6 +51,30 @@ class RecordingRepository extends DataObjectRepository
     }
 
 	/**
+	 * @param $conferenceId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getConferenceRecordings($conferenceId)
+	{
+		$rawObjects = $this->api->getConferenceRecordings($conferenceId);
+
+		return $this->makeDataObjects($rawObjects);
+	}
+
+	/**
+	 * @param $sponsorId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSponsorRecordings($sponsorId)
+	{
+		$rawObjects = $this->api->getSponsorRecordings($sponsorId);
+
+		return $this->makeDataObjects($rawObjects);
+	}
+
+	/**
 	 * @param $topicId
 	 * @return array
 	 * @throws Exception
@@ -85,6 +110,13 @@ class RecordingRepository extends DataObjectRepository
 		$apiResponse = $this->api->getBookRecordings($bookId);
 
 		return $this->makeDataObjects($apiResponse);
+	}
+
+	public function getSeriesRecordings($seriesId)
+	{
+		$rawObjects = $this->api->getSeriesRecordings($seriesId);
+
+		return $this->makeDataObjects($rawObjects);
 	}
 
 }

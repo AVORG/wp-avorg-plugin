@@ -1,0 +1,15 @@
+<div class="avorg-page-seriesList">
+	<ul>
+		{% for series in avorg.series %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					image: series.photo256,
+					imageAlt: series.title,
+					title: series.title,
+					titleUrl: series.url,
+					description: "Conference or Sponsor"
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
+</div>

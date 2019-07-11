@@ -11,6 +11,68 @@ class AvorgApi
 {
 	private $context;
 
+	public function getOneSeries($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("series/$id");
+
+		return $response[0]->series;
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getAllSeries()
+	{
+		$endpoint = "series";
+
+		return array_map(function($item) {
+			return $item->series;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
+	 * @param $id
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function getSponsor($id)
+	{
+		if (!is_numeric($id)) return false;
+
+		$response = $this->getResponse("sponsors/$id");
+
+		return $response[0]->sponsors;
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSponsors()
+	{
+		$endpoint = "sponsors";
+
+		return array_map(function($item) {
+			return $item->sponsors;
+		}, $this->getResponse($endpoint));
+	}
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getConferences()
+	{
+		$endpoint = "conferences";
+
+		return array_map(function($item) {
+			return $item->conferences;
+		}, $this->getResponse($endpoint));
+	}
+
 	/**
 	 * @return array
 	 * @throws Exception
@@ -162,7 +224,7 @@ class AvorgApi
 
 	/**
 	 * @param string $list
-	 * @return null
+	 * @return array
 	 * @throws Exception
 	 */
 	public function getRecordings($list = "")
@@ -174,7 +236,7 @@ class AvorgApi
 
 	/**
 	 * @param $topicId
-	 * @return null
+	 * @return array
 	 * @throws Exception
 	 */
 	public function getTopicRecordings($topicId)
@@ -184,7 +246,7 @@ class AvorgApi
 
 	/**
 	 * @param $presenterId
-	 * @return bool|null
+	 * @return bool|array
 	 * @throws Exception
 	 */
 	public function getPresenterRecordings($presenterId)
@@ -195,8 +257,32 @@ class AvorgApi
 	}
 
 	/**
-	 * @param $bookId
+	 * @param $sponsorId
 	 * @return bool|null
+	 * @throws Exception
+	 */
+	public function getSponsorRecordings($sponsorId)
+	{
+		if (!is_numeric($sponsorId)) return false;
+
+		return $this->getRecordingsResponse("recordings/sponsor/$sponsorId");
+	}
+
+	/**
+	 * @param $conferenceId
+	 * @return bool|array
+	 * @throws Exception
+	 */
+	public function getConferenceRecordings($conferenceId)
+	{
+		if (!is_numeric($conferenceId)) return false;
+
+		return $this->getRecordingsResponse("recordings/conference/$conferenceId");
+	}
+
+	/**
+	 * @param $bookId
+	 * @return bool|array
 	 * @throws Exception
 	 */
 	public function getBookRecordings($bookId)
@@ -204,6 +290,18 @@ class AvorgApi
 		if (!is_numeric($bookId)) return false;
 
 		return $this->getRecordingsResponse("recordings/audiobook/$bookId");
+	}
+
+	/**
+	 * @param $seriesId
+	 * @return bool|array
+	 * @throws Exception
+	 */
+	public function getSeriesRecordings($seriesId)
+	{
+		if (!is_numeric($seriesId)) return false;
+
+		return $this->getRecordingsResponse("recordings/series/$seriesId");
 	}
 
 	/**
@@ -225,6 +323,11 @@ class AvorgApi
 	 */
 	private function getResponse($endpoint)
 	{
+		if (defined('AVORG_TESTS_RUNNING') && AVORG_TESTS_RUNNING)
+		{
+			throw new Exception("Unmocked API method called");
+		}
+
 		if (!$this->context) $this->context = $this->createContext();
 
 		if ($response = @file_get_contents(

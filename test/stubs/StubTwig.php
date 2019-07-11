@@ -2,14 +2,25 @@
 
 namespace Avorg;
 
+use Exception;
 use natlib\Stub;
 
 class StubTwig extends Twig
 {
 	use Stub;
 
+	/**
+	 * @param $templateFile
+	 * @param array $data
+	 * @return mixed|string|null
+	 * @throws Exception
+	 */
 	public function render($templateFile, $data = [])
 	{
+		if (!file_exists(AVORG_BASE_PATH . "/view/$templateFile")) {
+			throw new Exception("Template file `$templateFile` does not exist!");
+		}
+
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 

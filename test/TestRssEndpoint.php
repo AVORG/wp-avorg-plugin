@@ -14,7 +14,7 @@ final class TestRssEndpoint extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->rssEndpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\RssLatest");
+		$this->rssEndpoint = $this->factory->secure("Avorg\\Endpoint\\RssEndpoint\\Latest");
 	}
 
 	public function testGetOutput()

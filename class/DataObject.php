@@ -3,6 +3,7 @@
 namespace Avorg;
 
 use function defined;
+use Exception;
 
 if (!defined('ABSPATH')) exit;
 
@@ -52,6 +53,10 @@ abstract class DataObject implements iEntity
 		return (array) $this->data;
 	}
 
+	/**
+	 * @return string|null
+	 * @throws Exception
+	 */
 	public function getUrl()
 	{
 		if (!class_exists($this->detailClass)) return null;

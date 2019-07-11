@@ -5,6 +5,7 @@ namespace Avorg;
 use Avorg\Route\PageRoute;
 use function defined;
 use Exception;
+use natlib\Stub;
 
 if (!defined('ABSPATH')) exit;
 
@@ -128,14 +129,14 @@ class Router
 		return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 	}
 
-	public function buildUrl($pageClass, $variables = [])
+	public function buildUrl($routableClass, $variables = [])
 	{
-		if (!class_exists($pageClass)) {
-			throw new Exception("Class $pageClass does not exist.");
+		if (!class_exists($routableClass)) {
+			throw new Exception("Class $routableClass does not exist.");
 		}
 
-		/** @var PageRoute $route */
-		$route = $this->routeFactory->getPageRouteByClass($pageClass);
+		/** @var Route $route */
+		$route = $this->routeFactory->getRouteByClass($routableClass);
 		$locale = $this->wp->get_locale() ?: "en_US";
 		$language = $this->languageFactory->getLanguageByWpLangCode($locale);
 		$vars = array_merge([

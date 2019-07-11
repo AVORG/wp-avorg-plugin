@@ -8,6 +8,31 @@ class StubAvorgApi extends AvorgApi
 {
 	use Stub;
 
+	public function getOneSeries($id)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getAllSeries()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getSponsor($id)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getSponsors()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getConferences()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getStories()
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -78,7 +103,22 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function getSponsorRecordings($sponsorId)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getSeriesRecordings($seriesId)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getPresenterRecordings($presenterId)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getConferenceRecordings($conferenceId)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -89,6 +129,31 @@ class StubAvorgApi extends AvorgApi
 	}
 
 	/* Helper Methods */
+
+	public function loadOneSeries($data)
+	{
+		$this->setDataObjectReturnValue("getOneSeries", $data);
+	}
+
+	public function loadAllSeries(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getAllSeries", $dataArrays);
+	}
+
+	public function loadSponsor($data)
+	{
+		$this->setDataObjectReturnValue("getSponsor", $data);
+	}
+
+	public function loadSponsors(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getSponsors", $dataArrays);
+	}
+
+	public function loadConferences(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getConferences", $dataArrays);
+	}
 
 	public function loadStories(...$dataArrays)
 	{
@@ -111,6 +176,11 @@ class StubAvorgApi extends AvorgApi
 		}, []);
 
 		$this->setReturnValue("getBibles", $objects);
+	}
+
+	public function loadPresenter($data)
+	{
+		$this->setDataObjectReturnValue("getPresenter", $data);
 	}
 
 	public function loadTopic($data)
@@ -138,9 +208,34 @@ class StubAvorgApi extends AvorgApi
 		$this->setDataObjectsReturnValue("getRecordings", $dataArrays);
 	}
 
+	public function loadConferenceRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getConferenceRecordings", $dataArrays);
+	}
+
+	public function loadSeriesRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getSeriesRecordings", $dataArrays);
+	}
+
+	public function loadSponsorRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getSponsorRecordings", $dataArrays);
+	}
+
 	public function loadBookRecordings(...$dataArrays)
 	{
 		$this->setDataObjectsReturnValue("getBookRecordings", $dataArrays);
+	}
+
+	public function loadPresenterRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getPresenterRecordings", $dataArrays);
+	}
+
+	public function loadTopicRecordings(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getTopicRecordings", $dataArrays);
 	}
 
 	private function setDataObjectsReturnValue($function, $dataArrays)

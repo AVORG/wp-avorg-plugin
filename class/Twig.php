@@ -15,11 +15,10 @@ class Twig
 	
 	public function __construct()
 	{
-		$pluginDirectory = dirname(dirname(__FILE__));
-		$loader = new FilesystemLoader($pluginDirectory . "/view");
+		$loader = new FilesystemLoader(AVORG_BASE_PATH . "/view");
 		
 		$this->twig = new Environment($loader, array(
-			"cache" => $pluginDirectory . "/cache",
+			"cache" => AVORG_BASE_PATH . "/cache",
 			"debug" => WP_DEBUG
 		));
 		

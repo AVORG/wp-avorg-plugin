@@ -5,6 +5,7 @@ namespace Avorg;
 use Avorg\Route\RouteFragment;
 use Avorg\Route\RouteFragment\RouteOption;
 use Exception;
+use natlib\Stub;
 
 if (!\defined('ABSPATH')) exit;
 
@@ -53,6 +54,24 @@ abstract class Route
 		$this->routeTree = $this->composeRouteTree($this->routeFormat);
 
 		return $this;
+	}
+
+	public abstract function getBaseRoute();
+
+	public function getPath($variables)
+	{
+		array_walk($this->routeTree, function(RouteFragment $fragment) use($variables) {
+			$fragment->setVariables($variables);
+		});
+
+		return $this->getPathFromFragments();
+	}
+
+	private function getPathFromFragments()
+	{
+		return array_reduce((array) $this->routeTree, function ($carry, RouteFragment $trunk) {
+			return $carry . $trunk->getUrlFragment();
+		}, "");
 	}
 
 	/**
@@ -124,8 +143,6 @@ abstract class Route
 
 		return $queryVarString ? "$baseRedirect&$queryVarString" : $baseRedirect;
 	}
-
-	abstract function getBaseRoute();
 
 	private function getRegex()
 	{
