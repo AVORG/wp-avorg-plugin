@@ -36,6 +36,7 @@ if (!\defined('ABSPATH')) exit;
  * @method get_posts(array $param)
  * @method get_locale()
  * @method get_queried_object_id()
+ * @method is_plugin_active(string $string)
  */
 class WordPress
 {

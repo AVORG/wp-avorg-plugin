@@ -96,7 +96,8 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->renderAdminNotices();
 		
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Permalinks turned off!");
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Permalinks turned off!",
+			"/wp-admin/options-permalink.php");
 	}
 	
 	public function testChecksPermalinkStructure()
@@ -126,7 +127,8 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->renderAdminNotices();
 		
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API username!");
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API username!",
+			"/wp-admin/admin.php?page=avorg");
 	}
 	
 	public function testErrorNoticePostedWhenNoAvorgApiPass()
@@ -135,7 +137,8 @@ final class TestPlugin extends Avorg\TestCase
 		
 		$this->plugin->renderAdminNotices();
 		
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!");
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!",
+			"/wp-admin/admin.php?page=avorg");
 	}
 
 	/**
@@ -288,5 +291,31 @@ final class TestPlugin extends Avorg\TestCase
 				"filterRedirect"
 			]
 		];
+	}
+
+	public function testChecksForXwpPwaPlugin()
+	{
+		$this->plugin->renderAdminNotices();
+
+		$this->mockWordPress->assertMethodCalledWith("is_plugin_active", "pwa/pwa.php");
+	}
+
+	public function testRendersNoticeIfPwaPluginInactive()
+	{
+		$this->plugin->renderAdminNotices();
+
+		$this->mockTwig->assertErrorRenderedWithMessage(
+			"AVORG Warning: PWA plugin not active!",
+			"/wp-admin/plugins.php"
+		);
+	}
+
+	public function testDoesNotRenderNoticeIfPwaPluginActive()
+	{
+		$this->mockWordPress->setReturnValue("is_plugin_active", TRUE);
+
+		$this->plugin->renderAdminNotices();
+
+		$this->mockTwig->assertErrorNotRenderedWithMessage("AVORG Warning: PWA plugin not active!");
 	}
 }

@@ -132,20 +132,28 @@ class Plugin
 	{
 		$this->wp->settings_errors();
 
-		$this->outputUnsetOptionError("permalink_structure", "AVORG Warning: Permalinks turned off!");
-		$this->outputUnsetOptionError("avorgApiUser", "AVORG Warning: Missing API username!");
-		$this->outputUnsetOptionError("avorgApiPass", "AVORG Warning: Missing API password!");
+		$this->outputUnsetOptionError("permalink_structure", "AVORG Warning: Permalinks turned off!",
+			"/wp-admin/options-permalink.php");
+		$this->outputUnsetOptionError("avorgApiUser", "AVORG Warning: Missing API username!",
+			"/wp-admin/admin.php?page=avorg");
+		$this->outputUnsetOptionError("avorgApiPass", "AVORG Warning: Missing API password!",
+			"/wp-admin/admin.php?page=avorg");
+
+		if (! $this->wp->is_plugin_active("pwa/pwa.php")) {
+			$this->renderer->renderNotice("error",
+				"AVORG Warning: PWA plugin not active!", "/wp-admin/plugins.php");
+		}
 	}
 
 	/**
 	 * @param $optionName
 	 * @param $message
 	 */
-	private function outputUnsetOptionError($optionName, $message)
+	private function outputUnsetOptionError($optionName, $message, $url = null)
 	{
 		if ($this->wp->get_option($optionName)) return;
 
-		$this->renderer->renderNotice("error", $message);
+		$this->renderer->renderNotice("error", $message, $url);
 	}
 	
 	private function enqueuePluginStyles()

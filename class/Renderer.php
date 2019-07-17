@@ -18,9 +18,15 @@ class Renderer
 		$this->twig = $twig;
 	}
 	
-	public function renderNotice($type, $message)
+	public function renderNotice($type, $message, $url = null)
 	{
-		$this->render("molecule-notice.twig", ["type" => $type, "message" => $message]);
+		$data = ["type" => $type, "message" => $message];
+
+		if ($url) {
+			$data['url'] = $url;
+		}
+
+		$this->render("molecule-notice.twig", $data);
 	}
 	
 	public function render($template, $data = [], $shouldReturn = false)

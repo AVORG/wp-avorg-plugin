@@ -24,12 +24,32 @@ class StubTwig extends Twig
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function assertErrorRenderedWithMessage($message)
+	public function assertErrorRenderedWithMessage($message, $url = null)
 	{
-		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", [
+		$data = [
 			"type" => "error",
 			"message" => $message
-		]);
+		];
+
+		if ($url) {
+			$data['url'] = $url;
+		}
+
+		$this->assertTwigTemplateRenderedWithData("molecule-notice.twig", $data);
+	}
+
+	public function assertErrorNotRenderedWithMessage($message, $url = null)
+	{
+		$data = [
+			"type" => "error",
+			"message" => $message
+		];
+
+		if ($url) {
+			$data['url'] = $url;
+		}
+
+		$this->assertTwigTemplateNotRenderedWithData("molecule-notice.twig", $data);
 	}
 
 	public function assertTwigTemplateRendered($template)
@@ -42,17 +62,34 @@ class StubTwig extends Twig
 		$this->assertTwigTemplateRenderedWithDataMatching($template, [$this, "doesDataObjectIncludeData"], $data);
 	}
 
+	public function assertTwigTemplateNotRenderedWithData($template, $data)
+	{
+		$this->assertTwigTemplateNotRenderedWithDataMatching($template, [$this, "doesDataObjectIncludeData"], $data);
+	}
+
 	public function assertTwigTemplateRenderedWithDataMatching($template, $callable, ...$params)
 	{
 		$this->assertAnyCallMatches("render", function($call) use($template, $callable, $params) {
-			$callTemplate = $call[0];
-			$callDataObject = $call[1]["avorg"];
-
-			$doesTemplateMatch = $callTemplate === $template;
-			$doesMatch = call_user_func($callable, $callDataObject, ...$params);
-
-			return $doesTemplateMatch && $doesMatch;
+			return $this->doesCallDataMatch($call, $template, $callable, $params);
 		});
+	}
+
+	public function assertTwigTemplateNotRenderedWithDataMatching($template, $callable, ...$params)
+	{
+		$this->assertNoCallsMatch("render", function($call) use($template, $callable, $params) {
+			return $this->doesCallDataMatch($call, $template, $callable, $params);
+		});
+	}
+
+	private function doesCallDataMatch($call, $template, $callable, $params)
+	{
+		$callTemplate = $call[0];
+		$callDataObject = $call[1]["avorg"];
+
+		$doesTemplateMatch = $callTemplate === $template;
+		$doesMatch = call_user_func($callable, $callDataObject, ...$params);
+
+		return $doesTemplateMatch && $doesMatch;
 	}
 
 	/**
