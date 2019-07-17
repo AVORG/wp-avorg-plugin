@@ -38,7 +38,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getBibleBooks($id)
+	public function getBibleBooks($bible_id)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -163,6 +163,18 @@ class StubAvorgApi extends AvorgApi
 	public function loadPlaylists(...$dataArrays)
 	{
 		$this->setDataObjectsReturnValue("getPlaylists", $dataArrays);
+	}
+
+	public function loadBibleBooks(...$dataArrays)
+	{
+		$objects = array_reduce($dataArrays, function($carry, $dataArray) {
+			$key = array_key_exists("book_id", $dataArray) ? $dataArray["book_id"] : rand();
+			$carry[$key] = $this->testCase->convertArrayToObjectRecursively($dataArray);
+
+			return $carry;
+		});
+
+		$this->setReturnValue("getBibleBooks", $objects);
 	}
 
 	public function loadBibles(...$dataArrays)

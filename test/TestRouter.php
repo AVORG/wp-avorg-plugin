@@ -41,7 +41,7 @@ final class TestRouter extends Avorg\TestCase
 			return eval("return \"$redirect\";");
 		}, $addRewriteCalls);
 
-		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $addRewriteCalls);
 	}
 
 	public function pageRouteProvider()
@@ -158,6 +158,10 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"/english/sermons/series",
 				"index.php?page_id=SERIES_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"english/audiobibles/books/ENGKJV/O/Josh/1",
+				"index.php?page_id=BIBLEBOOK_DETAIL_PAGE_ID&language=english&bible_id=ENGKJV&testament_id=O&book_id=Josh&chapter_id=1"
 			]
 		];
 	}
@@ -179,7 +183,7 @@ final class TestRouter extends Avorg\TestCase
 			return preg_replace("/$regex/", $redirect, $inputUrl);
 		}, $addRewriteCalls);
 
-		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $addRewriteCalls);
 	}
 
 	public function outputRouteProvider()
@@ -370,10 +374,12 @@ final class TestRouter extends Avorg\TestCase
 	 * @param $inputUrl
 	 * @param $outputUrl
 	 * @param $results
+	 * @param $rewriteRules
 	 */
-	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results)
+	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $rewriteRules)
 	{
 		$resultsExport = var_export($results, true);
+		$rewriteRulesExport = var_export($rewriteRules, true);
 		$getOptionCalls = var_export($this->mockWordPress->getCalls("get_option"), true);
 		$errorMessage = <<<EOM
 Input: $inputUrl
@@ -382,6 +388,9 @@ Expected Output: $outputUrl
 
 Haystack:
 $resultsExport
+
+Rewrite Rules:
+$rewriteRulesExport
 
 Calls to wp->get_option():
 $getOptionCalls
