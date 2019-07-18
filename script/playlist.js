@@ -99,7 +99,7 @@ const Playlist = {
             item.addEventListener("click", (e) => {
                 const id = e.target.getAttribute("data-id");
                 const index = this.recordings.findIndex((recording) => {
-                    return recording.id === parseInt(id);
+                    return String(recording.id) === id;
                 });
 
                 this.playRecordingAtIndex(index)
