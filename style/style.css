@@ -7,7 +7,9 @@
   margin-bottom: 1rem; }
   .avorg-molecule-mediaObject .avorg-molecule-mediaObject__image {
     border-radius: 100%;
-    max-width: 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
     box-shadow: -2px 3px 0.5em rgba(0, 0, 0, 0.15); }
   .avorg-molecule-mediaObject .avorg-molecule-mediaObject__text {
     margin-left: 1rem; }
