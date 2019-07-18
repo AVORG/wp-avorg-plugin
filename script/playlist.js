@@ -79,12 +79,20 @@ const Playlist = {
     index: 0,
 
     listItemTemplate: function (recording) {
+        const imageUrl = recording.presenters[0].photo;
+        const imageAlt = `${recording.presenters[0].name.first} ${recording.presenters[0].name.last} ${recording.presenters[0].name.suffix}`;
+        const image = imageUrl ? `<img class="avorg-molecule-mediaObject__image" src="${imageUrl}" alt="${imageAlt}" />` : '';
+        const presenters = recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")
+
         return `
-        <li data-id="${recording.id}">
-        ${recording.title} ${recording.videoFiles.length ? "(video)" : ""}<br/>
-        ${recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")}
-        </li>
-        `;
+<li data-id="${recording.id}" class="avorg-molecule-mediaObject">
+    ${image}
+    <div class="avorg-molecule-mediaObject__text">
+        <h4 class="avorg-molecule-mediaObject__title">${recording.title} ${recording.videoFiles.length ? "(video)" : ""}</h4>
+        ${presenters}
+    </div>
+</li>
+`;
     },
 
     renderList: function() {
