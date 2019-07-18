@@ -30,7 +30,7 @@ class RouteFactory
 	private $pageRouteFormats = [
 		"Avorg\Page\Presenter\Listing" => "{ language }/sermons/presenters[/{ letter }]",
 		"Avorg\Page\Presenter\Detail" => "{ language }/sermons/presenters/{ entity_id:[0-9]+ }[/{ slug }]",
-		"Avorg\Page\Media" => "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Presentation\Detail" => "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Book\Listing" => "{ language }/audiobooks/books",
 		"Avorg\Page\Book\Detail" => "{ language }/audiobooks/books/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Playlist\Listing" => "{ language }/playlists/lists",

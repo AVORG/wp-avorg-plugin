@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) exit;
 
 class Presentation extends DataObject\Recording
 {
-	protected $detailClass = "Avorg\Page\Media";
+	protected $detailClass = "Avorg\Page\Presentation\Detail";
 
 	public function toArray()
 	{

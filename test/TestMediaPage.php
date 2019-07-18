@@ -1,14 +1,14 @@
 <?php
 
 use Avorg\AvorgApi_exceptions;
-use Avorg\Page\Media;
+use Avorg\Page\Detail;
 use Avorg\Recording;
 use Avorg\WP_Query;
 use natlib\Factory;
 
 final class TestMediaPage extends Avorg\TestCase
 {
-	/** @var Media $mediaPage */
+	/** @var Detail $mediaPage */
 	protected $mediaPage;
 	
 	private function assertPlayerUiInjected()
@@ -38,14 +38,14 @@ final class TestMediaPage extends Avorg\TestCase
 			$this->mockWordPress
 		);
 		
-		return $factory->secure("Avorg\\Page\\Media");
+		return $factory->secure("Avorg\\Page\\Presentation\\Detail");
 	}
 	
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->mediaPage = $this->factory->secure("Avorg\\Page\\Media");
+		$this->mediaPage = $this->factory->secure("Avorg\\Page\\Presentation\\Detail");
 	}
 	
 	public function testSavesMediaPageId()
@@ -58,7 +58,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mockWordPress->assertMethodCalledWith(
 			"update_option",
-			"avorg_page_id_avorg_page_media",
+			"avorg_page_id_avorg_page_presentation_detail",
 			7
 		);
 	}
@@ -67,7 +67,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mediaPage->createPage();
 		
-		$this->mockWordPress->assertMethodCalledWith( "get_option", "avorg_page_id_avorg_page_media");
+		$this->mockWordPress->assertMethodCalledWith( "get_option", "avorg_page_id_avorg_page_presentation_detail");
 	}
 	
 	public function testCreatesPageIfNoPageStatus()
@@ -119,7 +119,7 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$this->mediaPage->addUi("content");
 		
-		$this->mockTwig->assertTwigTemplateRenderedWithData("organism-recording.twig", ["recording" => null]);
+		$this->mockTwig->assertTwigTemplateRenderedWithData("page-presentation.twig", ["recording" => null]);
 	}
 	
 	public function testOnlyOutputsMediaPageUIOnMediaPage()
@@ -141,7 +141,7 @@ final class TestMediaPage extends Avorg\TestCase
 		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
             $callGlobal = $call[1]["avorg"];
 
-		    return $callGlobal->recording instanceof \Avorg\DataObject\Recording;
+		    return $callGlobal->recordings[0] instanceof \Avorg\DataObject\Recording;
         });
 	}
 	

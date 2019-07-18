@@ -1,0 +1,4 @@
+<div class="avorg-page-presentation">
+	{% include "molecule-recordingMeta.twig" with { recording: avorg.recordings[0] } only %}
+	{% include "molecule-playlist.twig" with { jsVariable: "avorg.recordings", showList: false } %}
+</div>

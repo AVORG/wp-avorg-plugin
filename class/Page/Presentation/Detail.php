@@ -1,6 +1,6 @@
 <?php
 
-namespace Avorg\Page;
+namespace Avorg\Page\Presentation;
 
 use Avorg\AvorgApi;
 use Avorg\DataObject;
@@ -12,7 +12,7 @@ use Exception;
 
 if (!\defined('ABSPATH')) exit;
 
-class Media extends Page
+class Detail extends Page
 {
     /** @var AvorgApi $avorgApi */
     protected $avorgApi;
@@ -22,7 +22,7 @@ class Media extends Page
 
     protected $defaultPageTitle = "Media Detail";
     protected $defaultPageContent = "Media Detail";
-    protected $twigTemplate = "organism-recording.twig";
+    protected $twigTemplate = "page-presentation.twig";
 
     public function __construct(
 		AvorgApi $avorgApi,
@@ -43,7 +43,7 @@ class Media extends Page
 	 */
 	protected function getData()
 	{
-		return ["recording" => $this->getEntity()];
+		return ["recordings" => [$this->getEntity()]];
 	}
 
 	/**

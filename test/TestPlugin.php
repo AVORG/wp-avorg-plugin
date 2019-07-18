@@ -156,7 +156,7 @@ final class TestPlugin extends Avorg\TestCase
 	public function pageNameProvider()
 	{
 		$pages = [
-			"Media",
+			"Presentation\\Detail",
 			"Topic\\Detail",
 			"Playlist\\Detail"
 		];

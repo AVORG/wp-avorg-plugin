@@ -96,8 +96,6 @@ const Playlist = {
     },
 
     renderList: function() {
-        if (this.recordings.length < 2) return;
-
         document.getElementsByClassName("avorg-molecule-playlist__list")[0].innerHTML
             = this.recordings.map( this.listItemTemplate ).join( "" );
     },
@@ -105,10 +103,19 @@ const Playlist = {
     registerClickHandler: function() {
         document.querySelectorAll(".avorg-molecule-playlist__list li").forEach((item) => {
             item.addEventListener("click", (e) => {
-                const id = e.target.getAttribute("data-id");
+                const id = e.currentTarget.getAttribute("data-id");
+
+                if (!id) {
+                    console.warn("Failed to retrieve id for selected presentation", id, e.target)
+                }
+
                 const index = this.recordings.findIndex((recording) => {
                     return String(recording.id) === id;
                 });
+
+                if (index === -1) {
+                    console.warn("Failed to find index for id " + id)
+                }
 
                 this.playRecordingAtIndex(index)
             }, false)
@@ -135,7 +142,10 @@ const Playlist = {
     },
 
     playRecordingAtIndex: function(i) {
-        if (typeof this.recordings[i] === 'undefined') return;
+        if (typeof this.recordings[i] === 'undefined') {
+            console.warn("Failed to load presentation at index " + i);
+            return;
+        }
 
         this.loadRecordingAtIndex(i);
         this.player.play();
@@ -145,11 +155,11 @@ const Playlist = {
         this.playRecordingAtIndex(this.index + 1)
     },
 
-    init: function ( player, recordings) {
+    init: function (player, recordings, showList) {
         this.player = player;
         this.recordings = recordings;
 
-        this.renderList();
+        if (showList) this.renderList();
         this.registerClickHandler();
         this.loadRecordingAtIndex(0);
     }
