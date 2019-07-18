@@ -170,6 +170,11 @@ class StubAvorgApi extends AvorgApi
 		$this->setDataObjectsReturnValue("getPlaylists", $dataArrays);
 	}
 
+	public function loadPlaylist($dataArray)
+	{
+		$this->setDataObjectReturnValue("getPlaylist", $dataArray);
+	}
+
 	public function loadBibleChapters(...$dataArrays)
 	{
 		$this->setDataObjectsReturnValue("getBibleChapters", $dataArrays);

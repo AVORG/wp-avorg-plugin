@@ -2,6 +2,9 @@
 
 namespace Avorg\Page\Playlist;
 
+use Avorg\DataObject;
+use Avorg\DataObject\Playlist;
+use Avorg\DataObjectRepository\PlaylistRepository;
 use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Page;
 use Avorg\DataObject\Recording;
@@ -15,8 +18,8 @@ if (!defined('ABSPATH')) exit;
 
 class Detail extends Page
 {
-	/** @var PresentationRepository $recordingRepository */
-	private $recordingRepository;
+	/** @var PlaylistRepository $playlistRepository */
+	private $playlistRepository;
 
 	/** @var ScriptFactory $scriptFactory */
 	private $scriptFactory;
@@ -26,7 +29,7 @@ class Detail extends Page
 	protected $twigTemplate = "page-playlist.twig";
 
 	public function __construct(
-		PresentationRepository $presenterRepository,
+		PlaylistRepository $playlistRepository,
 		Renderer $renderer,
 		ScriptFactory $scriptFactory,
 		WordPress $wp
@@ -34,36 +37,27 @@ class Detail extends Page
 	{
 		parent::__construct($renderer, $wp);
 
-		$this->recordingRepository = $presenterRepository;
+		$this->playlistRepository = $playlistRepository;
 		$this->scriptFactory = $scriptFactory;
 	}
 
 	protected function getData()
 	{
 		return [
-			"recordings" => $this->getRecordings()
+			"recordings" => $this->getEntity()->getPresentations()
 		];
-	}
-
-	/**
-	 * @return array
-	 * @throws Exception
-	 */
-	private function getRecordings()
-	{
-		$recordings = $this->recordingRepository->getPlaylistPresentations($this->getEntityId());
-
-		$array_reduce = array_reduce($recordings, function ($carry, Recording $recording) {
-			$carry[$recording->getId()] = $recording;
-
-			return $carry;
-		}, []);
-
-		return $array_reduce;
 	}
 
 	protected function getTitle()
 	{
-		// TODO: Implement getEntityTitle() method.
+		return $this->getEntity()->title;
+	}
+
+	/**
+	 * @return Playlist
+	 */
+	private function getEntity()
+	{
+		return $this->playlistRepository->getPlaylist($this->getEntityId());
 	}
 }

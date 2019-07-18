@@ -18,9 +18,8 @@ final class TestTopicDetail extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->mockWordPress->setReturnValue("get_option", 5);
-		$this->mockWordPress->setReturnValue("get_the_ID", 5);
-		$this->mockWordPress->setReturnValues("get_query_var",  5);
+		$this->mockWordPress->passCurrentPageCheck();
+
 		$this->topicPage = $this->factory->secure("Avorg\\Page\\Topic\\Detail");
 	}
 

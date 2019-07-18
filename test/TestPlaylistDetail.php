@@ -1,27 +1,31 @@
 <?php
 
+use Avorg\Page\Playlist\Detail;
+
 final class TestPlaylistDetail extends Avorg\TestCase
 {
-	/** @var \Avorg\Page\Playlist\Detail $playlistPage */
-	protected $playlistPage;
+	/** @var Detail $page */
+	protected $page;
 
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->playlistPage = $this->factory->secure("Avorg\\Page\\Playlist\\Detail");
+		$this->mockWordPress->passCurrentPageCheck();
+
+		$this->page = $this->factory->secure("Avorg\\Page\\Playlist\\Detail");
 	}
 
 	public function testExist()
 	{
-		$this->assertInstanceOf("\\Avorg\\Page\\Playlist\\Detail", $this->playlistPage);
+		$this->assertInstanceOf("\\Avorg\\Page\\Playlist\\Detail", $this->page);
 	}
 
 	public function testRendersCorrectTemplate()
 	{
-		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
+		$this->mockWordPress->setCurrentPageToPage($this->page);
 
-		$this->playlistPage->addUi("content");
+		$this->page->addUi("content");
 
 		$this->mockTwig->assertTwigTemplateRendered("page-playlist.twig");
 	}
@@ -30,7 +34,7 @@ final class TestPlaylistDetail extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("get_option", false);
 
-		$this->playlistPage->createPage();
+		$this->page->createPage();
 
 		$this->mockWordPress->assertPageCreated(
 			"Playlist Detail",
@@ -40,34 +44,45 @@ final class TestPlaylistDetail extends Avorg\TestCase
 
 	public function testPassesTitleThrough()
 	{
-		$title = $this->playlistPage->filterTitle("Title");
+		$title = $this->page->filterTitle("Title");
 
 		$this->assertEquals("Title", $title);
 	}
 
 	public function testGetsPlaylistById()
 	{
-		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
+		$this->mockWordPress->setCurrentPageToPage($this->page);
 		$this->mockWordPress->setReturnValue("get_query_var", 7);
 
-		$this->playlistPage->addUi("");
+		$this->page->addUi("");
 
 		$this->mockAvorgApi->assertMethodCalledWith("getPlaylist", 7);
 	}
 
 	public function testReturnsRecordings()
 	{
-		$this->mockWordPress->setCurrentPageToPage($this->playlistPage);
+		$this->mockWordPress->setCurrentPageToPage($this->page);
 		$this->mockAvorgApi->setReturnValue("getPlaylist", json_decode(json_encode([
 			"recordings" => [
 				$this->convertArrayToObjectRecursively(["id" => "0"])
 			]
 		])));
 
-		$this->playlistPage->addUi("");
+		$this->page->addUi("");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-playlist.twig", function($data) {
 			return is_a($data->recordings[0], "\\Avorg\\DataObject\\Recording");
 		});
+	}
+
+	public function testFilterTitle()
+	{
+		$this->mockAvorgApi->loadPlaylist([
+			"title" => "the_title"
+		]);
+
+		$result = $this->page->filterTitle("");
+
+		$this->assertEquals("the_title - AudioVerse", $result);
 	}
 }
