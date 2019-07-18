@@ -142,7 +142,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	 */
 	public function testUsesArrayData()
 	{
-		$recording = $this->makeRecording(["title" => "sermon_title"]);
+		$recording = $this->makePresentation(["title" => "sermon_title"]);
 
 		$this->global->setData([$recording])->loadScript("script.js");
 

@@ -2,7 +2,7 @@
 
 namespace Avorg\Page\Playlist;
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Page;
 use Avorg\DataObject\Recording;
 use Avorg\Renderer;
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) exit;
 
 class Detail extends Page
 {
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	private $recordingRepository;
 
 	/** @var ScriptFactory $scriptFactory */
@@ -26,7 +26,7 @@ class Detail extends Page
 	protected $twigTemplate = "page-playlist.twig";
 
 	public function __construct(
-		RecordingRepository $presenterRepository,
+		PresentationRepository $presenterRepository,
 		Renderer $renderer,
 		ScriptFactory $scriptFactory,
 		WordPress $wp
@@ -51,7 +51,7 @@ class Detail extends Page
 	 */
 	private function getRecordings()
 	{
-		$recordings = $this->recordingRepository->getPlaylistRecordings($this->getEntityId());
+		$recordings = $this->recordingRepository->getPlaylistPresentations($this->getEntityId());
 
 		$array_reduce = array_reduce($recordings, function ($carry, Recording $recording) {
 			$carry[$recording->getId()] = $recording;

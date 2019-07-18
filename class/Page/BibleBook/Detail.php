@@ -60,9 +60,9 @@ class Detail extends Page
 	private function getEntity()
 	{
 		$bibleId = $this->wp->get_query_var("bible_id");
+		$drama = $this->wp->get_query_var("drama");
 		$bookId = $this->wp->get_query_var("book_id");
 
-		$bibleBook = $this->bibleBookRepository->getBibleBook($bibleId, $bookId);
-		return $bibleBook;
+		return $this->bibleBookRepository->getBibleBook($bibleId . $drama, $bookId);
 	}
 }

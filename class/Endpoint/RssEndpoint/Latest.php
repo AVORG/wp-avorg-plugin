@@ -3,7 +3,7 @@
 namespace Avorg\Endpoint\RssEndpoint;
 
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Endpoint\RssEndpoint;
 use Avorg\Php;
 use Avorg\Renderer;
@@ -16,7 +16,7 @@ class Latest extends RssEndpoint
 {
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getRecordings();
+		return $this->recordingRepository->getPresentations();
 	}
 
 	protected function getTitle()

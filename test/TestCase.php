@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Avorg\DataObject\BibleBook;
+use Avorg\DataObject\Book;
 use Avorg\DataObject\Recording;
 use natlib\Factory;
 use ReflectionException;
@@ -97,18 +99,38 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
+	 * @param array $data
+	 * @return BibleBook
+	 * @throws ReflectionException
+	 */
+	protected function makeBibleBook($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\BibleBook", $data);
+	}
+
+	/**
 	 * @param $data
 	 * @return Recording
 	 * @throws ReflectionException
 	 */
-	protected function makeRecording($data = [])
+	protected function makePresentation($data = [])
 	{
-		return $this->makeDataObject("Avorg\\DataObject\\Recording", $data);
+		return $this->makeDataObject("Avorg\\DataObject\\Recording\\Presentation", $data);
 	}
 
 	/**
 	 * @param array $data
-	 * @return mixed
+	 * @return Recording\BibleChapter
+	 * @throws ReflectionException
+	 */
+	protected function makeBibleChapter($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Recording\\BibleChapter", $data);
+	}
+
+	/**
+	 * @param array $data
+	 * @return Book
 	 * @throws ReflectionException
 	 */
 	protected function makeBook($data = [])

@@ -7,7 +7,7 @@ final class TestRecording extends Avorg\TestCase
 	 */
 	public function testIncludesPresenterName()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"presenters" => [
 				[
 					"givenName" => "first_name",
@@ -31,7 +31,7 @@ final class TestRecording extends Avorg\TestCase
 	 */
 	public function testIncludesTitle()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"title" => "sermon_title"
 		]);
 
@@ -43,7 +43,7 @@ final class TestRecording extends Avorg\TestCase
 	 */
 	public function testIncludesRecordings()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"mediaFiles" => [[]]
 		]);
 
@@ -55,7 +55,7 @@ final class TestRecording extends Avorg\TestCase
 	 */
 	public function testPassesThroughStreamUrl()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"mediaFiles" => [[
 				"streamURL" => "stream_url"
 			]]
@@ -69,7 +69,7 @@ final class TestRecording extends Avorg\TestCase
 	 */
 	public function testPassesThroughStreamUrlForVideoFiles()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"videoFiles" => [[
 				"downloadURL" => "stream_url",
 				"container" => "m3u8_ios"
@@ -84,7 +84,7 @@ final class TestRecording extends Avorg\TestCase
 	 */
 	public function testUsesVideoFileClass()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"videoFiles" => [[
 				"container" => "m3u8_ios"
 			]]
@@ -98,7 +98,7 @@ final class TestRecording extends Avorg\TestCase
 	 */
 	public function testOnlyReturnsM3u8Videos()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"videoFiles" => [
 				[
 					"container" => "m3u8_ios"
@@ -114,7 +114,7 @@ final class TestRecording extends Avorg\TestCase
 
 	public function testGetLogUrl()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"videoFiles" => [
 				[
 					"logURL" => "log_url",
@@ -132,7 +132,7 @@ final class TestRecording extends Avorg\TestCase
 
 	public function testGetLogUrlWhenNoLogUrl()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"videoFiles" => [
 				[
 					"container" => "m3u8_ios"
@@ -145,7 +145,7 @@ final class TestRecording extends Avorg\TestCase
 
 	public function testIncludesPublishDate()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"publishDate" => "2018-02-19 05:22:17"
 		]);
 
@@ -160,7 +160,7 @@ final class TestRecording extends Avorg\TestCase
 			"title" => 'E.P. Daniels and True Revival'
 		]);
 
-		$recording = $this->makeRecording($apiRecording);
+		$recording = $this->makePresentation($apiRecording);
 
 		$this->assertEquals(
 			"http://localhost:8080/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",
@@ -174,7 +174,7 @@ final class TestRecording extends Avorg\TestCase
 			"id" => "1836"
 		]);
 
-		$recording = $this->makeRecording($apiRecording);
+		$recording = $this->makePresentation($apiRecording);
 
 		$this->assertEquals(1836, $recording->getId());
 	}
@@ -189,7 +189,7 @@ final class TestRecording extends Avorg\TestCase
 	public function testToJson($recordingArray, $expectedKey, $expectedValue)
 	{
 		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
-		$recording = $this->makeRecording($apiRecording);
+		$recording = $this->makePresentation($apiRecording);
 		$json = $recording->toJson();
 		$object = json_decode($json, true);
 
@@ -355,7 +355,7 @@ final class TestRecording extends Avorg\TestCase
 
 	public function testGetPresenterString()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"presenters" => [
 				[
 					"givenName" => "first_name",
@@ -383,14 +383,14 @@ final class TestRecording extends Avorg\TestCase
 
 	public function testImplementsInterface()
 	{
-		$recording = $this->makeRecording(["presenters" => [[]]]);
+		$recording = $this->makePresentation(["presenters" => [[]]]);
 
 		$this->assertContains("Avorg\\iEntity", class_implements($recording));
 	}
 
 	public function testMagicGetUsesGetters()
 	{
-		$recording = $this->makeRecording([
+		$recording = $this->makePresentation([
 			"presenters" => [
 				[
 					"givenName" => "first_name",

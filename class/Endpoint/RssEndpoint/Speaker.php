@@ -6,7 +6,7 @@ namespace Avorg\Endpoint\RssEndpoint;
 use Avorg\DataObject;
 use Avorg\DataObject\Presenter;
 use Avorg\DataObjectRepository\PresenterRepository;
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Endpoint\RssEndpoint;
 use Avorg\Php;
 use Avorg\Renderer;
@@ -26,7 +26,7 @@ class Speaker extends RssEndpoint
 		Factory $factory,
 		Php $php,
 		PresenterRepository $sponsorRepository,
-		RecordingRepository $recordingRepository,
+		PresentationRepository $recordingRepository,
 		Renderer $renderer,
 		WordPress $wp
 	)
@@ -41,7 +41,7 @@ class Speaker extends RssEndpoint
 	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getPresenterRecordings($this->getEntityId());
+		return $this->recordingRepository->getPresenterPresentations($this->getEntityId());
 	}
 
 	/**

@@ -43,6 +43,11 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function getBibleChapters($bibleId, $bookId, $testamentId)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function getBibles()
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
@@ -163,6 +168,11 @@ class StubAvorgApi extends AvorgApi
 	public function loadPlaylists(...$dataArrays)
 	{
 		$this->setDataObjectsReturnValue("getPlaylists", $dataArrays);
+	}
+
+	public function loadBibleChapters(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getBibleChapters", $dataArrays);
 	}
 
 	public function loadBibleBooks(...$dataArrays)

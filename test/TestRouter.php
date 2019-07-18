@@ -161,7 +161,7 @@ final class TestRouter extends Avorg\TestCase
 			],
 			[
 				"english/audiobibles/books/ENGKJV/O/Josh/1",
-				"index.php?page_id=BIBLEBOOK_DETAIL_PAGE_ID&language=english&bible_id=ENGKJV&testament_id=O&book_id=Josh&chapter_id=1"
+				"index.php?page_id=BIBLEBOOK_DETAIL_PAGE_ID&language=english&bible_id=ENGKJV&testament_id=O&book_id=Josh&drama=1"
 			]
 		];
 	}

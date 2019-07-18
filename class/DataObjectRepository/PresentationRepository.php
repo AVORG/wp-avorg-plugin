@@ -10,16 +10,16 @@ use natlib\Stub;
 
 if (!defined('ABSPATH')) exit;
 
-class RecordingRepository extends DataObjectRepository
+class PresentationRepository extends DataObjectRepository
 {
-	protected $dataObjectClass = "Avorg\\DataObject\\Recording";
+	protected $dataObjectClass = "Avorg\\DataObject\\Recording\\Presentation";
 
     /**
      * @param string $list
      * @return array
      * @throws Exception
      */
-    public function getRecordings($list = "")
+    public function getPresentations($list = "")
     {
         $apiResponse = $this->api->getRecordings($list);
 
@@ -31,7 +31,7 @@ class RecordingRepository extends DataObjectRepository
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getPresenterRecordings($presenterId)
+	public function getPresenterPresentations($presenterId)
 	{
 		$apiResponse = $this->api->getPresenterRecordings($presenterId);
 
@@ -43,7 +43,7 @@ class RecordingRepository extends DataObjectRepository
 	 * @return DataObject|null
 	 * @throws Exception
 	 */
-	public function getRecording($id)
+	public function getPresentation($id)
     {
         $apiResponse = $this->api->getRecording($id);
 
@@ -55,7 +55,7 @@ class RecordingRepository extends DataObjectRepository
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getConferenceRecordings($conferenceId)
+	public function getConferencePresentations($conferenceId)
 	{
 		$rawObjects = $this->api->getConferenceRecordings($conferenceId);
 
@@ -67,7 +67,7 @@ class RecordingRepository extends DataObjectRepository
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getSponsorRecordings($sponsorId)
+	public function getSponsorPresentations($sponsorId)
 	{
 		$rawObjects = $this->api->getSponsorRecordings($sponsorId);
 
@@ -79,7 +79,7 @@ class RecordingRepository extends DataObjectRepository
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getTopicRecordings($topicId)
+	public function getTopicPresentations($topicId)
 	{
 		$apiResponse = $this->api->getTopicRecordings($topicId);
 
@@ -91,7 +91,7 @@ class RecordingRepository extends DataObjectRepository
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getPlaylistRecordings($playlistId)
+	public function getPlaylistPresentations($playlistId)
 	{
 		$apiResponse = $this->api->getPlaylist($playlistId);
 
@@ -105,14 +105,14 @@ class RecordingRepository extends DataObjectRepository
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getBookRecordings($bookId)
+	public function getBookPresentations($bookId)
 	{
 		$apiResponse = $this->api->getBookRecordings($bookId);
 
 		return $this->makeDataObjects($apiResponse);
 	}
 
-	public function getSeriesRecordings($seriesId)
+	public function getSeriesPresentations($seriesId)
 	{
 		$rawObjects = $this->api->getSeriesRecordings($seriesId);
 

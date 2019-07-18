@@ -3,7 +3,7 @@
 namespace Avorg\Endpoint;
 
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Endpoint;
 use Avorg\Php;
 use Avorg\Renderer;
@@ -20,7 +20,7 @@ abstract class RssEndpoint extends Endpoint
 	/** @var Php $php */
 	private $php;
 
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	protected $recordingRepository;
 
 	/** @var Renderer $renderer */
@@ -32,7 +32,7 @@ abstract class RssEndpoint extends Endpoint
 	public function __construct(
 		Factory $factory,
 		Php $php,
-		RecordingRepository $recordingRepository,
+		PresentationRepository $recordingRepository,
 		Renderer $renderer,
 		WordPress $wp
 	)

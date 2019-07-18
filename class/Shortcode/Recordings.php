@@ -2,7 +2,7 @@
 
 namespace Avorg\Shortcode;
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Renderer;
 use Avorg\Router;
 use Avorg\Shortcode;
@@ -17,14 +17,14 @@ class Recordings extends Shortcode
 	protected $handle = "avorg-list";
 	protected $template = "shortcode-list.twig";
 
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	private $recordingRepository;
 
 	/** @var Router $router */
 	private $router;
 
 	public function __construct(
-		RecordingRepository $recordingRepository,
+		PresentationRepository $recordingRepository,
 		Router $router,
 		Renderer $twig,
 		WordPress $wp
@@ -46,7 +46,7 @@ class Recordings extends Shortcode
 		$list = $this->getListName($attributes);
 
 		return [
-			"recordings" => $this->recordingRepository->getRecordings($list),
+			"recordings" => $this->recordingRepository->getPresentations($list),
 			"rss" => $this->getRssUrl($list)
 		];
 	}

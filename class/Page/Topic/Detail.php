@@ -2,7 +2,7 @@
 
 namespace Avorg\Page\Topic;
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\DataObjectRepository\TopicRepository;
 use Avorg\Page;
 use Avorg\Renderer;
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) exit;
 
 class Detail extends Page
 {
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	private $recordingRepository;
 
 	/** @var TopicRepository $topicRepository */
@@ -27,7 +27,7 @@ class Detail extends Page
 	protected $twigTemplate = "page-topic.twig";
 
 	public function __construct(
-		RecordingRepository $presenterRepository,
+		PresentationRepository $presenterRepository,
 		Renderer $renderer,
 		TopicRepository $topicRepository,
 		WordPress $wp
@@ -48,7 +48,7 @@ class Detail extends Page
 	{
 		$topicId = $this->wp->get_query_var( "entity_id");
 
-		$recordings = $this->recordingRepository->getTopicRecordings($topicId);
+		$recordings = $this->recordingRepository->getTopicPresentations($topicId);
 
 		return [ "recordings" => $recordings ];
 	}

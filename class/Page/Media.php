@@ -4,7 +4,7 @@ namespace Avorg\Page;
 
 use Avorg\AvorgApi;
 use Avorg\DataObject;
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Page;
 use Avorg\Renderer;
 use Avorg\WordPress;
@@ -17,7 +17,7 @@ class Media extends Page
     /** @var AvorgApi $avorgApi */
     protected $avorgApi;
 
-    /** @var RecordingRepository $recordingRepository */
+    /** @var PresentationRepository $recordingRepository */
     protected $recordingRepository;
 
     protected $defaultPageTitle = "Media Detail";
@@ -26,7 +26,7 @@ class Media extends Page
 
     public function __construct(
 		AvorgApi $avorgApi,
-		RecordingRepository $recordingRepository,
+		PresentationRepository $recordingRepository,
 		Renderer $renderer,
 		WordPress $wordPress
 	)
@@ -65,6 +65,6 @@ class Media extends Page
 	{
 		$entityId = $this->getEntityId();
 
-		return $this->recordingRepository->getRecording($entityId);
+		return $this->recordingRepository->getPresentation($entityId);
 	}
 }

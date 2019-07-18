@@ -2,7 +2,7 @@
 
 namespace Avorg\AjaxAction;
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Php;
 use Avorg\WordPress;
 use Avorg\AjaxAction;
@@ -11,10 +11,10 @@ if (!\defined('ABSPATH')) exit;
 
 class Recording extends AjaxAction
 {
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	protected $recordingRepository;
 
-	public function __construct(Php $php, RecordingRepository $recordingRepository, WordPress $wp)
+	public function __construct(Php $php, PresentationRepository $recordingRepository, WordPress $wp)
 	{
 		parent::__construct($php, $wp);
 
@@ -28,7 +28,7 @@ class Recording extends AjaxAction
 	protected function getResponseData()
 	{
 		$id = $_POST["entity_id"];
-		$recording = $this->recordingRepository->getRecording($id);
+		$recording = $this->recordingRepository->getPresentation($id);
 
 		return [
 			"success" => (bool)$recording,

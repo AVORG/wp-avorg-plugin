@@ -1,17 +1,17 @@
 <?php
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 
 final class TestRecordingRepository extends Avorg\TestCase
 {
-    /** @var RecordingRepository $plugin */
+    /** @var PresentationRepository $plugin */
     protected $recordingRepository;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->recordingRepository = $this->factory->secure("Avorg\\DataObjectRepository\\RecordingRepository");
+        $this->recordingRepository = $this->factory->secure("Avorg\\DataObjectRepository\\PresentationRepository");
     }
 
     /**
@@ -23,7 +23,7 @@ final class TestRecordingRepository extends Avorg\TestCase
         $entry->recordings = "item";
         $this->mockAvorgApi->setReturnValue("getRecordings", [$entry]);
 
-        $result = $this->recordingRepository->getRecordings();
+        $result = $this->recordingRepository->getPresentations();
 
         $this->assertInstanceOf("\\Avorg\\DataObject\\Recording", $result[0]);
     }
@@ -42,7 +42,7 @@ final class TestRecordingRepository extends Avorg\TestCase
 
         $this->mockAvorgApi->setReturnValue("getRecordings", [$entryObject]);
 
-        $result = $this->recordingRepository->getRecordings();
+        $result = $this->recordingRepository->getPresentations();
 
         $this->assertEquals("photo_url", $result[0]->getPresenters()[0]["photo"]);
     }
@@ -57,7 +57,7 @@ final class TestRecordingRepository extends Avorg\TestCase
 
         $this->mockAvorgApi->setReturnValue("getRecordings", [$apiRecording]);
 
-        $result = $this->recordingRepository->getRecordings();
+        $result = $this->recordingRepository->getPresentations();
 
         $this->assertEquals(
             "http://localhost:8080/english/sermons/recordings/1836/ep-daniels-and-true-revival.html",

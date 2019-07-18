@@ -47,7 +47,7 @@ class RouteFactory
 		"Avorg\Page\Sponsor\Detail" => "{ language }/sponsors/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Series\Listing" => "{ language }/sermons/series",
 		"Avorg\Page\Series\Detail" => "{ language }/sermons/series/{ entity_id:[0-9]+ }[/{ slug }]",
-		"Avorg\Page\BibleBook\Detail" => "{ language }/audiobibles/books/{ bible_id }/{ testament_id }/{ book_id }/{ chapter_id:[0-9]+ }"
+		"Avorg\Page\BibleBook\Detail" => "{ language }/audiobibles/books/{ bible_id }/{ testament_id }/{ book_id }/{ drama:[0-9]+ }"
 	];
 
 	private $endpointRouteFormats = [

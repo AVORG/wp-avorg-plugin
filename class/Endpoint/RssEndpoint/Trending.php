@@ -3,7 +3,7 @@
 namespace Avorg\Endpoint\RssEndpoint;
 
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Endpoint\RssEndpoint;
 use Avorg\Php;
 use Avorg\Renderer;
@@ -22,7 +22,7 @@ class Trending extends RssEndpoint
 	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getRecordings("popular");
+		return $this->recordingRepository->getPresentations("popular");
 	}
 
 	protected function getTitle()
