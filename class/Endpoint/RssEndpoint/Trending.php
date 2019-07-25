@@ -22,7 +22,7 @@ class Trending extends RssEndpoint
 	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getPresentations("popular");
+		return $this->presentationRepository->getPresentations("popular");
 	}
 
 	protected function getTitle()

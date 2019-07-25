@@ -6,8 +6,10 @@ use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Php;
 use Avorg\WordPress;
 use Avorg\AjaxAction;
+use function defined;
+use Exception;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class Recording extends AjaxAction
 {
@@ -23,7 +25,7 @@ class Recording extends AjaxAction
 
 	/**
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected function getResponseData()
 	{
@@ -32,7 +34,7 @@ class Recording extends AjaxAction
 
 		return [
 			"success" => (bool)$recording,
-			"data" => $recording ? $recording->toJson() : null
+			"data" => json_encode($recording)
 		];
 	}
 }

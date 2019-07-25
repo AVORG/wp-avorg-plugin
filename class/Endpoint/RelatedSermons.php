@@ -3,6 +3,7 @@
 namespace Avorg\Endpoint;
 
 
+use Avorg\DataObject\Recording\Presentation;
 use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Endpoint;
 use Avorg\WordPress;
@@ -11,32 +12,29 @@ use Exception;
 
 if (!defined('ABSPATH')) exit;
 
-class Recording extends Endpoint
+class RelatedSermons extends Endpoint
 {
 	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
-
-	/** @var WordPress $wp */
-	private $wp;
+	protected $presentationRepository;
 
 	public function __construct(
 		PresentationRepository $presentationRepository,
 		WordPress $wp
 	)
 	{
+		parent::__construct($wp);
+
 		$this->presentationRepository = $presentationRepository;
-		$this->wp = $wp;
 	}
 
 	/**
-	 * @return false|string|null
+	 * @return string
 	 * @throws Exception
 	 */
 	public function getOutput()
 	{
-		$id = $this->wp->get_query_var( "entity_id");
-		$recording = $this->presentationRepository->getPresentation($id);
+		$presentations = $this->presentationRepository->getRelatedPresentations($this->getEntityId());
 
-		return json_encode($recording);
+		return json_encode($presentations);
 	}
 }

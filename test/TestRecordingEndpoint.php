@@ -1,22 +1,24 @@
 <?php
 
+use Avorg\Endpoint\Recording;
+
 final class TestRecordingEndpoint extends Avorg\TestCase
 {
-	/** @var \Avorg\Endpoint\Recording $Recording */
-	protected $Recording;
+	/** @var Recording $endpoint */
+	protected $endpoint;
 
 	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->Recording = $this->factory->secure("Avorg\\Endpoint\\Recording");
+		$this->endpoint = $this->factory->secure("Avorg\\Endpoint\\Recording");
 	}
 
 	public function testEndpoint()
 	{
 		$this->mockAvorgApi->loadRecording(["title" => "My Recording"]);
 
-		$output = $this->Recording->getOutput();
+		$output = $this->endpoint->getOutput();
 
 		$object = json_decode($output);
 
@@ -25,7 +27,7 @@ final class TestRecordingEndpoint extends Avorg\TestCase
 
 	public function testGetsEntityId()
 	{
-		$this->Recording->getOutput();
+		$this->endpoint->getOutput();
 
 		$this->mockWordPress->assertMethodCalledWith("get_query_var", "entity_id");
 	}
@@ -34,7 +36,7 @@ final class TestRecordingEndpoint extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("get_query_var", 7);
 
-		$this->Recording->getOutput();
+		$this->endpoint->getOutput();
 
 		$this->mockAvorgApi->assertMethodCalledWith("getRecording", 7);
 	}

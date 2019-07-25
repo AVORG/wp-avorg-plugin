@@ -56,7 +56,8 @@ class RouteFactory
 		"Avorg\Endpoint\Recording" => "api/presentation/{ entity_id:[0-9]+ }",
 		"Avorg\Endpoint\RssEndpoint\Trending" => "{ language }/podcasts/trending",
 		"Avorg\Endpoint\RssEndpoint\Topic" => "{ language }/topics/podcast/{ entity_id:[0-9]+ }[/{ slug }]",
-		"Avorg\Endpoint\RssEndpoint\Sponsor" => "{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]"
+		"Avorg\Endpoint\RssEndpoint\Sponsor" => "{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]",
+		"Avorg\Endpoint\RelatedSermons" => "api/related/{ entity_id:[0-9]+ }",
 	];
 
 	public function __construct(

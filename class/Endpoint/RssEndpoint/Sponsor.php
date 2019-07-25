@@ -39,7 +39,7 @@ class Sponsor extends RssEndpoint
 	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getSponsorPresentations($this->getEntityId());
+		return $this->presentationRepository->getSponsorPresentations($this->getEntityId());
 	}
 
 	protected function getTitle()

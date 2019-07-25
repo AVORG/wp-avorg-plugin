@@ -190,7 +190,7 @@ final class TestRecording extends Avorg\TestCase
 	{
 		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
 		$recording = $this->makePresentation($apiRecording);
-		$json = $recording->toJson();
+		$json = json_encode($recording);
 		$object = json_decode($json, true);
 
 		$this->assertEquals($expectedValue, $object[$expectedKey]);
@@ -381,11 +381,11 @@ final class TestRecording extends Avorg\TestCase
 		);
 	}
 
-	public function testImplementsInterface()
+	public function testJsonEncodable()
 	{
 		$recording = $this->makePresentation(["presenters" => [[]]]);
 
-		$this->assertContains("Avorg\\iEntity", class_implements($recording));
+		$this->assertTrue(method_exists($recording, "jsonSerialize"));
 	}
 
 	public function testMagicGetUsesGetters()

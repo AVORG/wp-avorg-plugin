@@ -14,6 +14,32 @@ class PresentationRepository extends DataObjectRepository
 {
 	protected $dataObjectClass = "Avorg\\DataObject\\Recording\\Presentation";
 
+	/**
+	 * @param $presentationId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getRelatedPresentations($presentationId)
+	{
+		$presentation = $this->getPresentation($presentationId);
+		$conferencePresentations = $this->getConferencePresentations($presentation->conferenceId);
+		$seriesPresentations = ($presentation->seriesId === "0") ? [] :
+			$this->getSeriesPresentations($presentation->seriesId);
+		$sponsorPresentations = $this->getSponsorPresentations($presentation->sponsorId);
+		$presenterPresentations = array_reduce((array) $presentation->presenters, function($carry, $presenter) {
+			return array_merge($carry, $this->getPresenterPresentations($presenter->id));
+		}, []);
+
+		$relatedPresentations = array_merge(
+			$conferencePresentations,
+			$seriesPresentations,
+			$sponsorPresentations,
+			$presenterPresentations
+		);
+
+		return array_unique($relatedPresentations);
+	}
+
     /**
      * @param string $list
      * @return array

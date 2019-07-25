@@ -16,7 +16,7 @@ class Latest extends RssEndpoint
 {
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getPresentations();
+		return $this->presentationRepository->getPresentations();
 	}
 
 	protected function getTitle()

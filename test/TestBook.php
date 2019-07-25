@@ -40,14 +40,14 @@ final class TestBook extends Avorg\TestCase
 	{
 		$book = $this->makeBook();
 
-		$this->assertContains("Avorg\\iEntity", class_implements($book));
+		$this->assertTrue(method_exists($book, "jsonSerialize"));
 	}
 
 	public function testToJsonIncludesRecordingsKey()
 	{
 		$book = $this->makeBook();
 
-		$this->assertObjectHasAttribute("recordings", json_decode($book->toJson()));
+		$this->assertArrayHasKey("recordings", $book->jsonSerialize());
 	}
 
 	public function testToJsonIncludesRecordings()
@@ -58,7 +58,7 @@ final class TestBook extends Avorg\TestCase
 			"title" => "Chapter 0 - Foreword"
 		]);
 
-		$decodedJson = json_decode($book->toJson());
+		$decodedJson = json_decode(json_encode($book));
 		$decodedBook = $decodedJson->recordings[0];
 
 		$this->assertEquals("Chapter 0 - Foreword", $decodedBook->title);

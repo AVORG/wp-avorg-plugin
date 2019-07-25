@@ -41,7 +41,7 @@ class Speaker extends RssEndpoint
 	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getPresenterPresentations($this->getEntityId());
+		return $this->presentationRepository->getPresenterPresentations($this->getEntityId());
 	}
 
 	/**

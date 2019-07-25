@@ -148,6 +148,7 @@ class Plugin
 	/**
 	 * @param $optionName
 	 * @param $message
+	 * @param null $url
 	 */
 	private function outputUnsetOptionError($optionName, $message, $url = null)
 	{
