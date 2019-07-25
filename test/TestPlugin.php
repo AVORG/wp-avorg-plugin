@@ -223,6 +223,11 @@ final class TestPlugin extends Avorg\TestCase
 				"wp_enqueue_scripts",
 				"Plugin",
 				"enqueueScripts"
+			],
+			[
+				'init',
+				'Block\RelatedSermons',
+				'init'
 			]
 		];
 	}

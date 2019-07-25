@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use Avorg\Block\RelatedSermons;
 use Avorg\Shortcode\Recordings;
 
 if (!\defined('ABSPATH')) exit;
@@ -22,6 +23,9 @@ class Plugin
 
 	/** @var Pwa $pwa */
 	private $pwa;
+
+	/** @var RelatedSermons $relatedSermons */
+	private $relatedSermons;
 	
 	/** @var Renderer $renderer */
 	private $renderer;
@@ -44,6 +48,7 @@ class Plugin
 		Localization $localization,
 		PageFactory $pageFactory,
 		Pwa $pwa,
+		RelatedSermons $relatedSermons,
 		Renderer $renderer,
 		Router $router,
 		ScriptFactory $scriptFactory,
@@ -56,6 +61,7 @@ class Plugin
 		$this->localization = $localization;
 		$this->pageFactory = $pageFactory;
 		$this->pwa = $pwa;
+		$this->relatedSermons = $relatedSermons;
 		$this->renderer = $renderer;
 		$this->router = $router;
 		$this->scriptFactory = $scriptFactory;
@@ -76,7 +82,8 @@ class Plugin
 				$this->pwa,
 				$this->localization,
 				$this->contentBits,
-				$this->router
+				$this->router,
+				$this->relatedSermons
 			],
 			$this->pageFactory->getPages(),
 			$this->ajaxActionFactory->getActions(),

@@ -37,6 +37,8 @@ if (!\defined('ABSPATH')) exit;
  * @method get_locale()
  * @method get_queried_object_id()
  * @method is_plugin_active(string $string)
+ * @method wp_register_script(string $handle, string|bool $src, array $deps = array(), string|bool|null $ver = false, bool $in_footer = false)
+ * @method register_block_type(string|WP_Block_Type $name, array $args = array())
  */
 class WordPress
 {
