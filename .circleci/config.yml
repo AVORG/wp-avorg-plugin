@@ -6,8 +6,8 @@ version: 2
 jobs:
   build:
     docker:
-    # specify the version you desire here
-    - image: circleci/php:7.1-browsers
+      # specify the version you desire here
+      - image: circleci/php:7.1-browsers
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -17,39 +17,43 @@ jobs:
     working_directory: ~/wp-avorg-plugin
 
     steps:
-    - checkout
+      # Install NPM
+      - curl -sL https://deb.nodesource.com/setup_12.x | bash -
+      - apt-get install -y nodejs
 
-    # Download and cache dependencies
-    - restore_cache:
-        keys:
-        - v1-composer-{{ checksum "composer.lock" }}
-        # fallback to using the latest cache if no exact match is found
-        - v1-composer-
+      - checkout
 
-    - restore_cache:
-        keys:
-          - v1-npm-{{ checksum "package-lock.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-npm-
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-composer-{{ checksum "composer.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-composer-
 
-    - run: composer install -n
-    - run: npm install
+      - restore_cache:
+          keys:
+            - v1-npm-{{ checksum "package-lock.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-
 
-    - run: sudo apt-get update && sudo apt-get install zip
-    - run: zip -r wp-avorg-plugin .
+      - run: composer install -n
+      - run: npm install
 
-    - store_artifacts:
-        path: wp-avorg-plugin.zip
+      - run: sudo apt-get update && sudo apt-get install zip
+      - run: zip -r wp-avorg-plugin .
 
-    - save_cache:
-        paths:
-        - ./vendor
-        key: v1-composer-{{ checksum "composer.lock" }}
+      - store_artifacts:
+          path: wp-avorg-plugin.zip
 
-    - save_cache:
-        paths:
-          - ./node_modules
-        key: v1-composer-{{ checksum "package-lock.json" }}
+      - save_cache:
+          paths:
+            - ./vendor
+          key: v1-composer-{{ checksum "composer.lock" }}
 
-    # run tests!
-    - run: vendor/phpunit/phpunit/phpunit
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v1-composer-{{ checksum "package-lock.json" }}
+
+      # run tests!
+      - run: vendor/phpunit/phpunit/phpunit
