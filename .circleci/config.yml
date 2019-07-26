@@ -22,11 +22,18 @@ jobs:
     # Download and cache dependencies
     - restore_cache:
         keys:
-        - v7-dependencies-{{ checksum "composer.json" }}
+        - v1-composer-{{ checksum "composer.lock" }}
         # fallback to using the latest cache if no exact match is found
-        - v7-dependencies-
+        - v1-composer-
+
+    - restore_cache:
+        keys:
+          - v1-npm-{{ checksum "package-lock.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-npm-
 
     - run: composer install -n
+    - run: npm install
 
     - run: sudo apt-get update && sudo apt-get install zip
     - run: zip -r wp-avorg-plugin .
@@ -37,7 +44,12 @@ jobs:
     - save_cache:
         paths:
         - ./vendor
-        key: v7-dependencies-{{ checksum "composer.json" }}
+        key: v1-composer-{{ checksum "composer.lock" }}
+
+    - save_cache:
+        paths:
+          - ./node_modules
+        key: v1-composer-{{ checksum "package-lock.json" }}
 
     # run tests!
     - run: vendor/phpunit/phpunit/phpunit
