@@ -18,8 +18,8 @@ jobs:
 
     steps:
       # Install NPM
-      - run: curl -sL https://deb.nodesource.com/setup_12.x | bash -
-      - run: apt-get install -y nodejs
+      - run: curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+      - run: sudo apt-get install -y nodejs
 
       - checkout
 
