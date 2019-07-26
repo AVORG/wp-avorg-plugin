@@ -75,7 +75,6 @@ class Plugin
 	{
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
 		$this->wp->add_action("init", [$this, "init"]);
-		$this->wp->add_action("wp_enqueue_scripts", [$this, "enqueueScripts"]);
 
 		$toRegister = array_merge(
 			[
@@ -115,6 +114,8 @@ class Plugin
 		array_walk($shortcodes, function(Shortcode $shortcode) {
 			$shortcode->init();
 		});
+
+		$this->enqueueStyles();
 	}
 
 	private function registerEntityCallbacks($entities)
@@ -127,12 +128,6 @@ class Plugin
 	public function activate()
 	{
 		$this->router->activate();
-	}
-	
-	public function enqueueScripts()
-	{
-		$this->enqueuePluginStyles();
-		$this->enqueueVideoJsStyles();
 	}
 	
 	public function renderAdminNotices()
@@ -163,11 +158,17 @@ class Plugin
 
 		$this->renderer->renderNotice("error", $message, $url);
 	}
+
+	private function enqueueStyles()
+	{
+		$this->enqueuePluginStyles();
+		$this->enqueueVideoJsStyles();
+	}
 	
 	private function enqueuePluginStyles()
 	{
-		$url = $this->wp->plugins_url("style/style.css", dirname(__FILE__));
-		$this->wp->wp_enqueue_style("avorgStyle", $url);
+		$this->wp->wp_enqueue_style("avorgStyle", AVORG_BASE_URL . "/style/style.css");
+		$this->wp->wp_enqueue_style("avorgEditorStyle", AVORG_BASE_URL . "/style/editor.css");
 	}
 	
 	private function enqueueVideoJsStyles()

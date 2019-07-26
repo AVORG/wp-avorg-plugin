@@ -47,34 +47,36 @@ final class TestPlugin extends Avorg\TestCase
 	
 	public function testEnqueueScripts()
 	{
-		$this->plugin->enqueueScripts();
+		$this->plugin->init();
 		
 		$this->mockWordPress->assertMethodCalled("wp_enqueue_style");
 	}
 	
-	public function testEnqueueScriptsGetsStylesheetUrl()
-	{
-		$this->plugin->enqueueScripts();
-		
-		$this->mockWordPress->assertMethodCalled("plugins_url");
-	}
-	
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
-		$this->mockWordPress->setReturnValue("plugins_url", "path");
-		
-		$this->plugin->enqueueScripts();
+		$this->plugin->init();
 		
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
 			"avorgStyle",
-			"path"
+			AVORG_BASE_URL . "/style/style.css"
+		);
+	}
+
+	public function testEnqueuesEditorStyles()
+	{
+		$this->plugin->init();
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"wp_enqueue_style",
+			"avorgEditorStyle",
+			AVORG_BASE_URL . "/style/editor.css"
 		);
 	}
 	
 	public function testEnqueuesVideoJsStyles()
 	{
-		$this->plugin->enqueueScripts();
+		$this->plugin->init();
 		
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -218,11 +220,6 @@ final class TestPlugin extends Avorg\TestCase
 				"save_post",
 				"ContentBits",
 				"saveIdentifierMetaBox"
-			],
-			[
-				"wp_enqueue_scripts",
-				"Plugin",
-				"enqueueScripts"
 			],
 			[
 				'init',
