@@ -24,7 +24,7 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
 		$this->mockWordPress->assertMethodCalledWith("wp_register_script",
 			'avorg-block-relatedSermons',
 			AVORG_BASE_URL . '/script/block-relatedSermons.js',
-			['wp-blocks', 'wp-element']);
+			['wp-blocks', 'wp-element', 'system-js']);
 	}
 
 	public function testInitRegistersBlockType()

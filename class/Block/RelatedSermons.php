@@ -26,8 +26,15 @@ class RelatedSermons
 
 	public function init()
 	{
+		$this->wp->wp_register_script('system-js',
+			AVORG_BASE_URL . "/node_modules/systemjs/dist/system.js");
+
 		$this->wp->wp_register_script(
-			$this->getHandle(), $this->getUrl(), ['wp-blocks', 'wp-element']);
+			$this->getHandle(), AVORG_BASE_URL . "script/sys.js", ['wp-blocks', 'wp-element', 'system-js']);
+
+		$this->wp->wp_localize_script($this->getHandle(), "avorg_sys", [
+			"urls" => [$this->getUrl()]
+		]);
 
 		$this->wp->register_block_type($this->getName(), [
 			'editor_script' => $this->getHandle()
@@ -52,7 +59,7 @@ class RelatedSermons
 	 */
 	private function getUrl()
 	{
-		return AVORG_BASE_URL . "/script/$this->filename";
+		return AVORG_BASE_URL . "script/$this->filename";
 	}
 
 	/**

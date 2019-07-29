@@ -50,6 +50,7 @@ class Script
 	public function registerCallbacks()
 	{
 		$this->wp->add_action("wp_enqueue_scripts", [$this, "enqueue"]);
+		$this->wp->add_action("admin_enqueue_scripts", [$this, "enqueue"]);
 	}
 
 	public function enqueue()

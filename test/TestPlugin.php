@@ -4,11 +4,11 @@ final class TestPlugin extends Avorg\TestCase
 {
 	/** @var \Avorg\Plugin $plugin */
 	protected $plugin;
-	
+
 	protected function setUp()
 	{
 		parent::setUp();
-		
+
 		$this->mockWordPress->setReturnValue("call", 5);
 		$this->plugin = $this->factory->secure("Avorg\\Plugin");
 	}
@@ -37,25 +37,25 @@ final class TestPlugin extends Avorg\TestCase
 			["avorg-rss", "Avorg\\Shortcode\\Rss"]
 		];
 	}
-	
+
 	public function testInitInitsRouter()
 	{
 		$this->plugin->init();
-		
+
 		$this->mockWordPress->assertMethodCalled("add_rewrite_rule");
 	}
-	
+
 	public function testEnqueueScripts()
 	{
 		$this->plugin->init();
-		
+
 		$this->mockWordPress->assertMethodCalled("wp_enqueue_style");
 	}
-	
+
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
 		$this->plugin->init();
-		
+
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
 			"avorgStyle",
@@ -73,72 +73,72 @@ final class TestPlugin extends Avorg\TestCase
 			AVORG_BASE_URL . "/style/editor.css"
 		);
 	}
-	
+
 	public function testEnqueuesVideoJsStyles()
 	{
 		$this->plugin->init();
-		
+
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
 			"avorgVideoJsStyle",
 			"//vjs.zencdn.net/7.0/video-js.min.css"
 		);
 	}
-	
+
 	public function testRenderAdminNoticesOutputsDefaultNotices()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalled("settings_errors");
 	}
-	
+
 	public function testErrorNoticePostedWhenPermalinksTurnedOff()
 	{
 		$this->mockWordPress->setReturnValue("call", false);
-		
+
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Permalinks turned off!",
 			"/wp-admin/options-permalink.php");
 	}
-	
+
 	public function testChecksPermalinkStructure()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalledWith("get_option", "permalink_structure");
 	}
-	
+
 	public function testGetsAvorgApiUser()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalledWith("get_option", "avorgApiUser");
 	}
-	
+
 	public function testGetsAvorgApiPass()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalledWith("get_option", "avorgApiPass");
 	}
-	
+
 	public function testErrorNoticePostedWhenNoAvorgApiUser()
 	{
 		$this->mockWordPress->setReturnValue("call", false);
-		
+
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API username!",
 			"/wp-admin/admin.php?page=avorg");
 	}
-	
+
 	public function testErrorNoticePostedWhenNoAvorgApiPass()
 	{
 		$this->mockWordPress->setReturnValue("call", false);
-		
+
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!",
 			"/wp-admin/admin.php?page=avorg");
 	}
@@ -163,7 +163,9 @@ final class TestPlugin extends Avorg\TestCase
 			"Playlist\\Detail"
 		];
 
-		$data = array_map(function($page) { return [$page]; }, $pages);
+		$data = array_map(function ($page) {
+			return [$page];
+		}, $pages);
 
 		return array_combine($pages, $data);
 	}
@@ -234,10 +236,16 @@ final class TestPlugin extends Avorg\TestCase
 	 * @param $path
 	 * @param bool $shouldRegister
 	 * @param bool $isRelative
+	 * @param string $action
 	 */
-	public function testRegistersScripts($path, $shouldRegister = true, $isRelative = false)
+	public function testRegistersScripts(
+		$path,
+		$shouldRegister = true,
+		$isRelative = false,
+		$action = "wp_enqueue_scripts"
+	)
 	{
-		$this->mockWordPress->runActions("wp", "wp_enqueue_scripts");
+		$this->mockWordPress->runActions($action);
 
 		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
 
@@ -260,7 +268,8 @@ final class TestPlugin extends Avorg\TestCase
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
 			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
-			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
+			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"],
+			"system.js" => ["node_modules/systemjs/dist/system.js", true, true, "admin_enqueue_scripts"]
 		];
 	}
 

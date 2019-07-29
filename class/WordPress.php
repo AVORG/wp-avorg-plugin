@@ -5,7 +5,7 @@ namespace Avorg;
 if (!\defined('ABSPATH')) exit;
 
 /**
- * @method add_action($string, array $array)
+ * @method add_action(string $tag, callable $function_to_add, int $priority = 10, int $accepted_args = 1)
  * @method add_filter($string, array $array)
  * @method add_rewrite_rule($string, $string1, $string2)
  * @method add_rewrite_tag($string, $string1)
@@ -22,11 +22,11 @@ if (!\defined('ABSPATH')) exit;
  * @method wp_publish_post($postId)
  * @method check_ajax_referer($string)
  * @method wp_enqueue_style($string, $string1)
- * @method wp_enqueue_script($string, $string1)
+ * @method wp_enqueue_script(string $handle, string $src = '', array $deps = array(), string|bool|null $ver = false, bool $in_footer = false)
  * @method plugins_url($string, $dirname)
  * @method settings_errors()
  * @method wp_create_nonce($id)
- * @method wp_localize_script($id, $string, $nonces)
+ * @method wp_localize_script($handle, $name, $data)
  * @method add_meta_box(array $args)
  * @method register_taxonomy($string, array $array, array $args)
  * @method get_post_meta($postId, $string, $true)
