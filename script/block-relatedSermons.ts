@@ -1,4 +1,4 @@
-// import molecule_mediaObject from "./molecule-mediaObject.js"
+import molecule_mediaObject from "./molecule-mediaObject.js"
 
 declare const wp: any;
 
