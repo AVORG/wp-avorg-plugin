@@ -1,6 +1,6 @@
-System.register(["./molecule-mediaObject.js"], function (exports_1, context_1) {
+System.register(["../../molecule/mediaObject/index.js"], function (exports_1, context_1) {
     "use strict";
-    var molecule_mediaObject_js_1, blocks, element, el, blockStyle, itemTemplate;
+    var index_js_1, blocks, element, el, blockStyle, itemTemplate;
     var __moduleName = context_1 && context_1.id;
     function getRandomSubarray(arr, size) {
         var shuffled = arr.slice(0), i = arr.length, temp, index;
@@ -14,8 +14,8 @@ System.register(["./molecule-mediaObject.js"], function (exports_1, context_1) {
     }
     return {
         setters: [
-            function (molecule_mediaObject_js_1_1) {
-                molecule_mediaObject_js_1 = molecule_mediaObject_js_1_1;
+            function (index_js_1_1) {
+                index_js_1 = index_js_1_1;
             }
         ],
         execute: function () {
@@ -31,7 +31,7 @@ System.register(["./molecule-mediaObject.js"], function (exports_1, context_1) {
                 var presenters = recording.presenters.map(function (presenter) {
                     return presenter.name.first + " " + presenter.name.last + " " + presenter.name.suffix;
                 }).join(", ");
-                return molecule_mediaObject_js_1.default(recording.title, presenters, imageUrl, imageAlt);
+                return index_js_1.default(recording.title, presenters, imageUrl, imageAlt);
             };
             blocks.registerBlockType('avorg/block-relatedsermons', {
                 title: 'Example: Basic',
@@ -64,4 +64,4 @@ System.register(["./molecule-mediaObject.js"], function (exports_1, context_1) {
         }
     };
 });
-//# sourceMappingURL=block-relatedSermons.js.map
+//# sourceMappingURL=index.ts.js.map

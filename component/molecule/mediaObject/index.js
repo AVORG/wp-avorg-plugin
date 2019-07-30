@@ -13,4 +13,4 @@ System.register([], function (exports_1, context_1) {
         }
     };
 });
-//# sourceMappingURL=molecule-mediaObject.js.map
+//# sourceMappingURL=index.js.map

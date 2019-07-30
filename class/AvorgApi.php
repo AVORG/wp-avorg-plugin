@@ -3,9 +3,10 @@
 namespace Avorg;
 
 use Exception;
+use function defined;
 use function get_option;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class AvorgApi
 {

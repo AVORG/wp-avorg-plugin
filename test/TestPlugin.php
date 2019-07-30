@@ -225,7 +225,7 @@ final class TestPlugin extends Avorg\TestCase
 			],
 			[
 				'init',
-				'Block\RelatedSermons',
+				'BlockRepository',
 				'init'
 			]
 		];
@@ -268,8 +268,7 @@ final class TestPlugin extends Avorg\TestCase
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
 			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
-			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"],
-			"system.js" => ["node_modules/systemjs/dist/system.js", true, true, "admin_enqueue_scripts"]
+			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
 		];
 	}
 

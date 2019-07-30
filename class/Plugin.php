@@ -12,6 +12,9 @@ class Plugin
 	/** @var AjaxActionFactory $ajaxActionFactory */
 	private $ajaxActionFactory;
 
+	/** @var BlockRepository $blockRepository */
+	private $blockRepository;
+
 	/** @var ContentBits $contentBits */
 	private $contentBits;
 
@@ -23,9 +26,6 @@ class Plugin
 
 	/** @var Pwa $pwa */
 	private $pwa;
-
-	/** @var RelatedSermons $relatedSermons */
-	private $relatedSermons;
 	
 	/** @var Renderer $renderer */
 	private $renderer;
@@ -44,11 +44,11 @@ class Plugin
 	
 	public function __construct(
 		AjaxActionFactory $ajaxActionFactory,
+		BlockRepository $blockRepository,
 		ContentBits $contentBits,
 		Localization $localization,
 		PageFactory $pageFactory,
 		Pwa $pwa,
-		RelatedSermons $relatedSermons,
 		Renderer $renderer,
 		Router $router,
 		ScriptFactory $scriptFactory,
@@ -57,11 +57,11 @@ class Plugin
 	)
 	{
 		$this->ajaxActionFactory = $ajaxActionFactory;
+		$this->blockRepository = $blockRepository;
 		$this->contentBits = $contentBits;
 		$this->localization = $localization;
 		$this->pageFactory = $pageFactory;
 		$this->pwa = $pwa;
-		$this->relatedSermons = $relatedSermons;
 		$this->renderer = $renderer;
 		$this->router = $router;
 		$this->scriptFactory = $scriptFactory;
@@ -82,7 +82,7 @@ class Plugin
 				$this->localization,
 				$this->contentBits,
 				$this->router,
-				$this->relatedSermons
+				$this->blockRepository
 			],
 			$this->pageFactory->getPages(),
 			$this->ajaxActionFactory->getActions(),
