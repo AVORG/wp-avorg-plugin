@@ -23,10 +23,10 @@ class BlockRepository
 
 	public function registerCallbacks()
 	{
-		$this->wp->add_action("init", [$this, "init"]);
+		$this->wp->add_action("enqueue_block_editor_assets", [$this, "registerBlocks"]);
 	}
 
-	public function init()
+	public function registerBlocks()
 	{
 		$this->registerSystemJs();
 		$this->registerTypeScriptLoader();

@@ -12,9 +12,11 @@ Domain Path: /languages
 namespace Avorg;
 
 use natlib\Factory;
+use function defined;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
+define( "AVORG_PLUGIN_FILE", __FILE__ );
 define( "AVORG_BASE_PATH", dirname(__FILE__) );
 define( "AVORG_BASE_URL", \plugin_dir_url(__FILE__) );
 define( "AVORG_LOGO_URL", "https://s.audioverse.org/english/gallery/sponsors/_/600/600/default-logo.png" );
@@ -22,7 +24,4 @@ define( "AVORG_LOGO_URL", "https://s.audioverse.org/english/gallery/sponsors/_/6
 include_once(AVORG_BASE_PATH . "/vendor/autoload.php");
 
 $factory = new Factory();
-
-$factory->secure("Avorg\\AdminPanel")->registerCallbacks();
-
-\register_activation_hook(__FILE__, [$factory->secure("Avorg\\Plugin"), "activate"]);
+$factory->secure("Avorg\\Plugin")->registerCallbacks();

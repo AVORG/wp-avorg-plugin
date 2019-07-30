@@ -9,6 +9,9 @@ if (!\defined('ABSPATH')) exit;
 
 class Plugin
 {
+	/** @var AdminPanel $adminPanel */
+	private $adminPanel;
+
 	/** @var AjaxActionFactory $ajaxActionFactory */
 	private $ajaxActionFactory;
 
@@ -43,6 +46,7 @@ class Plugin
 	private $wp;
 	
 	public function __construct(
+		AdminPanel $adminPanel,
 		AjaxActionFactory $ajaxActionFactory,
 		BlockRepository $blockRepository,
 		ContentBits $contentBits,
@@ -56,6 +60,7 @@ class Plugin
 		WordPress $WordPress
 	)
 	{
+		$this->adminPanel = $adminPanel;
 		$this->ajaxActionFactory = $ajaxActionFactory;
 		$this->blockRepository = $blockRepository;
 		$this->contentBits = $contentBits;
@@ -67,14 +72,13 @@ class Plugin
 		$this->scriptFactory = $scriptFactory;
 		$this->shortcodeFactory = $shortcodeFactory;
 		$this->wp = $WordPress;
-
-		$this->registerCallbacks();
 	}
 
-	private function registerCallbacks()
+	public function registerCallbacks()
 	{
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
 		$this->wp->add_action("init", [$this, "init"]);
+		$this->wp->register_activation_hook(AVORG_PLUGIN_FILE, [$this, "activate"]);
 
 		$toRegister = array_merge(
 			[
@@ -82,7 +86,8 @@ class Plugin
 				$this->localization,
 				$this->contentBits,
 				$this->router,
-				$this->blockRepository
+				$this->blockRepository,
+				$this->adminPanel
 			],
 			$this->pageFactory->getPages(),
 			$this->ajaxActionFactory->getActions(),

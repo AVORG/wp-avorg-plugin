@@ -15,16 +15,9 @@ final class TestBlockRepository extends Avorg\TestCase
 		$this->repository = $this->factory->secure("Avorg\\BlockRepository");
 	}
 
-	public function testRegistersCallbacks()
-	{
-		$this->repository->registerCallbacks();
-
-		$this->mockWordPress->assertActionAdded('init', [$this->repository, 'init']);
-	}
-
 	public function testInitRegistersTypeScriptLoader()
 	{
-		$this->repository->init();
+		$this->repository->registerBlocks();
 
 		$this->mockWordPress->assertMethodCalledWith("wp_register_script",
 			'avorg_scripts',
@@ -34,7 +27,7 @@ final class TestBlockRepository extends Avorg\TestCase
 
 	public function testRegistersSystemJs()
 	{
-		$this->repository->init();
+		$this->repository->registerBlocks();
 
 		$this->mockWordPress->assertMethodCalledWith('wp_register_script',
 			'system-js', AVORG_BASE_URL . "/node_modules/systemjs/dist/system.js");
@@ -42,14 +35,14 @@ final class TestBlockRepository extends Avorg\TestCase
 
 	public function testEnqueuesTypescriptLoader()
 	{
-		$this->repository->init();
+		$this->repository->registerBlocks();
 
 		$this->mockWordPress->assertMethodCalledWith('wp_enqueue_script', 'avorg_scripts');
 	}
 
 	public function testGetsBlockIndices()
 	{
-		$this->repository->init();
+		$this->repository->registerBlocks();
 
 		$this->mockFilesystem->assertMethodCalledWith('getMatchingPathsRecursive',
 			'component/block', '/index\.js/');
@@ -61,7 +54,7 @@ final class TestBlockRepository extends Avorg\TestCase
 			AVORG_BASE_PATH . 'component/block/layer/name/index.js'
 		]);
 
-		$this->repository->init();
+		$this->repository->registerBlocks();
 
 		$this->mockWordPress->assertMethodCalledWith('wp_localize_script',
 			'avorg_scripts', 'avorg_scripts', [

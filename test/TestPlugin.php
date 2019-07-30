@@ -150,7 +150,7 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testRegistersPageCallbacks($pageName)
 	{
-		$this->factory->make("Avorg\\Plugin");
+		$this->plugin->registerCallbacks();
 
 		$this->mockWordPress->assertPageRegistered($pageName);
 	}
@@ -179,6 +179,8 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod)
 	{
+		$this->plugin->registerCallbacks();
+
 		$this->mockWordPress->assertActionAdded($action, [
 			$this->factory->secure("Avorg\\$callbackClass"),
 			$callbackMethod
@@ -224,9 +226,14 @@ final class TestPlugin extends Avorg\TestCase
 				"saveIdentifierMetaBox"
 			],
 			[
-				'init',
+				'enqueue_block_editor_assets',
 				'BlockRepository',
-				'init'
+				'registerBlocks'
+			],
+			[
+				"admin_menu",
+				'AdminPanel',
+				'register'
 			]
 		];
 	}
@@ -245,6 +252,8 @@ final class TestPlugin extends Avorg\TestCase
 		$action = "wp_enqueue_scripts"
 	)
 	{
+		$this->plugin->registerCallbacks();
+
 		$this->mockWordPress->runActions($action);
 
 		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
@@ -281,6 +290,8 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testFilterCallbacksRegistered($filter, $callbackClass, $callbackMethod)
 	{
+		$this->plugin->registerCallbacks();
+
 		$this->mockWordPress->assertFilterAdded($filter, [
 			$this->factory->secure("Avorg\\$callbackClass"),
 			$callbackMethod
@@ -327,5 +338,13 @@ final class TestPlugin extends Avorg\TestCase
 		$this->plugin->renderAdminNotices();
 
 		$this->mockTwig->assertErrorNotRenderedWithMessage("AVORG Warning: PWA plugin not active!");
+	}
+
+	public function testRegistersActivationHook()
+	{
+		$this->plugin->registerCallbacks();
+
+		$this->mockWordPress->assertMethodCalledWith('register_activation_hook', AVORG_PLUGIN_FILE,
+			[$this->plugin, 'activate']);
 	}
 }

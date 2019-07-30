@@ -40,6 +40,10 @@ interface Recording {
 	}[];
 }
 
+const prepareId = function(id: string) {
+	return 'avorg-' + id.replace(/-/g,'')
+};
+
 const itemTemplate = function(recording: Recording) {
 	const imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
 	const imageAlt = recording.presenters[0] ?
@@ -50,43 +54,43 @@ const itemTemplate = function(recording: Recording) {
 	return molecule_mediaObject(recording.title, presenters, imageUrl, imageAlt);
 };
 
+const loadRecordings = function(id: string) {
+	const url = 'http://localhost:8000/api/related/20047';
+	fetch(url).then(response => {
+		return response.json();
+	}).then(response => {
+		const el = document.querySelector('#'+id);
+		const recordings = getRandomSubarray(Object.values( response ), 3);
+
+		el.innerHTML = recordings.map( itemTemplate ).join( "" );
+	});
+};
+
 blocks.registerBlockType( 'avorg/block-relatedsermons', {
 	title: 'Example: Basic',
 	icon: 'universal-access-alt',
 	category: 'layout',
-	edit: function() {
-		console.log('hello back');
+	edit: function(props: any) {
+		console.log('hello back', props);
 
-		const id = 'avorg-block-relatedSermons-' + Math.floor(Math.random() * Math.floor(1000));
+		const id = prepareId(props.clientId);
 
-		const url = 'http://localhost:8000/api/related/20047';
-		fetch(url).then(response => {
-			return response.json();
-		}).then(response => {
-			console.log(response);
-			const el = document.querySelector('#'+id);
-			console.log(el);
-			el.textContent = 'Data loaded';
-			const recordings = getRandomSubarray(Object.values( response ), 3);
-			el.innerHTML = recordings.map( itemTemplate ).join( "" );
-		});
+		loadRecordings(id);
 
 		return el(
 			'p',
-			{
-				style: blockStyle,
-				id: id
-			},
+			{ style: blockStyle, id: id },
 			'Loading...'
 		);
 	},
-	save: function() {
+	save: function(props: any) {
 		console.log('hello front');
 
 		return el(
 			'p',
 			{ style: blockStyle },
-			'Hello World, step 1 (from the frontend).'
+			// { style: blockStyle, id: prepareId(props.clientId) },
+			'Loading...'
 		);
 	},
 } );

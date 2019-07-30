@@ -1,6 +1,6 @@
 System.register(["../../molecule/mediaObject/index.js"], function (exports_1, context_1) {
     "use strict";
-    var index_js_1, blocks, element, el, blockStyle, itemTemplate;
+    var index_js_1, blocks, element, el, blockStyle, prepareId, itemTemplate, loadRecordings;
     var __moduleName = context_1 && context_1.id;
     function getRandomSubarray(arr, size) {
         var shuffled = arr.slice(0), i = arr.length, temp, index;
@@ -24,6 +24,9 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
             element = wp.element;
             el = element.createElement;
             blockStyle = {};
+            prepareId = function (id) {
+                return 'avorg-' + id.replace(/-/g, '');
+            };
             itemTemplate = function (recording) {
                 var imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
                 var imageAlt = recording.presenters[0] ?
@@ -33,35 +36,32 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
                 }).join(", ");
                 return index_js_1.default(recording.title, presenters, imageUrl, imageAlt);
             };
+            loadRecordings = function (id) {
+                var url = 'http://localhost:8000/api/related/20047';
+                fetch(url).then(function (response) {
+                    return response.json();
+                }).then(function (response) {
+                    var el = document.querySelector('#' + id);
+                    var recordings = getRandomSubarray(Object.values(response), 3);
+                    el.innerHTML = recordings.map(itemTemplate).join("");
+                });
+            };
             blocks.registerBlockType('avorg/block-relatedsermons', {
                 title: 'Example: Basic',
                 icon: 'universal-access-alt',
                 category: 'layout',
-                edit: function () {
-                    console.log('hello back');
-                    var id = 'avorg-block-relatedSermons-' + Math.floor(Math.random() * Math.floor(1000));
-                    var url = 'http://localhost:8000/api/related/20047';
-                    fetch(url).then(function (response) {
-                        return response.json();
-                    }).then(function (response) {
-                        console.log(response);
-                        var el = document.querySelector('#' + id);
-                        console.log(el);
-                        el.textContent = 'Data loaded';
-                        var recordings = getRandomSubarray(Object.values(response), 3);
-                        el.innerHTML = recordings.map(itemTemplate).join("");
-                    });
-                    return el('p', {
-                        style: blockStyle,
-                        id: id
-                    }, 'Loading...');
+                edit: function (props) {
+                    console.log('hello back', props);
+                    var id = prepareId(props.clientId);
+                    loadRecordings(id);
+                    return el('p', { style: blockStyle, id: id }, 'Loading...');
                 },
-                save: function () {
+                save: function (props) {
                     console.log('hello front');
-                    return el('p', { style: blockStyle }, 'Hello World, step 1 (from the frontend).');
+                    return el('p', { style: blockStyle }, 'Loading...');
                 },
             });
         }
     };
 });
-//# sourceMappingURL=index.ts.js.map
+//# sourceMappingURL=index.js.map
