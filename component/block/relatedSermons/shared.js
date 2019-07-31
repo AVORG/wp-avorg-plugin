@@ -26,12 +26,11 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
                 return index_js_1.default(recording.title, recording.url, recording.presentersString, imageUrl, imageAlt);
             };
             exports_1("loadRecordings", loadRecordings = function (className) {
-                var url = 'http://localhost:8000/api/related/20047';
+                var url = "http://localhost:8000/api/related/" + avorg_scripts.query.entity_id;
                 fetch(url).then(function (response) {
                     return response.json();
                 }).then(function (response) {
                     var elements = document.querySelectorAll("." + className), recordings = getRandomSubarray(Object.values(response), 3), content = recordings.map(itemTemplate).join("");
-                    console.log(elements);
                     elements.forEach(function (el) { return el.innerHTML = content; });
                 });
             });

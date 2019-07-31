@@ -59,11 +59,13 @@ final class TestBlockRepository extends Avorg\TestCase
 		$this->repository->enqueueBlockEditorAssets();
 
 		$this->mockFilesystem->assertMethodCalledWith('getMatchingPathsRecursive',
-			'component/block', '/index\.js/');
+			'component/block', '/index\.js$/');
 	}
 
 	public function testLocalizesLoaderScript()
 	{
+		$this->mockWordPress->setReturnValue('get_all_query_vars', ['GET']);
+
 		$this->mockFilesystem->setReturnValue('getMatchingPathsRecursive', [
 			AVORG_BASE_PATH . 'component/block/layer/name/index.js'
 		]);
@@ -72,7 +74,8 @@ final class TestBlockRepository extends Avorg\TestCase
 
 		$this->mockWordPress->assertMethodCalledWith('wp_localize_script',
 			'avorg_block_editor_scripts', 'avorg_scripts', [
-				'urls' => [AVORG_BASE_URL . 'component/block/layer/name/index.js']
+				'urls' => [AVORG_BASE_URL . 'component/block/layer/name/index.js'],
+				'query' => ['GET']
 			]);
 	}
 
@@ -92,6 +95,8 @@ final class TestBlockRepository extends Avorg\TestCase
 
 	public function testEnqueueFrontendAssetsLocalizesTypeScriptLoader()
 	{
+		$this->mockWordPress->setReturnValue('get_all_query_vars', ['GET']);
+
 		$this->mockFilesystem->setReturnValue('getMatchingPathsRecursive', [
 			AVORG_BASE_PATH . 'component/block/layer/name/frontend.js'
 		]);
@@ -100,7 +105,8 @@ final class TestBlockRepository extends Avorg\TestCase
 
 		$this->mockWordPress->assertMethodCalledWith('wp_localize_script',
 			'avorg_block_frontend_scripts', 'avorg_scripts', [
-				'urls' => [AVORG_BASE_URL . 'component/block/layer/name/frontend.js']
+				'urls' => [AVORG_BASE_URL . 'component/block/layer/name/frontend.js'],
+				'query' => ['GET']
 			]);
 	}
 

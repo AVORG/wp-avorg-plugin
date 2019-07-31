@@ -31,7 +31,7 @@ class BlockRepository
 	{
 		$this->enqueueAssets(
 			'avorg_block_editor_scripts',
-			'/index\.js/'
+			'/index\.js$/'
 		);
 	}
 
@@ -39,7 +39,7 @@ class BlockRepository
 	{
 		$this->enqueueAssets(
 			'avorg_block_frontend_scripts',
-			'/frontend\.js/'
+			'/frontend\.js$/'
 		);
 	}
 
@@ -78,7 +78,8 @@ class BlockRepository
 		}, $blockScriptPaths);
 
 		$this->wp->wp_localize_script($handle, 'avorg_scripts', [
-			'urls' => $blockScriptUrls
+			'urls' => $blockScriptUrls,
+			'query' => $this->wp->get_all_query_vars()
 		]);
 	}
 }

@@ -67,4 +67,10 @@ class WordPress
 
 		return array_map(function($row) { return $row->meta_value; }, $result);
 	}
+
+	public function get_all_query_vars()
+	{
+		global $wp_query;
+		return $wp_query->query_vars;
+	}
 }

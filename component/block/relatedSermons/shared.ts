@@ -1,5 +1,10 @@
 import molecule_mediaObject from "../../molecule/mediaObject/index.js";
 
+declare const avorg_scripts: {
+    query: any;
+    urls: string[]
+};
+
 interface Recording {
     id: number;
     title: string;
@@ -42,15 +47,13 @@ const itemTemplate = function (recording: Recording) {
 };
 
 export const loadRecordings = (className: string) => {
-    const url = 'http://localhost:8000/api/related/20047';
+    const url = `http://localhost:8000/api/related/${avorg_scripts.query.entity_id}`;
     fetch(url).then(response => {
         return response.json();
     }).then(response => {
         const elements = document.querySelectorAll(`.${className}`),
             recordings = getRandomSubarray(Object.values(response), 3),
             content = recordings.map(itemTemplate).join("");
-
-        console.log(elements);
 
         elements.forEach(el => el.innerHTML = content);
     });

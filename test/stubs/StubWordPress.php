@@ -32,6 +32,11 @@ class StubWordPress extends WordPress
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
+	public function get_all_query_vars()
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
 	public function passCurrentPageCheck()
 	{
 		$this->setReturnValue("get_option", 100);
