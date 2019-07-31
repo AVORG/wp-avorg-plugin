@@ -228,13 +228,18 @@ final class TestPlugin extends Avorg\TestCase
 			[
 				'enqueue_block_editor_assets',
 				'BlockRepository',
-				'registerBlocks'
+				'enqueueBlockEditorAssets'
 			],
 			[
 				"admin_menu",
 				'AdminPanel',
 				'register'
-			]
+			],
+			[
+				'enqueue_block_assets',
+				'BlockRepository',
+				'enqueueBlockFrontendAssets'
+			],
 		];
 	}
 
