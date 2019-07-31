@@ -3,6 +3,7 @@ import molecule_mediaObject from "../../molecule/mediaObject/index.js";
 interface Recording {
     id: number;
     title: string;
+    url: string;
     presenters: {
         photo: string;
         name: {
@@ -11,6 +12,7 @@ interface Recording {
             suffix: string;
         };
     }[];
+    presentersString: string;
     videoFiles: {}[];
 }
 
@@ -29,10 +31,14 @@ const itemTemplate = function (recording: Recording) {
     const imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
     const imageAlt = recording.presenters[0] ?
         `${recording.presenters[0].name.first} ${recording.presenters[0].name.last} ${recording.presenters[0].name.suffix}` : null;
-    const presenters = recording.presenters.map((presenter) =>
-        `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ");
 
-    return molecule_mediaObject(recording.title, presenters, imageUrl, imageAlt);
+    return molecule_mediaObject(
+        recording.title,
+        recording.url,
+        recording.presentersString,
+        imageUrl,
+        imageAlt
+    );
 };
 
 export const loadRecordings = (className: string) => {

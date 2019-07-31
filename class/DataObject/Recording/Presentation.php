@@ -18,6 +18,7 @@ class Presentation extends DataObject\Recording
 			"logUrl" => $this->getLogUrl(),
 			"datePublished" => $this->getDatePublished(),
 			"presenters" => $this->getPresenters(),
+			"presentersString" => $this->getPresentersString(),
 			"image" => $this->getImage(),
 			"description" => $this->getDescription(),
 			"audioFiles" => $this->convertMediaFilesToArrays($this->getAudioFiles()),
@@ -36,17 +37,6 @@ class Presentation extends DataObject\Recording
 		});
 	}
 
-	public function getPresentersString()
-	{
-		$presenters = $this->getPresenters();
-		$presenterFragments = array_map(function ($presenter) {
-			$pieces = array_filter($presenter["name"]);
-			return implode(" ", $pieces);
-		}, $presenters);
-
-		return implode(", ", $presenterFragments);
-	}
-
 	public function getPresenters()
 	{
 		$apiPresenters = (isset($this->data->presenters)) ? $this->data->presenters : [];
@@ -61,6 +51,17 @@ class Presentation extends DataObject\Recording
 				]
 			];
 		}, $apiPresenters);
+	}
+
+	public function getPresentersString()
+	{
+		$presenters = $this->getPresenters();
+		$presenterFragments = array_map(function ($presenter) {
+			$pieces = array_filter($presenter["name"]);
+			return implode(" ", $pieces);
+		}, $presenters);
+
+		return implode(", ", $presenterFragments);
 	}
 
 	public function getDatePublished()

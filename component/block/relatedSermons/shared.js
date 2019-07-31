@@ -23,10 +23,7 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
                 var imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
                 var imageAlt = recording.presenters[0] ?
                     recording.presenters[0].name.first + " " + recording.presenters[0].name.last + " " + recording.presenters[0].name.suffix : null;
-                var presenters = recording.presenters.map(function (presenter) {
-                    return presenter.name.first + " " + presenter.name.last + " " + presenter.name.suffix;
-                }).join(", ");
-                return index_js_1.default(recording.title, presenters, imageUrl, imageAlt);
+                return index_js_1.default(recording.title, recording.url, recording.presentersString, imageUrl, imageAlt);
             };
             exports_1("loadRecordings", loadRecordings = function (className) {
                 var url = 'http://localhost:8000/api/related/20047';

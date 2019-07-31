@@ -1,6 +1,6 @@
 <?php
 
-final class TestRecording extends Avorg\TestCase
+final class TestPresentation extends Avorg\TestCase
 {
 	/**
 	 * @throws ReflectionException
@@ -289,6 +289,20 @@ final class TestRecording extends Avorg\TestCase
 					]
 				]
 			],
+			"presenters string" => [
+				[
+					"presenters" => [
+						[
+							"photo256" => "photo_url",
+							"givenName" => "first_name",
+							"surname" => "last_name",
+							"suffix" => "suffix"
+						]
+					]
+				],
+				"presentersString",
+				"first_name last_name suffix"
+			],
 			"image" => [
 				[
 					"photo86" => "photo_url"
@@ -349,7 +363,7 @@ final class TestRecording extends Avorg\TestCase
 				],
 				"description",
 				"This is the description. Presenters: first_name last_name suffix"
-			]
+			],
 		];
 	}
 
