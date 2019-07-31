@@ -13,9 +13,9 @@ const blockStyle = {
 };
 
 blocks.registerBlockType('avorg/block-relatedsermons', {
-    title: 'Example: Basic',
-    icon: 'universal-access-alt',
-    category: 'layout',
+    title: 'Related Sermons',
+    icon: 'excerpt-view',
+    category: 'widgets',
     edit: function (props: any) {
         loadRecordings(props.className);
 

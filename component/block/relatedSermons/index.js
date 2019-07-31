@@ -14,9 +14,9 @@ System.register(["./shared.js"], function (exports_1, context_1) {
             el = element.createElement;
             blockStyle = {};
             blocks.registerBlockType('avorg/block-relatedsermons', {
-                title: 'Example: Basic',
-                icon: 'universal-access-alt',
-                category: 'layout',
+                title: 'Related Sermons',
+                icon: 'excerpt-view',
+                category: 'widgets',
                 edit: function (props) {
                     shared_js_1.loadRecordings(props.className);
                     return el('p', { style: blockStyle, className: props.className }, 'Loading...');
