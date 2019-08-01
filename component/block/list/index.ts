@@ -15,17 +15,66 @@ namespace AvorgBlockList {
         title: 'Recordings List',
         icon: 'playlist-audio',
         category: 'widgets',
+        attributes: {
+            type: {
+                type: 'string',
+                source: 'attribute',
+                attribute: 'data-type',
+                selector: '[data-type]'
+            }
+        },
         edit: function (props: any) {
+            const { attributes: { type }, setAttributes } = props;
+
+            const {
+                RichText,
+                AlignmentToolbar,
+                BlockControls,
+                BlockAlignmentToolbar,
+                InspectorControls,
+            } = wp.editor;
+
+            const {
+                Toolbar,
+                Button,
+                Tooltip,
+                PanelBody,
+                PanelRow,
+                FormToggle,
+                SelectControl,
+            } = wp.components;
+
+            const select = el(SelectControl, {
+                label: 'List Type',
+                value: type,
+                options: [
+                    { value: '', label: 'Recent' },
+                    { value: 'featured', label: 'Featured' },
+                    { value: 'popular', label: 'Popular' }
+                ],
+                onChange: (type: string) => {
+                    setAttributes({ type });
+                }
+            });
+            const panelRow = el(PanelRow, {}, select);
+            const panel = el(PanelBody, {title: "List Type"}, panelRow);
+            const inspectorControls = el(InspectorControls, {}, panel);
+
             return el(
                 'p',
-                {style: blockStyle, className: props.className},
-                'Loading...'
+                {style: blockStyle, 'data-type': type,  className: props.className},
+                [
+                    inspectorControls,
+                    'Loading...'
+                ]
             );
         },
         save: function (props: any) {
+            const { attributes: { type } } = props;
+
             return el(
                 'p',
-                {style: blockStyle},
+                {style: blockStyle, 'data-type': type},
                 'Loading...'
             );
         },
