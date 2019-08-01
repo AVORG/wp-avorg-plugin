@@ -33,8 +33,7 @@ final class TestPlugin extends Avorg\TestCase
 	{
 		return [
 			["avorg-bits", "Avorg\\ContentBits"],
-			["avorg-list", "Avorg\\Shortcode\\Recordings"],
-			["avorg-rss", "Avorg\\Shortcode\\Rss"]
+			["avorg-list", "Avorg\\Shortcode\\Recordings"]
 		];
 	}
 

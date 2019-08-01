@@ -26,7 +26,10 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
                 return index_js_1.default(recording.title, recording.url, recording.presentersString, imageUrl, imageAlt);
             };
             exports_1("loadRecordings", loadRecordings = function (className) {
-                var url = "http://localhost:8000/api/related/" + avorg_scripts.query.entity_id;
+                var entityId = avorg_scripts.query.entity_id;
+                if (!entityId)
+                    return;
+                var url = "http://localhost:8000/api/related/" + entityId;
                 fetch(url).then(function (response) {
                     return response.json();
                 }).then(function (response) {

@@ -47,7 +47,11 @@ const itemTemplate = function (recording: Recording) {
 };
 
 export const loadRecordings = (className: string) => {
-    const url = `http://localhost:8000/api/related/${avorg_scripts.query.entity_id}`;
+    const entityId = avorg_scripts.query.entity_id;
+
+    if (!entityId) return;
+
+    const url = `http://localhost:8000/api/related/${entityId}`;
     fetch(url).then(response => {
         return response.json();
     }).then(response => {
