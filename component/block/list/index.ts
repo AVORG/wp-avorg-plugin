@@ -1,3 +1,5 @@
+import { loadRecordings } from "./shared.js";
+
 namespace AvorgBlockList {
     declare const wp: any;
 
@@ -24,23 +26,17 @@ namespace AvorgBlockList {
             }
         },
         edit: function (props: any) {
-            const { attributes: { type }, setAttributes } = props;
+            const { attributes: { type }, setAttributes, className } = props;
+
+            loadRecordings(className);
 
             const {
-                RichText,
-                AlignmentToolbar,
-                BlockControls,
-                BlockAlignmentToolbar,
                 InspectorControls,
             } = wp.editor;
 
             const {
-                Toolbar,
-                Button,
-                Tooltip,
                 PanelBody,
                 PanelRow,
-                FormToggle,
                 SelectControl,
             } = wp.components;
 

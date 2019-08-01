@@ -1,25 +1,9 @@
-import molecule_mediaObject from "../../molecule/mediaObject/index.js";
+import molecule_recordingList from "../../molecule/recordingList/index.js";
 
 declare const avorg_scripts: {
     query: any;
     urls: string[]
 };
-
-interface Recording {
-    id: number;
-    title: string;
-    url: string;
-    presenters: {
-        photo: string;
-        name: {
-            first: string;
-            last: string;
-            suffix: string;
-        };
-    }[];
-    presentersString: string;
-    videoFiles: {}[];
-}
 
 function getRandomSubarray(arr: any[], size: number) {
     var shuffled = arr.slice(0), i = arr.length, temp, index;
@@ -32,20 +16,6 @@ function getRandomSubarray(arr: any[], size: number) {
     return shuffled.slice(0, size);
 }
 
-const itemTemplate = function (recording: Recording) {
-    const imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
-    const imageAlt = recording.presenters[0] ?
-        `${recording.presenters[0].name.first} ${recording.presenters[0].name.last} ${recording.presenters[0].name.suffix}` : null;
-
-    return molecule_mediaObject(
-        recording.title,
-        recording.url,
-        recording.presentersString,
-        imageUrl,
-        imageAlt
-    );
-};
-
 export const loadRecordings = (className: string) => {
     const entityId = avorg_scripts.query.entity_id;
 
@@ -57,7 +27,7 @@ export const loadRecordings = (className: string) => {
     }).then(response => {
         const elements = document.querySelectorAll(`.${className}`),
             recordings = getRandomSubarray(Object.values(response), 3),
-            content = recordings.map(itemTemplate).join("");
+            content = molecule_recordingList(recordings)
 
         elements.forEach(el => el.innerHTML = content);
     });

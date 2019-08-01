@@ -1,6 +1,6 @@
-System.register(["../../molecule/mediaObject/index.js"], function (exports_1, context_1) {
+System.register(["../../molecule/recordingList/index.js"], function (exports_1, context_1) {
     "use strict";
-    var index_js_1, itemTemplate, loadRecordings;
+    var index_js_1, loadRecordings;
     var __moduleName = context_1 && context_1.id;
     function getRandomSubarray(arr, size) {
         var shuffled = arr.slice(0), i = arr.length, temp, index;
@@ -19,12 +19,6 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
             }
         ],
         execute: function () {
-            itemTemplate = function (recording) {
-                var imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
-                var imageAlt = recording.presenters[0] ?
-                    recording.presenters[0].name.first + " " + recording.presenters[0].name.last + " " + recording.presenters[0].name.suffix : null;
-                return index_js_1.default(recording.title, recording.url, recording.presentersString, imageUrl, imageAlt);
-            };
             exports_1("loadRecordings", loadRecordings = function (className) {
                 var entityId = avorg_scripts.query.entity_id;
                 if (!entityId)
@@ -33,7 +27,7 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
                 fetch(url).then(function (response) {
                     return response.json();
                 }).then(function (response) {
-                    var elements = document.querySelectorAll("." + className), recordings = getRandomSubarray(Object.values(response), 3), content = recordings.map(itemTemplate).join("");
+                    var elements = document.querySelectorAll("." + className), recordings = getRandomSubarray(Object.values(response), 3), content = index_js_1.default(recordings);
                     elements.forEach(function (el) { return el.innerHTML = content; });
                 });
             });
