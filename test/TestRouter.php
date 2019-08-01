@@ -216,8 +216,12 @@ final class TestRouter extends Avorg\TestCase
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Sponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
 			],
 			[
-				"/api/related/10",
+				"/api/presentation/related/10",
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RelatedSermons&entity_id=10"
+			],
+			[
+				"/api/presentation/featured",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_Presentations&entity_id=featured"
 			]
 		];
 	}

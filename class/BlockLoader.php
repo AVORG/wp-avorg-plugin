@@ -7,7 +7,7 @@ use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class BlockRepository
+class BlockLoader
 {
 	/** @var Filesystem $filesystem */
 	private $filesystem;

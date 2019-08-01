@@ -1,18 +1,18 @@
 <?php
 
 
-use Avorg\BlockRepository;
+use Avorg\BlockLoader;
 
-final class TestBlockRepository extends Avorg\TestCase
+final class TestBlockLoader extends Avorg\TestCase
 {
-	/** @var BlockRepository $repository */
+	/** @var BlockLoader $repository */
 	protected $repository;
 
 	public function setUp()
 	{
 		parent::setUp();
 
-		$this->repository = $this->factory->secure("Avorg\\BlockRepository");
+		$this->repository = $this->factory->secure("Avorg\\BlockLoader");
 	}
 
 	// Helpers

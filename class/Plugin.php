@@ -15,7 +15,7 @@ class Plugin
 	/** @var AjaxActionFactory $ajaxActionFactory */
 	private $ajaxActionFactory;
 
-	/** @var BlockRepository $blockRepository */
+	/** @var BlockLoader $blockRepository */
 	private $blockRepository;
 
 	/** @var ContentBits $contentBits */
@@ -48,7 +48,7 @@ class Plugin
 	public function __construct(
 		AdminPanel $adminPanel,
 		AjaxActionFactory $ajaxActionFactory,
-		BlockRepository $blockRepository,
+		BlockLoader $blockRepository,
 		ContentBits $contentBits,
 		Localization $localization,
 		PageFactory $pageFactory,

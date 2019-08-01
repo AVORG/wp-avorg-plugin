@@ -226,7 +226,7 @@ final class TestPlugin extends Avorg\TestCase
 			],
 			[
 				'enqueue_block_editor_assets',
-				'BlockRepository',
+				'BlockLoader',
 				'enqueueBlockEditorAssets'
 			],
 			[
@@ -236,7 +236,7 @@ final class TestPlugin extends Avorg\TestCase
 			],
 			[
 				'enqueue_block_assets',
-				'BlockRepository',
+				'BlockLoader',
 				'enqueueBlockFrontendAssets'
 			],
 		];

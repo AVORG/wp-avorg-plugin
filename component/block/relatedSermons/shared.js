@@ -29,7 +29,7 @@ System.register(["../../molecule/mediaObject/index.js"], function (exports_1, co
                 var entityId = avorg_scripts.query.entity_id;
                 if (!entityId)
                     return;
-                var url = "http://localhost:8000/api/related/" + entityId;
+                var url = "http://localhost:8000/api/presentation/related/" + entityId;
                 fetch(url).then(function (response) {
                     return response.json();
                 }).then(function (response) {

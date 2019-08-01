@@ -47,6 +47,10 @@ class PresentationRepository extends DataObjectRepository
      */
     public function getPresentations($list = "")
     {
+    	$list = strtolower($list);
+
+		if ($list && !in_array($list, ["featured", "popular"])) $list = "";
+
         $apiResponse = $this->api->getRecordings($list);
 
 		return $this->makeDataObjects($apiResponse);
