@@ -83,14 +83,14 @@ final class TestRelatedSermonsEndpoint extends Avorg\TestCase
 	{
 		$this->mockAvorgApi->loadRecording([
 			"presenters" => [
-				["id" => "1"], ["id" => "2"]
+				["id" => "7"], ["id" => "8"]
 			]
 		]);
 
 		$this->endpoint->getOutput();
 
-		$this->mockAvorgApi->assertMethodCalled("getPresenterRecordings", "1");
-		$this->mockAvorgApi->assertMethodCalled("getPresenterRecordings", "2");
+		$this->mockAvorgApi->assertMethodCalledWith("getPresenterRecordings", "7");
+		$this->mockAvorgApi->assertMethodCalledWith("getPresenterRecordings", "8");
 	}
 
 	public function testReturnsPresentations()

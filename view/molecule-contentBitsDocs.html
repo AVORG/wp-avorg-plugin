@@ -1,18 +1,24 @@
-<p>The content bits shortcode is included in a page or post with the following code:</p>
-
-<pre>[avorg-bits id=identifierString]</pre>
+<p>Placeholder blocks display content bits. Each placeholder is provided with an identifier used to select content bits
+    to display.</p>
 
 <p>Identifiers could be `mediaSidebar`, `homeFooter`, `smallAds`, or any other string that makes sense as a way to
-	tie the shortcode instance to a collection of content bits. The identifier may be unique, but it doesn't need to be.</p>
+    tie the block instance to a collection of content bits. The identifier may be unique, but it doesn't need to
+    be.</p>
 
-<p>Once you've placed the shortcode in a page or post, you'll need to create one or more pieces of content in the Content
-	Bits page in the admin interface that specify the previously-used id in the "Identifier" meta box.</p>
+<p>Once you've placed the block in a page or post, you'll need to create one or more pieces of content in the
+    Content Bits page in the admin interface that specify the previously-used id in the "Identifier" meta box.</p>
 
-<p>What the shortcode actually displays depends on the situation:</p>
+<p>What the block actually displays depends on the situation:</p>
 
 <ol>
-	<li>If there are no pieces of content that are associated with the used identifier, the shortcode will output nothing.</li>
-	<li>If there is one or more piece of content associated with the identifier, one will be chosen at random to be displayed.</li>
-	<li>If there is a piece of content associated with the identifier and also associated with one or more media IDs, a content bits shortcode using that identifier on the page for one of those media items will display one of the pieces
-		of content explicitly associated with both that media item's ID and the shortcode identifier.</li>
+    <li>If there are no pieces of content that are associated with the used identifier, the block will output
+        nothing.
+    </li>
+    <li>If there is one or more piece of content associated with the identifier, one will be chosen at random to be
+        displayed.
+    </li>
+    <li>If there is a piece of content associated with the identifier and also associated with one or more media IDs, a
+        Placeholder block using that identifier on the page for one of those media items will display one of the
+        pieces of content explicitly associated with both that media item's ID and the block identifier.
+    </li>
 </ol>

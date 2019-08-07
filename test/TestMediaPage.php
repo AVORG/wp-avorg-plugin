@@ -239,7 +239,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$this->mockWordPress->passCurrentPageCheck();
 
-		$recording = $this->convertArrayToObjectRecursively([
+		$recording = $this->arrayToObject([
 			"title" => "Recording Title"
         ]);
 		
@@ -344,7 +344,7 @@ final class TestMediaPage extends Avorg\TestCase
 
 	public function testFilterTitleTerminates()
 	{
-		$recording = $this->convertArrayToObjectRecursively([
+		$recording = $this->arrayToObject([
 			"recordings" => [
 				"title" => "Recording Title"
 			]

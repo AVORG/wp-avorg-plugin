@@ -11,12 +11,12 @@
 
 		<datalist id="avorgBitIdentifiers">
 			{% for identifier in avorg.allIdentifiers %}
-			<option value="{{ identifier }}">
-				{% endfor %}
+				<option value="{{ identifier }}">
+			{% endfor %}
 		</datalist>
 	</p>
 
-	<p>A non-unique string used to reference bits from the shortcode. When more than one bit has the
+	<p>A non-unique string used to reference bits from the Placeholder block. When more than one bit has the
 		same identifier after other filters have been applied, one of the matching bits is selected
 		at random.</p>
 

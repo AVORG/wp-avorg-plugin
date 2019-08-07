@@ -41,16 +41,18 @@ class Router
 		$this->wp = $WordPress;
 	}
 
+    public function registerCallbacks()
+    {
+        $this->wp->add_filter("locale", array($this, "setLocale"));
+        $this->wp->add_filter("redirect_canonical", array($this, "filterRedirect"));
+        $this->wp->add_action('init', [$this, 'registerRoutes']);
+        $this->wp->register_activation_hook(AVORG_PLUGIN_FILE, [$this, 'activate']);
+    }
+
 	public function activate()
 	{
 		$this->registerRoutes();
 		$this->wp->flush_rewrite_rules();
-	}
-
-	public function registerCallbacks()
-	{
-		$this->wp->add_filter("locale", array($this, "setLocale"));
-		$this->wp->add_filter("redirect_canonical", array($this, "filterRedirect"));
 	}
 
 	public function registerRoutes()

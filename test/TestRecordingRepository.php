@@ -49,7 +49,7 @@ final class TestRecordingRepository extends Avorg\TestCase
 
     public function testLoadsRecordingsWithRecordingUrl()
     {
-        $apiRecording = $this->convertArrayToObjectRecursively([
+        $apiRecording = $this->arrayToObject([
 			"lang" => "en",
 			"id" => "1836",
 			"title" => 'E.P. Daniels and True Revival'

@@ -154,7 +154,7 @@ final class TestPresentation extends Avorg\TestCase
 
 	public function testGetUrl()
 	{
-		$apiRecording = $this->convertArrayToObjectRecursively([
+		$apiRecording = $this->arrayToObject([
 			"lang" => "en",
 			"id" => "1836",
 			"title" => 'E.P. Daniels and True Revival'
@@ -170,7 +170,7 @@ final class TestPresentation extends Avorg\TestCase
 
 	public function testGetId()
 	{
-		$apiRecording = $this->convertArrayToObjectRecursively([
+		$apiRecording = $this->arrayToObject([
 			"id" => "1836"
 		]);
 
@@ -188,7 +188,7 @@ final class TestPresentation extends Avorg\TestCase
 	 */
 	public function testToJson($recordingArray, $expectedKey, $expectedValue)
 	{
-		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
+		$apiRecording = $this->arrayToObject($recordingArray);
 		$recording = $this->makePresentation($apiRecording);
 		$json = json_encode($recording);
 		$object = json_decode($json, true);
@@ -414,17 +414,6 @@ final class TestPresentation extends Avorg\TestCase
 			]
 		]);
 
-		$expected = [
-			[
-				"name" => [
-					"first" => "first_name",
-					"last" => "last_name",
-					"suffix" => "suffix"
-				],
-				"photo" => null
-			]
-		];
-
-		$this->assertEquals($expected, $recording->presenters);
+		$this->assertEquals('first_name', $recording->presenters[0]['name']['first']);
 	}
 }

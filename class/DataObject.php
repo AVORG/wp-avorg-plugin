@@ -28,7 +28,7 @@ abstract class DataObject implements JsonSerializable
 	 */
 	public function setData($data)
 	{
-		$this->data = $data;
+		$this->data = (object)$data;
 		return $this;
 	}
 
@@ -41,7 +41,11 @@ abstract class DataObject implements JsonSerializable
 	{
 		$getter = "get" . ucfirst($name);
 
-		return method_exists($this, $getter) ? $this->$getter() : $this->data->$name;
+		if (method_exists($this, $getter)) {
+            return $this->$getter();
+        }
+
+		return property_exists($this->data, $name) ? $this->data->$name : null;
 	}
 
 	public function __toString()
@@ -75,10 +79,10 @@ abstract class DataObject implements JsonSerializable
 
 	public function getId()
 	{
-		return intval($this->data->id);
+		return property_exists($this->data, 'id') ? intval($this->data->id) : null;
 	}
 
 	protected function getSlug() {
-		return $this->router->formatStringForUrl($this->data->title) . ".html";
+		return $this->router->formatStringForUrl($this->title) . ".html";
 	}
 }

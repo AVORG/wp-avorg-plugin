@@ -12,7 +12,7 @@ class BibleChapter extends DataObject\Recording
 	public function toArray()
 	{
 		return array_merge(parent::toArray(), [
-			"title" => "Chapter " . $this->data->chapter_id,
+			"title" => "Chapter " . $this->chapter_id,
 			"audioFiles" => $this->getAudioFileArrays()
 		]);
 	}
@@ -20,12 +20,12 @@ class BibleChapter extends DataObject\Recording
 	private function getAudioFileArrays()
 	{
 		$base = 'https://www.audioverse.org/english/download/audiobible';
-		$filename = pathinfo($this->data->path)['filename'];
-		$bookId = $this->data->book_id;
-		$chapterId = $this->data->chapter_id;
+		$filename = pathinfo($this->path)['filename'];
+		$bookId = $this->book_id;
+		$chapterId = $this->chapter_id;
 		$pieces = explode('_', $filename);
 		$dir = end($pieces) . "${bookId}_${chapterId}.mp3";
-		$basename = urlencode($this->data->path);
+		$basename = urlencode($this->path);
 
 		return [
 			[
@@ -37,6 +37,6 @@ class BibleChapter extends DataObject\Recording
 
 	public function getId()
 	{
-		return sha1($this->data->path);
+		return sha1($this->path);
 	}
 }

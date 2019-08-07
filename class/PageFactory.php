@@ -22,6 +22,14 @@ class PageFactory
 		$this->filesystem = $filesystem;
 	}
 
+	public function registerCallbacks()
+    {
+        $pages = $this->getPages();
+        array_walk($pages, function (Page $page) {
+            $page->registerCallbacks();
+        });
+    }
+
 	/**
 	 * @return array
 	 */

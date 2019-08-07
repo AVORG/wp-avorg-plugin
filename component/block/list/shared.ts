@@ -5,7 +5,7 @@ export const loadRecordings = (className: string) => {
 
     elements.forEach(el => {
         const list = el.getAttribute('data-type'),
-            url = `http://localhost:8000/api/presentation/${list}`;
+            url = `/api/presentation/${list}`;
         fetch(url).then(response => {
             return response.json();
         }).then(response => {

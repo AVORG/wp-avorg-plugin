@@ -51,6 +51,6 @@ class BibleBook extends DataObject
 	public function getChapters()
 	{
 		return $this->bibleChapterRepository->getChapters(
-			$this->data->dam_id, $this->data->book_id, $this->data->testament);
+			$this->dam_id, $this->book_id, $this->testament);
 	}
 }

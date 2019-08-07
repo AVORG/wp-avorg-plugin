@@ -30,6 +30,6 @@ class Playlist extends DataObject
 	 */
 	public function getPresentations()
 	{
-		return $this->presentationRepository->getPlaylistPresentations($this->data->id);
+		return $this->presentationRepository->getPlaylistPresentations($this->id);
 	}
 }

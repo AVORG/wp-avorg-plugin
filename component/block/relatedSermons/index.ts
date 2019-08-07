@@ -23,7 +23,7 @@ namespace AvorgRelatedSermons {
             return el(
                 'p',
                 {style: blockStyle, className: props.className},
-                'Loading...'
+                'Related Sermons'
             );
         },
         save: function (props: any) {
