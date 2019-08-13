@@ -21,7 +21,7 @@ export const loadRecordings = (className: string) => {
 
     if (!entityId) return;
 
-    const url = `http://localhost:8000/api/presentation/related/${entityId}`;
+    const url = `/api/presentation/related/${entityId}`;
     fetch(url).then(response => {
         return response.json();
     }).then(response => {
