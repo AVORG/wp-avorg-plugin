@@ -2,6 +2,7 @@
 
 error_reporting(E_ALL);
 
+define( "WP_DEBUG", "WP_DEBUG" );
 define( "ABSPATH", "/" );
 define( "AVORG_BASE_PATH", dirname(dirname(__FILE__)) );
 define( "AVORG_BASE_URL", "AVORG_BASE_URL" );

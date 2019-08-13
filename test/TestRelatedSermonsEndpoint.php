@@ -83,7 +83,8 @@ final class TestRelatedSermonsEndpoint extends Avorg\TestCase
 	{
 		$this->mockAvorgApi->loadRecording([
 			"presenters" => [
-				["id" => "7"], ["id" => "8"]
+                $this->arrayToObject(["id" => "7"]),
+                $this->arrayToObject(["id" => "8"])
 			]
 		]);
 
@@ -95,7 +96,9 @@ final class TestRelatedSermonsEndpoint extends Avorg\TestCase
 
 	public function testReturnsPresentations()
 	{
-		$this->mockAvorgApi->loadRecording(["presenters" => [[]]]);
+		$this->mockAvorgApi->loadRecording(["presenters" => [
+		    $this->arrayToObject([])
+        ]]);
 		$this->mockAvorgApi->loadConferenceRecordings(["id" => "1"]);
 		$this->mockAvorgApi->loadSeriesRecordings(["id" => "2"]);
 		$this->mockAvorgApi->loadSponsorRecordings(["id" => "3"]);
@@ -109,7 +112,9 @@ final class TestRelatedSermonsEndpoint extends Avorg\TestCase
 
 	public function testRemovesDupes()
 	{
-		$this->mockAvorgApi->loadRecording(["presenters" => [[]]]);
+		$this->mockAvorgApi->loadRecording(["presenters" => [
+            $this->arrayToObject([])
+        ]]);
 		$this->mockAvorgApi->loadConferenceRecordings([]);
 		$this->mockAvorgApi->loadSeriesRecordings([]);
 		$this->mockAvorgApi->loadSponsorRecordings([]);

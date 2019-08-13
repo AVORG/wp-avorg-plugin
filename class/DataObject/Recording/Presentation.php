@@ -41,13 +41,13 @@ class Presentation extends DataObject\Recording
 	{
 		$apiPresenters = (isset($this->data->presenters)) ? $this->data->presenters : [];
 
-		return array_map(function ($presenter) {
+		return array_map(function($presenter) {
 			return array_merge((array)$presenter, [
                 "photo" => property_exists($presenter, 'photo256') ? $presenter->photo256 : null,
                 "name" => [
-                    "first" => $presenter->givenName,
-                    "last" => $presenter->surname,
-                    "suffix" => $presenter->suffix
+                    "first" => property_exists($presenter, 'givenName') ? $presenter->givenName : null,
+                    "last" => property_exists($presenter, 'surname') ? $presenter->surname : null,
+                    "suffix" => property_exists($presenter, 'suffix') ? $presenter->suffix : null
                 ]
             ]);
 		}, $apiPresenters);

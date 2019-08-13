@@ -40,7 +40,7 @@ final class TestRouter extends Avorg\TestCase
 
 			preg_match("/$regex/", $inputUrl, $matches);
 
-			return eval("return \"$redirect\";");
+			return @eval("return \"$redirect\";");
 		}, $addRewriteCalls);
 
 		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $addRewriteCalls);

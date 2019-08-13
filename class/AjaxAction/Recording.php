@@ -29,7 +29,7 @@ class Recording extends AjaxAction
 	 */
 	protected function getResponseData()
 	{
-		$id = $_POST["entity_id"];
+		$id = array_key_exists('entity_id', $_POST) ? $_POST["entity_id"] : null;
 		$recording = $this->recordingRepository->getPresentation($id);
 
 		return [

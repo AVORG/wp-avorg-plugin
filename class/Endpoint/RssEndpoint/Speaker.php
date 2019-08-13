@@ -74,6 +74,8 @@ class Speaker extends RssEndpoint
 	{
 		$presenter = $this->getEntity();
 
+		if (!$presenter) return null;
+
 		return $presenter->photo256;
 	}
 

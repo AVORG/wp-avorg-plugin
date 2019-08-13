@@ -128,7 +128,9 @@ class Router
 
 	public function getRequestPath()
 	{
-		return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+        $url = array_key_exists('REQUEST_URI', $_SERVER) ? $_SERVER["REQUEST_URI"] : null;
+
+        return parse_url($url, PHP_URL_PATH);
 	}
 
 	public function buildUrl($routableClass, $variables = [])
