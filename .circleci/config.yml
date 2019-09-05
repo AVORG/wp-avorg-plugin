@@ -1,8 +1,6 @@
-# PHP CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-php/ for more details
-#
-version: 2
+version: 2.1
+orbs:
+  pr-comment: benjlevesque/pr-comment@0.1.4
 jobs:
   build:
     docker:
@@ -44,6 +42,10 @@ jobs:
 
       - store_artifacts:
           path: wp-avorg-plugin.zip
+
+      - pr-comment:
+          comment: "Testing"
+          maxComments: 1000
 
       - save_cache:
           paths:
