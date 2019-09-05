@@ -43,7 +43,7 @@ jobs:
       - store_artifacts:
           path: wp-avorg-plugin.zip
 
-      - pr-comment:
+      - pr-comment/pr-comment:
           comment: "Testing"
           maxComments: 1000
 
