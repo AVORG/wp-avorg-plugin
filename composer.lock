@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "11dd8868aad24ba5c77a77a5a4ffd823",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/narthur/natlib.git",
-                "reference": "949124008f5d192b8110c2ecdb1e525942513714"
+                "reference": "25b669f02a7b7ac2d1e6bbdedcc508968f76c464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/narthur/natlib/zipball/949124008f5d192b8110c2ecdb1e525942513714",
-                "reference": "949124008f5d192b8110c2ecdb1e525942513714",
+                "url": "https://api.github.com/repos/narthur/natlib/zipball/25b669f02a7b7ac2d1e6bbdedcc508968f76c464",
+                "reference": "25b669f02a7b7ac2d1e6bbdedcc508968f76c464",
                 "shasum": ""
             },
             "type": "library",
@@ -42,7 +42,7 @@
                 "source": "https://github.com/narthur/natlib/tree/master",
                 "issues": "https://github.com/narthur/natlib/issues"
             },
-            "time": "2019-05-14T17:49:57+00:00"
+            "time": "2019-08-13T19:44:35+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
