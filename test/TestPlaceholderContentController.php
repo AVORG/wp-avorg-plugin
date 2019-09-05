@@ -28,7 +28,7 @@ final class TestPlaceholderContentController extends Avorg\TestCase
         $this->mockWordPress->assertMethodCalledWith(
             'register_rest_route',
             'avorg/v1',
-            '/placeholder-content/(?P<id>[\d]+)',
+            '/placeholder-content/(?P<id>[\w]+)(?:/(?P<media_id>[\d]+))?',
             [
                 'methods' => 'GET',
                 'callback' => [$this->controller, 'getItem'],
@@ -80,30 +80,11 @@ final class TestPlaceholderContentController extends Avorg\TestCase
                     'key' => 'avorgBitIdentifier',
                     'value' => 'identifier'
                 ]
-            ],
-            'tax_query' => [
-                [
-                    'taxonomy' => 'avorgMediaIds',
-                    'field' => 'slug',
-                    'terms' => null
-                ]
             ]
         ]);
     }
 
-    public function testSelectsItemRandomly()
-    {
-        $this->mockWordPress->setReturnValue('get_posts', ['item_1', 'item_2']);
-
-        $this->controller->getItem([
-            'id' => 'identifier',
-            'media_id' => 'media_id'
-        ]);
-
-        $this->mockPhp->assertMethodCalledWith('array_rand', ['item_1', 'item_2']);
-    }
-
-    public function testReturnsPostContent()
+    public function testReturnsPost()
     {
         $post = $this->arrayToObject([
             'post_content' => 'the_content'
@@ -112,12 +93,12 @@ final class TestPlaceholderContentController extends Avorg\TestCase
         $this->mockWordPress->setReturnValue('get_posts', [$post]);
         $this->mockPhp->setReturnValue('array_rand', 0);
 
-        $content = $this->controller->getItem([
+        $result = $this->controller->getItem([
             'id' => 'identifier',
             'media_id' => 'media_id'
         ]);
 
-        $this->assertEquals('the_content', $content);
+        $this->assertEquals([$post], $result);
     }
 
     public function testDoesNotAttemptSelectionWhenNoPosts()

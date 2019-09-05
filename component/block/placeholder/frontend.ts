@@ -5,23 +5,38 @@ namespace AvorgPlaceholder {
         }
     }
 
+    interface Avorg {
+        recordings: {
+            id: string
+        }[]
+    }
+
+    declare var avorg: Avorg;
+
     const loadContent = function (className: string) {
         const elements = document.querySelectorAll(`.${className}`);
 
         if (!elements) return;
 
-        const url = `/wp-json/wp/v2/avorg-content-bits`;
-        fetch(url).then(response => {
-            return response.json();
-        }).then(response => {
-            elements.forEach(el => {
-                const identifier: string = el.getAttribute('data-id'),
-                    matches = response.filter((item: bit) => {
-                        return item.meta.avorgBitIdentifier === identifier
-                    }),
-                    i = Math.floor(Math.random() * matches.length);
+        elements.forEach(el => {
+            const identifier: string = el.getAttribute('data-id'),
+                media_id: string = avorg.recordings ? avorg.recordings[0].id : '',
+                url: string = `/wp-json/avorg/v1/placeholder-content/${identifier}/${media_id}`;
 
-                el.innerHTML = matches[i].content.rendered
+            fetch(url).then(response => {
+                return response.json();
+            }).then(response => {
+                console.log(`matches for ${identifier}`, response);
+
+                if (typeof response !== 'undefined' && response.length > 0) {
+                    const i = Math.floor(Math.random() * response.length);
+
+                    el.innerHTML = response[i].post_content
+                } else {
+                    console.warn( `No content found for placeholder ID '${identifier}'` );
+
+                    el.innerHTML = '';
+                }
             });
         });
     };

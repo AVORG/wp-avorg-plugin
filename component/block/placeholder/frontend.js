@@ -4,15 +4,20 @@ var AvorgPlaceholder;
         var elements = document.querySelectorAll("." + className);
         if (!elements)
             return;
-        var url = "/wp-json/wp/v2/avorg-content-bits";
-        fetch(url).then(function (response) {
-            return response.json();
-        }).then(function (response) {
-            elements.forEach(function (el) {
-                var identifier = el.getAttribute('data-id'), matches = response.filter(function (item) {
-                    return item.meta.avorgBitIdentifier === identifier;
-                }), i = Math.floor(Math.random() * matches.length);
-                el.innerHTML = matches[i].content.rendered;
+        elements.forEach(function (el) {
+            var identifier = el.getAttribute('data-id'), media_id = avorg.recordings ? avorg.recordings[0].id : '', url = "/wp-json/avorg/v1/placeholder-content/" + identifier + "/" + media_id;
+            fetch(url).then(function (response) {
+                return response.json();
+            }).then(function (response) {
+                console.log("matches for " + identifier, response);
+                if (typeof response !== 'undefined' && response.length > 0) {
+                    var i = Math.floor(Math.random() * response.length);
+                    el.innerHTML = response[i].post_content;
+                }
+                else {
+                    console.warn("No content found for placeholder ID '" + identifier + "'");
+                    el.innerHTML = '';
+                }
             });
         });
     };

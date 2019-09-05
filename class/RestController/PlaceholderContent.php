@@ -25,7 +25,7 @@ class PlaceholderContent extends RestController
     {
         $this->wp->register_rest_route(
             'avorg/v1',
-            '/placeholder-content/(?P<id>[\d]+)',
+            '/placeholder-content/(?P<id>[\w]+)(?:/(?P<media_id>[\d]+))?',
             [
                 'methods' => 'GET',
                 'callback' => [$this, 'getItem'],
@@ -38,13 +38,7 @@ class PlaceholderContent extends RestController
 
     public function getItem($data)
     {
-        $posts = $this->getPosts($data['id'], $data['media_id']) ?: $this->getPosts($data['id']);
-
-        if (!$posts) return null;
-
-        $post = (object)$this->randomChoice($posts);
-
-        return property_exists($post, 'post_content') ? $post->post_content : null;
+        return $this->getPosts($data['id'], $data['media_id']) ?: $this->getPosts($data['id']);
     }
 
     /**
@@ -53,33 +47,28 @@ class PlaceholderContent extends RestController
      */
     private function getPosts($identifier, $mediaId = null)
     {
-        return $this->wp->get_posts([
-            'posts_per_page' => -1,
-            'post_type' => 'avorg-content-bits',
-            'meta_query' => [
-                [
-                    'key' => 'avorgBitIdentifier',
-                    'value' => $identifier
+        $args = array_merge(
+            [
+                'posts_per_page' => -1,
+                'post_type' => 'avorg-content-bits',
+                'meta_query' => [
+                    [
+                        'key' => 'avorgBitIdentifier',
+                        'value' => $identifier
+                    ]
                 ]
             ],
-            'tax_query' => [
-                [
-                    'taxonomy' => 'avorgMediaIds',
-                    'field' => 'slug',
-                    'terms' => $mediaId
+            ($mediaId) ? [
+                'tax_query' => [
+                    [
+                        'taxonomy' => 'avorgMediaIds',
+                        'field' => 'slug',
+                        'terms' => $mediaId
+                    ]
                 ]
-            ]
-        ]);
-    }
+            ] : []
+        );
 
-    /**
-     * @param $items
-     * @return mixed
-     */
-    private function randomChoice($items)
-    {
-        $i = $this->php->array_rand($items);
-
-        return array_key_exists($i, $items) ? $items[$i] : null;
+        return $this->wp->get_posts($args);
     }
 }
