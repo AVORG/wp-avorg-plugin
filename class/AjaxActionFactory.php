@@ -20,6 +20,14 @@ class AjaxActionFactory
 		$this->factory = $factory;
 	}
 
+    public function registerCallbacks()
+    {
+        $actions = $this->getActions();
+        array_walk($actions, function (AjaxAction $action) {
+            $action->registerCallbacks();
+        });
+    }
+
 	public function getActions()
 	{
 		return array_map(function($actionName) {

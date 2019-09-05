@@ -20,7 +20,7 @@ System.register(["./shared.js"], function (exports_1, context_1) {
                     category: 'widgets',
                     edit: function (props) {
                         shared_js_1.loadRecordings(props.className);
-                        return el('p', { style: blockStyle, className: props.className }, 'Loading...');
+                        return el('p', { style: blockStyle, className: props.className }, 'Related Sermons');
                     },
                     save: function (props) {
                         return el('p', { style: blockStyle }, 'Loading...');

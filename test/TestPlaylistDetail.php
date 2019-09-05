@@ -64,14 +64,17 @@ final class TestPlaylistDetail extends Avorg\TestCase
 		$this->mockWordPress->setCurrentPageToPage($this->page);
 		$this->mockAvorgApi->setReturnValue("getPlaylist", json_decode(json_encode([
 			"recordings" => [
-				$this->convertArrayToObjectRecursively(["id" => "0"])
+				$this->arrayToObject(["id" => "0"])
 			]
 		])));
 
 		$this->page->addUi("");
 
 		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-playlist.twig", function($data) {
-			return is_a($data->recordings[0], "\\Avorg\\DataObject\\Recording");
+		    $recordings = $data->recordings;
+		    $recording = reset($recordings);
+
+			return is_a($recording, "\\Avorg\\DataObject\\Recording");
 		});
 	}
 

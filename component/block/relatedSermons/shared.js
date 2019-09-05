@@ -20,14 +20,15 @@ System.register(["../../molecule/recordingList/index.js"], function (exports_1, 
         ],
         execute: function () {
             exports_1("loadRecordings", loadRecordings = function (className) {
-                var entityId = avorg_scripts.query.entity_id;
-                if (!entityId)
+                var entityId = avorg_scripts.query.entity_id, elements = document.querySelectorAll("." + className);
+                if (!entityId || !elements)
                     return;
-                var url = "http://localhost:8000/api/presentation/related/" + entityId;
+                var url = "/api/presentation/related/" + entityId;
                 fetch(url).then(function (response) {
+                    console.log(response);
                     return response.json();
                 }).then(function (response) {
-                    var elements = document.querySelectorAll("." + className), recordings = getRandomSubarray(Object.values(response), 3), content = index_js_1.default(recordings);
+                    var recordings = getRandomSubarray(Object.values(response), 3), content = index_js_1.default(recordings);
                     elements.forEach(function (el) { return el.innerHTML = content; });
                 });
             });

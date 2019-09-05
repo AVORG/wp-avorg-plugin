@@ -40,7 +40,7 @@ final class TestRouter extends Avorg\TestCase
 
 			preg_match("/$regex/", $inputUrl, $matches);
 
-			return eval("return \"$redirect\";");
+			return @eval("return \"$redirect\";");
 		}, $addRewriteCalls);
 
 		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $addRewriteCalls);
@@ -412,4 +412,19 @@ EOM;
 			$errorMessage
 		);
 	}
+
+	public function testRegistersActivationMethod()
+    {
+        $this->router->registerCallbacks();
+
+        $this->mockWordPress->assertMethodCalledWith(
+            'register_activation_hook', AVORG_PLUGIN_FILE, [$this->router, 'activate']);
+    }
+
+    public function testRegistersRouteRegistrationInitAction()
+    {
+        $this->router->registerCallbacks();
+
+        $this->mockWordPress->assertActionAdded('init', [$this->router, 'registerRoutes']);
+    }
 }

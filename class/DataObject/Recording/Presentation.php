@@ -41,15 +41,15 @@ class Presentation extends DataObject\Recording
 	{
 		$apiPresenters = (isset($this->data->presenters)) ? $this->data->presenters : [];
 
-		return array_map(function ($presenter) {
-			return [
-				"photo" => $presenter->photo256,
-				"name" => [
-					"first" => $presenter->givenName,
-					"last" => $presenter->surname,
-					"suffix" => $presenter->suffix
-				]
-			];
+		return array_map(function($presenter) {
+			return array_merge((array)$presenter, [
+                "photo" => property_exists($presenter, 'photo256') ? $presenter->photo256 : null,
+                "name" => [
+                    "first" => property_exists($presenter, 'givenName') ? $presenter->givenName : null,
+                    "last" => property_exists($presenter, 'surname') ? $presenter->surname : null,
+                    "suffix" => property_exists($presenter, 'suffix') ? $presenter->suffix : null
+                ]
+            ]);
 		}, $apiPresenters);
 	}
 
@@ -66,7 +66,7 @@ class Presentation extends DataObject\Recording
 
 	public function getDatePublished()
 	{
-		return $this->data->publishDate;
+		return $this->publishDate;
 	}
 
 	public function getDescription()
@@ -79,7 +79,9 @@ class Presentation extends DataObject\Recording
 			]);
 		}, $this->getPresenters());
 
-		return trim($this->data->description . " Presenters: " . implode(", ", $presenterNames));
+		$rawDescription = property_exists($this->data, 'description') ? $this->data->description : null;
+
+		return trim( $rawDescription . " Presenters: " . implode(", ", $presenterNames));
 	}
 
 	public function getImage()

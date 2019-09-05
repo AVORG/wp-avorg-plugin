@@ -57,6 +57,8 @@ abstract class AjaxAction
 
 	public function getSimpleIdentifier()
 	{
-		return strtolower(end(explode("\\", get_class($this))));
+        $pieces = explode("\\", get_class($this));
+
+        return strtolower(end($pieces));
 	}
 }

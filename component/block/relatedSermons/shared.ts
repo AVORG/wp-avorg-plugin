@@ -17,17 +17,19 @@ function getRandomSubarray(arr: any[], size: number) {
 }
 
 export const loadRecordings = (className: string) => {
-    const entityId = avorg_scripts.query.entity_id;
+    const entityId = avorg_scripts.query.entity_id,
+        elements = document.querySelectorAll(`.${className}`);
 
-    if (!entityId) return;
+    if (!entityId || !elements) return;
 
     const url = `/api/presentation/related/${entityId}`;
     fetch(url).then(response => {
+        console.log(response);
+
         return response.json();
     }).then(response => {
-        const elements = document.querySelectorAll(`.${className}`),
-            recordings = getRandomSubarray(Object.values(response), 3),
-            content = molecule_recordingList(recordings)
+        const recordings = getRandomSubarray(Object.values(response), 3),
+            content = molecule_recordingList(recordings);
 
         elements.forEach(el => el.innerHTML = content);
     });

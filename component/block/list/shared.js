@@ -12,7 +12,7 @@ System.register(["../../molecule/recordingList/index.js"], function (exports_1, 
             exports_1("loadRecordings", loadRecordings = function (className) {
                 var elements = document.querySelectorAll("." + className);
                 elements.forEach(function (el) {
-                    var list = el.getAttribute('data-type'), url = "http://localhost:8000/api/presentation/" + list;
+                    var list = el.getAttribute('data-type'), url = "/api/presentation/" + list;
                     fetch(url).then(function (response) {
                         return response.json();
                     }).then(function (response) {

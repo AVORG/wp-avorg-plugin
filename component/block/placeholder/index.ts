@@ -48,7 +48,7 @@ namespace AvorgPlaceholder {
             return el(
                 'div',
                 {style: blockStyle, className: className, 'data-id': id},
-                isSelected ? form : 'Loading...'
+                isSelected ? form : `Placeholder: ${id}`
             );
         },
         save: function (props: any) {

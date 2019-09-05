@@ -154,7 +154,7 @@ final class TestPresentation extends Avorg\TestCase
 
 	public function testGetUrl()
 	{
-		$apiRecording = $this->convertArrayToObjectRecursively([
+		$apiRecording = $this->arrayToObject([
 			"lang" => "en",
 			"id" => "1836",
 			"title" => 'E.P. Daniels and True Revival'
@@ -170,7 +170,7 @@ final class TestPresentation extends Avorg\TestCase
 
 	public function testGetId()
 	{
-		$apiRecording = $this->convertArrayToObjectRecursively([
+		$apiRecording = $this->arrayToObject([
 			"id" => "1836"
 		]);
 
@@ -188,7 +188,7 @@ final class TestPresentation extends Avorg\TestCase
 	 */
 	public function testToJson($recordingArray, $expectedKey, $expectedValue)
 	{
-		$apiRecording = $this->convertArrayToObjectRecursively($recordingArray);
+		$apiRecording = $this->arrayToObject($recordingArray);
 		$recording = $this->makePresentation($apiRecording);
 		$json = json_encode($recording);
 		$object = json_decode($json, true);
@@ -265,29 +265,6 @@ final class TestPresentation extends Avorg\TestCase
 				["publishDate" => "2018-02-19 05:22:17"],
 				"datePublished",
 				"2018-02-19 05:22:17"
-			],
-			"presenters" => [
-				[
-					"presenters" => [
-						[
-							"photo256" => "photo_url",
-							"givenName" => "first_name",
-							"surname" => "last_name",
-							"suffix" => "suffix"
-						]
-					]
-				],
-				"presenters",
-				[
-					[
-						"photo" => "photo_url",
-						"name" => [
-							"first" => "first_name",
-							"last" => "last_name",
-							"suffix" => "suffix"
-						]
-					]
-				]
 			],
 			"presenters string" => [
 				[
@@ -367,6 +344,32 @@ final class TestPresentation extends Avorg\TestCase
 		];
 	}
 
+    public function testPresenterData()
+    {
+        $apiRecording = $this->arrayToObject([
+            "presenters" => [
+                [
+                    "photo256" => "photo_url",
+                    "givenName" => "first_name",
+                    "surname" => "last_name",
+                    "suffix" => "suffix"
+                ]
+            ]
+        ]);
+
+        $recording = $this->makePresentation($apiRecording);
+        $json = json_encode($recording);
+        $object = json_decode($json, true);
+        $presenter = $object['presenters'][0];
+
+        $this->assertEquals($presenter['photo'], 'photo_url');
+        $this->assertEquals($presenter['name'], [
+            "first" => "first_name",
+            "last" => "last_name",
+            "suffix" => "suffix"
+        ]);
+    }
+
 	public function testGetPresenterString()
 	{
 		$recording = $this->makePresentation([
@@ -414,17 +417,6 @@ final class TestPresentation extends Avorg\TestCase
 			]
 		]);
 
-		$expected = [
-			[
-				"name" => [
-					"first" => "first_name",
-					"last" => "last_name",
-					"suffix" => "suffix"
-				],
-				"photo" => null
-			]
-		];
-
-		$this->assertEquals($expected, $recording->presenters);
+		$this->assertEquals('first_name', $recording->presenters[0]['name']['first']);
 	}
 }

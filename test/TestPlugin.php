@@ -1,8 +1,10 @@
 <?php
 
+use Avorg\Plugin;
+
 final class TestPlugin extends Avorg\TestCase
 {
-	/** @var \Avorg\Plugin $plugin */
+	/** @var Plugin $plugin */
 	protected $plugin;
 
 	protected function setUp()
@@ -13,47 +15,16 @@ final class TestPlugin extends Avorg\TestCase
 		$this->plugin = $this->factory->secure("Avorg\\Plugin");
 	}
 
-	/**
-	 * @dataProvider shortcodeProvider
-	 */
-	public function testInitsShortcodes($handle, $class)
-	{
-		$shortcode = $this->factory->secure($class);
-
-		$this->plugin->init();
-
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_shortcode",
-			$handle,
-			[$shortcode, "renderShortcode"]
-		);
-	}
-
-	public function shortcodeProvider()
-	{
-		return [
-			["avorg-bits", "Avorg\\ContentBits"],
-			["avorg-list", "Avorg\\Shortcode\\Recordings"]
-		];
-	}
-
-	public function testInitInitsRouter()
-	{
-		$this->plugin->init();
-
-		$this->mockWordPress->assertMethodCalled("add_rewrite_rule");
-	}
-
 	public function testEnqueueScripts()
 	{
-		$this->plugin->init();
+		$this->plugin->enqueueStyles();
 
 		$this->mockWordPress->assertMethodCalled("wp_enqueue_style");
 	}
 
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
-		$this->plugin->init();
+		$this->plugin->enqueueStyles();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -64,7 +35,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueuesEditorStyles()
 	{
-		$this->plugin->init();
+		$this->plugin->enqueueStyles();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -75,7 +46,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueuesVideoJsStyles()
 	{
-		$this->plugin->init();
+		$this->plugin->enqueueStyles();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -217,7 +188,7 @@ final class TestPlugin extends Avorg\TestCase
 			[
 				"init",
 				"Plugin",
-				"init"
+				"enqueueStyles"
 			],
 			[
 				"save_post",
@@ -239,6 +210,11 @@ final class TestPlugin extends Avorg\TestCase
 				'BlockLoader',
 				'enqueueBlockFrontendAssets'
 			],
+            [
+                'rest_api_init',
+                'RestController\\PlaceholderContent',
+                'registerRoutes'
+            ]
 		];
 	}
 
@@ -342,13 +318,5 @@ final class TestPlugin extends Avorg\TestCase
 		$this->plugin->renderAdminNotices();
 
 		$this->mockTwig->assertErrorNotRenderedWithMessage("AVORG Warning: PWA plugin not active!");
-	}
-
-	public function testRegistersActivationHook()
-	{
-		$this->plugin->registerCallbacks();
-
-		$this->mockWordPress->assertMethodCalledWith('register_activation_hook', AVORG_PLUGIN_FILE,
-			[$this->plugin, 'activate']);
 	}
 }

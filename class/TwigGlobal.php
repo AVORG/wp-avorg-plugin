@@ -35,16 +35,16 @@ class TwigGlobal
 		$this->scriptFactory = $scriptFactory;
 		$this->wp = $wordPress;
 	}
-	
-	public function __isset($name)
-	{
-		return array_key_exists($name, $this->data);
-	}
-	
+
 	public function __get($name)
 	{
-		return $this->data[$name];
+		return $this->__isset($name) ? $this->data[$name] : null;
 	}
+
+    public function __isset($name)
+    {
+        return array_key_exists($name, $this->data);
+    }
 	
 	public function i__($string)
 	{

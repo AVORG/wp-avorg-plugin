@@ -7,7 +7,7 @@ final class TestMediaFile extends Avorg\TestCase
 	 */
 	public function testAttributeAccess($apiResponseArray, $getterName, $expected )
     {
-        $apiMediaFile = $this->convertArrayToObjectRecursively($apiResponseArray);
+        $apiMediaFile = $this->arrayToObject($apiResponseArray);
 
         $mediaFile = new \Avorg\MediaFile\AudioFile($apiMediaFile);
 

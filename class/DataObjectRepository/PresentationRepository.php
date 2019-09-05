@@ -22,12 +22,17 @@ class PresentationRepository extends DataObjectRepository
 	public function getRelatedPresentations($presentationId)
 	{
 		$presentation = $this->getPresentation($presentationId);
+
+		if (!$presentation) return [];
+
 		$conferencePresentations = $this->getConferencePresentations($presentation->conferenceId);
 		$seriesPresentations = ($presentation->seriesId === "0") ? [] :
 			$this->getSeriesPresentations($presentation->seriesId);
 		$sponsorPresentations = $this->getSponsorPresentations($presentation->sponsorId);
 		$presenterPresentations = array_reduce((array) $presentation->presenters, function($carry, $presenter) {
-			return array_merge($carry, $this->getPresenterPresentations($presenter->id));
+            $presenterId = array_key_exists('id', $presenter) ? $presenter['id'] : null;
+
+            return $presenterId ? array_merge($carry, $this->getPresenterPresentations($presenterId)) : $carry;
 		}, []);
 
 		$relatedPresentations = array_merge(
@@ -123,11 +128,12 @@ class PresentationRepository extends DataObjectRepository
 	 */
 	public function getPlaylistPresentations($playlistId)
 	{
-		$apiResponse = $this->api->getPlaylist($playlistId);
+		$apiResponse = (object)$this->api->getPlaylist($playlistId);
+		$recordings = property_exists($apiResponse, 'recordings') ? $apiResponse : [];
 
 		return array_map(function ($recording) {
 			return $this->makeDataObject($recording);
-		}, $apiResponse->recordings ?: []);
+		}, (array)$recordings);
 	}
 
 	/**

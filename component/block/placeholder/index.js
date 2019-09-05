@@ -27,7 +27,7 @@ var AvorgPlaceholder;
             var form = el('form', {
                 onSubmit: function (event) { return event.preventDefault(); }
             }, input);
-            return el('div', { style: blockStyle, className: className, 'data-id': id }, isSelected ? form : 'Loading...');
+            return el('div', { style: blockStyle, className: className, 'data-id': id }, isSelected ? form : "Placeholder: " + id);
         },
         save: function (props) {
             var id = props.attributes.id;

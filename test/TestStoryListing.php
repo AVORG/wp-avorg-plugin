@@ -32,7 +32,9 @@ final class TestStoryListing extends Avorg\TestCase
 		$this->mockAvorgApi->loadStories([]);
 
 		$this->assertTwigGlobalMatchesCallback($this->page, function($avorg) {
-			return reset($avorg->stories) instanceof Story;
+            $stories = $avorg->stories;
+
+            return reset($stories) instanceof Story;
 		});
 	}
 }
