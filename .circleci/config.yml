@@ -47,6 +47,7 @@ jobs:
       - github-release/release:
           tag: v$CIRCLE_BUILD_NUM
           title: Release v$CIRCLE_BUILD_NUM
+          artefacts-folder: wp-avorg-plugin.zip
 
       - run:
           name: Define BUILD_URL environment variable
