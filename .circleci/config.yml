@@ -39,26 +39,16 @@ jobs:
       - run: npm install
 
       - run: sudo apt-get update && sudo apt-get install zip
-      - run: zip -r wp-avorg-plugin .
+      - run: mkdir build
+      - run: zip -r ./build/wp-avorg-plugin .
 
       - store_artifacts:
-          path: wp-avorg-plugin.zip
+          path: ./build/wp-avorg-plugin.zip
 
       - github-release/release:
           tag: v$CIRCLE_BUILD_NUM
           title: Release v$CIRCLE_BUILD_NUM
-          artefacts-folder: wp-avorg-plugin.zip
-
-      - run:
-          name: Define BUILD_URL environment variable
-          command: |
-            echo "export BUILD_URL=${CIRCLE_BUILD_URL}${CIRCLE_NODE_INDEX}/artificats/${CIRCLE_ARTIFACTS}/wp-avorg-plugin.zip"
-            echo "export BUILD_URL=${CIRCLE_BUILD_URL}${CIRCLE_NODE_INDEX}/artificats/${CIRCLE_ARTIFACTS}/wp-avorg-plugin.zip" >> $BASH_ENV
-            source $BASH_ENV
-
-      - pr-comment/pr-comment:
-          comment: "Testing ${BUILD_URL}"
-          maxComments: 1000
+          artefacts-folder: ./build
 
       - save_cache:
           paths:
