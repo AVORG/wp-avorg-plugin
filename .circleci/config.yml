@@ -44,6 +44,7 @@ jobs:
           name: Compress build
           command: |
             sudo mkdir /build
+            chown -R $USER:$USER /build
             zip -r /build/wp-avorg-plugin .
 
       - store_artifacts:
