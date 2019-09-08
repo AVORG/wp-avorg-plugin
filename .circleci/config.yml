@@ -60,7 +60,7 @@ jobs:
               only:
                 - master
                 - dev
-      
+
       - save_cache:
           paths:
             - ./vendor
@@ -73,13 +73,13 @@ jobs:
 
       # run tests!
       - run: vendor/phpunit/phpunit/phpunit
-workflows:
-  version: 2.1
-  jobs:
-    - github-release/release:
-        tag: v$CIRCLE_BUILD_NUM
-        title: Release v$CIRCLE_BUILD_NUM
-        artefacts-folder: ./build
-        filters:
-          branches:
-            only: master
+workflow:
+  my-github-release:
+    jobs:
+      - github-release/release:
+          tag: v$CIRCLE_BUILD_NUM
+          title: Release v$CIRCLE_BUILD_NUM
+          artefacts-folder: ./build
+          filters:
+            branches:
+              only: master
