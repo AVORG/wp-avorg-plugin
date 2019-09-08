@@ -62,7 +62,6 @@ jobs:
                 - dev
 
       - github-release/release:
-          name: Create GitHub release
           tag: v$CIRCLE_BUILD_NUM
           title: Release v$CIRCLE_BUILD_NUM
           artefacts-folder: ./build
