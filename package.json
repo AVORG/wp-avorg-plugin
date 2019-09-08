@@ -25,7 +25,5 @@
     "@types/wordpress__blocks": "^6.4.3",
     "systemjs": "^4.1.0"
   },
-  "devDependencies": {
-    "surge": "^0.21.3"
-  }
+  "devDependencies": {}
 }
