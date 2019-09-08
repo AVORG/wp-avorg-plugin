@@ -45,6 +45,7 @@ jobs:
       - store_artifacts:
           path: ./build/wp-avorg-plugin.zip
 
+      - run: npm set prefix=/home/circleci/npm && echo 'export PATH=$HOME/circleci/npm/bin:$PATH' >> /home/circleci/.bashrc
       - run: npm install --global surge
       - run: surge --project ./build --domain wp-avorg-plugin.surge.sh
 
