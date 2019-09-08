@@ -71,8 +71,17 @@ jobs:
             - ./node_modules
           key: v1-npm-{{ checksum "package-lock.json" }}
 
-      # run tests!
-      - run: vendor/phpunit/phpunit/phpunit
+      - run:
+          command: |
+            mkdir -p ~/phpunit
+            vendor/phpunit/phpunit/phpunit --log-junit ~/phpunit/junit.xml tests
+          when: always
+
+      - store_test_results:
+          path: ~/phpunit
+
+      - store_artifacts:
+          path: ~/phpunit
 workflow:
   my-github-release:
     jobs:
