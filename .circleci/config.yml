@@ -44,17 +44,17 @@ jobs:
           name: Compress build
           command: |
             sudo apt-get update && sudo apt-get install zip
-            mkdir build
-            zip -r ./build/wp-avorg-plugin .
+            mkdir /build
+            zip -r /build/wp-avorg-plugin .
 
       - store_artifacts:
-          path: ./build/wp-avorg-plugin.zip
+          path: /build/wp-avorg-plugin.zip
 
       - run:
           name: Upload build to surge.sh
           command: |
             echo "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
-            ./node_modules/.bin/surge --project ./build --domain "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
+            ./node_modules/.bin/surge --project /build --domain "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
           filters:
             branches:
               only:
@@ -88,7 +88,7 @@ workflow:
       - github-release/release:
           tag: v$CIRCLE_BUILD_NUM
           title: Release v$CIRCLE_BUILD_NUM
-          artefacts-folder: ./build
+          artefacts-folder: /build
           filters:
             branches:
               only: master
