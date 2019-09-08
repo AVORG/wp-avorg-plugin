@@ -43,8 +43,7 @@ jobs:
       - run:
           name: Compress build
           command: |
-            sudo apt-get update && sudo apt-get install zip
-            mkdir /build
+            sudo mkdir /build
             zip -r /build/wp-avorg-plugin .
 
       - store_artifacts:
