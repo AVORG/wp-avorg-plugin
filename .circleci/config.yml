@@ -1,6 +1,5 @@
 version: 2.1
 orbs:
-  pr-comment: benjlevesque/pr-comment@0.1.4
   github-release: haskell-works/github-release@1.3.3
 jobs:
   build:
@@ -35,23 +34,41 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-npm-
 
-      - run: composer install -n
-      - run: npm install
+      - run:
+          name: Install dependencies
+          command: |
+            composer install -n
+            npm install
 
-      - run: sudo apt-get update && sudo apt-get install zip
-      - run: mkdir build
-      - run: zip -r ./build/wp-avorg-plugin .
+      - run:
+          name: Compress build
+          command: |
+            sudo apt-get update && sudo apt-get install zip
+            mkdir build
+            zip -r ./build/wp-avorg-plugin .
 
       - store_artifacts:
           path: ./build/wp-avorg-plugin.zip
 
-      - run: echo "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
-      - run: ./node_modules/.bin/surge --project ./build --domain "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
+      - run:
+          name: Upload build to surge.sh
+          command: |
+            echo "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
+            ./node_modules/.bin/surge --project ./build --domain "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
+          filters:
+            branches:
+              only:
+                - master
+                - dev
 
       - github-release/release:
+          name: Create GitHub release
           tag: v$CIRCLE_BUILD_NUM
           title: Release v$CIRCLE_BUILD_NUM
           artefacts-folder: ./build
+          filters:
+            branches:
+              only: master
 
       - save_cache:
           paths:
