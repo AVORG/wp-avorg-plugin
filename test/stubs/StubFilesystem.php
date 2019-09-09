@@ -23,4 +23,11 @@ class StubFilesystem extends Filesystem
 
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
+
+	public function getMatchingPathsRecursive($rel_dir, $pattern)
+	{
+		$response = $this->handleCall(__FUNCTION__, func_get_args());
+
+		return $response ?: parent::getMatchingPathsRecursive($rel_dir, $pattern);
+	}
 }

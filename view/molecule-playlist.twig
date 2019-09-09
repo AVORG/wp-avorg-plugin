@@ -1,6 +1,9 @@
 {#
 	jsVariable : string; reference to list of recordings in js context; ex, avorg.recordings
+	showList : bool; just shows a single recording when set to false
 #}
+
+{% set showListVal = showList is defined and not showList ? 'false' : 'true' %}
 
 <div class="avorg-molecule-playlist">
 	<div class="avorg-molecule-playlist__player"></div>
@@ -12,7 +15,7 @@
 		document.addEventListener("DOMContentLoaded", function (event) {
 			console.log('Loading playlist', avorg);
 
-			Playlist.init(Player, Object.values( {{ jsVariable }} ));
+			Playlist.init(Player, Object.values( {{ jsVariable }} ), {{ showListVal }});
 		});
 	</script>
 </div>

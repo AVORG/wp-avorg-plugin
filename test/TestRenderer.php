@@ -1,8 +1,10 @@
 <?php
 
+use Avorg\Renderer;
+
 final class TestRenderer extends Avorg\TestCase
 {
-	/** @var \Avorg\Renderer $renderer */
+	/** @var Renderer $renderer */
 	protected $renderer;
 	
 	protected function setUp()

@@ -4,8 +4,8 @@ use Avorg\DataObjectRepository\BookRepository;
 
 final class TestBookRepository extends Avorg\TestCase
 {
-	/** @var BookRepository $bookRepository */
-	protected $bookRepository;
+	/** @var BookRepository $repository */
+	protected $repository;
 
 	private $apiBooks;
 
@@ -13,7 +13,7 @@ final class TestBookRepository extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->bookRepository = $this->factory->secure("Avorg\\DataObjectRepository\\BookRepository");
+		$this->repository = $this->factory->secure("Avorg\\DataObjectRepository\\BookRepository");
 
 		$this->apiBooks = [(object) [
 			"title" => "A Call to Medical Evangelism",
@@ -25,21 +25,21 @@ final class TestBookRepository extends Avorg\TestCase
 
 	public function testUsesApi()
 	{
-		$books = $this->bookRepository->getBooks();
+		$books = $this->repository->getBooks();
 
 		$this->assertEquals("A Call to Medical Evangelism", $books[0]->title);
 	}
 
 	public function testIsSet()
 	{
-		$books = $this->bookRepository->getBooks();
+		$books = $this->repository->getBooks();
 
 		$this->assertTrue($books[0]->__isset("title"));
 	}
 
 	public function testGetUrl()
 	{
-		$books = $this->bookRepository->getBooks();
+		$books = $this->repository->getBooks();
 
 		$this->assertEquals(
 			"http://${_SERVER['HTTP_HOST']}/english/audiobooks/books/937/a-call-to-medical-evangelism.html",

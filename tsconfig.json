@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "target": "ES5",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "component",
+    "sourceMap": true,
+    "allowJs": false,
+    "lib": ["es2015", "es2017", "dom"]
+  },
+  "include": [
+    "component/**/*"
+  ],
+  "exclude": [
+
+  ]
+}

@@ -6,6 +6,9 @@ use natlib\Stub;
 
 class StubAvorgApi extends AvorgApi
 {
+    /** @var TestCase $testCase */
+    private $testCase;
+
 	use Stub;
 
 	public function getOneSeries($id)
@@ -38,7 +41,12 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getBibleBooks($id)
+	public function getBibleBooks($bible_id)
+	{
+		return $this->handleCall(__FUNCTION__, func_get_args());
+	}
+
+	public function getBibleChapters($bibleId, $bookId, $testamentId)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -165,12 +173,34 @@ class StubAvorgApi extends AvorgApi
 		$this->setDataObjectsReturnValue("getPlaylists", $dataArrays);
 	}
 
+	public function loadPlaylist($dataArray)
+	{
+		$this->setDataObjectReturnValue("getPlaylist", $dataArray);
+	}
+
+	public function loadBibleChapters(...$dataArrays)
+	{
+		$this->setDataObjectsReturnValue("getBibleChapters", $dataArrays);
+	}
+
+	public function loadBibleBooks(...$dataArrays)
+	{
+		$objects = array_reduce($dataArrays, function($carry, $dataArray) {
+			$key = array_key_exists("book_id", $dataArray) ? $dataArray["book_id"] : rand();
+			$carry[$key] = $this->testCase->arrayToObject($dataArray);
+
+			return $carry;
+		});
+
+		$this->setReturnValue("getBibleBooks", $objects);
+	}
+
 	public function loadBibles(...$dataArrays)
 	{
 		$objects = array_reduce($dataArrays, function($carry, $dataArray) {
 			$key = array_key_exists("dam_id", $dataArray) ? $dataArray["dam_id"] : rand();
 			$dataArray["dam_id"] = $key;
-			$carry[$key] = $this->testCase->convertArrayToObjectRecursively($dataArray);
+			$carry[$key] = $this->testCase->arrayToObject($dataArray);
 
 			return $carry;
 		}, []);
@@ -247,13 +277,13 @@ class StubAvorgApi extends AvorgApi
 
 	private function setDataObjectReturnValue($function, $dataArray)
 	{
-		$object = $this->testCase->convertArrayToObjectRecursively($dataArray);
+		$object = $this->testCase->arrayToObject($dataArray);
 
 		$this->setReturnValue($function, $object);
 	}
 
 	private function convertArraysToObjectsRecursively($arrays)
 	{
-		return array_map([$this->testCase, "convertArrayToObjectRecursively"], $arrays);
+		return array_map([$this->testCase, "arrayToObject"], $arrays);
 	}
 }

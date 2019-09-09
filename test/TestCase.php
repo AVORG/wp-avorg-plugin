@@ -2,6 +2,8 @@
 
 namespace Avorg;
 
+use Avorg\DataObject\BibleBook;
+use Avorg\DataObject\Book;
 use Avorg\DataObject\Recording;
 use natlib\Factory;
 use ReflectionException;
@@ -32,9 +34,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	protected function setUp()
 	{
-		define( "ABSPATH", "/" );
-		define( "AVORG_LOGO_URL", "https://s.audioverse.org/english/gallery/sponsors/_/600/600/default-logo.png" );
-
 		$_SERVER["HTTP_HOST"] = "localhost:8080";
 
 		$this->factory = new Factory(__NAMESPACE__);
@@ -97,18 +96,38 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	}
 
 	/**
+	 * @param array $data
+	 * @return BibleBook
+	 * @throws ReflectionException
+	 */
+	protected function makeBibleBook($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\BibleBook", $data);
+	}
+
+	/**
 	 * @param $data
 	 * @return Recording
 	 * @throws ReflectionException
 	 */
-	protected function makeRecording($data = [])
+	protected function makePresentation($data = [])
 	{
-		return $this->makeDataObject("Avorg\\DataObject\\Recording", $data);
+		return $this->makeDataObject("Avorg\\DataObject\\Recording\\Presentation", $data);
 	}
 
 	/**
 	 * @param array $data
-	 * @return mixed
+	 * @return Recording\BibleChapter
+	 * @throws ReflectionException
+	 */
+	protected function makeBibleChapter($data = [])
+	{
+		return $this->makeDataObject("Avorg\\DataObject\\Recording\\BibleChapter", $data);
+	}
+
+	/**
+	 * @param array $data
+	 * @return Book
 	 * @throws ReflectionException
 	 */
 	protected function makeBook($data = [])
@@ -125,7 +144,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	private function makeDataObject($class, $data = [])
 	{
 		$object = $this->factory->make($class);
-		$apiResponse = $this->convertArrayToObjectRecursively($data);
+		$apiResponse = $this->arrayToObject($data);
 
 		$object->setData($apiResponse);
 
@@ -136,7 +155,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
      * @param $array
      * @return mixed
      */
-    public function convertArrayToObjectRecursively($array)
+    public function arrayToObject($array)
     {
     	if ($array == []) return new stdClass();
 

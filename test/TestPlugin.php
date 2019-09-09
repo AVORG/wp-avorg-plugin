@@ -1,141 +1,116 @@
 <?php
 
+use Avorg\Plugin;
+
 final class TestPlugin extends Avorg\TestCase
 {
-	/** @var \Avorg\Plugin $plugin */
+	/** @var Plugin $plugin */
 	protected $plugin;
-	
+
 	protected function setUp()
 	{
 		parent::setUp();
-		
+
 		$this->mockWordPress->setReturnValue("call", 5);
 		$this->plugin = $this->factory->secure("Avorg\\Plugin");
 	}
 
-	/**
-	 * @dataProvider shortcodeProvider
-	 */
-	public function testInitsShortcodes($handle, $class)
-	{
-		$shortcode = $this->factory->secure($class);
-
-		$this->plugin->init();
-
-		$this->mockWordPress->assertMethodCalledWith(
-			"add_shortcode",
-			$handle,
-			[$shortcode, "renderShortcode"]
-		);
-	}
-
-	public function shortcodeProvider()
-	{
-		return [
-			["avorg-bits", "Avorg\\ContentBits"],
-			["avorg-list", "Avorg\\Shortcode\\Recordings"],
-			["avorg-rss", "Avorg\\Shortcode\\Rss"]
-		];
-	}
-	
-	public function testInitInitsRouter()
-	{
-		$this->plugin->init();
-		
-		$this->mockWordPress->assertMethodCalled("add_rewrite_rule");
-	}
-	
 	public function testEnqueueScripts()
 	{
-		$this->plugin->enqueueScripts();
-		
+		$this->plugin->enqueueStyles();
+
 		$this->mockWordPress->assertMethodCalled("wp_enqueue_style");
 	}
-	
-	public function testEnqueueScriptsGetsStylesheetUrl()
-	{
-		$this->plugin->enqueueScripts();
-		
-		$this->mockWordPress->assertMethodCalled("plugins_url");
-	}
-	
+
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
-		$this->mockWordPress->setReturnValue("plugins_url", "path");
-		
-		$this->plugin->enqueueScripts();
-		
+		$this->plugin->enqueueStyles();
+
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
 			"avorgStyle",
-			"path"
+			AVORG_BASE_URL . "/style/style.css"
 		);
 	}
-	
+
+	public function testEnqueuesEditorStyles()
+	{
+		$this->plugin->enqueueStyles();
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"wp_enqueue_style",
+			"avorgEditorStyle",
+			AVORG_BASE_URL . "/style/editor.css"
+		);
+	}
+
 	public function testEnqueuesVideoJsStyles()
 	{
-		$this->plugin->enqueueScripts();
-		
+		$this->plugin->enqueueStyles();
+
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
 			"avorgVideoJsStyle",
 			"//vjs.zencdn.net/7.0/video-js.min.css"
 		);
 	}
-	
+
 	public function testRenderAdminNoticesOutputsDefaultNotices()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalled("settings_errors");
 	}
-	
+
 	public function testErrorNoticePostedWhenPermalinksTurnedOff()
 	{
 		$this->mockWordPress->setReturnValue("call", false);
-		
+
 		$this->plugin->renderAdminNotices();
-		
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Permalinks turned off!");
+
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Permalinks turned off!",
+			"/wp-admin/options-permalink.php");
 	}
-	
+
 	public function testChecksPermalinkStructure()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalledWith("get_option", "permalink_structure");
 	}
-	
+
 	public function testGetsAvorgApiUser()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalledWith("get_option", "avorgApiUser");
 	}
-	
+
 	public function testGetsAvorgApiPass()
 	{
 		$this->plugin->renderAdminNotices();
-		
+
 		$this->mockWordPress->assertMethodCalledWith("get_option", "avorgApiPass");
 	}
-	
+
 	public function testErrorNoticePostedWhenNoAvorgApiUser()
 	{
 		$this->mockWordPress->setReturnValue("call", false);
-		
+
 		$this->plugin->renderAdminNotices();
-		
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API username!");
+
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API username!",
+			"/wp-admin/admin.php?page=avorg");
 	}
-	
+
 	public function testErrorNoticePostedWhenNoAvorgApiPass()
 	{
 		$this->mockWordPress->setReturnValue("call", false);
-		
+
 		$this->plugin->renderAdminNotices();
-		
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!");
+
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!",
+			"/wp-admin/admin.php?page=avorg");
 	}
 
 	/**
@@ -145,7 +120,7 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testRegistersPageCallbacks($pageName)
 	{
-		$this->factory->make("Avorg\\Plugin");
+		$this->plugin->registerCallbacks();
 
 		$this->mockWordPress->assertPageRegistered($pageName);
 	}
@@ -153,12 +128,14 @@ final class TestPlugin extends Avorg\TestCase
 	public function pageNameProvider()
 	{
 		$pages = [
-			"Media",
+			"Presentation\\Detail",
 			"Topic\\Detail",
 			"Playlist\\Detail"
 		];
 
-		$data = array_map(function($page) { return [$page]; }, $pages);
+		$data = array_map(function ($page) {
+			return [$page];
+		}, $pages);
 
 		return array_combine($pages, $data);
 	}
@@ -172,6 +149,8 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod)
 	{
+		$this->plugin->registerCallbacks();
+
 		$this->mockWordPress->assertActionAdded($action, [
 			$this->factory->secure("Avorg\\$callbackClass"),
 			$callbackMethod
@@ -209,7 +188,7 @@ final class TestPlugin extends Avorg\TestCase
 			[
 				"init",
 				"Plugin",
-				"init"
+				"enqueueStyles"
 			],
 			[
 				"save_post",
@@ -217,10 +196,25 @@ final class TestPlugin extends Avorg\TestCase
 				"saveIdentifierMetaBox"
 			],
 			[
-				"wp_enqueue_scripts",
-				"Plugin",
-				"enqueueScripts"
-			]
+				'enqueue_block_editor_assets',
+				'BlockLoader',
+				'enqueueBlockEditorAssets'
+			],
+			[
+				"admin_menu",
+				'AdminPanel',
+				'register'
+			],
+			[
+				'enqueue_block_assets',
+				'BlockLoader',
+				'enqueueBlockFrontendAssets'
+			],
+            [
+                'rest_api_init',
+                'RestController\\PlaceholderContent',
+                'registerRoutes'
+            ]
 		];
 	}
 
@@ -229,10 +223,18 @@ final class TestPlugin extends Avorg\TestCase
 	 * @param $path
 	 * @param bool $shouldRegister
 	 * @param bool $isRelative
+	 * @param string $action
 	 */
-	public function testRegistersScripts($path, $shouldRegister = true, $isRelative = false)
+	public function testRegistersScripts(
+		$path,
+		$shouldRegister = true,
+		$isRelative = false,
+		$action = "wp_enqueue_scripts"
+	)
 	{
-		$this->mockWordPress->runActions("wp", "wp_enqueue_scripts");
+		$this->plugin->registerCallbacks();
+
+		$this->mockWordPress->runActions($action);
 
 		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
 
@@ -268,6 +270,8 @@ final class TestPlugin extends Avorg\TestCase
 	 */
 	public function testFilterCallbacksRegistered($filter, $callbackClass, $callbackMethod)
 	{
+		$this->plugin->registerCallbacks();
+
 		$this->mockWordPress->assertFilterAdded($filter, [
 			$this->factory->secure("Avorg\\$callbackClass"),
 			$callbackMethod
@@ -288,5 +292,31 @@ final class TestPlugin extends Avorg\TestCase
 				"filterRedirect"
 			]
 		];
+	}
+
+	public function testChecksForXwpPwaPlugin()
+	{
+		$this->plugin->renderAdminNotices();
+
+		$this->mockWordPress->assertMethodCalledWith("is_plugin_active", "pwa/pwa.php");
+	}
+
+	public function testRendersNoticeIfPwaPluginInactive()
+	{
+		$this->plugin->renderAdminNotices();
+
+		$this->mockTwig->assertErrorRenderedWithMessage(
+			"AVORG Warning: PWA plugin not active!",
+			"/wp-admin/plugins.php"
+		);
+	}
+
+	public function testDoesNotRenderNoticeIfPwaPluginActive()
+	{
+		$this->mockWordPress->setReturnValue("is_plugin_active", TRUE);
+
+		$this->plugin->renderAdminNotices();
+
+		$this->mockTwig->assertErrorNotRenderedWithMessage("AVORG Warning: PWA plugin not active!");
 	}
 }

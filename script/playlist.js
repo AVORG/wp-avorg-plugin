@@ -79,17 +79,24 @@ const Playlist = {
     index: 0,
 
     listItemTemplate: function (recording) {
+        const imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
+        const imageAlt = recording.presenters[0] ?
+            `${recording.presenters[0].name.first} ${recording.presenters[0].name.last} ${recording.presenters[0].name.suffix}` : null;
+        const image = imageUrl ? `<img class="avorg-molecule-mediaObject__image" src="${imageUrl}" alt="${imageAlt}" />` : '';
+        const presenters = recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")
+
         return `
-        <li data-id="${recording.id}">
-        ${recording.title} ${recording.videoFiles.length ? "(video)" : ""}<br/>
-        ${recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")}
-        </li>
-        `;
+<li data-id="${recording.id}" class="avorg-molecule-mediaObject">
+    ${image}
+    <div class="avorg-molecule-mediaObject__text">
+        <h4 class="avorg-molecule-mediaObject__title">${recording.title} ${recording.videoFiles.length ? "(video)" : ""}</h4>
+        ${presenters}
+    </div>
+</li>
+`;
     },
 
     renderList: function() {
-        if (this.recordings.length < 2) return;
-
         document.getElementsByClassName("avorg-molecule-playlist__list")[0].innerHTML
             = this.recordings.map( this.listItemTemplate ).join( "" );
     },
@@ -97,10 +104,19 @@ const Playlist = {
     registerClickHandler: function() {
         document.querySelectorAll(".avorg-molecule-playlist__list li").forEach((item) => {
             item.addEventListener("click", (e) => {
-                const id = e.target.getAttribute("data-id");
+                const id = e.currentTarget.getAttribute("data-id");
+
+                if (!id) {
+                    console.warn("Failed to retrieve id for selected presentation", id, e.target)
+                }
+
                 const index = this.recordings.findIndex((recording) => {
-                    return recording.id === parseInt(id);
+                    return String(recording.id) === id;
                 });
+
+                if (index === -1) {
+                    console.warn("Failed to find index for id " + id)
+                }
 
                 this.playRecordingAtIndex(index)
             }, false)
@@ -127,7 +143,10 @@ const Playlist = {
     },
 
     playRecordingAtIndex: function(i) {
-        if (typeof this.recordings[i] === 'undefined') return;
+        if (typeof this.recordings[i] === 'undefined') {
+            console.warn("Failed to load presentation at index " + i);
+            return;
+        }
 
         this.loadRecordingAtIndex(i);
         this.player.play();
@@ -137,11 +156,11 @@ const Playlist = {
         this.playRecordingAtIndex(this.index + 1)
     },
 
-    init: function ( player, recordings) {
+    init: function (player, recordings, showList) {
         this.player = player;
         this.recordings = recordings;
 
-        this.renderList();
+        if (showList) this.renderList();
         this.registerClickHandler();
         this.loadRecordingAtIndex(0);
     }

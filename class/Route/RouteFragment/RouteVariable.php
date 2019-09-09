@@ -8,7 +8,7 @@ if (!\defined('ABSPATH')) exit;
 
 class RouteVariable extends RouteFragment
 {
-	private $defaultTokenRegex = "([\w-\.]+)";
+	private $defaultTokenRegex = "([\w\-\.]+)";
 	private $value;
 
 	public function setVariables($values)

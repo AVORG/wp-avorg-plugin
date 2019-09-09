@@ -3,7 +3,7 @@
 namespace Avorg\DataObject;
 
 use Avorg\DataObject;
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Router;
 use function defined;
 
@@ -11,13 +11,13 @@ if (!defined('ABSPATH')) exit;
 
 class Presenter extends DataObject
 {
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	private $recordingRepository;
 
 	protected $detailClass = "Avorg\Page\Presenter\Detail";
 
 	public function __construct(
-		RecordingRepository $recordingRepository,
+		PresentationRepository $recordingRepository,
 		Router $router
 	)
 	{
@@ -29,7 +29,7 @@ class Presenter extends DataObject
 
 	public function getRecordings()
 	{
-		return $this->recordingRepository->getPresenterRecordings($this->getId());
+		return $this->recordingRepository->getPresenterPresentations($this->getId());
 	}
 
 	public function getName()

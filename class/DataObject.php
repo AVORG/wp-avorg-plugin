@@ -4,10 +4,11 @@ namespace Avorg;
 
 use function defined;
 use Exception;
+use JsonSerializable;
 
 if (!defined('ABSPATH')) exit;
 
-abstract class DataObject implements iEntity
+abstract class DataObject implements JsonSerializable
 {
 	/** @var Router $router */
 	protected $router;
@@ -27,7 +28,7 @@ abstract class DataObject implements iEntity
 	 */
 	public function setData($data)
 	{
-		$this->data = $data;
+		$this->data = (object)$data;
 		return $this;
 	}
 
@@ -40,12 +41,21 @@ abstract class DataObject implements iEntity
 	{
 		$getter = "get" . ucfirst($name);
 
-		return method_exists($this, $getter) ? $this->$getter() : $this->data->$name;
+		if (method_exists($this, $getter)) {
+            return $this->$getter();
+        }
+
+		return property_exists($this->data, $name) ? $this->data->$name : null;
 	}
 
-	public function toJson()
+	public function __toString()
 	{
-		return json_encode($this->toArray());
+		return json_encode($this);
+	}
+
+	public function jsonSerialize()
+	{
+		return $this->toArray();
 	}
 
 	public function toArray()
@@ -69,10 +79,10 @@ abstract class DataObject implements iEntity
 
 	public function getId()
 	{
-		return intval($this->data->id);
+		return property_exists($this->data, 'id') ? intval($this->data->id) : null;
 	}
 
 	protected function getSlug() {
-		return $this->router->formatStringForUrl($this->data->title) . ".html";
+		return $this->router->formatStringForUrl($this->title) . ".html";
 	}
 }

@@ -3,6 +3,7 @@
 
 namespace Avorg\Page\Bible;
 
+use Avorg\DataObject;
 use Avorg\DataObject\Bible;
 use Avorg\DataObjectRepository\BibleRepository;
 use Avorg\Page;
@@ -56,7 +57,7 @@ class Detail extends Page
 	}
 
 	/**
-	 * @return Bible|null
+	 * @return DataObject
 	 * @throws Exception
 	 */
 	private function getEntity()

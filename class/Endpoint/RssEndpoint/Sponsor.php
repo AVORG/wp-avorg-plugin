@@ -3,7 +3,7 @@
 namespace Avorg\Endpoint\RssEndpoint;
 
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\DataObjectRepository\SponsorRepository;
 use Avorg\Endpoint\RssEndpoint;
 use Avorg\Php;
@@ -24,7 +24,7 @@ class Sponsor extends RssEndpoint
 		Factory $factory,
 		Php $php,
 		SponsorRepository $sponsorRepository,
-		RecordingRepository $recordingRepository,
+		PresentationRepository $recordingRepository,
 		Renderer $renderer,
 		WordPress $wp
 	)
@@ -39,7 +39,7 @@ class Sponsor extends RssEndpoint
 	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getSponsorRecordings($this->getEntityId());
+		return $this->presentationRepository->getSponsorPresentations($this->getEntityId());
 	}
 
 	protected function getTitle()

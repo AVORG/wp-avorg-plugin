@@ -21,4 +21,11 @@ class PlaylistRepository extends DataObjectRepository
 
 		return $this->makeDataObjects($rawObjects);
 	}
+
+	public function getPlaylist($playlistId)
+	{
+		$rawObject = $this->api->getPlaylist($playlistId);
+
+		return $this->makeDataObject($rawObject);
+	}
 }

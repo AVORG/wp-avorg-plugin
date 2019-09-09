@@ -1,4 +1,8 @@
 {% set type = (type is defined) ? type : avorg.type %}
 {% set message = (message is defined) ? message : avorg.message %}
 
-<div class="notice notice-{{ type }}"><p>{{ message }}</p></div>
+<div class="notice notice-{{ type }}">
+	<p>
+		{{ message }} {% if avorg.url %}<a href="{{ avorg.url }}">Resolve</a>{% endif %}
+	</p>
+</div>

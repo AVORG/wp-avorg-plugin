@@ -30,7 +30,7 @@ class RouteFactory
 	private $pageRouteFormats = [
 		"Avorg\Page\Presenter\Listing" => "{ language }/sermons/presenters[/{ letter }]",
 		"Avorg\Page\Presenter\Detail" => "{ language }/sermons/presenters/{ entity_id:[0-9]+ }[/{ slug }]",
-		"Avorg\Page\Media" => "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\Presentation\Detail" => "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Book\Listing" => "{ language }/audiobooks/books",
 		"Avorg\Page\Book\Detail" => "{ language }/audiobooks/books/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Playlist\Listing" => "{ language }/playlists/lists",
@@ -47,6 +47,7 @@ class RouteFactory
 		"Avorg\Page\Sponsor\Detail" => "{ language }/sponsors/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Series\Listing" => "{ language }/sermons/series",
 		"Avorg\Page\Series\Detail" => "{ language }/sermons/series/{ entity_id:[0-9]+ }[/{ slug }]",
+		"Avorg\Page\BibleBook\Detail" => "{ language }/audiobibles/books/{ bible_id }/{ testament_id }/{ book_id }/{ drama:[0-9]+ }"
 	];
 
 	private $endpointRouteFormats = [
@@ -55,7 +56,9 @@ class RouteFactory
 		"Avorg\Endpoint\Recording" => "api/presentation/{ entity_id:[0-9]+ }",
 		"Avorg\Endpoint\RssEndpoint\Trending" => "{ language }/podcasts/trending",
 		"Avorg\Endpoint\RssEndpoint\Topic" => "{ language }/topics/podcast/{ entity_id:[0-9]+ }[/{ slug }]",
-		"Avorg\Endpoint\RssEndpoint\Sponsor" => "{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]"
+		"Avorg\Endpoint\RssEndpoint\Sponsor" => "{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]",
+		"Avorg\Endpoint\RelatedSermons" => "api/presentation/related/{ entity_id:[0-9]+ }",
+		"Avorg\Endpoint\Presentations" => "api/presentation[/{ entity_id:[^\d]+ }]"
 	];
 
 	public function __construct(

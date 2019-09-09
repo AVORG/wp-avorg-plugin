@@ -3,7 +3,7 @@
 namespace Avorg\Endpoint;
 
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Endpoint;
 use Avorg\Php;
 use Avorg\Renderer;
@@ -20,28 +20,26 @@ abstract class RssEndpoint extends Endpoint
 	/** @var Php $php */
 	private $php;
 
-	/** @var RecordingRepository $recordingRepository */
-	protected $recordingRepository;
+	/** @var PresentationRepository $presentationRepository */
+	protected $presentationRepository;
 
 	/** @var Renderer $renderer */
 	private $renderer;
 
-	/** @var WordPress $wp */
-	private $wp;
-
 	public function __construct(
 		Factory $factory,
 		Php $php,
-		RecordingRepository $recordingRepository,
+		PresentationRepository $presentationRepository,
 		Renderer $renderer,
 		WordPress $wp
 	)
 	{
+		parent::__construct($wp);
+
 		$this->factory = $factory;
 		$this->php = $php;
-		$this->recordingRepository = $recordingRepository;
+		$this->presentationRepository = $presentationRepository;
 		$this->renderer = $renderer;
-		$this->wp = $wp;
 	}
 
 	public function getOutput()
@@ -68,13 +66,5 @@ abstract class RssEndpoint extends Endpoint
 	protected function getImage()
 	{
 		return null;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	protected function getEntityId()
-	{
-		return $this->wp->get_query_var("entity_id");
 	}
 }

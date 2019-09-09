@@ -3,9 +3,10 @@
 namespace Avorg;
 
 use Exception;
+use function defined;
 use function get_option;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class AvorgApi
 {
@@ -87,13 +88,27 @@ class AvorgApi
 	}
 
 	/**
-	 * @param $id
+	 * @param $bibleId
+	 * @param $bookId
+	 * @param $testamentId
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getBibleBooks($id)
+	public function getBibleChapters($bibleId, $bookId, $testamentId)
 	{
-		return (array) $this->getResponse("audiobibles/$id");
+		return (array) $this->getResponse(
+			"audiobibles/books/$bookId?volume=$bibleId&testament=$testamentId"
+		);
+	}
+
+	/**
+	 * @param $bible_id
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBibleBooks($bible_id)
+	{
+		return (array) $this->getResponse("audiobibles/$bible_id");
 	}
 
 	/**

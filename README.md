@@ -1,5 +1,8 @@
 # wp-avorg
 
+[![latest build | master](https://img.shields.io/badge/latest%20build-master-75d60d)](https://wp-avorg-plugin-master.surge.sh/wp-avorg-plugin.zip)
+[![latest build | dev](https://img.shields.io/badge/latest%20build-dev-f39f37)](https://wp-avorg-plugin-dev.surge.sh/wp-avorg-plugin.zip)
+
 PHP 7.2
 
 ## Installation

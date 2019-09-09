@@ -3,7 +3,7 @@
 namespace Avorg\Endpoint\RssEndpoint;
 
 
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\DataObjectRepository\TopicRepository;
 use Avorg\Endpoint\RssEndpoint;
 use Avorg\Php;
@@ -23,13 +23,13 @@ class Topic extends RssEndpoint
 	public function __construct(
 		Factory $factory,
 		Php $php,
-		RecordingRepository $recordingRepository,
+		PresentationRepository $presentationRepository,
 		Renderer $renderer,
 		TopicRepository $topicRepository,
 		WordPress $wp
 	)
 	{
-		parent::__construct($factory, $php, $recordingRepository, $renderer, $wp);
+		parent::__construct($factory, $php, $presentationRepository, $renderer, $wp);
 
 		$this->topicRepository = $topicRepository;
 	}
@@ -40,7 +40,7 @@ class Topic extends RssEndpoint
 	 */
 	protected function getRecordings()
 	{
-		return $this->recordingRepository->getTopicRecordings($this->getEntityId());
+		return $this->presentationRepository->getTopicPresentations($this->getEntityId());
 	}
 
 	protected function getTitle()

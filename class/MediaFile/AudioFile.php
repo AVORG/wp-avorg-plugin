@@ -3,8 +3,9 @@
 namespace Avorg\MediaFile;
 
 use Avorg\MediaFile;
+use function defined;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class AudioFile extends MediaFile
 {

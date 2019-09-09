@@ -1,8 +1,16 @@
 .avorg-molecule-playlist {
   .avorg-molecule-playlist__list {
     li {
-      &.active {
-        background-color: yellow;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: #747474;
+      list-style-type: none;
+      border-top: 1px solid #ddd;
+      padding: .75rem 1rem;
+      &:hover, &.active {
+        background-color: #f5f5f5;
       }
     }
   }

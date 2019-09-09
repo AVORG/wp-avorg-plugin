@@ -1,0 +1,31 @@
+{
+  "name": "wp-avorg-plugin",
+  "version": "1.0.0",
+  "description": "PHP 7.2",
+  "main": "serviceWorker.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avorg/wp-avorg-plugin.git"
+  },
+  "author": "Nathan Arthur",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/avorg/wp-avorg-plugin/issues"
+  },
+  "homepage": "https://github.com/avorg/wp-avorg-plugin#readme",
+  "dependencies": {
+    "@types/wordpress__block-editor": "^2.2.0",
+    "@types/wordpress__block-library": "^2.6.0",
+    "@types/wordpress__blocks": "^6.4.3",
+    "systemjs": "^4.1.0"
+  },
+  "devDependencies": {
+    "surge": "^0.21.3"
+  }
+}

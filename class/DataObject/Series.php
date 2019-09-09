@@ -4,19 +4,19 @@ namespace Avorg\DataObject;
 
 
 use Avorg\DataObject;
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Router;
 
 if (!defined('ABSPATH')) exit;
 
 class Series extends DataObject
 {
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	private $recordingRepository;
 
 	protected $detailClass = "Avorg\Page\Series\Detail";
 
-	public function __construct(RecordingRepository $recordingRepository, Router $router)
+	public function __construct(PresentationRepository $recordingRepository, Router $router)
 	{
 		parent::__construct($router);
 
@@ -25,6 +25,6 @@ class Series extends DataObject
 
 	public function getRecordings()
 	{
-		return $this->recordingRepository->getSeriesRecordings($this->getId());
+		return $this->recordingRepository->getSeriesPresentations($this->getId());
 	}
 }

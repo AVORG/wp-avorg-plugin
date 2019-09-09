@@ -10,7 +10,7 @@ class VideoFile extends MediaFile
 {
     public function getStreamUrl()
     {
-        return $this->apiMediaFile->downloadURL;
+        return property_exists($this->apiMediaFile, 'downloadURL') ? $this->apiMediaFile->downloadURL : null;
     }
 
     public function getType()

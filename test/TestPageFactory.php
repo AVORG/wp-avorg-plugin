@@ -22,7 +22,7 @@ final class TestPageFactory extends Avorg\TestCase
 	private function assertPagesExist()
 	{
 		$this->assertTrue((bool) array_filter($this->pages, function($page) {
-			return $page instanceof Avorg\Page\Media;
+			return $page instanceof Avorg\Page;
 		}), "PageFactory did not return pages");
 	}
 

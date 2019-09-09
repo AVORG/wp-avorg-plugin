@@ -4,7 +4,7 @@ namespace Avorg\DataObject;
 
 
 use Avorg\DataObject;
-use Avorg\DataObjectRepository\RecordingRepository;
+use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Router;
 use Exception;
 
@@ -12,12 +12,12 @@ if (!defined('ABSPATH')) exit;
 
 class Book extends DataObject
 {
-	/** @var RecordingRepository $recordingRepository */
+	/** @var PresentationRepository $recordingRepository */
 	private $recordingRepository;
 
 	protected $detailClass = "Avorg\Page\Book\Detail";
 
-	public function __construct(RecordingRepository $recordingRepository, Router $router)
+	public function __construct(PresentationRepository $recordingRepository, Router $router)
 	{
 		parent::__construct($router);
 
@@ -51,6 +51,6 @@ class Book extends DataObject
 	 */
 	public function getRecordings()
 	{
-		return $this->recordingRepository->getBookRecordings($this->getId());
+		return $this->recordingRepository->getBookPresentations($this->getId());
 	}
 }

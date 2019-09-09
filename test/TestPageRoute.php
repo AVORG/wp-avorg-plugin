@@ -134,7 +134,12 @@ final class TestPageRoute extends Avorg\TestCase
 			$redirect = $pair["redirect"];
 
 			preg_match("/$regex/", $inputUrl, $matches);
-			$result = eval("return \"$redirect\";");
+
+			try {
+                $result = eval("return \"$redirect\";");
+            } catch (Exception $e) {
+			    $result = null;
+            }
 
 			return $carry || $result === $outputUrl;
 		}, false);

@@ -1,8 +1,10 @@
 <?php
 
+use Avorg\Router;
+
 final class TestRouter extends Avorg\TestCase
 {
-	/** @var \Avorg\Router $router */
+	/** @var Router $router */
 	protected $router;
 
 	public function setUp()
@@ -38,10 +40,10 @@ final class TestRouter extends Avorg\TestCase
 
 			preg_match("/$regex/", $inputUrl, $matches);
 
-			return eval("return \"$redirect\";");
+			return @eval("return \"$redirect\";");
 		}, $addRewriteCalls);
 
-		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $addRewriteCalls);
 	}
 
 	public function pageRouteProvider()
@@ -49,59 +51,59 @@ final class TestRouter extends Avorg\TestCase
 		return [
 			[
 				"english/sermons/recordings/316/parents-how.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
 			],
 			[
 				"english/sermons/recordings/316/parents-how.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=316&slug=parents-how.html"
 			],
 			[
 				"english/sermons/recordings/2913/generation-of-youth-for-christ.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=2913&slug=generation-of-youth-for-christ.html"
 			],
 			[
 				"english/sermons/recordings/3914/killing-the-fat-king.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=3914&slug=killing-the-fat-king.html"
 			],
 			[
 				"english/sermons/recordings/17663/2-new-theology--halfhearted-christians.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=17663&slug=2-new-theology--halfhearted-christians.html"
 			],
 			[
 				"english/sermons/recordings/17831/the-last-attack.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=17831&slug=the-last-attack.html"
 			],
 			[
 				"english/sermons/recordings/17833/single-and-satisfied.html/",
-				"index.php?page_id=MEDIA_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=english&entity_id=17833&slug=single-and-satisfied.html"
 			],
 			[
 				"espanol/sermones/grabaciones/17283/saludismo.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=espanol&entity_id=17283&slug=saludismo.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=espanol&entity_id=17283&slug=saludismo.html"
 			],
 			[
 				"francais/predications/enregistrements/3839/jesus-sur-le-mont-des-oliviers.html",
-				"index.php?page_id=MEDIA_PAGE_ID&language=francais&entity_id=3839&slug=jesus-sur-le-mont-des-oliviers.html"
+				"index.php?page_id=PRESENTATION_DETAIL_PAGE_ID&language=francais&entity_id=3839&slug=jesus-sur-le-mont-des-oliviers.html"
 			],
 			[
 				"espanol",
@@ -158,6 +160,10 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"/english/sermons/series",
 				"index.php?page_id=SERIES_LISTING_PAGE_ID&language=english"
+			],
+			[
+				"english/audiobibles/books/ENGKJV/O/Josh/1",
+				"index.php?page_id=BIBLEBOOK_DETAIL_PAGE_ID&language=english&bible_id=ENGKJV&testament_id=O&book_id=Josh&drama=1"
 			]
 		];
 	}
@@ -179,7 +185,7 @@ final class TestRouter extends Avorg\TestCase
 			return preg_replace("/$regex/", $redirect, $inputUrl);
 		}, $addRewriteCalls);
 
-		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results);
+		$this->assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $addRewriteCalls);
 	}
 
 	public function outputRouteProvider()
@@ -208,6 +214,14 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"/english/sponsors/podcast/49/latest/a-loud-and-clear-call-ministries.xml",
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Sponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
+			],
+			[
+				"/api/presentation/related/10",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_RelatedSermons&entity_id=10"
+			],
+			[
+				"/api/presentation/featured",
+				"endpoint.php?endpoint_id=Avorg_Endpoint_Presentations&entity_id=featured"
 			]
 		];
 	}
@@ -370,10 +384,12 @@ final class TestRouter extends Avorg\TestCase
 	 * @param $inputUrl
 	 * @param $outputUrl
 	 * @param $results
+	 * @param $rewriteRules
 	 */
-	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results)
+	private function assertRewrittenUrlMatchesExpectedUrl($inputUrl, $outputUrl, $results, $rewriteRules)
 	{
 		$resultsExport = var_export($results, true);
+		$rewriteRulesExport = var_export($rewriteRules, true);
 		$getOptionCalls = var_export($this->mockWordPress->getCalls("get_option"), true);
 		$errorMessage = <<<EOM
 Input: $inputUrl
@@ -382,6 +398,9 @@ Expected Output: $outputUrl
 
 Haystack:
 $resultsExport
+
+Rewrite Rules:
+$rewriteRulesExport
 
 Calls to wp->get_option():
 $getOptionCalls
@@ -393,4 +412,19 @@ EOM;
 			$errorMessage
 		);
 	}
+
+	public function testRegistersActivationMethod()
+    {
+        $this->router->registerCallbacks();
+
+        $this->mockWordPress->assertMethodCalledWith(
+            'register_activation_hook', AVORG_PLUGIN_FILE, [$this->router, 'activate']);
+    }
+
+    public function testRegistersRouteRegistrationInitAction()
+    {
+        $this->router->registerCallbacks();
+
+        $this->mockWordPress->assertActionAdded('init', [$this->router, 'registerRoutes']);
+    }
 }
