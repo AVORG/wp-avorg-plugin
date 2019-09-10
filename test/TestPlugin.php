@@ -196,19 +196,9 @@ final class TestPlugin extends Avorg\TestCase
 				"saveIdentifierMetaBox"
 			],
 			[
-				'enqueue_block_editor_assets',
-				'BlockLoader',
-				'enqueueBlockEditorAssets'
-			],
-			[
 				"admin_menu",
 				'AdminPanel',
 				'register'
-			],
-			[
-				'enqueue_block_assets',
-				'BlockLoader',
-				'enqueueBlockFrontendAssets'
 			],
             [
                 'rest_api_init',
@@ -218,20 +208,21 @@ final class TestPlugin extends Avorg\TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider scriptPathProvider
-	 * @param $path
-	 * @param bool $shouldRegister
-	 * @param bool $isRelative
-	 * @param string $action
-	 */
+    /**
+     * @dataProvider scriptPathProvider
+     * @param $path
+     * @param array $options
+     */
 	public function testRegistersScripts(
 		$path,
-		$shouldRegister = true,
-		$isRelative = false,
-		$action = "wp_enqueue_scripts"
+		$options = []
 	)
 	{
+	    $shouldRegister = $this->arrSafe('should_register', $options, true);
+	    $isRelative = $this->arrSafe('is_relative', $options, false);
+	    $action = $this->arrSafe('action', $options, "wp_enqueue_scripts");
+	    $deps = $this->arrSafe('deps', $options, null);
+
 		$this->plugin->registerCallbacks();
 
 		$this->mockWordPress->runActions($action);
@@ -241,7 +232,8 @@ final class TestPlugin extends Avorg\TestCase
 		$args = [
 			"wp_enqueue_script",
 			"Avorg_Script_" . sha1($fullPath),
-			$fullPath
+			$fullPath,
+            $deps
 		];
 
 		if ($shouldRegister) {
@@ -251,13 +243,28 @@ final class TestPlugin extends Avorg\TestCase
 		}
 	}
 
+	private function arrSafe($key, $array, $default = Null)
+    {
+        return array_key_exists($key, $array) ? $array[$key] : $default;
+    }
+
 	public function scriptPathProvider()
 	{
 		return [
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
-			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
-			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
+			"don't init playlist.js on other pages" => ["script/playlist.js", [
+			    'should_register' => false,
+                'is_relative' => true
+            ]],
+            "frontend" => ["dist/frontend.js", [
+                'is_relative' => true
+            ]],
+            "editor" => ["dist/editor.js", [
+                'is_relative' => true,
+                'action' => 'enqueue_block_editor_assets',
+                'deps' => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n']
+            ]],
 		];
 	}
 

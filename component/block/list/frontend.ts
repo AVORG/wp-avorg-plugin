@@ -1,3 +1,3 @@
-import { loadRecordings } from "./shared.js";
+import { loadRecordings } from "./shared";
 
 loadRecordings("wp-block-avorg-block-list");

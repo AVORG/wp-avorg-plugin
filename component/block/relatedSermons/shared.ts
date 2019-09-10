@@ -1,4 +1,4 @@
-import molecule_recordingList from "../../molecule/recordingList/index.js";
+import molecule_recordingList from "../../molecule/recordingList";
 
 declare const avorg_scripts: {
     query: any;

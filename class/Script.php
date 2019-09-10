@@ -12,6 +12,7 @@ class Script
 	private $wp;
 
 	private $actions = [];
+	private $deps = [];
 	private $data = [];
 	private $path;
 
@@ -47,19 +48,30 @@ class Script
 		return $this;
 	}
 
-	public function registerCallbacks()
+    /**
+     * @throws Exception
+     */
+    public function registerCallbacks()
 	{
-		$this->wp->add_action("wp_enqueue_scripts", [$this, "enqueue"]);
-		$this->wp->add_action("admin_enqueue_scripts", [$this, "enqueue"]);
+        if (! $this->actions) {
+            throw new Exception("No actions set for script $this->path");
+        }
+
+        array_walk($this->actions, function($action) {
+           $this->wp->add_action($action, [$this, "enqueue"]);
+        });
 	}
 
-	public function enqueue()
+    /**
+     * @throws Exception
+     */
+    public function enqueue()
 	{
 		if (!$this->path) throw new Exception("Failed to enqueue script. Path not set.");
 
 		$id = $this->getScriptId();
 
-		$this->wp->wp_enqueue_script($id, $this->path);
+		$this->wp->wp_enqueue_script($id, $this->path, $this->deps);
 		$this->wp->wp_localize_script($id, "avorg", $this->getLocalizeData());
 	}
 
@@ -89,10 +101,12 @@ class Script
 	 */
 	private function getNonces()
 	{
-		return array_reduce($this->actions, function ($carry, AjaxAction $action) {
-			return array_merge($carry, [
-				$action->getSimpleIdentifier() => $action->getNonce()
-			]);
-		}, []);
+		return [];
 	}
+
+    public function setDeps(...$deps)
+    {
+        $this->deps = $deps;
+        return $this;
+    }
 }

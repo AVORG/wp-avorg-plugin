@@ -20,7 +20,6 @@ class Plugin
 	public function __construct(
 		AdminPanel $adminPanel,
 		AjaxActionFactory $ajaxActionFactory,
-		BlockLoader $blockRepository,
 		ContentBits $contentBits,
 		Localization $localization,
 		PageFactory $pageFactory,
