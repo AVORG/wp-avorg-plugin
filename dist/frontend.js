@@ -164,60 +164,6 @@ var AvorgPlaceholder;
 
 /***/ }),
 
-/***/ "./component/block/relatedSermons/frontend.ts":
-/*!****************************************************!*\
-  !*** ./component/block/relatedSermons/frontend.ts ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var shared_1 = __webpack_require__(/*! ./shared */ "./component/block/relatedSermons/shared.ts");
-shared_1.loadRecordings('wp-block-avorg-block-relatedsermons');
-
-
-/***/ }),
-
-/***/ "./component/block/relatedSermons/shared.ts":
-/*!**************************************************!*\
-  !*** ./component/block/relatedSermons/shared.ts ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var recordingList_1 = __webpack_require__(/*! ../../molecule/recordingList */ "./component/molecule/recordingList/index.ts");
-function getRandomSubarray(arr, size) {
-    var shuffled = arr.slice(0), i = arr.length, temp, index;
-    while (i--) {
-        index = Math.floor((i + 1) * Math.random());
-        temp = shuffled[index];
-        shuffled[index] = shuffled[i];
-        shuffled[i] = temp;
-    }
-    return shuffled.slice(0, size);
-}
-exports.loadRecordings = function (className) {
-    var entityId = false, elements = document.querySelectorAll("." + className);
-    if (!entityId || !elements)
-        return;
-    var url = "/api/presentation/related/" + entityId;
-    fetch(url).then(function (response) {
-        console.log(response);
-        return response.json();
-    }).then(function (response) {
-        var recordings = getRandomSubarray(Object.values(response), 3), content = recordingList_1.default(recordings);
-        elements.forEach(function (el) { return el.innerHTML = content; });
-    });
-};
-
-
-/***/ }),
-
 /***/ "./component/frontend.ts":
 /*!*******************************!*\
   !*** ./component/frontend.ts ***!
@@ -230,7 +176,6 @@ exports.loadRecordings = function (className) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __webpack_require__(/*! ./block/list/frontend */ "./component/block/list/frontend.ts");
 __webpack_require__(/*! ./block/placeholder/frontend */ "./component/block/placeholder/frontend.ts");
-__webpack_require__(/*! ./block/relatedSermons/frontend */ "./component/block/relatedSermons/frontend.ts");
 var text = "FRONTEND.TS BUNDLE";
 console.log(text);
 

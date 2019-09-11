@@ -219,12 +219,8 @@ var AvorgPlaceholder;
   !*** ./component/block/relatedSermons/index.tsx ***!
   \**************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var shared_1 = __webpack_require__(/*! ./shared */ "./component/block/relatedSermons/shared.ts");
 var AvorgRelatedSermons;
 (function (AvorgRelatedSermons) {
     window.wp.blocks.registerBlockType('avorg/block-relatedsermons', {
@@ -232,50 +228,11 @@ var AvorgRelatedSermons;
         icon: 'excerpt-view',
         category: 'widgets',
         edit: function (props) {
-            shared_1.loadRecordings(props.className);
             return wp.element.createElement("p", { className: props.className }, "Related Sermons");
         },
         save: function () { return null; }
     });
 })(AvorgRelatedSermons || (AvorgRelatedSermons = {}));
-
-
-/***/ }),
-
-/***/ "./component/block/relatedSermons/shared.ts":
-/*!**************************************************!*\
-  !*** ./component/block/relatedSermons/shared.ts ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var recordingList_1 = __webpack_require__(/*! ../../molecule/recordingList */ "./component/molecule/recordingList/index.ts");
-function getRandomSubarray(arr, size) {
-    var shuffled = arr.slice(0), i = arr.length, temp, index;
-    while (i--) {
-        index = Math.floor((i + 1) * Math.random());
-        temp = shuffled[index];
-        shuffled[index] = shuffled[i];
-        shuffled[i] = temp;
-    }
-    return shuffled.slice(0, size);
-}
-exports.loadRecordings = function (className) {
-    var entityId = false, elements = document.querySelectorAll("." + className);
-    if (!entityId || !elements)
-        return;
-    var url = "/api/presentation/related/" + entityId;
-    fetch(url).then(function (response) {
-        console.log(response);
-        return response.json();
-    }).then(function (response) {
-        var recordings = getRandomSubarray(Object.values(response), 3), content = recordingList_1.default(recordings);
-        elements.forEach(function (el) { return el.innerHTML = content; });
-    });
-};
 
 
 /***/ }),
