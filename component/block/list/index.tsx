@@ -7,6 +7,8 @@ namespace AvorgBlockList {
         // padding: '20px',
     };
 
+    const className = 'wp-block-avorg-block-list';
+
     window.wp.blocks.registerBlockType('avorg/block-list', {
         title: 'Recordings List',
         icon: 'playlist-audio',
@@ -20,7 +22,7 @@ namespace AvorgBlockList {
             }
         },
         edit: function (props: any) {
-            const { attributes: { type }, setAttributes, className } = props;
+            const { attributes: { type }, setAttributes } = props;
 
             loadRecordings(className);
 
@@ -62,4 +64,6 @@ namespace AvorgBlockList {
             return <p style={blockStyle} data-type={type}>Loading...</p>;
         },
     });
+
+    loadRecordings(className);
 }

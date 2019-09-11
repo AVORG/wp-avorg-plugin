@@ -166,4 +166,20 @@ final class TestTwigGlobal extends Avorg\TestCase
 			return $call[2][0]['title'] === "A Call to Medical Evangelism";
 		});
 	}
+
+	public function testGetsQueryVars()
+    {
+        $this->factory->make("Avorg\\TwigGlobal");
+
+        $this->mockWordPress->assertMethodCalled("get_all_query_vars");
+    }
+
+    public function testIncludesQueryVarsInData()
+    {
+        $this->mockWordPress->setReturnValue("get_all_query_vars", "vars");
+
+        $global = $this->factory->make("Avorg\\TwigGlobal");
+
+        $this->assertEquals("vars", $global->query);
+    }
 }

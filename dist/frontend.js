@@ -202,7 +202,7 @@ function getRandomSubarray(arr, size) {
     return shuffled.slice(0, size);
 }
 exports.loadRecordings = function (className) {
-    var entityId = avorg_scripts.query.entity_id, elements = document.querySelectorAll("." + className);
+    var entityId = false, elements = document.querySelectorAll("." + className);
     if (!entityId || !elements)
         return;
     var url = "/api/presentation/related/" + entityId;

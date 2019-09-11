@@ -28,10 +28,13 @@ class ScriptFactory
     private function getScripts()
     {
         $pathOptions = [
-            "dist/frontend.js" => [],
             "//vjs.zencdn.net/7.0/video.min.js" => [],
             "https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js" => [],
+            "dist/frontend.js" => [
+                "handle" => "Avorg_Script_Frontend",
+            ],
             "dist/editor.js" => [
+                "handle" => "Avorg_Script_Editor",
                 "actions" => ["enqueue_block_editor_assets"],
                 "deps" => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n']
             ]
@@ -52,15 +55,15 @@ class ScriptFactory
      * @throws ReflectionException
      */
     public function getScript($path, $options = []) {
+        $handle = $this->arrSafe("handle", $options, null);
 	    $actions = $this->arrSafe("actions", $options, ["wp_enqueue_scripts"]);
 	    $deps = $this->arrSafe("deps", $options, []);
 
-		/** @var Script $script */
-		$script = $this->factory->obtain("Avorg\\Script");
-
-		$script->setPath($path)->setActions(...$actions)->setDeps(...$deps);
-
-		return $script;
+		return $this->factory->obtain("Avorg\\Script")
+            ->setPath($path)
+            ->setActions(...$actions)
+            ->setHandle($handle)
+            ->setDeps(...$deps);
 	}
 
     private function arrSafe($key, $array, $default = Null)

@@ -15,6 +15,7 @@ class Script
 	private $deps = [];
 	private $data = [];
 	private $path;
+	private $handle;
 
 	public function __construct(WordPress $wp)
 	{
@@ -69,17 +70,19 @@ class Script
 	{
 		if (!$this->path) throw new Exception("Failed to enqueue script. Path not set.");
 
-		$id = $this->getScriptId();
+		$handle = $this->getHandle();
 
-		$this->wp->wp_enqueue_script($id, $this->path, $this->deps);
-		$this->wp->wp_localize_script($id, "avorg", $this->getLocalizeData());
+		$this->wp->wp_enqueue_script($handle, $this->path, $this->deps);
+		$this->wp->wp_localize_script($handle, "avorg", $this->getLocalizeData());
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getScriptId()
+	private function getHandle()
 	{
+	    if ($this->handle) return $this->handle;
+
 		$class = get_class($this);
 
 		return str_replace("\\", "_", $class) . "_" . sha1($this->path);
@@ -107,6 +110,16 @@ class Script
     public function setDeps(...$deps)
     {
         $this->deps = $deps;
+        return $this;
+    }
+
+    /**
+     * @param mixed $handle
+     * @return Script
+     */
+    public function setHandle($handle)
+    {
+        $this->handle = $handle;
         return $this;
     }
 }

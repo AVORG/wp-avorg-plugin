@@ -1,10 +1,5 @@
 import molecule_recordingList from "../../molecule/recordingList";
 
-declare const avorg_scripts: {
-    query: any;
-    urls: string[]
-};
-
 function getRandomSubarray(arr: any[], size: number) {
     var shuffled = arr.slice(0), i = arr.length, temp, index;
     while (i--) {
@@ -17,7 +12,7 @@ function getRandomSubarray(arr: any[], size: number) {
 }
 
 export const loadRecordings = (className: string) => {
-    const entityId = avorg_scripts.query.entity_id,
+    const entityId = false, // window.avorg.query.entity_id,
         elements = document.querySelectorAll(`.${className}`);
 
     if (!entityId || !elements) return;

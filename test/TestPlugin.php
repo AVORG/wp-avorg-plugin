@@ -204,6 +204,11 @@ final class TestPlugin extends Avorg\TestCase
                 'rest_api_init',
                 'RestController\\PlaceholderContent',
                 'registerRoutes'
+            ],
+            [
+                'init',
+                'Block\\RelatedSermons',
+                'init'
             ]
 		];
 	}
@@ -218,20 +223,24 @@ final class TestPlugin extends Avorg\TestCase
 		$options = []
 	)
 	{
+
 	    $shouldRegister = $this->arrSafe('should_register', $options, true);
 	    $isRelative = $this->arrSafe('is_relative', $options, false);
 	    $action = $this->arrSafe('action', $options, "wp_enqueue_scripts");
 	    $deps = $this->arrSafe('deps', $options, null);
 
+        $fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
+
+        $defaultHandle = "Avorg_Script_" . sha1($fullPath);
+        $handle = $this->arrSafe("handle", $options, $defaultHandle);
+
 		$this->plugin->registerCallbacks();
 
 		$this->mockWordPress->runActions($action);
 
-		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
-
 		$args = [
 			"wp_enqueue_script",
-			"Avorg_Script_" . sha1($fullPath),
+			$handle,
 			$fullPath,
             $deps
 		];
@@ -243,11 +252,6 @@ final class TestPlugin extends Avorg\TestCase
 		}
 	}
 
-	private function arrSafe($key, $array, $default = Null)
-    {
-        return array_key_exists($key, $array) ? $array[$key] : $default;
-    }
-
 	public function scriptPathProvider()
 	{
 		return [
@@ -258,12 +262,14 @@ final class TestPlugin extends Avorg\TestCase
                 'is_relative' => true
             ]],
             "frontend" => ["dist/frontend.js", [
-                'is_relative' => true
+                'is_relative' => true,
+                'handle' => 'Avorg_Script_Frontend'
             ]],
             "editor" => ["dist/editor.js", [
                 'is_relative' => true,
                 'action' => 'enqueue_block_editor_assets',
-                'deps' => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n']
+                'deps' => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n'],
+                'handle' => 'Avorg_Script_Editor'
             ]],
 		];
 	}

@@ -100,6 +100,7 @@ var shared_1 = __webpack_require__(/*! ./shared */ "./component/block/list/share
 var AvorgBlockList;
 (function (AvorgBlockList) {
     var blockStyle = {};
+    var className = 'wp-block-avorg-block-list';
     window.wp.blocks.registerBlockType('avorg/block-list', {
         title: 'Recordings List',
         icon: 'playlist-audio',
@@ -113,7 +114,7 @@ var AvorgBlockList;
             }
         },
         edit: function (props) {
-            var type = props.attributes.type, setAttributes = props.setAttributes, className = props.className;
+            var type = props.attributes.type, setAttributes = props.setAttributes;
             shared_1.loadRecordings(className);
             var InspectorControls = window.wp.editor.InspectorControls;
             var _a = window.wp.components, PanelBody = _a.PanelBody, PanelRow = _a.PanelRow, SelectControl = _a.SelectControl;
@@ -137,6 +138,7 @@ var AvorgBlockList;
             return wp.element.createElement("p", { style: blockStyle, "data-type": type }, "Loading...");
         },
     });
+    shared_1.loadRecordings(className);
 })(AvorgBlockList || (AvorgBlockList = {}));
 
 
@@ -225,18 +227,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var shared_1 = __webpack_require__(/*! ./shared */ "./component/block/relatedSermons/shared.ts");
 var AvorgRelatedSermons;
 (function (AvorgRelatedSermons) {
-    var blockStyle = {};
     window.wp.blocks.registerBlockType('avorg/block-relatedsermons', {
         title: 'Related Sermons',
         icon: 'excerpt-view',
         category: 'widgets',
         edit: function (props) {
             shared_1.loadRecordings(props.className);
-            return wp.element.createElement("p", { style: blockStyle, className: props.className }, "Related Sermons");
+            return wp.element.createElement("p", { className: props.className }, "Related Sermons");
         },
-        save: function (props) {
-            return wp.element.createElement("p", { style: blockStyle }, "Loading...");
-        },
+        save: function () { return null; }
     });
 })(AvorgRelatedSermons || (AvorgRelatedSermons = {}));
 
@@ -265,7 +264,7 @@ function getRandomSubarray(arr, size) {
     return shuffled.slice(0, size);
 }
 exports.loadRecordings = function (className) {
-    var entityId = avorg_scripts.query.entity_id, elements = document.querySelectorAll("." + className);
+    var entityId = false, elements = document.querySelectorAll("." + className);
     if (!entityId || !elements)
         return;
     var url = "/api/presentation/related/" + entityId;

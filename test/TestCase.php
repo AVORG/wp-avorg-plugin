@@ -161,4 +161,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 
         return json_decode(json_encode($array), FALSE);
     }
+
+    protected function arrSafe($key, $array, $default = Null)
+    {
+        return array_key_exists($key, $array) ? $array[$key] : $default;
+    }
 }
