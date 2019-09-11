@@ -198,6 +198,16 @@ var AvorgPlaceholder;
         edit: function (props) {
             var id = props.attributes.id, isSelected = props.isSelected, setAttributes = props.setAttributes, className = props.className;
             var TextControl = window.wp.components.TextControl;
+            fetch('/wp-json/avorg/v1/placeholder-ids').then(function (response) {
+                return response.json();
+            }).then(function (response) {
+                var el = document.querySelector('#avorg_placeholder_suggestions');
+                if (typeof response !== 'undefined' && response.length > 0 && el) {
+                    el.innerHTML = response.map(function (s) {
+                        return "<option value=\"" + s + "\" />";
+                    }).join('');
+                }
+            });
             var form = wp.element.createElement("form", { onSubmit: function (event) { return event.preventDefault(); } },
                 wp.element.createElement(TextControl, { placeholder: 'Placeholder Identifier', value: id, list: 'avorg_placeholder_suggestions', onChange: function (id) { return setAttributes({ id: id }); } }),
                 wp.element.createElement("datalist", { id: 'avorg_placeholder_suggestions' },

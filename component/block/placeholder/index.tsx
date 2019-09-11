@@ -31,6 +31,18 @@ namespace AvorgPlaceholder {
                 TextControl
             } = window.wp.components;
 
+            fetch('/wp-json/avorg/v1/placeholder-ids').then(response => {
+                return response.json();
+            }).then(response => {
+                const el = document.querySelector('#avorg_placeholder_suggestions');
+
+                if (typeof response !== 'undefined' && response.length > 0 && el) {
+                    el.innerHTML = response.map((s: string) => {
+                        return `<option value="${s}" />`
+                    }).join('');
+                }
+            });
+
             const form = <form onSubmit={(event: FormEvent<HTMLFormElement>) => event.preventDefault()}>
                 <TextControl
                     placeholder={'Placeholder Identifier'}
