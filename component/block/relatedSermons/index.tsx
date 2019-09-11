@@ -1,5 +1,3 @@
-import { loadRecordings } from "./shared";
-
 namespace AvorgRelatedSermons {
     window.wp.blocks.registerBlockType('avorg/block-relatedsermons', {
         title: 'Related Sermons',

@@ -8,9 +8,15 @@ class StubPhp extends Php
 {
 	use Stub;
 
-	public function array_rand(...$arguments)
+	public function arrayRand($array, $num = 1)
 	{
-		return $this->handleCall(__FUNCTION__, func_get_args());
+		$val = $this->handleCall(__FUNCTION__, func_get_args());
+
+		if ($val) {
+		    return $val;
+        }
+
+		return parent::arrayRand($array, $num);
 	}
 
 	public function header($string)

@@ -52,6 +52,16 @@ class StubTwig extends Twig
 		$this->assertTwigTemplateNotRenderedWithData("molecule-notice.twig", $data);
 	}
 
+    public function getRenderedData($template)
+    {
+        $calls = $this->getCalls("render");
+        $filtered_calls = array_filter($calls, function($call) use($template) {
+            return $call[0] === $template;
+        });
+
+        return $calls[0][1]['avorg']->getData();
+    }
+
 	public function assertTwigTemplateRendered($template)
 	{
 		$this->assertTwigTemplateRenderedWithDataMatching($template, function() { return true; });

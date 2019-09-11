@@ -110,6 +110,6 @@ final class TestPlaceholderContentController extends Avorg\TestCase
             'media_id' => 'media_id'
         ]);
 
-        $this->mockPhp->assertMethodNotCalled('array_rand');
+        $this->mockPhp->assertMethodNotCalled('arrayRand');
     }
 }

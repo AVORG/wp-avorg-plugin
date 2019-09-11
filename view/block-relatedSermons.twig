@@ -1,3 +1,5 @@
 <div class="avorg-block-relatedSermons">
-    HELLO WORLD RELATED SERMONS
+    {% include "molecule-recordingsList.twig" with {
+        recordings: avorg.recordings
+    } %}
 </div>

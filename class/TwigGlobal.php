@@ -114,4 +114,12 @@ class TwigGlobal
 
 		return array_map($func, $array);
 	}
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 }
