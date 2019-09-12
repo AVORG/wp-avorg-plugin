@@ -61,7 +61,6 @@ Usage                        | Result
 
 Endpoint                                                            | Description
 --------------------------------------------------------------------|------------------------------------
-`/wp-json/avorg/v1/placeholder-content/${identifier}[/${media_id}]` | Retrieve placeholder content
 `/wp-json/avorg/v1/placeholder-ids`                                 | Retrieve placeholder identifiers
 
 ## Testing

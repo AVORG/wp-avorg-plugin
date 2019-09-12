@@ -41,15 +41,20 @@ abstract class Block
     }
 
     /**
+     * @param $attributes
+     * @param $content
      * @return string
-     * @throws Exception
      */
-    public function render()
+    public function render($attributes, $content)
     {
-        return $this->renderer->render($this->template, $this->getData(), true);
+        return $this->renderer->render(
+            $this->template,
+            $this->getData($attributes, $content),
+            true
+        );
     }
 
-    protected abstract function getData();
+    protected abstract function getData($attributes, $content);
 
     private function getName()
     {
@@ -67,5 +72,10 @@ abstract class Block
     protected function getEntityId()
     {
         return $this->wp->get_query_var("entity_id");
+    }
+
+    protected function arrSafe($key, $array, $default = Null)
+    {
+        return array_key_exists($key, $array) ? $array[$key] : $default;
     }
 }

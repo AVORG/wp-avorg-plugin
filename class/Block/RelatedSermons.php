@@ -33,14 +33,15 @@ class RelatedSermons extends Block
 
 	    $this->php = $php;
 	    $this->presentationRepository = $presentationRepository;
-
 	}
 
     /**
+     * @param $attributes
+     * @param $content
      * @return array
      * @throws Exception
      */
-    protected function getData() {
+    protected function getData($attributes, $content) {
         $entityId = $this->getEntityId();
         $recordings = $this->presentationRepository->getRelatedPresentations($entityId);
 

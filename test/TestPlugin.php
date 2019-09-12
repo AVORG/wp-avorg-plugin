@@ -201,11 +201,6 @@ final class TestPlugin extends Avorg\TestCase
 				'register'
 			],
             [
-                'rest_api_init',
-                'RestController\\PlaceholderContent',
-                'registerRoutes'
-            ],
-            [
                 'init',
                 'Block\\RelatedSermons',
                 'init'

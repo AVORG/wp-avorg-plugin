@@ -182,17 +182,13 @@ exports.loadRecordings = function (className) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var AvorgPlaceholder;
 (function (AvorgPlaceholder) {
-    var blockStyle = {};
     window.wp.blocks.registerBlockType('avorg/block-placeholder', {
         title: 'Placeholder',
         icon: 'location',
         category: 'widgets',
         attributes: {
             id: {
-                type: 'string',
-                source: 'attribute',
-                attribute: 'data-id',
-                selector: '[data-id]',
+                type: 'string'
             },
         },
         edit: function (props) {
@@ -212,12 +208,9 @@ var AvorgPlaceholder;
                 wp.element.createElement(TextControl, { placeholder: 'Placeholder Identifier', value: id, list: 'avorg_placeholder_suggestions', onChange: function (id) { return setAttributes({ id: id }); } }),
                 wp.element.createElement("datalist", { id: 'avorg_placeholder_suggestions' },
                     wp.element.createElement("option", { value: 'Something' })));
-            return wp.element.createElement("div", { style: blockStyle, className: className, "data-id": id }, isSelected ? form : "Placeholder: " + id);
+            return wp.element.createElement("div", { className: className }, isSelected ? form : "Placeholder: " + id);
         },
-        save: function (props) {
-            var id = props.attributes.id;
-            return wp.element.createElement("div", { style: blockStyle, "data-id": id }, "Loading...");
-        },
+        save: function () { return null; }
     });
 })(AvorgPlaceholder || (AvorgPlaceholder = {}));
 

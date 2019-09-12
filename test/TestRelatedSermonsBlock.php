@@ -32,14 +32,14 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
 
 	public function testRender()
     {
-        $this->block->render();
+        $this->block->render([], '');
 
         $this->mockTwig->assertMethodCalled('render');
     }
 
     public function testRendersTemplate()
     {
-        $this->block->render();
+        $this->block->render([], '');
 
         $this->mockTwig->assertTwigTemplateRendered("block-relatedSermons.twig");
     }
@@ -48,20 +48,20 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
     {
         $this->mockTwig->setReturnValue("render", "html");
 
-        $result = $this->block->render();
+        $result = $this->block->render([], '');
 
         $this->assertEquals("html", $result);
     }
 
     public function testGetsEntityId()
     {
-        $this->block->render();
+        $this->block->render([], '');
 
         $this->mockWordPress->assertMethodCalledWith("get_query_var", "entity_id");
     }
 
     public function testIncludesRecordings() {
-        $this->block->render();
+        $this->block->render([], '');
 
         $data = $this->mockTwig->getRenderedData("block-relatedSermons.twig");
 
@@ -72,7 +72,7 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
     {
         $this->mockWordPress->setReturnValue("get_query_var", 7);
 
-        $this->block->render();
+        $this->block->render([], '');
 
         $this->mockAvorgApi->assertMethodCalledWith("getRecording", 7);
     }
@@ -87,7 +87,7 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
         $this->mockAvorgApi->loadSponsorRecordings(["id" => "3"]);
         $this->mockAvorgApi->loadPresenterRecordings(["id" => "4"]);
 
-        $this->block->render();
+        $this->block->render([], '');
 
         $data = $this->mockTwig->getRenderedData("block-relatedSermons.twig");
 
@@ -106,7 +106,7 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
             ["id" => "4"]
         );
 
-        $this->block->render();
+        $this->block->render([], '');
 
         $this->mockTwig->getRenderedData("block-relatedSermons.twig");
 

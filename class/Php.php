@@ -22,14 +22,19 @@ class Php {
 
 	public function arrayRand($array, $num = 1)
     {
+        if (! $array) {
+            return ($num === 1) ? null : $array;
+        }
+
         if (count($array) <= $num) {
-            return $array;
+            return ($num === 1) ? $array[0] : $array;
         }
 
         $keys = array_rand($array, $num);
-
-        return array_map(function($key) use($array) {
+        $items = array_map(function($key) use($array) {
             return $array[$key];
         }, $keys);
+
+        return ($num === 1) ? $items[0] : $items;
     }
 }

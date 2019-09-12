@@ -1,22 +1,13 @@
 import {FormEvent} from 'react';
 
 namespace AvorgPlaceholder {
-    const blockStyle = {
-        // backgroundColor: '#900',
-        // color: '#fff',
-        // padding: '20px',
-    };
-
     window.wp.blocks.registerBlockType('avorg/block-placeholder', {
         title: 'Placeholder',
         icon: 'location',
         category: 'widgets',
         attributes: {
             id: {
-                type: 'string',
-                source: 'attribute',
-                attribute: 'data-id',
-                selector: '[data-id]',
+                type: 'string'
             },
         },
         edit: function (props: any) {
@@ -55,14 +46,10 @@ namespace AvorgPlaceholder {
                 </datalist>
             </form>;
 
-            return <div style={blockStyle} className={className} data-id={id}>
+            return <div className={className}>
                 {isSelected ? form : `Placeholder: ${id}`}
             </div>;
         },
-        save: function (props: any) {
-            const { attributes: { id } } = props;
-
-            return <div style={blockStyle} data-id={id}>Loading...</div>;
-        },
+        save: (): null => null
     });
 }
