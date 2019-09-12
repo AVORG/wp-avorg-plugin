@@ -45,6 +45,7 @@ jobs:
           name: Upload build to surge.sh
           command: |
             echo "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
+            npm install surge
             ./node_modules/.bin/surge --project /build --domain "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
           filters:
             branches:
