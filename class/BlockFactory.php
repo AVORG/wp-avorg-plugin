@@ -8,7 +8,7 @@ use ReflectionException;
 
 if (!defined('ABSPATH')) exit;
 
-class AjaxActionFactory
+class BlockFactory
 {
     /** @var ScanningFactory $scanningFactory */
     private $scanningFactory;
@@ -20,6 +20,6 @@ class AjaxActionFactory
 
     public function registerCallbacks()
     {
-        $this->scanningFactory->registerCallbacks("class/AjaxAction");
+        $this->scanningFactory->registerCallbacks("class/Block");
     }
 }

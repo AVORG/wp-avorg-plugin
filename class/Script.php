@@ -12,8 +12,10 @@ class Script
 	private $wp;
 
 	private $actions = [];
+	private $deps = [];
 	private $data = [];
 	private $path;
+	private $handle;
 
 	public function __construct(WordPress $wp)
 	{
@@ -47,27 +49,40 @@ class Script
 		return $this;
 	}
 
-	public function registerCallbacks()
+    /**
+     * @throws Exception
+     */
+    public function registerCallbacks()
 	{
-		$this->wp->add_action("wp_enqueue_scripts", [$this, "enqueue"]);
-		$this->wp->add_action("admin_enqueue_scripts", [$this, "enqueue"]);
+        if (! $this->actions) {
+            throw new Exception("No actions set for script $this->path");
+        }
+
+        array_walk($this->actions, function($action) {
+           $this->wp->add_action($action, [$this, "enqueue"]);
+        });
 	}
 
-	public function enqueue()
+    /**
+     * @throws Exception
+     */
+    public function enqueue()
 	{
 		if (!$this->path) throw new Exception("Failed to enqueue script. Path not set.");
 
-		$id = $this->getScriptId();
+		$handle = $this->getHandle();
 
-		$this->wp->wp_enqueue_script($id, $this->path);
-		$this->wp->wp_localize_script($id, "avorg", $this->getLocalizeData());
+		$this->wp->wp_enqueue_script($handle, $this->path, $this->deps);
+		$this->wp->wp_localize_script($handle, "avorg", $this->getLocalizeData());
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getScriptId()
+	private function getHandle()
 	{
+	    if ($this->handle) return $this->handle;
+
 		$class = get_class($this);
 
 		return str_replace("\\", "_", $class) . "_" . sha1($this->path);
@@ -89,10 +104,22 @@ class Script
 	 */
 	private function getNonces()
 	{
-		return array_reduce($this->actions, function ($carry, AjaxAction $action) {
-			return array_merge($carry, [
-				$action->getSimpleIdentifier() => $action->getNonce()
-			]);
-		}, []);
+		return [];
 	}
+
+    public function setDeps(...$deps)
+    {
+        $this->deps = $deps;
+        return $this;
+    }
+
+    /**
+     * @param mixed $handle
+     * @return Script
+     */
+    public function setHandle($handle)
+    {
+        $this->handle = $handle;
+        return $this;
+    }
 }

@@ -1,44 +1,42 @@
 <?php
 
-namespace Avorg\RestController;
+namespace Avorg\Block;
 
+use Avorg\Block;
 use Avorg\Php;
-use Avorg\RestController;
+use Avorg\Renderer;
 use Avorg\WordPress;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class PlaceholderContent extends RestController
+class Placeholder extends Block
 {
-    /** @var Php $php */
+    protected $template = 'block-placeholder.twig';
+
+    /** @var Php */
     private $php;
 
-    public function __construct(Php $php, WordPress $wp)
+    public function __construct(
+        Php $php,
+        Renderer $renderer,
+        WordPress $wp
+    )
     {
-        parent::__construct($wp);
+        parent::__construct($renderer, $wp);
 
         $this->php = $php;
     }
 
-    public function registerRoutes()
+    protected function getData($attributes, $content)
     {
-        $this->wp->register_rest_route(
-            'avorg/v1',
-            '/placeholder-content/(?P<id>[\w]+)(?:/(?P<media_id>[\d]+))?',
-            [
-                'methods' => 'GET',
-                'callback' => [$this, 'getItem'],
-                'args' => [
-                    'media_id' => null
-                ]
-            ]
-        );
-    }
+        $placeholderId = $this->arrSafe('id', $attributes);
+        $mediaId = $this->getEntityId();
+        $posts = $this->getPosts($placeholderId, $mediaId);
 
-    public function getItem($data)
-    {
-        return $this->getPosts($data['id'], $data['media_id']) ?: $this->getPosts($data['id']);
+        return [
+            "content" => $this->php->arrayRand($posts)
+        ];
     }
 
     /**

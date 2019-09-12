@@ -1,11 +1,16 @@
 <?php
 
 use Avorg\Page;
+use Avorg\PageFactory;
+use Avorg\ScanningFactory;
 
 final class TestPageFactory extends Avorg\TestCase
 {
-	/** @var \Avorg\PageFactory $pageFactory */
+	/** @var PageFactory $pageFactory */
 	protected $pageFactory;
+
+	/** @var ScanningFactory $scanningFactory */
+	protected $scanningFactory;
 
 	protected $pages;
 
@@ -16,7 +21,8 @@ final class TestPageFactory extends Avorg\TestCase
 		$this->mockWordPress->passCurrentPageCheck();
 
 		$this->pageFactory = $this->factory->obtain("Avorg\\PageFactory");
-		$this->pages = $this->pageFactory->getPages();
+		$this->scanningFactory = $this->factory->obtain("Avorg\\ScanningFactory");
+		$this->pages = $this->scanningFactory->getEntities("class/Page");
 	}
 
 	private function assertPagesExist()

@@ -1,10 +1,10 @@
-import molecule_recordingList from "../../molecule/recordingList/index.js";
+import molecule_recordingList from "../../molecule/recordingList";
 
 export const loadRecordings = (className: string) => {
     const elements = document.querySelectorAll(`.${className}`);
 
     elements.forEach(el => {
-        const list = el.getAttribute('data-type'),
+        const list = el.getAttribute('data-type') || '',
             url = `/api/presentation/${list}`;
         fetch(url).then(response => {
             return response.json();

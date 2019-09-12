@@ -57,6 +57,12 @@ Usage                        | Result
 `[avorg-list list=featured]` | List of featured recordings
 `[avorg-list list=popular]`  | List of popular recordings
 
+## API
+
+Endpoint                                                            | Description
+--------------------------------------------------------------------|------------------------------------
+`/wp-json/avorg/v1/placeholder-ids`                                 | Retrieve placeholder identifiers
+
 ## Testing
 
 ```bash
