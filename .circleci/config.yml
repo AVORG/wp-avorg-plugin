@@ -28,17 +28,9 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v2-composer-
 
-      - restore_cache:
-          keys:
-            - v1-npm-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-npm-
-
       - run:
           name: Install dependencies
-          command: |
-            composer install -n
-            npm install
+          command: composer install -n
 
       - run:
           name: Compress build
@@ -64,11 +56,6 @@ jobs:
           paths:
             - ./vendor
           key: v2-composer-{{ checksum "composer.lock" }}
-
-      - save_cache:
-          paths:
-            - ./node_modules
-          key: v1-npm-{{ checksum "package-lock.json" }}
 
       - run:
           command: |
