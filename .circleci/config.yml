@@ -15,10 +15,6 @@ jobs:
     working_directory: ~/wp-avorg-plugin
 
     steps:
-      # Install NPM
-      - run: curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
-      - run: sudo apt-get install -y nodejs
-
       - checkout
 
       # Download and cache dependencies
@@ -30,7 +26,7 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: composer install -n
+          command: composer install --no-dev --no-interaction
 
       - run:
           name: Compress build
@@ -45,6 +41,8 @@ jobs:
           name: Upload build to surge.sh
           command: |
             echo "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
+            curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+            sudo apt-get install -y nodejs
             npm install surge
             ./node_modules/.bin/surge --project /build --domain "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
           filters:
@@ -59,16 +57,18 @@ jobs:
           key: v2-composer-{{ checksum "composer.lock" }}
 
       - run:
+          name: PHPUnit
           command: |
-            mkdir -p ~/phpunit
-            vendor/phpunit/phpunit/phpunit --log-junit ~/phpunit/junit.xml
-          when: always
+            curl -o ~/phpunit https://phar.phpunit.de/phpunit-8.phar
+            chmod +x ~/phpunit
+            mkdir -p ~/phpunit_results
+            ~/phpunit --log-junit ~/phpunit_results/junit.xml
 
       - store_test_results:
-          path: ~/phpunit
+          path: ~/phpunit_results
 
       - store_artifacts:
-          path: ~/phpunit
+          path: ~/phpunit_results
 workflow:
   my-github-release:
     jobs:
