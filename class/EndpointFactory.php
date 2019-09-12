@@ -1,47 +1,47 @@
 <?php
 
+
 namespace Avorg;
 
+use function defined;
 use natlib\Factory;
 use ReflectionException;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class EndpointFactory
 {
-	/** @var Factory $factory */
-	private $factory;
+    /** @var Factory $factory */
+    private $factory;
 
-	private $classes = [
-		"Avorg\\Endpoint\\Recording",
-		"Avorg\\Endpoint\\RssEndpoint\\Latest",
-		"Avorg\\Endpoint\\RssEndpoint\\Speaker"
-	];
+    /** @var ScanningFactory $scanningFactory */
+    private $scanningFactory;
 
-	public function __construct(Factory $factory)
-	{
-		$this->factory = $factory;
-	}
+    public function __construct(Factory $factory, ScanningFactory $scanningFactory)
+    {
+        $this->factory = $factory;
+        $this->scanningFactory = $scanningFactory;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getEndpoints()
-	{
-		return array_map([$this, "getEndpointByClass"], $this->classes);
-	}
+    public function registerCallbacks()
+    {
+        $entity = $this->scanningFactory->getEntities("class/Endpoint");
+        array_walk($entity, function (Endpoint $entity) {
+            $entity->registerCallbacks();
+        });
+    }
 
-	/**
-	 * @param $class
-	 * @return mixed
-	 * @throws ReflectionException
-	 */
-	public function getEndpointByClass($class)
-	{
-		return $this->factory->secure($class);
-	}
+    /**
+     * @param $class
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public function getEndpointByClass($class)
+    {
+        return $this->factory->secure($class);
+    }
 
-	public function getEndpointById($id)
+    public function getEndpointById($id)
 	{
 		if (strpos($id, "Avorg_Endpoint_") !== 0) return null;
 

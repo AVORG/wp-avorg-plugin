@@ -21,11 +21,11 @@ class Plugin
 	public function __construct(
 		AdminPanel $adminPanel,
 		AjaxActionFactory $ajaxActionFactory,
+		BlockFactory $blockFactory,
 		ContentBits $contentBits,
 		Localization $localization,
 		PageFactory $pageFactory,
 		Pwa $pwa,
-		RelatedSermons $relatedSermons,
 		Renderer $renderer,
 		RestControllerFactory $restControllerFactory,
 		Router $router,

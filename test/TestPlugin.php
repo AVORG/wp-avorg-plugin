@@ -209,6 +209,11 @@ final class TestPlugin extends Avorg\TestCase
                 'init',
                 'Block\\RelatedSermons',
                 'init'
+            ],
+            [
+                'init',
+                'Block\\Placeholder',
+                'init'
             ]
 		];
 	}
