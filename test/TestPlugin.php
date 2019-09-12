@@ -223,7 +223,6 @@ final class TestPlugin extends Avorg\TestCase
 		$options = []
 	)
 	{
-
 	    $shouldRegister = $this->arrSafe('should_register', $options, true);
 	    $isRelative = $this->arrSafe('is_relative', $options, false);
 	    $action = $this->arrSafe('action', $options, "wp_enqueue_scripts");
