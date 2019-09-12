@@ -24,10 +24,7 @@ class PageFactory
 
 	public function registerCallbacks()
     {
-        $pages = $this->scanningFactory->getEntities("class/Page");
-        array_walk($pages, function (Page $page) {
-            $page->registerCallbacks();
-        });
+        $this->scanningFactory->registerCallbacks("class/Page");
     }
 
 	/**

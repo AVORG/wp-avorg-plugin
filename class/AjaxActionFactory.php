@@ -20,9 +20,6 @@ class AjaxActionFactory
 
     public function registerCallbacks()
     {
-        $entity = $this->scanningFactory->getEntities("class/AjaxAction");
-        array_walk($entity, function (AjaxAction $entity) {
-            $entity->registerCallbacks();
-        });
+        $this->scanningFactory->registerCallbacks("class/AjaxAction");
     }
 }

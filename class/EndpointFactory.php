@@ -25,10 +25,7 @@ class EndpointFactory
 
     public function registerCallbacks()
     {
-        $entity = $this->scanningFactory->getEntities("class/Endpoint");
-        array_walk($entity, function (Endpoint $entity) {
-            $entity->registerCallbacks();
-        });
+        $this->scanningFactory->registerCallbacks("class/Endpoint");
     }
 
     /**

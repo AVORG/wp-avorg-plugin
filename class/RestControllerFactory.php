@@ -20,9 +20,6 @@ class RestControllerFactory
 
     public function registerCallbacks()
     {
-        $entity = $this->scanningFactory->getEntities("class/RestController");
-        array_walk($entity, function (RestController $entity) {
-            $entity->registerCallbacks();
-        });
+        $this->scanningFactory->registerCallbacks("class/RestController");
     }
 }

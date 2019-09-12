@@ -22,6 +22,14 @@ class ScanningFactory
         $this->filesystem = $filesystem;
     }
 
+    public function registerCallbacks($relDir)
+    {
+        $entities = $this->getEntities($relDir);
+        array_walk($entities, function($entity) {
+            $entity->registerCallbacks();
+        });
+    }
+
     /**
      * @param $relDir
      * @return array
