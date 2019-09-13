@@ -7,7 +7,7 @@ final class TestSponsor extends Avorg\TestCase
 	/** @var Sponsor $sponsor */
 	private $sponsor;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

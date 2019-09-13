@@ -41,7 +41,7 @@ final class TestMediaPage extends Avorg\TestCase
 		return $factory->secure("Avorg\\Page\\Presentation\\Detail");
 	}
 	
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

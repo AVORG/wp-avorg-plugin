@@ -9,7 +9,7 @@ final class TestPresenter extends Avorg\TestCase
 
 	private $apiPresenter;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

@@ -7,7 +7,7 @@ final class TestPlaceholderIdsController extends Avorg\TestCase
     /** @var PlaceholderIds $controller */
     protected $controller;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -8,7 +8,7 @@ final class TestPresenterListing extends Avorg\TestCase
 	/** @var Listing $presenterListing */
 	protected $presenterListing;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

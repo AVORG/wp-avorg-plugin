@@ -8,7 +8,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	/** @var TwigGlobal $global */
 	private $global;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

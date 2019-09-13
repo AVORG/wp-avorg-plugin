@@ -8,7 +8,7 @@ final class TestBibleDetail extends Avorg\TestCase
 	/** @var Detail $page */
 	private $page;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

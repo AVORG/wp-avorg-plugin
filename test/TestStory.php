@@ -7,7 +7,7 @@ final class TestStory extends Avorg\TestCase
 	/** @var Story $story */
 	private $story;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

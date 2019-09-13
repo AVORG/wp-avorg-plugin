@@ -1,11 +1,13 @@
 <?php
 
+use Avorg\Script;
+
 final class TestScript extends Avorg\TestCase
 {
-	/** @var \Avorg\Script $script */
+	/** @var Script $script */
 	protected $script;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

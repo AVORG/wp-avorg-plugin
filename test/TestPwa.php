@@ -1,11 +1,13 @@
 <?php
 
+use Avorg\Pwa;
+
 final class TestPwa extends Avorg\TestCase
 {
-	/** @var \Avorg\Pwa $pwa */
+	/** @var Pwa $pwa */
 	protected $pwa;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

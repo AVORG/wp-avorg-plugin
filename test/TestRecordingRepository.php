@@ -7,7 +7,7 @@ final class TestRecordingRepository extends Avorg\TestCase
     /** @var PresentationRepository $plugin */
     protected $recordingRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

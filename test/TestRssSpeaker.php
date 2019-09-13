@@ -6,10 +6,10 @@ use Avorg\Endpoint\RssEndpoint\Speaker;
 
 final class TestRssSpeaker extends Avorg\TestCase
 {
-	/** @var RssSpeaker $endpoint */
+	/** @var Speaker $endpoint */
 	protected $endpoint;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

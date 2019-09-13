@@ -14,7 +14,7 @@ final class TestPageFactory extends Avorg\TestCase
 
 	protected $pages;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

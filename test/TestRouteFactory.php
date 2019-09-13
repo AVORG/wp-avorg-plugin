@@ -7,7 +7,7 @@ final class TestRouteFactory extends Avorg\TestCase
 	/** @var RouteFactory $routeFactory */
 	protected $routeFactory;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

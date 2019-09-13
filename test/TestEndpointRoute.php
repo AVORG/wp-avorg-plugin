@@ -5,7 +5,7 @@ final class TestEndpointRoute extends Avorg\TestCase
 	/** @var \Avorg\Route\EndpointRoute $feed */
 	protected $fileRoute;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

@@ -7,7 +7,7 @@ final class TestConference extends Avorg\TestCase
 	/** @var Conference $conference */
 	private $conference;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

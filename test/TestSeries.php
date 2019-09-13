@@ -7,7 +7,7 @@ final class TestSeries extends Avorg\TestCase
 	/** @var Series $series */
 	private $series;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

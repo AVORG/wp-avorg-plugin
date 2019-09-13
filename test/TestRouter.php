@@ -7,7 +7,7 @@ final class TestRouter extends Avorg\TestCase
 	/** @var Router $router */
 	protected $router;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

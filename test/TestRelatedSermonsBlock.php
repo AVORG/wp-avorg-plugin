@@ -2,7 +2,6 @@
 
 use Avorg\Block\RelatedSermons;
 use Avorg\DataObjectRepository\PresentationRepository;
-use natlib\Stub;
 
 final class TestRelatedSermonsBlock extends Avorg\TestCase
 {
@@ -12,7 +11,7 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
 	/**
 	 * @throws ReflectionException
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

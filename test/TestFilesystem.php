@@ -5,7 +5,7 @@ final class TestFilesystem extends Avorg\TestCase
 	/** @var \Avorg\Filesystem $filesystem */
 	protected $filesystem;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

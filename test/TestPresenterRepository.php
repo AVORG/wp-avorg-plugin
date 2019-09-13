@@ -7,7 +7,7 @@ final class TestPresenterRepository extends Avorg\TestCase
 	/** @var PresenterRepository $presenterRepository */
 	private $presenterRepository;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

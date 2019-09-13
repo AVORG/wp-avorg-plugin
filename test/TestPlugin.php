@@ -7,7 +7,7 @@ final class TestPlugin extends Avorg\TestCase
 	/** @var Plugin $plugin */
 	protected $plugin;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

@@ -9,7 +9,7 @@ final class TestBookRepository extends Avorg\TestCase
 
 	private $apiBooks;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

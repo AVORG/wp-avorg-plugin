@@ -5,7 +5,7 @@ final class TestPageRoute extends Avorg\TestCase
 	/** @var \Avorg\Route\PageRoute $feed */
 	protected $pageRoute;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 
