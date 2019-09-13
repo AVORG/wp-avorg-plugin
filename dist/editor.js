@@ -91,16 +91,10 @@
   !*** ./component/block/list/index.tsx ***!
   \****************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var shared_1 = __webpack_require__(/*! ./shared */ "./component/block/list/shared.ts");
 var AvorgBlockList;
 (function (AvorgBlockList) {
-    var blockStyle = {};
-    var className = 'wp-block-avorg-block-list';
     window.wp.blocks.registerBlockType('avorg/block-list', {
         title: 'Recordings List',
         icon: 'playlist-audio',
@@ -108,64 +102,29 @@ var AvorgBlockList;
         attributes: {
             type: {
                 type: 'string',
-                source: 'attribute',
-                attribute: 'data-type',
-                selector: '[data-type]'
             }
         },
         edit: function (props) {
             var type = props.attributes.type, setAttributes = props.setAttributes;
-            shared_1.loadRecordings(className);
             var InspectorControls = window.wp.editor.InspectorControls;
             var _a = window.wp.components, PanelBody = _a.PanelBody, PanelRow = _a.PanelRow, SelectControl = _a.SelectControl;
-            return wp.element.createElement("p", { style: blockStyle, "data-type": type, className: props.className },
+            return wp.element.createElement("p", { className: props.className },
                 wp.element.createElement(InspectorControls, null,
                     wp.element.createElement(PanelBody, { title: "List Type" },
                         wp.element.createElement(PanelRow, null,
                             wp.element.createElement(SelectControl, { label: "List Type", value: type, options: [
-                                    { value: '', label: 'Recent' },
+                                    { value: 'recent', label: 'Recent' },
                                     { value: 'featured', label: 'Featured' },
                                     { value: 'popular', label: 'Popular' }
                                 ], onChange: function (type) {
                                     setAttributes({ type: type });
                                 } })))),
-                "Loading list of type ",
-                type,
-                "...");
+                "Recordings List: ",
+                type);
         },
-        save: function (props) {
-            var type = props.attributes.type;
-            return wp.element.createElement("p", { style: blockStyle, "data-type": type }, "Loading...");
-        },
+        save: function () { return null; }
     });
-    shared_1.loadRecordings(className);
 })(AvorgBlockList || (AvorgBlockList = {}));
-
-
-/***/ }),
-
-/***/ "./component/block/list/shared.ts":
-/*!****************************************!*\
-  !*** ./component/block/list/shared.ts ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var recordingList_1 = __webpack_require__(/*! ../../molecule/recordingList */ "./component/molecule/recordingList/index.ts");
-exports.loadRecordings = function (className) {
-    var elements = document.querySelectorAll("." + className);
-    elements.forEach(function (el) {
-        var list = el.getAttribute('data-type') || '', url = "/api/presentation/" + list;
-        fetch(url).then(function (response) {
-            return response.json();
-        }).then(function (response) {
-            el.innerHTML = recordingList_1.default(response);
-        });
-    });
-};
 
 
 /***/ }),
@@ -303,50 +262,6 @@ __webpack_require__(/*! ./block/relatedSermons */ "./component/block/relatedSerm
 __webpack_require__(/*! ./block/rss */ "./component/block/rss/index.tsx");
 var editor_message = "EDITOR.TS BUNDLE";
 console.log(editor_message);
-
-
-/***/ }),
-
-/***/ "./component/molecule/mediaObject/index.ts":
-/*!*************************************************!*\
-  !*** ./component/molecule/mediaObject/index.ts ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var molecule_mediaObject = function (title, titleUrl, secondLine, imgUrl, imgAlt) {
-    var image = imgUrl ? "<img class=\"avorg-molecule-mediaObject__image\" src=\"" + imgUrl + "\" alt=\"" + imgAlt + "\" />" : '', titleLinkStart = titleUrl ? "<a href=\"" + titleUrl + "\">" : '', titleLinkEnd = titleUrl ? '</a>' : '';
-    return "<li class=\"avorg-molecule-mediaObject\">\n    " + image + "\n    <div class=\"avorg-molecule-mediaObject__text\">\n        " + titleLinkStart + "\n        <h4 class=\"avorg-molecule-mediaObject__title\">" + title + "</h4>\n        " + titleLinkEnd + "\n        " + secondLine + "\n    </div>\n</li>";
-};
-exports.default = molecule_mediaObject;
-
-
-/***/ }),
-
-/***/ "./component/molecule/recordingList/index.ts":
-/*!***************************************************!*\
-  !*** ./component/molecule/recordingList/index.ts ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var mediaObject_1 = __webpack_require__(/*! ../mediaObject */ "./component/molecule/mediaObject/index.ts");
-var itemTemplate = function (recording) {
-    var imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
-    var imageAlt = recording.presenters[0] ?
-        recording.presenters[0].name.first + " " + recording.presenters[0].name.last + " " + recording.presenters[0].name.suffix : null;
-    return mediaObject_1.default(recording.title, recording.url, recording.presentersString, imageUrl, imageAlt);
-};
-var molecule_recordingList = function (recordings) {
-    return recordings.map(itemTemplate).join("");
-};
-exports.default = molecule_recordingList;
 
 
 /***/ })

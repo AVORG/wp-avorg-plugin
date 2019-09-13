@@ -17,12 +17,12 @@ class PlaceholderIds extends RestController
             '/placeholder-ids',
             [
                 'methods' => 'GET',
-                'callback' => [$this, 'getItem']
+                'callback' => [$this, 'getData']
             ]
         );
     }
 
-    public function getItem()
+    public function getData()
     {
         return $this->wp->get_all_meta_values("avorgBitIdentifier");
     }

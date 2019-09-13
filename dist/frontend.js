@@ -86,105 +86,15 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./component/block/list/frontend.ts":
-/*!******************************************!*\
-  !*** ./component/block/list/frontend.ts ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var shared_1 = __webpack_require__(/*! ./shared */ "./component/block/list/shared.ts");
-shared_1.loadRecordings("wp-block-avorg-block-list");
-
-
-/***/ }),
-
-/***/ "./component/block/list/shared.ts":
-/*!****************************************!*\
-  !*** ./component/block/list/shared.ts ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var recordingList_1 = __webpack_require__(/*! ../../molecule/recordingList */ "./component/molecule/recordingList/index.ts");
-exports.loadRecordings = function (className) {
-    var elements = document.querySelectorAll("." + className);
-    elements.forEach(function (el) {
-        var list = el.getAttribute('data-type') || '', url = "/api/presentation/" + list;
-        fetch(url).then(function (response) {
-            return response.json();
-        }).then(function (response) {
-            el.innerHTML = recordingList_1.default(response);
-        });
-    });
-};
-
-
-/***/ }),
-
 /***/ "./component/frontend.ts":
 /*!*******************************!*\
   !*** ./component/frontend.ts ***!
   \*******************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(/*! ./block/list/frontend */ "./component/block/list/frontend.ts");
 var text = "FRONTEND.TS BUNDLE";
 console.log(text);
-
-
-/***/ }),
-
-/***/ "./component/molecule/mediaObject/index.ts":
-/*!*************************************************!*\
-  !*** ./component/molecule/mediaObject/index.ts ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var molecule_mediaObject = function (title, titleUrl, secondLine, imgUrl, imgAlt) {
-    var image = imgUrl ? "<img class=\"avorg-molecule-mediaObject__image\" src=\"" + imgUrl + "\" alt=\"" + imgAlt + "\" />" : '', titleLinkStart = titleUrl ? "<a href=\"" + titleUrl + "\">" : '', titleLinkEnd = titleUrl ? '</a>' : '';
-    return "<li class=\"avorg-molecule-mediaObject\">\n    " + image + "\n    <div class=\"avorg-molecule-mediaObject__text\">\n        " + titleLinkStart + "\n        <h4 class=\"avorg-molecule-mediaObject__title\">" + title + "</h4>\n        " + titleLinkEnd + "\n        " + secondLine + "\n    </div>\n</li>";
-};
-exports.default = molecule_mediaObject;
-
-
-/***/ }),
-
-/***/ "./component/molecule/recordingList/index.ts":
-/*!***************************************************!*\
-  !*** ./component/molecule/recordingList/index.ts ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var mediaObject_1 = __webpack_require__(/*! ../mediaObject */ "./component/molecule/mediaObject/index.ts");
-var itemTemplate = function (recording) {
-    var imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
-    var imageAlt = recording.presenters[0] ?
-        recording.presenters[0].name.first + " " + recording.presenters[0].name.last + " " + recording.presenters[0].name.suffix : null;
-    return mediaObject_1.default(recording.title, recording.url, recording.presentersString, imageUrl, imageAlt);
-};
-var molecule_recordingList = function (recordings) {
-    return recordings.map(itemTemplate).join("");
-};
-exports.default = molecule_recordingList;
 
 
 /***/ })

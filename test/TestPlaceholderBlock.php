@@ -1,6 +1,7 @@
 <?php
 
 use Avorg\Block\RelatedSermons;
+use natlib\Stub;
 
 final class TestPlaceholderBlock extends Avorg\TestCase
 {

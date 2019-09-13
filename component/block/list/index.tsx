@@ -1,14 +1,4 @@
-import { loadRecordings } from "./shared";
-
 namespace AvorgBlockList {
-    const blockStyle = {
-        // backgroundColor: '#900',
-        // color: '#fff',
-        // padding: '20px',
-    };
-
-    const className = 'wp-block-avorg-block-list';
-
     window.wp.blocks.registerBlockType('avorg/block-list', {
         title: 'Recordings List',
         icon: 'playlist-audio',
@@ -16,15 +6,10 @@ namespace AvorgBlockList {
         attributes: {
             type: {
                 type: 'string',
-                source: 'attribute',
-                attribute: 'data-type',
-                selector: '[data-type]'
             }
         },
         edit: function (props: any) {
             const { attributes: { type }, setAttributes } = props;
-
-            loadRecordings(className);
 
             const {
                 InspectorControls,
@@ -36,7 +21,7 @@ namespace AvorgBlockList {
                 SelectControl,
             } = window.wp.components;
 
-            return <p style={blockStyle} data-type={type} className={props.className}>
+            return <p className={props.className}>
                 <InspectorControls>
                     <PanelBody title={"List Type"}>
                         <PanelRow>
@@ -44,7 +29,7 @@ namespace AvorgBlockList {
                                 label={"List Type"}
                                 value={type}
                                 options={[
-                                    { value: '', label: 'Recent' },
+                                    { value: 'recent', label: 'Recent' },
                                     { value: 'featured', label: 'Featured' },
                                     { value: 'popular', label: 'Popular' }
                                 ]}
@@ -55,15 +40,9 @@ namespace AvorgBlockList {
                         </PanelRow>
                     </PanelBody>
                 </InspectorControls>
-                Loading list of type {type}...
+                Recordings List: {type}
             </p>;
         },
-        save: function (props: any) {
-            const { attributes: { type } } = props;
-
-            return <p style={blockStyle} data-type={type}>Loading...</p>;
-        },
+        save: (): null => null
     });
-
-    loadRecordings(className);
 }
