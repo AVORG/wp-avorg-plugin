@@ -32,7 +32,7 @@ class Placeholder extends Block
     {
         $placeholderId = $this->arrSafe('id', $attributes);
         $mediaId = $this->getEntityId();
-        $posts = $this->getPosts($placeholderId, $mediaId);
+        $posts = $this->getPosts($placeholderId, $mediaId) ?? [];
 
         return [
             "content" => $this->php->arrayRand($posts)

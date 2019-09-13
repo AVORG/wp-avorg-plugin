@@ -20,7 +20,7 @@ class Php {
 		die();
 	}
 
-	public function arrayRand($array, $num = 1)
+	public function arrayRand(array $array, $num = 1)
     {
         if (! $array) {
             return ($num === 1) ? null : $array;

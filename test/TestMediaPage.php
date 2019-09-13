@@ -15,7 +15,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$haystack = $this->makePlayerUiHaystack();
 		
-		$this->assertContains("playerUI", $haystack);
+		$this->assertStringContainsString("playerUI", $haystack);
 	}
 	
 	private function makePlayerUiHaystack()
@@ -110,7 +110,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$haystack = $this->mediaPage->addUi("content");
 		
-		$this->assertContains("content", $haystack);
+		$this->assertStringContainsString("content", $haystack);
 	}
 	
 	public function testUsesTwig()
@@ -128,7 +128,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$haystack = $this->makePlayerUiHaystack();
 		
-		$this->assertNotContains("playerUI", $haystack);
+		$this->assertStringNotContainsString("playerUI", $haystack);
 	}
 	
 	public function testPassesRecordingToTwig()

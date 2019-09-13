@@ -64,11 +64,11 @@ final class TestPlaceholderBlock extends Avorg\TestCase
 
     public function testSelectsRandomPost()
     {
-        $this->mockWordPress->setReturnValue("get_posts", "posts");
+        $this->mockWordPress->setReturnValue("get_posts", ["posts"]);
 
         $this->block->render([], '');
 
-        $this->mockPhp->assertMethodCalledWith("arrayRand", "posts");
+        $this->mockPhp->assertMethodCalledWith("arrayRand", ["posts"]);
     }
 
     public function testRendersBlockWithRandomPost()

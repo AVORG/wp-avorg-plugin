@@ -3,8 +3,6 @@
 [![latest build | master](https://img.shields.io/badge/latest%20build-master-75d60d)](https://wp-avorg-plugin-master.surge.sh/wp-avorg-plugin.zip)
 [![latest build | dev](https://img.shields.io/badge/latest%20build-dev-f39f37)](https://wp-avorg-plugin-dev.surge.sh/wp-avorg-plugin.zip)
 
-PHP 7.2
-
 ## Installation
 
 ### Development
@@ -23,6 +21,10 @@ If you edit the Composer auto-load rules, you'll need to run `composer dump-auto
 0. In the WordPress admin panel, navigate to "Plugins > Add New" and click the "Upload Plugin" button
 0. Upload the zip file you downloaded
 0. Activate the plugin
+
+### PHP 7.2
+
+On MacOS install using [these scripts](https://php-osx.liip.ch/), then add /usr/local/php5/bin to your path.
 
 ## Shortcodes
 

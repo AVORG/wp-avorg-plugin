@@ -231,7 +231,7 @@ final class TestRouter extends Avorg\TestCase
 		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
 		$redirect = $addRewriteCalls[0][1];
 
-		$this->assertContains("page_id=3", $redirect);
+		$this->assertStringContainsString("page_id=3", $redirect);
 	}
 
 	public function testSetLocaleFunctionExists()
