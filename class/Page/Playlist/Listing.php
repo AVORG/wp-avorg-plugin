@@ -6,6 +6,7 @@ namespace Avorg\Page\Playlist;
 use Avorg\DataObjectRepository\PlaylistRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -24,10 +25,11 @@ class Listing extends Page
 	public function __construct(
 		PlaylistRepository $playlistRepository,
 		Renderer $renderer,
+		Router $router,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->playlistRepository = $playlistRepository;
 	}

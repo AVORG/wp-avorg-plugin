@@ -213,6 +213,11 @@ class StubAvorgApi extends AvorgApi
 		$this->setDataObjectReturnValue("getPresenter", $data);
 	}
 
+	public function loadPresenters(...$dataArrays)
+    {
+        $this->setDataObjectsReturnValue("getPresenters", $dataArrays);
+    }
+
 	public function loadTopic($data)
 	{
 		$this->setDataObjectReturnValue("getTopic", $data);

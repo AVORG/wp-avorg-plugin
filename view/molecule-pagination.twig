@@ -1,0 +1,5 @@
+<ul class="avorg-page-presenters__pagination">
+    {% for key, path in avorg.pagination.indices %}
+        <li><a href="{{ path }}">{{ key }}</a></li>
+    {% endfor %}
+</ul>

@@ -6,6 +6,7 @@ namespace Avorg\Page\Series;
 use Avorg\DataObjectRepository\SeriesRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -23,11 +24,12 @@ class Listing extends Page
 
 	public function __construct(
 		Renderer $renderer,
+		Router $router,
 		SeriesRepository $seriesRepository,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->seriesRepository = $seriesRepository;
 	}

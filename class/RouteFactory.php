@@ -28,7 +28,7 @@ class RouteFactory
 	private $wp;
 
 	private $pageRouteFormats = [
-		"Avorg\Page\Presenter\Listing" => "{ language }/sermons/presenters[/{ letter }]",
+		"Avorg\Page\Presenter\Listing" => "{ language }/sermons/presenters[/{ page }]",
 		"Avorg\Page\Presenter\Detail" => "{ language }/sermons/presenters/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Presentation\Detail" => "{ language }/sermons/recordings/{ entity_id:[0-9]+ }[/{ slug }]",
 		"Avorg\Page\Book\Listing" => "{ language }/audiobooks/books",
@@ -171,7 +171,7 @@ class RouteFactory
 	private function getPageRoute($routeId, $routeFormat)
 	{
 		/** @var PageRoute $route */
-		$route = $this->factory->obtain("Avorg\\Route\\PageRoute");
+		$route = $this->factory->make("Avorg\\Route\\PageRoute");
 
 		return $route->setId($routeId)->setFormat($routeFormat);
 	}
@@ -180,7 +180,7 @@ class RouteFactory
 	private function getEndpointRoute($routeId, $routeFormat)
 	{
 		/** @var EndpointRoute $route */
-		$route = $this->factory->obtain("Avorg\\Route\\EndpointRoute");
+		$route = $this->factory->make("Avorg\\Route\\EndpointRoute");
 
 		return $route->setId($routeId)->setFormat($routeFormat);
 	}

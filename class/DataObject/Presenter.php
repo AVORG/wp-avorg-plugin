@@ -11,8 +11,8 @@ if (!defined('ABSPATH')) exit;
 
 class Presenter extends DataObject
 {
-	/** @var PresentationRepository $recordingRepository */
-	private $recordingRepository;
+	/** @var PresentationRepository $presentationRepository */
+	private $presentationRepository;
 
 	protected $detailClass = "Avorg\Page\Presenter\Detail";
 
@@ -23,13 +23,13 @@ class Presenter extends DataObject
 	{
 		parent::__construct($router);
 
-		$this->recordingRepository = $recordingRepository;
+		$this->presentationRepository = $recordingRepository;
 		$this->router = $router;
 	}
 
-	public function getRecordings()
+    public function getRecordings()
 	{
-		return $this->recordingRepository->getPresenterPresentations($this->getId());
+		return $this->presentationRepository->getPresenterPresentations($this->getId());
 	}
 
 	public function getName()

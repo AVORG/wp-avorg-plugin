@@ -344,7 +344,7 @@ final class TestRouter extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_locale", "es_ES");
 
 		$result = $this->router->buildUrl("Avorg\Page\Presenter\Listing", [
-			"letter" => "D"
+			"page" => "D"
 		]);
 
 		$this->assertStringEndsWith("espanol/sermones/presenters/D", $result);

@@ -346,7 +346,9 @@ class AvorgApi
 		if (!$this->context) $this->context = $this->createContext();
 
 		if ($response = @file_get_contents(
-			"https://api2.audioverse.org/$endpoint", false, $this->context)) {
+			"https://api2.audioverse.org/$endpoint",
+            false, $this->context)
+        ) {
 			return json_decode($response)->result;
 		} else {
 			throw new Exception("Failed to get response from url $endpoint");

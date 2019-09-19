@@ -1,4 +1,4 @@
-<div class="avorg-page-presenters">
+g<div class="avorg-page-presenters">
 	<ul>
 		{% for presenter in avorg.presenters %}
 			<li>
@@ -13,11 +13,5 @@
 		{% endfor %}
 	</ul>
 
-	<ul class="avorg-page-presenters__pagination">
-		{% for i in 0..26 %}
-			{% set letter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'|slice(i, 1) %}
-			{% set basePath = avorg.requestPath|split("/")|slice(1, 3)|join("/") %}
-			<li><a href="/{{ basePath }}/{{ letter }}">{{ letter }}</a></li>
-		{% endfor %}
-	</ul>
+	{% include 'molecule-pagination.twig' %}
 </div>

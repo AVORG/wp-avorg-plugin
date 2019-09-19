@@ -11,7 +11,7 @@ final class TestScript extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->script = $this->factory->obtain("Avorg\\Script");
+		$this->script = $this->factory->make("Avorg\\Script");
 	}
 
 	public function testTheScript()

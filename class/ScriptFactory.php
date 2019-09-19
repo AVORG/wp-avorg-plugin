@@ -59,7 +59,7 @@ class ScriptFactory
 	    $actions = $this->arrSafe("actions", $options, ["wp_enqueue_scripts"]);
 	    $deps = $this->arrSafe("deps", $options, []);
 
-		return $this->factory->obtain("Avorg\\Script")
+		return $this->factory->make("Avorg\\Script")
             ->setPath($path)
             ->setActions(...$actions)
             ->setHandle($handle)

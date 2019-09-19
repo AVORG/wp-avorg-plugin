@@ -7,6 +7,7 @@ use Avorg\DataObject;
 use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use Exception;
 
@@ -28,10 +29,11 @@ class Detail extends Page
 		AvorgApi $avorgApi,
 		PresentationRepository $recordingRepository,
 		Renderer $renderer,
+		Router $router,
 		WordPress $wordPress
 	)
     {
-        parent::__construct($renderer, $wordPress);
+        parent::__construct($renderer, $router, $wordPress);
 
         $this->avorgApi = $avorgApi;
         $this->recordingRepository = $recordingRepository;
