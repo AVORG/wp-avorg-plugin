@@ -33,7 +33,7 @@ class Listing extends Page
 		$this->bookRepository = $bibleRepository;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"books" => $this->bookRepository->getBooks()

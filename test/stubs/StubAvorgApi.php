@@ -16,7 +16,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getAllSeries()
+	public function getAllSeries($search = NULL)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -26,17 +26,17 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getSponsors()
+	public function getSponsors($search = NULL)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getConferences()
+	public function getConferences($search = NULL)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getStories()
+	public function getStories($search = NULL)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -51,7 +51,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getBibles()
+	public function getBibles($search = NULL)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -61,7 +61,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getTopics()
+	public function getTopics($search = NULL)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -71,7 +71,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getBooks()
+	public function getBooks($search = NULL)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -91,7 +91,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getPresenters($page = 0)
+	public function getPresenters($search = null, $start = null)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}

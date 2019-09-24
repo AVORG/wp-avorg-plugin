@@ -39,7 +39,7 @@ abstract class Page implements iRoutable
 		if (!$this->isThisPage()) return;
 
 		try {
-			$this->getCachedData();
+			$this->getData();
 		} catch (Exception $e) {
 			$this->set404($query);
 		}
@@ -86,7 +86,7 @@ abstract class Page implements iRoutable
 	{
 		return $this->renderer->render(
 			$this->twigTemplate,
-			$this->getCachedData() ?: [],
+			$this->getData() ?: [],
 			true
 		);
 	}
@@ -158,9 +158,9 @@ abstract class Page implements iRoutable
 		return $this->wp->get_query_var("entity_id");
 	}
 
-    private function getCachedData() {
-        return $this->data ?? $this->data = $this->getData();
+    private function getData() {
+        return $this->data ?? $this->data = $this->getPageData();
     }
 
-    abstract protected function getData();
+    abstract protected function getPageData();
 }

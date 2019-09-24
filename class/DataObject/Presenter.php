@@ -4,6 +4,7 @@ namespace Avorg\DataObject;
 
 use Avorg\DataObject;
 use Avorg\DataObjectRepository\PresentationRepository;
+use Avorg\Renderer;
 use Avorg\Router;
 use function defined;
 
@@ -17,15 +18,24 @@ class Presenter extends DataObject
 	protected $detailClass = "Avorg\Page\Presenter\Detail";
 
 	public function __construct(
-		PresentationRepository $recordingRepository,
+		PresentationRepository $presentationRepository,
+		Renderer $renderer,
 		Router $router
 	)
 	{
-		parent::__construct($router);
+		parent::__construct($renderer, $router);
 
-		$this->presentationRepository = $recordingRepository;
+		$this->presentationRepository = $presentationRepository;
 		$this->router = $router;
 	}
+
+	protected function getDataArray()
+    {
+        return array_merge(parent::getDataArray(), [
+            "nameReversed" => $this->getNameReversed(),
+            "title" => $this->getNameReversed()
+        ]);
+    }
 
     public function getRecordings()
 	{

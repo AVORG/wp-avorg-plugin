@@ -39,7 +39,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws ReflectionException
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"sponsor" => $this->getEntity()

@@ -7,6 +7,8 @@
 	description : optional, string
 #}
 
+{% set descriptionLength = 200 %}
+
 <div class="avorg-molecule-mediaObject {{ classes }}">
 	<img class="avorg-molecule-mediaObject__image" src="{{ image }}" alt="{{ imageAlt }}">
 
@@ -17,7 +19,8 @@
 
 		{% if description %}
 			<div class="avorg-molecule-mediaObject__description">
-				{{ description }}
+				{% set ellipsis = (description|length > descriptionLength) ? '...' : '' %}
+				{{ description|slice(0,descriptionLength) }}{{ ellipsis }}
 			</div>
 		{% endif %}
 	</div>

@@ -43,7 +43,7 @@ class Detail extends Page
 		$this->scriptFactory = $scriptFactory;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"recordings" => $this->getEntity()->getPresentations()

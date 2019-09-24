@@ -40,48 +40,4 @@ final class TestPresenterRepository extends Avorg\TestCase
 
         $this->assertNull($result);
     }
-
-    public function testGetPresenterPerformance()
-    {
-        $dataArrays = array_fill(0, 1500, [
-            'givenName' => 'Alexis',
-            'surname' => 'Abrahantes Carralero',
-            'hiragana' => null,
-            'suffix' => '',
-            'photo' => 'default.png',
-            'summary' => '',
-            'description' => 'Alexis Abrahantes Carralero was born in Havana, Cuba, during the height of the Cold War, to a father who was a communist diplomat and member of the military class. He witnessed the religious struggle of underground Christians who still worshipped in spite of severe oppression and persecution. He soon joined those believers. In the midst of Alexis\' conversion he suffered a severe accident, which led to a series of miraculous events that eventually brought him and his mother to the United States. ',
-            'website' => '',
-            'relatedURI' => null,
-            'recordingCount' => '7',
-            'id' => '1225',
-            'photo36' => 'https://s.audioverse.org/english/gallery/persons/_/36/36/default.png',
-            'photo86' => 'https://s.audioverse.org/english/gallery/persons/_/86/86/default.png',
-            'lang' => 'en',
-            'recordingsURI' => 'https://api2.audioverse.org/recordings/presenter/1225',
-            'photo256' => 'https://s.audioverse.org/english/gallery/persons/_/256/256/default.png',
-        ]);
-        $this->mockAvorgApi->loadPresenters(...$dataArrays);
-
-        $factory = new Factory();
-        $factory->injectObjects(
-            $this->mockAvorgApi,
-            $this->mockWordPress
-        );
-        $repository = $factory->secure("Avorg\\DataObjectRepository\\PresenterRepository");
-
-        $start = microtime(true);
-
-        $presenters = $repository->getPresenters();
-
-        foreach ($presenters as $presenter) {
-            $presenter->photo256;
-            $presenter->getNameReversed();
-            $presenter->getUrl();
-        }
-
-        $end = microtime(true);
-
-        $this->assertLessThan(30, $end - $start);
-    }
 }

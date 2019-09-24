@@ -38,7 +38,7 @@ class Listing extends Page
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"series" => $this->seriesRepository->getAllSeries()

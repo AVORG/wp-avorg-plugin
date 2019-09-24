@@ -33,7 +33,7 @@ class Listing extends Page
 		$this->sponsorRepository = $seriesRepository;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"sponsors" => $this->sponsorRepository->getSponsors()

@@ -43,7 +43,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return ["recordings" => [$this->getEntity()]];
 	}

@@ -37,7 +37,7 @@ class Listing extends Page
 	/**
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"playlists" => $this->playlistRepository->getPlaylists()

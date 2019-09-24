@@ -47,7 +47,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		$topicId = $this->wp->get_query_var( "entity_id");
 

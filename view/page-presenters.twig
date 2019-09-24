@@ -1,17 +1,6 @@
-g<div class="avorg-page-presenters">
-	<ul>
-		{% for presenter in avorg.presenters %}
-			<li>
-				{% include "molecule-mediaObject.twig" with {
-					image: presenter.photo256,
-					imageAlt: "presenter",
-					title: presenter.nameReversed,
-					titleUrl: presenter.url,
-					description: "Something will go here probably."
-				} only %}
-			</li>
-		{% endfor %}
-	</ul>
-
-	{% include 'molecule-pagination.twig' %}
+<div class="avorg-page-presenters">
+	{% include "molecule-ajaxList.twig" with {
+        "endpoint": "/wp-json/avorg/v1/presenters",
+        "template": "molecule/listPresenter"
+    } only %}
 </div>

@@ -9,18 +9,7 @@ if (!defined('ABSPATH')) exit;
 
 class PlaceholderIds extends RestController
 {
-
-    public function registerRoutes()
-    {
-        $this->wp->register_rest_route(
-            'avorg/v1',
-            '/placeholder-ids',
-            [
-                'methods' => 'GET',
-                'callback' => [$this, 'getData']
-            ]
-        );
-    }
+    protected $route = '/placeholder-ids';
 
     public function getData()
     {

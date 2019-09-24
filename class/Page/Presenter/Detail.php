@@ -38,7 +38,7 @@ class Detail extends Page
 	/**
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		$presenter = $this->getEntity();
 

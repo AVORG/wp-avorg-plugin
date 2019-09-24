@@ -33,7 +33,7 @@ class Listing extends Page
 		$this->topicRepository = $topicRepository;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"topics" => $this->topicRepository->getTopics()

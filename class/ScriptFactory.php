@@ -32,6 +32,8 @@ class ScriptFactory
             "https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js" => [],
             "dist/frontend.js" => [
                 "handle" => "Avorg_Script_Frontend",
+                'in_footer' => true,
+                'deps' => ['wp-element']
             ],
             "dist/editor.js" => [
                 "handle" => "Avorg_Script_Editor",
@@ -58,12 +60,15 @@ class ScriptFactory
         $handle = $this->arrSafe("handle", $options, null);
 	    $actions = $this->arrSafe("actions", $options, ["wp_enqueue_scripts"]);
 	    $deps = $this->arrSafe("deps", $options, []);
+	    $inFooter = $options['in_footer'] ?? false;
 
-		return $this->factory->make("Avorg\\Script")
+		return $this->factory
+            ->make("Avorg\\Script")
             ->setPath($path)
             ->setActions(...$actions)
             ->setHandle($handle)
-            ->setDeps(...$deps);
+            ->setDeps(...$deps)
+            ->setInFooter($inFooter);
 	}
 
     private function arrSafe($key, $array, $default = Null)

@@ -37,35 +37,16 @@ class Listing extends Page
      * @return array
      * @throws Exception
      */
-    protected function getData()
+    protected function getPageData()
 	{
 		$letter = $this->wp->get_query_var("page") ?: 'A';
 
-		return array_merge([
+		return [
 			"presenters" => $this->presenterRepository->getPresenters($letter),
-        ], $this->getPaginationData($letter));
+        ];
 	}
 
-	private function getPaginationData($currentIndex)
-    {
-        $keys = range("A", "Z");
-        $indices = array_reduce($keys, function($carry, $key) {
-            return array_merge($carry, [
-                $key => $this->router->buildPath(get_class(), [
-                    "page" => $key
-                ])
-            ]);
-        }, []);
-
-        return [
-            "pagination" => [
-                "indices" => $indices,
-                "index" => $currentIndex
-            ]
-        ];
-    }
-
-	protected function getTitle()
+    protected function getTitle()
 	{
 		// TODO: Implement getEntityTitle() method.
 	}

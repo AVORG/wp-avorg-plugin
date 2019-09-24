@@ -34,7 +34,7 @@ class Listing extends Page
 		$this->conferenceRepository = $conferenceRepository;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"conferences" => $this->conferenceRepository->getConferences()

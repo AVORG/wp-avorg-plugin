@@ -9,6 +9,8 @@ if (!defined('ABSPATH')) exit;
 
 abstract class RestController
 {
+    protected $route;
+
     /** @var WordPress $wp */
     protected $wp;
 
@@ -22,5 +24,17 @@ abstract class RestController
         $this->wp->add_action('rest_api_init', [$this, 'registerRoutes']);
     }
 
-    public abstract function registerRoutes();
+    public function registerRoutes()
+    {
+        $this->wp->register_rest_route(
+            'avorg/v1',
+            $this->route,
+            [
+                'methods' => 'GET',
+                'callback' => [$this, 'getData']
+            ]
+        );
+    }
+
+    abstract public function getData();
 }

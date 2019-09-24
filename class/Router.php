@@ -158,6 +158,9 @@ class Router
 
         /** @var Route $route */
         $route = $this->routeFactory->getRouteByClass($routableClass);
+
+        if (!$route) return null;
+
         $locale = $this->wp->get_locale() ?: "en_US";
         $language = $this->languageFactory->getLanguageByWpLangCode($locale);
         $vars = array_merge([
