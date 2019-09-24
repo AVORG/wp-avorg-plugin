@@ -10,6 +10,7 @@ if (!defined('ABSPATH')) exit;
 abstract class RestController
 {
     protected $route;
+    protected $args = [];
 
     /** @var WordPress $wp */
     protected $wp;
@@ -31,10 +32,11 @@ abstract class RestController
             $this->route,
             [
                 'methods' => 'GET',
-                'callback' => [$this, 'getData']
+                'callback' => [$this, 'getData'],
+                'args' => $this->args
             ]
         );
     }
 
-    abstract public function getData();
+    abstract public function getData($request = null);
 }

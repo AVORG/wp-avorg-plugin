@@ -24,7 +24,8 @@ final class TestPlaceholderIdsController extends Avorg\TestCase
             '/placeholder-ids',
             [
                 'methods' => 'GET',
-                'callback' => [$this->controller, 'getData']
+                'callback' => [$this->controller, 'getData'],
+                'args' => []
             ]
         );
     }

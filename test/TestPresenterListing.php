@@ -53,7 +53,7 @@ final class TestPresenterListing extends Avorg\TestCase
 
         $this->page->addUi("hello world");
 
-        $this->mockAvorgApi->assertMethodCalledWith("getPresenters", "w");
+        $this->mockAvorgApi->assertMethodCalledWith("getPresenters", "w", null);
     }
 
     public function testDefaultsToA()
@@ -62,7 +62,7 @@ final class TestPresenterListing extends Avorg\TestCase
 
         $this->page->addUi("hello world");
 
-        $this->mockAvorgApi->assertMethodCalledWith("getPresenters", "A");
+        $this->mockAvorgApi->assertMethodCalledWith("getPresenters", "A", null);
     }
 
     public function testCachesData()

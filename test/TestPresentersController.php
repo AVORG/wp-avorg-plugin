@@ -35,4 +35,33 @@ final class TestPresentersController extends Avorg\TestCase
     {
         $this->assertIsArray($this->controller->getData());
     }
+
+    public function testRegistersArguments()
+    {
+        $this->controller->registerRoutes();
+
+        $this->mockWordPress->assertAnyCallMatches("register_rest_route", function ($call) {
+            $callArgs = $call[2]['args'] ?? null;
+
+            $expectedArgs = [
+                'search' => [
+                    'description' => 'Search term',
+                    'type' => 'string'
+                ],
+                'start' => [
+                    'description' => 'Index of item in result set that should begin returned data',
+                    'type' => 'integer'
+                ]
+            ];
+
+            return $callArgs === $expectedArgs;
+        });
+    }
+
+    public function testUsesStartParamToGetPresenters()
+    {
+        $this->controller->getData(['start' => 25]);
+
+        $this->mockAvorgApi->assertMethodCalledWith('getPresenters', '', 25);
+    }
 }
