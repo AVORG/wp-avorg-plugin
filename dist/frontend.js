@@ -136,7 +136,8 @@ var AvorgMoleculeAjaxList;
             var _this = _super.call(this, props) || this;
             _this.state = {
                 entries: [],
-                isLoading: true
+                isLoading: true,
+                page: 0
             };
             _this.myRef = React.createRef();
             return _this;
@@ -152,16 +153,17 @@ var AvorgMoleculeAjaxList;
         };
         AjaxList.prototype.loadEntries = function () {
             var _this = this;
-            this.setState({
+            this.setState(function (prev) { return ({
                 isLoading: true
-            });
-            fetch(this.props.endpoint)
+            }); });
+            fetch(this.props.endpoint + "?start=" + this.state.page * 25)
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
-                _this.setState({
-                    entries: _this.state.entries.concat(data),
-                    isLoading: false
-                });
+                _this.setState(function (prev) { return ({
+                    entries: prev.entries.concat(data),
+                    isLoading: false,
+                    page: prev.page + 1
+                }); });
             });
         };
         AjaxList.prototype.isEndVisible = function () {
@@ -177,8 +179,8 @@ var AvorgMoleculeAjaxList;
     }(React.Component));
     var components = document.querySelectorAll('.avorg-molecule-ajaxList');
     components.forEach(function (el) {
-        var endpoint = el.getAttribute('data-endpoint'), list = el.querySelector('.frame');
-        window.wp.element.render(wp.element.createElement(AjaxList, { endpoint: endpoint }), list);
+        var endpoint = el.getAttribute('data-endpoint'), frame = el.querySelector('.frame');
+        window.wp.element.render(wp.element.createElement(AjaxList, { endpoint: endpoint }), frame);
     });
 })(AvorgMoleculeAjaxList || (AvorgMoleculeAjaxList = {}));
 

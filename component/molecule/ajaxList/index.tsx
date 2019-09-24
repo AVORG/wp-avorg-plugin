@@ -16,7 +16,8 @@ namespace AvorgMoleculeAjaxList {
 
     interface AjaxListState {
         entries: DataObject[],
-        isLoading: boolean
+        isLoading: boolean,
+        page: number
     }
 
     class AjaxList extends React.Component<AjaxListProps, AjaxListState> {
@@ -27,7 +28,8 @@ namespace AvorgMoleculeAjaxList {
 
             this.state = {
                 entries: [],
-                isLoading: true
+                isLoading: true,
+                page: 0
             };
 
             this.myRef = React.createRef();
@@ -44,17 +46,18 @@ namespace AvorgMoleculeAjaxList {
         }
 
         loadEntries() {
-            this.setState({
+            this.setState((prev) => ({
                 isLoading: true
-            });
+            }));
 
-            fetch(this.props.endpoint)
+            fetch(`${this.props.endpoint}?start=${this.state.page * 25}`)
                 .then(res => res.json())
                 .then((data) => {
-                    this.setState({
-                        entries: this.state.entries.concat(data),
-                        isLoading: false
-                    });
+                    this.setState((prev) => ({
+                        entries: prev.entries.concat(data),
+                        isLoading: false,
+                        page: prev.page + 1
+                    }));
                 });
         }
 
