@@ -62,6 +62,13 @@ final class TestPresentersController extends Avorg\TestCase
     {
         $this->controller->getData(['start' => 25]);
 
-        $this->mockAvorgApi->assertMethodCalledWith('getPresenters', '', 25);
+        $this->mockAvorgApi->assertMethodCalledWith('getPresenters', null, 25);
+    }
+
+    public function testUsesSearchParamToGetPresenters()
+    {
+        $this->controller->getData(['search' => 'term']);
+
+        $this->mockAvorgApi->assertMethodCalledWith('getPresenters', 'term', null);
     }
 }

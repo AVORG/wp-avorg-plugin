@@ -36,7 +36,7 @@ class Presenters extends RestController
 
     public function getData($request = null)
     {
-        $search = '';
+        $search = $request['search'] ?? null;
         $start = $request['start'] ?? null;
 
         return $this->presenterRepository->getPresenters($search, $start);
