@@ -42,7 +42,7 @@ class Listing extends Page
 		$letter = $this->wp->get_query_var("page") ?: 'A';
 
 		return [
-			"presenters" => $this->presenterRepository->getPresenters($letter),
+			"presenters" => $this->presenterRepository->getDataObjects($letter),
         ];
 	}
 

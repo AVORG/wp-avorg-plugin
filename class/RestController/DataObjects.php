@@ -2,17 +2,16 @@
 
 namespace Avorg\RestController;
 
-use Avorg\DataObjectRepository\PresenterRepository;
+use Avorg\DataObjectRepository;
+use Avorg\DataObjectRepository\BookRepository;
 use Avorg\RestController;
 use Avorg\WordPress;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class Presenters extends RestController
+abstract class DataObjects extends RestController
 {
-    protected $route = '/presenters';
-
     protected $args = [
         'search' => [
             'description' => 'Search term',
@@ -24,21 +23,14 @@ class Presenters extends RestController
         ]
     ];
 
-    /** @var PresenterRepository $presenterRepository */
-    private $presenterRepository;
-
-    public function __construct(PresenterRepository $presenterRepository, WordPress $wp)
-    {
-        parent::__construct($wp);
-
-        $this->presenterRepository = $presenterRepository;
-    }
+    /** @var DataObjectRepository $repository */
+    protected $repository;
 
     public function getData($request = null)
     {
         $search = $request['search'] ?? null;
         $start = $request['start'] ?? null;
 
-        return $this->presenterRepository->getPresenters($search, $start);
+        return $this->repository->getDataObjects($search, $start);
     }
 }

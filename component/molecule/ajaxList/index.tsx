@@ -6,6 +6,7 @@ namespace AvorgMoleculeAjaxList {
     interface DataObject {
         id: string
         title: string
+        secondLine?: string
         url: string
         photo256: string
     }
@@ -40,7 +41,7 @@ namespace AvorgMoleculeAjaxList {
 
             this.wrapperRef = React.createRef();
 
-            this.onKeypress = this.onKeypress.bind(this);
+            this.onKeyDown = this.onKeyDown.bind(this);
         }
 
         componentDidMount(): void {
@@ -59,7 +60,7 @@ namespace AvorgMoleculeAjaxList {
                 && this.isEndVisible();
         }
 
-        onKeypress(e: React.KeyboardEvent) {
+        onKeyDown(e: React.KeyboardEvent) {
             const target = e.target as HTMLInputElement;
 
             clearTimeout(this.state.searchTimeout);
@@ -115,7 +116,7 @@ namespace AvorgMoleculeAjaxList {
                     <input
                         type="text"
                         placeholder={'Search'}
-                        onKeyPress={this.onKeypress}
+                        onKeyDown={this.onKeyDown}
                     />
                     <ul className={this.state.isLoading ? "loading" : ""}>
                         {this.state.entries.map(
@@ -125,7 +126,7 @@ namespace AvorgMoleculeAjaxList {
                                         molecule_mediaObject(
                                             entry.title,
                                             entry.url,
-                                            "Something will go here probably",
+                                            entry.secondLine,
                                             entry.photo256,
                                             entry.title
                                         )

@@ -29,6 +29,13 @@ class Conference extends DataObject
 		$this->recordingRepository = $presentationRepository;
 	}
 
+    protected function getDataArray()
+    {
+        return array_merge(parent::getDataArray(), [
+            "secondLine" => $this->sponsorTitle
+        ]);
+    }
+
 	/**
 	 * @throws Exception
 	 */

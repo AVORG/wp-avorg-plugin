@@ -143,7 +143,7 @@ var AvorgMoleculeAjaxList;
                 search: ''
             };
             _this.wrapperRef = React.createRef();
-            _this.onKeypress = _this.onKeypress.bind(_this);
+            _this.onKeyDown = _this.onKeyDown.bind(_this);
             return _this;
         }
         AjaxList.prototype.componentDidMount = function () {
@@ -160,7 +160,7 @@ var AvorgMoleculeAjaxList;
                 && !this.state.resultsExhausted
                 && this.isEndVisible();
         };
-        AjaxList.prototype.onKeypress = function (e) {
+        AjaxList.prototype.onKeyDown = function (e) {
             var _this = this;
             var target = e.target;
             clearTimeout(this.state.searchTimeout);
@@ -187,7 +187,6 @@ var AvorgMoleculeAjaxList;
                 isLoading: true
             }); });
             var url = this.props.endpoint + "?start=" + this.state.page * 25 + "&search=" + this.state.search;
-            console.log(url);
             fetch(url)
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
@@ -205,9 +204,9 @@ var AvorgMoleculeAjaxList;
         };
         AjaxList.prototype.render = function () {
             return (wp.element.createElement("div", { ref: this.wrapperRef },
-                wp.element.createElement("input", { type: "text", placeholder: 'Search', onKeyPress: this.onKeypress }),
+                wp.element.createElement("input", { type: "text", placeholder: 'Search', onKeyDown: this.onKeyDown }),
                 wp.element.createElement("ul", { className: this.state.isLoading ? "loading" : "" }, this.state.entries.map(function (entry, i) {
-                    return wp.element.createElement("li", { key: i }, mediaObject_1.default(entry.title, entry.url, "Something will go here probably", entry.photo256, entry.title));
+                    return wp.element.createElement("li", { key: i }, mediaObject_1.default(entry.title, entry.url, entry.secondLine, entry.photo256, entry.title));
                 }))));
         };
         return AjaxList;
@@ -234,8 +233,14 @@ var AvorgMoleculeAjaxList;
 Object.defineProperty(exports, "__esModule", { value: true });
 var molecule_mediaObject = function (title, titleUrl, secondLine, imgUrl, imgAlt) {
     var titleElement = wp.element.createElement("h4", { className: "avorg-molecule-mediaObject__title" }, title);
+    var hideImage = function (e) {
+        var target = e.target;
+        target.style.display = "none";
+    };
     return wp.element.createElement("div", { className: "avorg-molecule-mediaObject" },
-        imgUrl ? wp.element.createElement("img", { className: "avorg-molecule-mediaObject__image", src: imgUrl, alt: imgAlt }) : '',
+        imgUrl
+            ? wp.element.createElement("img", { className: "avorg-molecule-mediaObject__image", src: imgUrl, alt: imgAlt, onError: hideImage })
+            : '',
         wp.element.createElement("div", { className: "avorg-molecule-mediaObject__text" },
             titleUrl ? wp.element.createElement("a", { href: titleUrl }, titleElement) : titleElement,
             secondLine));

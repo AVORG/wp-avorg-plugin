@@ -36,7 +36,7 @@ class Listing extends Page
 	protected function getPageData()
 	{
 		return [
-			"books" => $this->bookRepository->getBooks()
+			"books" => $this->bookRepository->getDataObjects()
 		];
 	}
 

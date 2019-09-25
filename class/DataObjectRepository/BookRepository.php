@@ -13,13 +13,15 @@ class BookRepository extends DataObjectRepository
 {
 	protected $dataObjectClass = "Avorg\\DataObject\\Book";
 
-	/**
-	 * @return array
-	 * @throws Exception
-	 */
-	public function getBooks()
+    /**
+     * @param null $search
+     * @param null $start
+     * @return array
+     * @throws Exception
+     */
+	public function getDataObjects($search = null, $start = null)
 	{
-		$rawBooks = $this->api->getBooks();
+		$rawBooks = $this->api->getBooks($search, $start);
 
 		return $this->makeDataObjects($rawBooks);
 	}

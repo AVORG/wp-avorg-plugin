@@ -25,6 +25,8 @@ abstract class DataObjectRepository
 		$this->factory = $factory;
 	}
 
+	abstract public function getDataObjects();
+
 	/**
 	 * @param $rawObjects
 	 * @return array

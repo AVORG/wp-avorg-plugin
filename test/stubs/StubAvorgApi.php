@@ -31,7 +31,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getConferences($search = NULL)
+	public function getConferences($search = NULL, $start = null)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
@@ -71,7 +71,7 @@ class StubAvorgApi extends AvorgApi
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
 
-	public function getBooks($search = NULL)
+	public function getBooks($search = NULL, $start = null)
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}

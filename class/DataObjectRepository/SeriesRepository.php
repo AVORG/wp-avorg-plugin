@@ -34,4 +34,9 @@ class SeriesRepository extends DataObjectRepository
 
 		return $this->makeDataObject($rawObject);
 	}
+
+    public function getDataObjects()
+    {
+        // TODO: Implement getDataObjects() method.
+    }
 }

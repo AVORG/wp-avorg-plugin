@@ -65,12 +65,13 @@ class AvorgApi
 
     /**
      * @param null $search
+     * @param null $start
      * @return array
      * @throws Exception
      */
-	public function getConferences($search = null)
+	public function getConferences($search = null, $start = null)
 	{
-		$endpoint = "conferences";
+		$endpoint = "conferences?search=$search&start=$start";
 
 		return array_map(function($item) {
 			return $item->conferences;
@@ -169,11 +170,13 @@ class AvorgApi
 
     /**
      * @param null $search
+     * @param null $start
      * @return array
+     * @throws Exception
      */
-	public function getBooks($search = null)
+	public function getBooks($search = null, $start = null)
 	{
-		$endpoint = "audiobooks";
+		$endpoint = "audiobooks?search=$search&start=$start";
 
 		return array_map(function ($item) {
 			return $item->audiobooks;

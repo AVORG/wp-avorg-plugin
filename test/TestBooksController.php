@@ -1,10 +1,10 @@
 <?php
 
-use Avorg\RestController\DataObjects\Presenters;
+use Avorg\RestController\DataObjects\Books;
 
-final class TestPresentersController extends Avorg\TestCase
+final class TestBooksController extends Avorg\TestCase
 {
-    /** @var Presenters $controller */
+    /** @var Books $controller */
     protected $controller;
 
     /**
@@ -14,21 +14,21 @@ final class TestPresentersController extends Avorg\TestCase
     {
         parent::setUp();
 
-        $this->controller = $this->factory->secure("Avorg\\RestController\\DataObjects\\Presenters");
+        $this->controller = $this->factory->secure("Avorg\\RestController\\DataObjects\\Books");
     }
 
-    public function testExists()
+    public function testsRegistersRoute()
     {
         $this->controller->registerRoutes();
 
-        $this->mockWordPress->assertRestRouteRegistered("/presenters");
+        $this->mockWordPress->assertRestRouteRegistered("/books");
     }
 
     public function testGetsEntities()
     {
         $this->controller->getData();
 
-        $this->mockAvorgApi->assertMethodCalled("getPresenters");
+        $this->mockAvorgApi->assertMethodCalled("getBooks");
     }
 
     public function testReturnsEntities()
@@ -56,13 +56,13 @@ final class TestPresentersController extends Avorg\TestCase
     {
         $this->controller->getData(['start' => 25]);
 
-        $this->mockAvorgApi->assertMethodCalledWith('getPresenters', null, 25);
+        $this->mockAvorgApi->assertMethodCalledWith('getBooks', null, 25);
     }
 
     public function testUsesSearchParam()
     {
         $this->controller->getData(['search' => 'term']);
 
-        $this->mockAvorgApi->assertMethodCalledWith('getPresenters', 'term', null);
+        $this->mockAvorgApi->assertMethodCalledWith('getBooks', 'term', null);
     }
 }

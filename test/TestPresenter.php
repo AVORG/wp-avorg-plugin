@@ -1,5 +1,6 @@
 <?php
 
+use Avorg\DataObject;
 use Avorg\DataObject\Presenter;
 
 final class TestPresenter extends Avorg\TestCase
@@ -25,14 +26,6 @@ final class TestPresenter extends Avorg\TestCase
 		$this->presenter = $this->factory->make("Avorg\\DataObject\\Presenter");
 		$this->presenter->setData($this->apiPresenter);
 	}
-
-	private function assertToArrayKeyValue($key, $value)
-    {
-        $this->assertEquals(
-            $value,
-            $this->presenter->toArray()[$key]
-        );
-    }
 
 	public function testGetRecordings()
 	{
@@ -86,6 +79,7 @@ final class TestPresenter extends Avorg\TestCase
 	public function testIncludesUrlInArray()
     {
         $this->assertToArrayKeyValue(
+            $this->presenter,
             'url',
             "http://${_SERVER['HTTP_HOST']}/english/sermons/presenters/131/first-last-suffix.html"
         );
@@ -93,6 +87,6 @@ final class TestPresenter extends Avorg\TestCase
 
     public function testIncludesTitle()
     {
-        $this->assertToArrayKeyValue('title', "last suffix, first");
+        $this->assertToArrayKeyValue($this->presenter, 'title', "last suffix, first");
     }
 }

@@ -34,7 +34,7 @@ class PresenterRepository extends DataObjectRepository
      * @return array
      * @throws Exception
      */
-	public function getPresenters($search = null, $start = null)
+	public function getDataObjects($search = null, $start = null)
 	{
 
 		$rawPresenters = $this->api->getPresenters($search, $start) ?: [];

@@ -112,6 +112,15 @@ class StubWordPress extends WordPress
         }, "Failed asserting that route '$route' was registered");
     }
 
+    public function assertRestRouteQueryVarsRegistered($vars)
+    {
+        $this->assertAnyCallMatches("register_rest_route", function ($call) use($vars) {
+            $callArgs = $call[2]['args'] ?? null;
+
+            return $callArgs === $vars;
+        });
+    }
+
 	/**
 	 * @param $tag
 	 * @param $callable

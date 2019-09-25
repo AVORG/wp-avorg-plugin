@@ -47,6 +47,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
+    protected function assertToArrayKeyValue(DataObject $object, $key, $value)
+    {
+        $this->assertEquals($value, $object->toArray()[$key]);
+    }
+
 	protected function assertTwigGlobalMatchesCallback(Page $page, callable $callback)
 	{
 		$this->mockWordPress->passCurrentPageCheck();

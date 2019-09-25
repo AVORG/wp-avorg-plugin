@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use ErrorException;
 use function defined;
 use natlib\Factory;
 use ReflectionException;
@@ -36,19 +37,22 @@ class ScanningFactory
      */
     public function getEntities($relDir)
     {
-        return array_map(
+        return array_filter(array_map(
             [$this, "getEntity"],
             (array)$this->filesystem->getClassesRecursively($relDir)
-        );
+        ));
     }
 
     /**
      * @param $class
      * @return mixed
-     * @throws ReflectionException
      */
     private function getEntity($class)
     {
-        return $this->factory->secure($class);
+        try {
+            return $this->factory->secure($class);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
