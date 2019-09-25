@@ -4,20 +4,22 @@ import {RefObject} from 'react';
 
 namespace AvorgMoleculeAjaxList {
     interface DataObject {
-        id: string,
-        title: string,
+        id: string
+        title: string
         url: string
         photo256: string
     }
 
     interface AjaxListProps {
         endpoint: string
+        search: string
     }
 
     interface AjaxListState {
-        entries: DataObject[],
-        isLoading: boolean,
+        entries: DataObject[]
+        isLoading: boolean
         page: number
+        resultsExhausted: boolean
     }
 
     class AjaxList extends React.Component<AjaxListProps, AjaxListState> {
@@ -29,7 +31,8 @@ namespace AvorgMoleculeAjaxList {
             this.state = {
                 entries: [],
                 isLoading: true,
-                page: 0
+                page: 0,
+                resultsExhausted: false
             };
 
             this.myRef = React.createRef();
@@ -39,10 +42,16 @@ namespace AvorgMoleculeAjaxList {
             this.loadEntries();
 
             window.addEventListener("scroll", () => {
-                if (!this.state.isLoading && this.isEndVisible()) {
+                if (this.shouldLoadEntries()) {
                     this.loadEntries()
                 }
             });
+        }
+
+        shouldLoadEntries() {
+            return !this.state.isLoading
+                && !this.state.resultsExhausted
+                && this.isEndVisible();
         }
 
         loadEntries() {
@@ -50,13 +59,16 @@ namespace AvorgMoleculeAjaxList {
                 isLoading: true
             }));
 
-            fetch(`${this.props.endpoint}?start=${this.state.page * 25}`)
+            const url = `${this.props.endpoint}?start=${this.state.page * 25}&search=${this.props.search}`;
+
+            fetch(url)
                 .then(res => res.json())
                 .then((data) => {
                     this.setState((prev) => ({
                         entries: prev.entries.concat(data),
                         isLoading: false,
-                        page: prev.page + 1
+                        page: prev.page + 1,
+                        resultsExhausted: data.length === 0
                     }));
                 });
         }
@@ -95,6 +107,6 @@ namespace AvorgMoleculeAjaxList {
         const endpoint = el.getAttribute('data-endpoint'),
             frame = el.querySelector('.frame');
 
-        window.wp.element.render(<AjaxList endpoint={endpoint} />, frame);
+        window.wp.element.render(<AjaxList endpoint={endpoint} search={''} />, frame);
     });
 }

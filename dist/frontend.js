@@ -137,7 +137,8 @@ var AvorgMoleculeAjaxList;
             _this.state = {
                 entries: [],
                 isLoading: true,
-                page: 0
+                page: 0,
+                resultsExhausted: false
             };
             _this.myRef = React.createRef();
             return _this;
@@ -146,7 +147,7 @@ var AvorgMoleculeAjaxList;
             var _this = this;
             this.loadEntries();
             window.addEventListener("scroll", function () {
-                if (!_this.state.isLoading && _this.isEndVisible()) {
+                if (!_this.state.isLoading && !_this.state.resultsExhausted && _this.isEndVisible()) {
                     _this.loadEntries();
                 }
             });
@@ -156,13 +157,15 @@ var AvorgMoleculeAjaxList;
             this.setState(function (prev) { return ({
                 isLoading: true
             }); });
-            fetch(this.props.endpoint + "?start=" + this.state.page * 25)
+            var url = this.props.endpoint + "?start=" + this.state.page * 25 + "&search=" + this.props.search;
+            fetch(url)
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
                 _this.setState(function (prev) { return ({
                     entries: prev.entries.concat(data),
                     isLoading: false,
-                    page: prev.page + 1
+                    page: prev.page + 1,
+                    resultsExhausted: data.length === 0
                 }); });
             });
         };
@@ -180,7 +183,7 @@ var AvorgMoleculeAjaxList;
     var components = document.querySelectorAll('.avorg-molecule-ajaxList');
     components.forEach(function (el) {
         var endpoint = el.getAttribute('data-endpoint'), frame = el.querySelector('.frame');
-        window.wp.element.render(wp.element.createElement(AjaxList, { endpoint: endpoint }), frame);
+        window.wp.element.render(wp.element.createElement(AjaxList, { endpoint: endpoint, search: '' }), frame);
     });
 })(AvorgMoleculeAjaxList || (AvorgMoleculeAjaxList = {}));
 
