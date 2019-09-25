@@ -13,13 +13,15 @@ class StoryRepository extends DataObjectRepository
 {
 	protected $dataObjectClass = "Avorg\\DataObject\\Story";
 
-	/**
-	 * @return array
-	 * @throws Exception
-	 */
-	public function getStories()
+    /**
+     * @param null $search
+     * @param null $start
+     * @return array
+     * @throws Exception
+     */
+	public function getDataObjects($search = null, $start = null)
 	{
-		$rawObjects = $this->api->getStories();
+		$rawObjects = $this->api->getStories($search, $start);
 
 		return $this->makeDataObjects($rawObjects);
 	}
@@ -35,9 +37,4 @@ class StoryRepository extends DataObjectRepository
 
 		return $this->makeDataObject($rawObject);
 	}
-
-    public function getDataObjects($search = null, $start = null)
-    {
-        // TODO: Implement getDataObjects() method.
-    }
 }

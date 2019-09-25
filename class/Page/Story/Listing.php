@@ -41,7 +41,7 @@ class Listing extends Page
 	protected function getPageData()
 	{
 		return [
-			"stories" => $this->storyRepository->getStories()
+			"stories" => $this->storyRepository->getDataObjects()
 		];
 	}
 

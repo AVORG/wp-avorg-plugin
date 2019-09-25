@@ -82,12 +82,13 @@ class AvorgApi
 
     /**
      * @param null $search
+     * @param null $start
      * @return array
      * @throws Exception
      */
-	public function getStories($search = null)
+	public function getStories($search = null, $start = null)
 	{
-		$endpoint = "audiobooks?story=1";
+		$endpoint = "audiobooks?story=1&search=$search&start=$start";
 
 		return array_map(function($item) {
 			return $item->audiobooks;
