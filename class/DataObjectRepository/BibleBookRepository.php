@@ -41,7 +41,7 @@ class BibleBookRepository extends DataObjectRepository
 		return $this->makeDataObject($rawBibleBook);
 	}
 
-    public function getDataObjects()
+    public function getDataObjects($search = null, $start = null)
     {
         // TODO: Implement getDataObjects() method.
     }

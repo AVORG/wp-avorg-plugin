@@ -38,7 +38,7 @@ class SponsorRepository extends DataObjectRepository
 		return $this->makeDataObject($rawObject);
 	}
 
-    public function getDataObjects()
+    public function getDataObjects($search = null, $start = null)
     {
         // TODO: Implement getDataObjects() method.
     }

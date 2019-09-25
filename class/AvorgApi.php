@@ -23,12 +23,13 @@ class AvorgApi
 
     /**
      * @param null $search
+     * @param null $start
      * @return array
      * @throws Exception
      */
-	public function getAllSeries($search = null)
+	public function getAllSeries($search = null, $start = null)
 	{
-		$endpoint = "series";
+		$endpoint = "series?search=$search&start=$start";
 
 		return array_map(function($item) {
 			return $item->series;
@@ -183,13 +184,15 @@ class AvorgApi
 		}, $this->getResult($endpoint));
 	}
 
-	/**
-	 * @return array|object
-	 * @throws Exception
-	 */
-	public function getPlaylists()
+    /**
+     * @param null $search
+     * @param null $start
+     * @return array|object
+     * @throws Exception
+     */
+	public function getPlaylists($search = null, $start = null)
 	{
-		return $this->getResult("playlist");
+		return $this->getResult("playlist?search=$search&start=$start");
 	}
 
 	/**

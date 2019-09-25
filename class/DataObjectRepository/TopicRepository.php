@@ -38,7 +38,7 @@ class TopicRepository extends DataObjectRepository
 		return $this->makeDataObject($rawTopic);
 	}
 
-    public function getDataObjects()
+    public function getDataObjects($search = null, $start = null)
     {
         // TODO: Implement getDataObjects() method.
     }

@@ -41,7 +41,7 @@ class Listing extends Page
 	protected function getPageData()
 	{
 		return [
-			"series" => $this->seriesRepository->getAllSeries()
+			"series" => $this->seriesRepository->getDataObjects()
 		];
 	}
 

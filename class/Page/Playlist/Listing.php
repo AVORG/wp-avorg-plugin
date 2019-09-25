@@ -40,7 +40,7 @@ class Listing extends Page
 	protected function getPageData()
 	{
 		return [
-			"playlists" => $this->playlistRepository->getPlaylists()
+			"playlists" => $this->playlistRepository->getDataObjects()
 		];
 	}
 
