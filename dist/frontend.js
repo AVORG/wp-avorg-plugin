@@ -237,13 +237,19 @@ var molecule_mediaObject = function (title, titleUrl, secondLine, imgUrl, imgAlt
         var target = e.target;
         target.style.display = "none";
     };
+    var prepareSecondLine = function (secondLine) {
+        var div = document.createElement("div");
+        div.innerHTML = secondLine;
+        var text = div.textContent || div.innerText || '';
+        return text.length <= 200 ? text : text.substring(0, 200) + '...';
+    };
     return wp.element.createElement("div", { className: "avorg-molecule-mediaObject" },
         imgUrl
             ? wp.element.createElement("img", { className: "avorg-molecule-mediaObject__image", src: imgUrl, alt: imgAlt, onError: hideImage })
             : '',
         wp.element.createElement("div", { className: "avorg-molecule-mediaObject__text" },
             titleUrl ? wp.element.createElement("a", { href: titleUrl }, titleElement) : titleElement,
-            secondLine));
+            secondLine ? wp.element.createElement("div", { className: "avorg-molecule-mediaObject__description" }, prepareSecondLine(secondLine)) : ''));
 };
 exports.default = molecule_mediaObject;
 

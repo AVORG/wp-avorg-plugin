@@ -52,12 +52,13 @@ class AvorgApi
 
     /**
      * @param null $search
+     * @param null $start
      * @return array
      * @throws Exception
      */
-	public function getSponsors($search = null)
+	public function getSponsors($search = null, $start = null)
 	{
-		$endpoint = "sponsors";
+		$endpoint = "sponsors?search=$search&start=$start";
 
 		return array_map(function($item) {
 			return $item->sponsors;

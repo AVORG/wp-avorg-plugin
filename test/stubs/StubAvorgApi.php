@@ -26,7 +26,7 @@ class StubAvorgApi extends AvorgApi
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
-    public function getSponsors($search = NULL)
+    public function getSponsors($search = null, $start = null)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());
     }

@@ -2,14 +2,14 @@
 
 use Avorg\RestController\DataObjects\Series;
 
-final class TestSeriesController extends Avorg\TestCase
+final class TestSponsorsController extends Avorg\TestCase
 {
     /** @var Series $controller */
     protected $controller;
 
-    private $controllerName = "Series";
-    private $route = "/series";
-    private $apiMethod = "getAllSeries";
+    private $controllerName = "Sponsors";
+    private $route = "/sponsors";
+    private $apiMethod = "getSponsors";
 
     /**
      * @throws ReflectionException

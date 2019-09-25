@@ -28,6 +28,13 @@ class Sponsor extends DataObject
 		$this->presentationRepository = $presentationRepository;
 	}
 
+    protected function getDataArray()
+    {
+        return array_merge(parent::getDataArray(), [
+            "secondLine" => $this->description,
+        ]);
+    }
+
 	public function getRecordings()
 	{
 		return $this->presentationRepository->getSponsorPresentations($this->getId());

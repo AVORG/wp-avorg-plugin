@@ -15,6 +15,14 @@ const molecule_mediaObject = function (
         target.style.display = "none";
     };
 
+    const prepareSecondLine = (secondLine: string) => {
+        const div = document.createElement("div");
+        div.innerHTML = secondLine;
+        const text = div.textContent || div.innerText || '';
+
+        return text.length <= 200 ? text : text.substring(0, 200) + '...';
+    };
+
     return <div className="avorg-molecule-mediaObject">
         {
             imgUrl
@@ -23,7 +31,9 @@ const molecule_mediaObject = function (
         }
         <div className="avorg-molecule-mediaObject__text">
             {titleUrl ? <a href={titleUrl}>{titleElement}</a> : titleElement}
-            {secondLine}
+            {secondLine ? <div className="avorg-molecule-mediaObject__description">
+                {prepareSecondLine(secondLine)}
+            </div> : ''}
         </div>
     </div>;
 };

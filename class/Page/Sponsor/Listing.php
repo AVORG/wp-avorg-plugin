@@ -36,7 +36,7 @@ class Listing extends Page
 	protected function getPageData()
 	{
 		return [
-			"sponsors" => $this->sponsorRepository->getSponsors()
+			"sponsors" => $this->sponsorRepository->getDataObjects()
 		];
 	}
 

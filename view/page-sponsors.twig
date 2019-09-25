@@ -1,15 +1,5 @@
 <div class="avorg-page-sponsors">
-	<ul>
-		{% for sponsor in avorg.sponsors %}
-			<li>
-				{% include "molecule-mediaObject.twig" with {
-					image: sponsor.photo256,
-					imageAlt: sponsor.title,
-					title: sponsor.title,
-					titleUrl: sponsor.url,
-					description: sponsor.description
-				} only %}
-			</li>
-		{% endfor %}
-	</ul>
+	{% include "molecule-ajaxList.twig" with {
+		"endpoint": "/wp-json/avorg/v1/sponsors"
+	} only %}
 </div>
