@@ -10,7 +10,9 @@
 {% set descriptionLength = 200 %}
 
 <div class="avorg-molecule-mediaObject {{ classes }}">
+	{% if image %}
 	<img class="avorg-molecule-mediaObject__image" src="{{ image }}" alt="{{ imageAlt }}">
+	{% endif %}
 
 	<div class="avorg-molecule-mediaObject__text">
 		{% if titleUrl %}<a href="{{ titleUrl }}">{% endif %}

@@ -145,12 +145,13 @@ class AvorgApi
 
     /**
      * @param null $search
+     * @param null $start
      * @return array
      * @throws Exception
      */
-	public function getTopics($search = null)
+	public function getTopics($search = null, $start = null)
 	{
-		$endpoint = "topics";
+		$endpoint = "topics?search=$search&start=$start";
 
 		return array_map(function ($item) {
 			return $item->topics;
