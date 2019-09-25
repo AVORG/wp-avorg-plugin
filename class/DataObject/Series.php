@@ -28,6 +28,13 @@ class Series extends DataObject
 		$this->presentationRepository = $presentationRepository;
 	}
 
+    protected function getDataArray()
+    {
+        return array_merge(parent::getDataArray(), [
+            "secondLine" => $this->conference ?: $this->sponsor
+        ]);
+    }
+
 	public function getRecordings()
 	{
 		return $this->presentationRepository->getSeriesPresentations($this->getId());
