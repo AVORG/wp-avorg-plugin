@@ -12,7 +12,6 @@ namespace AvorgMoleculeAjaxList {
 
     interface AjaxListProps {
         endpoint: string
-        search: string
     }
 
     interface AjaxListState {
@@ -20,10 +19,12 @@ namespace AvorgMoleculeAjaxList {
         isLoading: boolean
         page: number
         resultsExhausted: boolean
+        searchTimeout: number
+        search: string
     }
 
     class AjaxList extends React.Component<AjaxListProps, AjaxListState> {
-        myRef: RefObject<HTMLDivElement>;
+        wrapperRef: RefObject<HTMLDivElement>;
 
         constructor(props: AjaxListProps) {
             super(props);
@@ -32,10 +33,14 @@ namespace AvorgMoleculeAjaxList {
                 entries: [],
                 isLoading: true,
                 page: 0,
-                resultsExhausted: false
+                resultsExhausted: false,
+                searchTimeout: null,
+                search: ''
             };
 
-            this.myRef = React.createRef();
+            this.wrapperRef = React.createRef();
+
+            this.onKeypress = this.onKeypress.bind(this);
         }
 
         componentDidMount(): void {
@@ -54,12 +59,37 @@ namespace AvorgMoleculeAjaxList {
                 && this.isEndVisible();
         }
 
+        onKeypress(e: React.KeyboardEvent) {
+            const target = e.target as HTMLInputElement;
+
+            clearTimeout(this.state.searchTimeout);
+
+            this.setState({
+                searchTimeout: setTimeout(() => {
+                    this.setState({
+                        search: target.value
+                    });
+
+                    this.resetEntries();
+                    this.loadEntries();
+                }, 1200)
+            });
+        }
+
+        resetEntries() {
+            this.setState({
+                entries: [],
+                page: 0,
+                resultsExhausted: false
+            })
+        }
+
         loadEntries() {
             this.setState((prev) => ({
                 isLoading: true
             }));
 
-            const url = `${this.props.endpoint}?start=${this.state.page * 25}&search=${this.props.search}`;
+            const url = `${this.props.endpoint}?start=${this.state.page * 25}&search=${this.state.search}`;
 
             fetch(url)
                 .then(res => res.json())
@@ -74,28 +104,35 @@ namespace AvorgMoleculeAjaxList {
         }
 
         isEndVisible(): boolean {
-            const rect = this.myRef.current.getBoundingClientRect();
+            const rect = this.wrapperRef.current.getBoundingClientRect();
 
             return rect.bottom <= window.innerHeight;
         }
 
         render() {
             return (
-                <div ref={this.myRef} className={this.state.isLoading ? "loading" : ""}>
-                    {this.state.entries.map(
-                        (entry: DataObject, i: number) =>
-                            <li key={i}>
-                                {
-                                    molecule_mediaObject(
-                                        entry.title,
-                                        entry.url,
-                                        "Something will go here probably",
-                                        entry.photo256,
-                                        entry.title
-                                    )
-                                }
-                            </li>
-                    )}
+                <div ref={this.wrapperRef}>
+                    <input
+                        type="text"
+                        placeholder={'Search'}
+                        onKeyPress={this.onKeypress}
+                    />
+                    <ul className={this.state.isLoading ? "loading" : ""}>
+                        {this.state.entries.map(
+                            (entry: DataObject, i: number) =>
+                                <li key={i}>
+                                    {
+                                        molecule_mediaObject(
+                                            entry.title,
+                                            entry.url,
+                                            "Something will go here probably",
+                                            entry.photo256,
+                                            entry.title
+                                        )
+                                    }
+                                </li>
+                        )}
+                    </ul>
                 </div>
             );
         }
@@ -104,9 +141,8 @@ namespace AvorgMoleculeAjaxList {
     const components = document.querySelectorAll('.avorg-molecule-ajaxList');
 
     components.forEach((el) => {
-        const endpoint = el.getAttribute('data-endpoint'),
-            frame = el.querySelector('.frame');
+        const endpoint = el.getAttribute('data-endpoint');
 
-        window.wp.element.render(<AjaxList endpoint={endpoint} search={''} />, frame);
+        window.wp.element.render(<AjaxList endpoint={endpoint} />, el);
     });
 }
