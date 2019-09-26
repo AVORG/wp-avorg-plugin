@@ -26,14 +26,9 @@ class Feeds extends RestController
     public function getData($request = null)
     {
         $formats = $this->routeFactory->getEndpointRouteFormats();
-        $filteredFormats = array_filter($formats, function($key) {
-            return strstr($key, 'RssEndpoint') !== false;
-        }, ARRAY_FILTER_USE_KEY);
-        $feedKeys = array_map(function($key) {
-            $pieces = explode("\\", $key);
-            return end($pieces);
-        }, array_keys($filteredFormats));
 
-        return array_combine($feedKeys, array_values($filteredFormats));
+        return array_filter(array_keys($formats), function($key) {
+            return strstr($key, 'RssEndpoint') !== false;
+        });
     }
 }

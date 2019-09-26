@@ -32,13 +32,13 @@ final class TestFeedsController extends Avorg\TestCase
     {
         $data = $this->controller->getData();
 
-        $this->assertArrayHasKey('Speaker', $data);
+        $this->assertContains('Avorg\Endpoint\RssEndpoint\Speaker', $data);
     }
 
     public function testDoesNotReturnNonFeedRoutes()
     {
         $data = $this->controller->getData();
 
-        $this->assertArrayNotHasKey('Presentations', $data);
+        $this->assertNotContains("Avorg\Endpoint\Recording", $data);
     }
 }
