@@ -89,8 +89,11 @@ class RouteFactory
 
 	private function getEndpointRouteByClass($class)
 	{
-		return $this->findRouteByClass($class, $this->endpointRouteFormats,
-			[$this->endpointFactory, "getEndpointByClass"], [$this, "getEndpointRoute"]);
+		return $this->findRouteByClass(
+		    $class, $this->endpointRouteFormats,
+			[$this->endpointFactory, "getEndpointByClass"],
+            [$this, "getEndpointRoute"]
+        );
 	}
 
 	/**
@@ -176,7 +179,15 @@ class RouteFactory
 		return $route->setId($routeId)->setFormat($routeFormat);
 	}
 
-	/** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @return array
+     */
+    public function getEndpointRouteFormats(): array
+    {
+        return $this->endpointRouteFormats;
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
 	private function getEndpointRoute($routeId, $routeFormat)
 	{
 		/** @var EndpointRoute $route */
