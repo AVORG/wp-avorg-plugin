@@ -25,21 +25,21 @@ final class TestBookRepository extends Avorg\TestCase
 
 	public function testUsesApi()
 	{
-		$books = $this->repository->getBooks();
+		$books = $this->repository->getDataObjects();
 
 		$this->assertEquals("A Call to Medical Evangelism", $books[0]->title);
 	}
 
 	public function testIsSet()
 	{
-		$books = $this->repository->getBooks();
+		$books = $this->repository->getDataObjects();
 
 		$this->assertTrue($books[0]->__isset("title"));
 	}
 
 	public function testGetUrl()
 	{
-		$books = $this->repository->getBooks();
+		$books = $this->repository->getDataObjects();
 
 		$this->assertEquals(
 			"http://${_SERVER['HTTP_HOST']}/english/audiobooks/books/937/a-call-to-medical-evangelism.html",

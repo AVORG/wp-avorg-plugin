@@ -29,7 +29,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$avorgApi = new AvorgApi_exceptions();
 
-		$factory = new Factory("Avorg");
+		$factory = new Factory();
 
 		$factory->injectObjects(
 			$avorgApi,

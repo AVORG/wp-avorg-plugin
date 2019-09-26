@@ -9,20 +9,9 @@ if (!defined('ABSPATH')) exit;
 
 class PlaceholderIds extends RestController
 {
+    protected $route = '/placeholder-ids';
 
-    public function registerRoutes()
-    {
-        $this->wp->register_rest_route(
-            'avorg/v1',
-            '/placeholder-ids',
-            [
-                'methods' => 'GET',
-                'callback' => [$this, 'getItem']
-            ]
-        );
-    }
-
-    public function getItem()
+    public function getData($request = null)
     {
         return $this->wp->get_all_meta_values("avorgBitIdentifier");
     }

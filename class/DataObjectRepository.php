@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use natlib\Stub;
 use function defined;
 use natlib\Factory;
 use ReflectionException;
@@ -24,6 +25,8 @@ abstract class DataObjectRepository
 		$this->factory = $factory;
 	}
 
+	abstract public function getDataObjects($search = null, $start = null);
+
 	/**
 	 * @param $rawObjects
 	 * @return array
@@ -40,6 +43,15 @@ abstract class DataObjectRepository
 	 */
 	protected function makeDataObject($rawObject)
 	{
-		return $this->factory->make($this->dataObjectClass)->setData($rawObject);
+        return $this->factory->make($this->dataObjectClass)->setData($rawObject);
+
+        var_dump($this->dataObjectClass);
+        $object = Stub::time(function() {
+            return $this->factory->make($this->dataObjectClass);
+        });
+
+        return Stub::time(function() use($object, $rawObject) {
+            return $object->setData($rawObject);
+        });
 	}
 }

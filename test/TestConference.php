@@ -13,6 +13,7 @@ final class TestConference extends Avorg\TestCase
 
 		$this->conference = $this->makeConference([
 			"title" => "ACF Institute 2017: Never Alone",
+			"sponsorTitle" => "AdAgrA: Adventist Agriculture Association",
 			"id" => "293",
 		]);
 	}
@@ -41,4 +42,13 @@ final class TestConference extends Avorg\TestCase
 
 		$this->assertInstanceOf("Avorg\\DataObject\\Recording", $recording);
 	}
+
+    public function testIncludesSecondLine()
+    {
+        $this->assertToArrayKeyValue(
+            $this->conference,
+            'secondLine',
+            "AdAgrA: Adventist Agriculture Association"
+        );
+    }
 }

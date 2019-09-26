@@ -27,13 +27,15 @@ class ConferenceRepository extends DataObjectRepository
 		return $this->makeDataObject(reset($filteredObjects));
 	}
 
-	/**
-	 * @return array
-	 * @throws Exception
-	 */
-	public function getConferences()
+    /**
+     * @param null $search
+     * @param null $start
+     * @return array
+     * @throws Exception
+     */
+	public function getDataObjects($search = null, $start = null)
 	{
-		$rawObjects = $this->api->getConferences();
+		$rawObjects = $this->api->getConferences($search, $start);
 
 		return $this->makeDataObjects($rawObjects);
 	}

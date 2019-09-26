@@ -6,6 +6,7 @@ namespace Avorg\Page\Bible;
 use Avorg\DataObjectRepository\BibleRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 
@@ -20,14 +21,19 @@ class Listing extends Page
 	protected $defaultPageContent = "Bibles";
 	protected $twigTemplate = "page-bibles.twig";
 
-	public function __construct(BibleRepository $bibleRepository, Renderer $renderer, WordPress $wp)
+	public function __construct(
+	    BibleRepository $bibleRepository,
+        Renderer $renderer,
+        Router $router,
+        WordPress $wp
+    )
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->bibleRepository = $bibleRepository;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"bibles" => $this->bibleRepository->getBibles()

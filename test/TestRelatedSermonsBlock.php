@@ -110,7 +110,7 @@ final class TestRelatedSermonsBlock extends Avorg\TestCase
         $this->mockTwig->getRenderedData("block-relatedSermons.twig");
 
         /** @var PresentationRepository $presentationRepository */
-        $presentationRepository = $this->factory->obtain(
+        $presentationRepository = $this->factory->make(
             "Avorg\\DataObjectRepository\\PresentationRepository");
         $presentations = $presentationRepository->getRelatedPresentations(0);
 

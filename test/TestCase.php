@@ -36,7 +36,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	{
 		$_SERVER["HTTP_HOST"] = "localhost:8080";
 
-		$this->factory = new Factory(__NAMESPACE__);
+		$this->factory = new Factory();
 
 		$this->factory->injectObjects(
 			$this->mockAvorgApi = new StubAvorgApi($this),
@@ -46,6 +46,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 			$this->mockWordPress = new StubWordPress($this, $this->factory)
 		);
 	}
+
+    protected function assertToArrayKeyValue(DataObject $object, $key, $value)
+    {
+        $this->assertEquals($value, $object->toArray()[$key]);
+    }
 
 	protected function assertTwigGlobalMatchesCallback(Page $page, callable $callback)
 	{

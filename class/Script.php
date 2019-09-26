@@ -12,10 +12,11 @@ class Script
 	private $wp;
 
 	private $actions = [];
-	private $deps = [];
-	private $data = [];
-	private $path;
 	private $handle;
+	private $path;
+	private $deps = [];
+	private $inFooter = false;
+	private $data = [];
 
 	public function __construct(WordPress $wp)
 	{
@@ -68,12 +69,25 @@ class Script
      */
     public function enqueue()
 	{
-		if (!$this->path) throw new Exception("Failed to enqueue script. Path not set.");
+		if (!$this->path) {
+            throw new Exception("Failed to enqueue script. Path not set.");
+        }
 
 		$handle = $this->getHandle();
 
-		$this->wp->wp_enqueue_script($handle, $this->path, $this->deps);
-		$this->wp->wp_localize_script($handle, "avorg", $this->getLocalizeData());
+		$this->wp->wp_enqueue_script(
+		    $handle,
+            $this->path,
+            $this->deps,
+            null,
+            $this->inFooter
+        );
+
+		$this->wp->wp_localize_script(
+		    $handle,
+            "avorg",
+            $this->getLocalizeData()
+        );
 	}
 
 	/**
@@ -120,6 +134,16 @@ class Script
     public function setHandle($handle)
     {
         $this->handle = $handle;
+        return $this;
+    }
+
+    /**
+     * @param bool $inFooter
+     * @return Script
+     */
+    public function setInFooter(bool $inFooter): Script
+    {
+        $this->inFooter = $inFooter;
         return $this;
     }
 }

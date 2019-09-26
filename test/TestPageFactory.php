@@ -20,8 +20,8 @@ final class TestPageFactory extends Avorg\TestCase
 
 		$this->mockWordPress->passCurrentPageCheck();
 
-		$this->pageFactory = $this->factory->obtain("Avorg\\PageFactory");
-		$this->scanningFactory = $this->factory->obtain("Avorg\\ScanningFactory");
+		$this->pageFactory = $this->factory->make("Avorg\\PageFactory");
+		$this->scanningFactory = $this->factory->make("Avorg\\ScanningFactory");
 		$this->pages = $this->scanningFactory->getEntities("class/Page");
 	}
 

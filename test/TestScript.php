@@ -11,7 +11,7 @@ final class TestScript extends Avorg\TestCase
 	{
 		parent::setUp();
 
-		$this->script = $this->factory->obtain("Avorg\\Script");
+		$this->script = $this->factory->make("Avorg\\Script");
 	}
 
 	public function testTheScript()
@@ -24,7 +24,9 @@ final class TestScript extends Avorg\TestCase
 			"wp_enqueue_script",
 			"Avorg_Script_" . sha1("//the_path"),
 			"//the_path",
-            []
+            [],
+            null,
+            false
 		);
 	}
 

@@ -227,6 +227,7 @@ final class TestPlugin extends Avorg\TestCase
 	    $isRelative = $this->arrSafe('is_relative', $options, false);
 	    $action = $this->arrSafe('action', $options, "wp_enqueue_scripts");
 	    $deps = $this->arrSafe('deps', $options, null);
+	    $in_footer = $options['in_footer'] ?? false;
 
         $fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
 
@@ -241,7 +242,9 @@ final class TestPlugin extends Avorg\TestCase
 			"wp_enqueue_script",
 			$handle,
 			$fullPath,
-            $deps
+            $deps,
+            null,
+            $in_footer
 		];
 
 		if ($shouldRegister) {
@@ -262,7 +265,9 @@ final class TestPlugin extends Avorg\TestCase
             ]],
             "frontend" => ["dist/frontend.js", [
                 'is_relative' => true,
-                'handle' => 'Avorg_Script_Frontend'
+                'handle' => 'Avorg_Script_Frontend',
+                'in_footer' => true,
+                'deps' => ['wp-element']
             ]],
             "editor" => ["dist/editor.js", [
                 'is_relative' => true,

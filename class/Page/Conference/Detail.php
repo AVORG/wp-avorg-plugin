@@ -7,6 +7,7 @@ use Avorg\DataObjectRepository\BookRepository;
 use Avorg\DataObjectRepository\ConferenceRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -26,10 +27,11 @@ class Detail extends Page
 	public function __construct(
 		ConferenceRepository $conferenceRepository,
 		Renderer $renderer,
+		Router $router,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->conferenceRepository = $conferenceRepository;
 	}
@@ -38,7 +40,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"conference" => $this->getEntity()

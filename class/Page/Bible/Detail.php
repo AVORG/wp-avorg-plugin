@@ -8,6 +8,7 @@ use Avorg\DataObject\Bible;
 use Avorg\DataObjectRepository\BibleRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -26,10 +27,11 @@ class Detail extends Page
 	public function __construct(
 		BibleRepository $bibleRepository,
 		Renderer $renderer,
+		Router $router,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->bibleRepository = $bibleRepository;
 	}
@@ -38,7 +40,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"bible" => $this->getEntity()
