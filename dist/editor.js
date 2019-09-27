@@ -211,35 +211,43 @@ var AvorgRelatedSermons;
 Object.defineProperty(exports, "__esModule", { value: true });
 var AvorgBlockRss;
 (function (AvorgBlockRss) {
-    var blockStyle = {};
-    var createLink = function (url) {
-        return wp.element.createElement("a", { href: url, target: '_blank', rel: 'noopener noreferrer' },
-            wp.element.createElement("svg", { "aria-hidden": "true", role: "img", focusable: "false", className: "dashicon dashicons-rss", xmlns: "http://www.w3.org/2000/svg", width: "20", height: "20", viewBox: "0 0 20 20" },
-                wp.element.createElement("path", { d: "M14.92 18H18C18 9.32 10.82 2.25 2 2.25v3.02c7.12 0 12.92 5.71 12.92 12.73zm-5.44 0h3.08C12.56 12.27 7.82 7.6 2 7.6v3.02c2 0 3.87.77 5.29 2.16C8.7 14.17 9.48 16.03 9.48 18zm-5.35-.02c1.17 0 2.13-.93 2.13-2.09 0-1.15-.96-2.09-2.13-2.09-1.18 0-2.13.94-2.13 2.09 0 1.16.95 2.09 2.13 2.09z" })));
-    };
+    var optionsLoaded = false;
     window.wp.blocks.registerBlockType('avorg/block-rss', {
         title: 'RSS Link',
         icon: 'rss',
         category: 'widgets',
         attributes: {
-            url: {
+            feeds: {
+                type: 'object',
+            },
+            feed: {
                 type: 'string',
-                source: 'attribute',
-                attribute: 'href',
-                selector: 'a',
             },
         },
         edit: function (props) {
-            var url = props.attributes.url, isSelected = props.isSelected, setAttributes = props.setAttributes;
-            var URLInput = window.wp.editor.URLInput;
+            var _a = props.attributes, feeds = _a.feeds, feed = _a.feed, isSelected = props.isSelected, setAttributes = props.setAttributes;
+            var SelectControl = window.wp.components.SelectControl;
+            if (!optionsLoaded) {
+                fetch('/wp-json/avorg/v1/feeds')
+                    .then(function (r) { return r.json(); })
+                    .then(function (feeds) {
+                    var options = Object.values(feeds).map(function (entry) {
+                        return {
+                            value: entry,
+                            label: entry.split('\\').slice(-1)[0]
+                        };
+                    });
+                    setAttributes({ feeds: options });
+                });
+                optionsLoaded = true;
+            }
             var form = wp.element.createElement("form", { onSubmit: function (event) { return event.preventDefault(); } },
-                wp.element.createElement(URLInput, { placeholder: 'RSS Url', value: url, onChange: function (url) { return setAttributes({ url: url }); } }));
-            return wp.element.createElement("div", { style: blockStyle, className: props.className }, isSelected ? form : createLink(url));
+                wp.element.createElement(SelectControl, { label: "List Type", value: feed, options: feeds ? feeds : [], onChange: function (feed) {
+                        setAttributes({ feed: feed });
+                    } }));
+            return wp.element.createElement("div", { className: props.className }, isSelected ? form : 'RSS link: ' + feed.split('\\').slice(-1)[0]);
         },
-        save: function (props) {
-            var url = props.attributes.url;
-            return wp.element.createElement("div", { style: blockStyle }, createLink(url));
-        },
+        save: function () { return null; }
     });
 })(AvorgBlockRss || (AvorgBlockRss = {}));
 
