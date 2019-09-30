@@ -5,8 +5,10 @@
 	titleUrl : optional, string
 	title : string
 	description : optional, string
+	truncate : bool
 #}
 
+{% set truncate = (truncate is defined) ? truncate : true %}
 {% set descriptionLength = 200 %}
 
 <div class="avorg-molecule-mediaObject {{ classes }}">
@@ -21,8 +23,12 @@
 
 		{% if description %}
 			<div class="avorg-molecule-mediaObject__description">
-				{% set ellipsis = (description|length > descriptionLength) ? '...' : '' %}
-				{{ description|slice(0,descriptionLength) }}{{ ellipsis }}
+				{% if truncate %}
+					{% set ellipsis = (description|length > descriptionLength) ? '...' : '' %}
+					{{ description|slice(0,descriptionLength) }}{{ ellipsis }}
+				{% else %}
+					{{ description }}
+				{% endif %}
 			</div>
 		{% endif %}
 	</div>

@@ -41,9 +41,7 @@ namespace AvorgPlaceholder {
                     list={'avorg_placeholder_suggestions'}
                     onChange={(id: string) => setAttributes({id})}
                 />
-                <datalist id={'avorg_placeholder_suggestions'}>
-                    <option value={'Something'} />
-                </datalist>
+                <datalist id={'avorg_placeholder_suggestions'} />
             </form>;
 
             return <div className={className}>

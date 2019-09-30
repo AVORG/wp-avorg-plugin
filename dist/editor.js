@@ -165,8 +165,7 @@ var AvorgPlaceholder;
             });
             var form = wp.element.createElement("form", { onSubmit: function (event) { return event.preventDefault(); } },
                 wp.element.createElement(TextControl, { placeholder: 'Placeholder Identifier', value: id, list: 'avorg_placeholder_suggestions', onChange: function (id) { return setAttributes({ id: id }); } }),
-                wp.element.createElement("datalist", { id: 'avorg_placeholder_suggestions' },
-                    wp.element.createElement("option", { value: 'Something' })));
+                wp.element.createElement("datalist", { id: 'avorg_placeholder_suggestions' }));
             return wp.element.createElement("div", { className: className }, isSelected ? form : "Placeholder: " + id);
         },
         save: function () { return null; }
