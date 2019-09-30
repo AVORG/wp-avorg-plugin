@@ -20,9 +20,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v5-composer-{{ checksum "composer.lock" }}
+            - v6-composer-{{ checksum "composer.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v5-composer-
+            - v6-composer-
 
       - run:
           name: Install dependencies
@@ -52,7 +52,7 @@ jobs:
       - save_cache:
           paths:
             - ./vendor
-          key: v5-composer-{{ checksum "composer.lock" }}
+          key: v6-composer-{{ checksum "composer.lock" }}
 
       - run:
           name: PHPUnit
