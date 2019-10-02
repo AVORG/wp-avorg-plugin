@@ -71,4 +71,19 @@ final class TestPresentationRepository extends Avorg\TestCase
 
         $this->mockAvorgApi->assertMethodCalledWith("getRecordings", "");
     }
+
+    public function testGetPlaylistPresentations()
+    {
+        $this->mockAvorgApi->loadPlaylist([
+            "recordings" => [
+                [
+                    "title" => "the_title"
+                ]
+            ]
+        ]);
+
+        $recordings = $this->repository->getPlaylistPresentations('id');
+
+        $this->assertEquals("the_title", $recordings[0]->title);
+    }
 }
