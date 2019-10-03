@@ -56,9 +56,11 @@ jobs:
       - run:
           name: Deploy build to staging server
           command: |
-            curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
             cp known_hosts_staging ~/.ssh/known_hosts
-            php wp-cli.phar --ssh=audiove9@146.66.103.140:18765/home/audiove9/public_html/dev/ plugin list
+            scp -P 18765 /build/wp-avorg-plugin.zip audiove9@146.66.103.140:/home/audiove9/public_html/dev/
+            curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+            php wp-cli.phar --ssh=audiove9@146.66.103.140:18765/home/audiove9/public_html/dev/ plugin install wp-avorg-plugin.zip --activate --force
+            ssh -p 18765 audiove9@146.66.103.140 'rm /home/audiove9/public_html/dev/wp-avorg-plugin.zip'
 
       - save_cache:
           paths:
