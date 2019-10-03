@@ -7,7 +7,7 @@ final class TestContentBits extends Avorg\TestCase
 	/** @var ContentBits $contentBits */
 	protected $contentBits;
 	
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 

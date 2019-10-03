@@ -15,7 +15,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$haystack = $this->makePlayerUiHaystack();
 		
-		$this->assertStringContainsString("playerUI", $haystack);
+		$this->assertContains("playerUI", $haystack);
 	}
 	
 	private function makePlayerUiHaystack()
@@ -29,7 +29,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$avorgApi = new AvorgApi_exceptions();
 
-		$factory = new Factory();
+		$factory = new Factory("Avorg");
 
 		$factory->injectObjects(
 			$avorgApi,
@@ -41,7 +41,7 @@ final class TestMediaPage extends Avorg\TestCase
 		return $factory->secure("Avorg\\Page\\Presentation\\Detail");
 	}
 	
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 
@@ -110,7 +110,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$haystack = $this->mediaPage->addUi("content");
 		
-		$this->assertStringContainsString("content", $haystack);
+		$this->assertContains("content", $haystack);
 	}
 	
 	public function testUsesTwig()
@@ -128,7 +128,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$haystack = $this->makePlayerUiHaystack();
 		
-		$this->assertStringNotContainsString("playerUI", $haystack);
+		$this->assertNotContains("playerUI", $haystack);
 	}
 	
 	public function testPassesRecordingToTwig()

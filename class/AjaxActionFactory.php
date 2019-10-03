@@ -2,24 +2,36 @@
 
 namespace Avorg;
 
-use function defined;
 use natlib\Factory;
-use ReflectionException;
 
-if (!defined('ABSPATH')) exit;
+if (!\defined('ABSPATH')) exit;
 
 class AjaxActionFactory
 {
-    /** @var ScanningFactory $scanningFactory */
-    private $scanningFactory;
+	/** @var Factory $factory */
+	private $factory;
 
-    public function __construct(ScanningFactory $scanningFactory)
-    {
-        $this->scanningFactory = $scanningFactory;
-    }
+	private $actionNames = [
+		"Recording"
+	];
+
+	public function __construct(Factory $factory)
+	{
+		$this->factory = $factory;
+	}
 
     public function registerCallbacks()
     {
-        $this->scanningFactory->registerCallbacks("class/AjaxAction");
+        $actions = $this->getActions();
+        array_walk($actions, function (AjaxAction $action) {
+            $action->registerCallbacks();
+        });
     }
+
+	public function getActions()
+	{
+		return array_map(function($actionName) {
+			return $this->factory->secure("Avorg\\AjaxAction\\$actionName");
+		}, $this->actionNames);
+	}
 }

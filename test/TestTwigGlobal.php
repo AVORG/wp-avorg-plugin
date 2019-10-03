@@ -8,11 +8,11 @@ final class TestTwigGlobal extends Avorg\TestCase
 	/** @var TwigGlobal $global */
 	private $global;
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->global = $this->factory->make("Avorg\\TwigGlobal");
+		$this->global = $this->factory->obtain("Avorg\\TwigGlobal");
 	}
 
 	public function test__Function()
@@ -166,20 +166,4 @@ final class TestTwigGlobal extends Avorg\TestCase
 			return $call[2][0]['title'] === "A Call to Medical Evangelism";
 		});
 	}
-
-	public function testGetsQueryVars()
-    {
-        $this->factory->make("Avorg\\TwigGlobal");
-
-        $this->mockWordPress->assertMethodCalled("get_all_query_vars");
-    }
-
-    public function testIncludesQueryVarsInData()
-    {
-        $this->mockWordPress->setReturnValue("get_all_query_vars", "vars");
-
-        $global = $this->factory->make("Avorg\\TwigGlobal");
-
-        $this->assertEquals("vars", $global->query);
-    }
 }

@@ -5,7 +5,6 @@ namespace Avorg\DataObject;
 
 use Avorg\DataObject;
 use Avorg\DataObjectRepository\PresentationRepository;
-use Avorg\Renderer;
 use Avorg\Router;
 use Exception;
 
@@ -18,15 +17,11 @@ class Book extends DataObject
 
 	protected $detailClass = "Avorg\Page\Book\Detail";
 
-	public function __construct(
-	    PresentationRepository $presentationRepository,
-        Renderer $renderer,
-        Router $router
-    )
+	public function __construct(PresentationRepository $recordingRepository, Router $router)
 	{
-		parent::__construct($renderer, $router);
+		parent::__construct($router);
 
-		$this->recordingRepository = $presentationRepository;
+		$this->recordingRepository = $recordingRepository;
 	}
 
 	/**

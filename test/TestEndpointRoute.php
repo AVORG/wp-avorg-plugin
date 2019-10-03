@@ -1,17 +1,15 @@
 <?php
 
-use Avorg\Route\EndpointRoute;
-
 final class TestEndpointRoute extends Avorg\TestCase
 {
-	/** @var EndpointRoute $feed */
+	/** @var \Avorg\Route\EndpointRoute $feed */
 	protected $fileRoute;
 
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 
-		$this->fileRoute = $this->factory->make("Avorg\\Route\\EndpointRoute");
+		$this->fileRoute = $this->factory->obtain("Avorg\\Route\\EndpointRoute");
 	}
 
 	public function testExists()

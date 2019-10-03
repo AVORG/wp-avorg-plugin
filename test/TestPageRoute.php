@@ -1,17 +1,15 @@
 <?php
 
-use Avorg\Route\PageRoute;
-
 final class TestPageRoute extends Avorg\TestCase
 {
-	/** @var PageRoute $feed */
+	/** @var \Avorg\Route\PageRoute $feed */
 	protected $pageRoute;
 
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 
-		$this->pageRoute = $this->factory->make("Avorg\\Route\\PageRoute");
+		$this->pageRoute = $this->factory->obtain("Avorg\\Route\\PageRoute");
 	}
 
 	public function testExists()

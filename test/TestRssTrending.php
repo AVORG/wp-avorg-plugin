@@ -5,10 +5,10 @@ use Avorg\Endpoint\RssEndpoint\Trending;
 
 final class TestRssTrending extends Avorg\TestCase
 {
-	/** @var Trending $endpoint */
+	/** @var RssTrending $endpoint */
 	protected $endpoint;
 
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 

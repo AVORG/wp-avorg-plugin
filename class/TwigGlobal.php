@@ -4,9 +4,8 @@ namespace Avorg;
 
 use Exception;
 use Twig\Markup;
-use function defined;
 
-if (!defined('ABSPATH')) exit;
+if (!\defined('ABSPATH')) exit;
 
 class TwigGlobal
 {
@@ -35,8 +34,6 @@ class TwigGlobal
 		$this->router = $router;
 		$this->scriptFactory = $scriptFactory;
 		$this->wp = $wordPress;
-
-		$this->data["query"] = $this->wp->get_all_query_vars();
 	}
 
 	public function __get($name)
@@ -114,12 +111,4 @@ class TwigGlobal
 
 		return array_map($func, $array);
 	}
-
-    /**
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
 }

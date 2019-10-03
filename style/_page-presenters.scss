@@ -2,4 +2,8 @@
   li {
     list-style-type: none;
   }
+  .avorg-page-presenters__pagination li {
+    display: inline-block;
+    padding: .5em;
+  }
 }

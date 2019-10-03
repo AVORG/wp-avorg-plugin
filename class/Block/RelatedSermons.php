@@ -2,51 +2,71 @@
 
 namespace Avorg\Block;
 
-use Avorg\Block;
-use Avorg\DataObjectRepository\PresentationRepository;
-use Avorg\Php;
-use Avorg\Renderer;
 use Avorg\WordPress;
-use Exception;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
 
-class RelatedSermons extends Block
+class RelatedSermons
 {
-	protected $template = 'block-relatedSermons.twig';
+	private $filename = 'block-relatedSermons.js';
 
-	/** @var Php */
-	private $php;
+	/** @var WordPress $wp */
+	private $wp;
 
-	/** @var PresentationRepository */
-	private $presentationRepository;
-
-	public function __construct(
-	    Php $php,
-	    PresentationRepository $presentationRepository,
-        Renderer $renderer,
-        WordPress $wp
-    )
+	public function __construct(WordPress $wp)
 	{
-	    parent::__construct($renderer, $wp);
-
-	    $this->php = $php;
-	    $this->presentationRepository = $presentationRepository;
+		$this->wp = $wp;
 	}
 
-    /**
-     * @param $attributes
-     * @param $content
-     * @return array
-     * @throws Exception
-     */
-    protected function getData($attributes, $content) {
-        $entityId = $this->getEntityId();
-        $recordings = $this->presentationRepository->getRelatedPresentations($entityId);
+	public function registerCallbacks()
+	{
+		$this->wp->add_action("init", [$this, "init"]);
+	}
 
-        return [
-            "recordings" => $this->php->arrayRand($recordings, 3)
-        ];
-    }
+	public function init()
+	{
+		$this->wp->wp_register_script('system-js',
+			AVORG_BASE_URL . "/node_modules/systemjs/dist/system.js");
+
+		$this->wp->wp_register_script(
+			$this->getHandle(), AVORG_BASE_URL . "script/sys.js", ['wp-blocks', 'wp-element', 'system-js']);
+
+		$this->wp->wp_localize_script($this->getHandle(), "avorg_sys", [
+			"urls" => [$this->getUrl()]
+		]);
+
+		$this->wp->register_block_type($this->getName(), [
+			'editor_script' => $this->getHandle()
+		]);
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getHandle()
+	{
+		return 'avorg-' . $this->getBasename();
+	}
+
+	private function getName()
+	{
+		return 'avorg/' . strtolower($this->getBasename());
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getUrl()
+	{
+		return AVORG_BASE_URL . "script/$this->filename";
+	}
+
+	/**
+	 * @return mixed
+	 */
+	private function getBasename()
+	{
+		return explode('.', $this->filename)[0];
+	}
 }

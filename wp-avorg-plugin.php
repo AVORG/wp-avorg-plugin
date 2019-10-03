@@ -3,7 +3,7 @@
 Plugin Name: WP Avorg Plugin
 Description: AudioVerse plugin
 Author: Nathan Arthur
-Version: 1.0.0
+Version: 1.0
 Author URI: http://NathanArthur.com/
 Text Domain: wp-avorg-plugin
 Domain Path: /languages

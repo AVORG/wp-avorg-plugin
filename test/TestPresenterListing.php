@@ -5,71 +5,54 @@ use Avorg\Presenter;
 
 final class TestPresenterListing extends Avorg\TestCase
 {
-    /** @var Listing $page */
-    protected $page;
+	/** @var Listing $presenterListing */
+	protected $presenterListing;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+	protected function setUp()
+	{
+		parent::setUp();
 
-        $this->mockWordPress->passCurrentPageCheck();
+		$this->mockWordPress->passCurrentPageCheck();
 
-        $this->page = $this->factory->secure("Avorg\\Page\\Presenter\\Listing");
-    }
+		$this->presenterListing = $this->factory->secure("Avorg\\Page\\Presenter\\Listing");
+	}
 
-    public function testHasPresentersArray()
-    {
-        $this->page->addUi("hello world");
+	public function testHasPresentersArray()
+	{
+		$this->presenterListing->addUi("hello world");
 
-        $this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-presenters.twig", function ($data) {
-            return is_array($data->presenters);
-        });
-    }
+		$this->mockTwig->assertTwigTemplateRenderedWithDataMatching("page-presenters.twig", function($data) {
+			return is_array($data->presenters);
+		});
+	}
 
-    public function testGetsPage()
-    {
-        $this->page->addUi("hello world");
+	public function testGetsLetter()
+	{
+		$this->presenterListing->addUi("hello world");
 
-        $this->mockWordPress->assertMethodCalledWith("get_query_var", "page");
-    }
+		$this->mockWordPress->assertMethodCalledWith("get_query_var", "letter");
+	}
 
-    public function testGetDataReturnsPresenters()
-    {
-        $this->mockAvorgApi->setReturnValue("getPresenters", [new stdClass()]);
-        $this->mockWordPress->setReturnValues("get_query_var", 7);
+	public function testGetDataReturnsPresenters()
+	{
+		$this->mockAvorgApi->setReturnValue("getPresenters", [new stdClass()]);
+		$this->mockWordPress->setReturnValues("get_query_var",  7);
 
-        $this->page->addUi("");
+		$this->presenterListing->addUi("");
 
-        $this->mockTwig->assertAnyCallMatches("render", function ($call) {
-            $callGlobal = $call[1]["avorg"];
+		$this->mockTwig->assertAnyCallMatches( "render", function($call) {
+			$callGlobal = $call[1]["avorg"];
 
-            return $callGlobal->presenters[0] instanceof \Avorg\DataObject\Presenter;
-        });
-    }
+			return $callGlobal->presenters[0] instanceof \Avorg\DataObject\Presenter;
+		});
+	}
 
-    public function testSearchesWithLetter()
-    {
-        $this->mockWordPress->setReturnValue("get_query_var", "w");
+	public function testSearchesWithLetter()
+	{
+		$this->mockWordPress->setReturnValue("get_query_var", "w");
 
-        $this->page->addUi("hello world");
+		$this->presenterListing->addUi("hello world");
 
-        $this->mockAvorgApi->assertMethodCalledWith("getPresenters", "w", null);
-    }
-
-    public function testDefaultsToA()
-    {
-        $this->mockWordPress->setReturnValue("get_query_var", '');
-
-        $this->page->addUi("hello world");
-
-        $this->mockAvorgApi->assertMethodCalledWith("getPresenters", "A", null);
-    }
-
-    public function testCachesData()
-    {
-        $this->page->throw404(null);
-        $this->page->addUi('content');
-
-        $this->mockAvorgApi->assertCallCount('getPresenters', 1);
-    }
+		$this->mockAvorgApi->assertMethodCalledWith("getPresenters", "w");
+	}
 }

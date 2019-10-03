@@ -7,7 +7,6 @@ use Avorg\DataObject;
 use Avorg\DataObjectRepository\SponsorRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use ReflectionException;
@@ -25,12 +24,11 @@ class Detail extends Page
 
 	public function __construct(
 		Renderer $renderer,
-		Router $router,
 		SponsorRepository $seriesRepository,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->sponsorRepository = $seriesRepository;
 	}
@@ -39,7 +37,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws ReflectionException
 	 */
-	protected function getPageData()
+	protected function getData()
 	{
 		return [
 			"sponsor" => $this->getEntity()

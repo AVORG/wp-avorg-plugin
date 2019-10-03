@@ -6,7 +6,6 @@ namespace Avorg\Page\Book;
 use Avorg\DataObjectRepository\BookRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use ReflectionException;
@@ -22,14 +21,9 @@ class Detail extends Page
 	protected $defaultPageContent = "Book";
 	protected $twigTemplate = "page-book.twig";
 
-	public function __construct(
-	    BookRepository $bibleRepository,
-        Renderer $renderer,
-        Router $router,
-        WordPress $wp
-    )
+	public function __construct(BookRepository $bibleRepository, Renderer $renderer, WordPress $wp)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->bookRepository = $bibleRepository;
 	}
@@ -38,7 +32,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws ReflectionException
 	 */
-	protected function getPageData()
+	protected function getData()
 	{
 		return ["book" => $this->getEntity()];
 	}

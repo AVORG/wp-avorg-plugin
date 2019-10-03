@@ -1,7 +1,6 @@
 <?php
 
-use Avorg\DataObject;
-use Avorg\DataObject\Presenter;
+use Avorg\Presenter;
 
 final class TestPresenter extends Avorg\TestCase
 {
@@ -10,7 +9,7 @@ final class TestPresenter extends Avorg\TestCase
 
 	private $apiPresenter;
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 
@@ -75,18 +74,4 @@ final class TestPresenter extends Avorg\TestCase
 
 		$this->assertEquals("last, first", $this->presenter->getNameReversed());
 	}
-
-	public function testIncludesUrlInArray()
-    {
-        $this->assertToArrayKeyValue(
-            $this->presenter,
-            'url',
-            "http://${_SERVER['HTTP_HOST']}/english/sermons/presenters/131/first-last-suffix.html"
-        );
-    }
-
-    public function testIncludesTitle()
-    {
-        $this->assertToArrayKeyValue($this->presenter, 'title', "last suffix, first");
-    }
 }

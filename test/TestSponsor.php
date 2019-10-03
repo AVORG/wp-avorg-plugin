@@ -7,14 +7,13 @@ final class TestSponsor extends Avorg\TestCase
 	/** @var Sponsor $sponsor */
 	private $sponsor;
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 
 		$this->sponsor = $this->makeSponsor([
 			"title" => "A Loud and Clear Call Ministries",
 			"id" => "49",
-            "description" => "Quality spiritual substance.  A young adult Sabbath School of the Loma Linda University Church.<br>"
 		]);
 	}
 
@@ -42,10 +41,4 @@ final class TestSponsor extends Avorg\TestCase
 
 		$this->assertInstanceOf("Avorg\\DataObject\\Recording", $recording);
 	}
-
-	public function testIncludesSecondLine()
-    {
-        $this->assertToArrayKeyValue($this->sponsor, "secondLine",
-            "Quality spiritual substance.  A young adult Sabbath School of the Loma Linda University Church.<br>");
-    }
 }

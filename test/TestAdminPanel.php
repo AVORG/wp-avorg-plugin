@@ -11,7 +11,7 @@ final class TestAdminPanel extends Avorg\TestCase
 	/** @var \Avorg\AdminPanel $adminPanel */
 	protected $adminPanel;
 	
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 		

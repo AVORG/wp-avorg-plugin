@@ -32,7 +32,7 @@ class Renderer
 	public function render($template, $data = [], $shouldReturn = false)
 	{
 		/** @var TwigGlobal $twigGlobal */
-		$twigGlobal = $this->factory->make("Avorg\\TwigGlobal");
+		$twigGlobal = $this->factory->obtain("Avorg\\TwigGlobal");
 		$twigGlobal->setData($data);
 		$data = ["_GET" => $_GET, "_POST" => $_POST, "avorg" => $twigGlobal];
 		$output = $this->twig->render($template, $data);

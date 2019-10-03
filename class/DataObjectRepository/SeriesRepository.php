@@ -12,15 +12,13 @@ class SeriesRepository extends DataObjectRepository
 {
 	protected $dataObjectClass = "Avorg\\DataObject\\Series";
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getDataObjects($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getAllSeries()
 	{
-		$rawObjects = $this->api->getAllSeries($search, $start);
+		$rawObjects = $this->api->getAllSeries();
 
 		return $this->makeDataObjects($rawObjects);
 	}

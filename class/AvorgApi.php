@@ -16,24 +16,22 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 
-		$response = $this->getResult("series/$id");
+		$response = $this->getResponse("series/$id");
 
 		return $response[0]->series;
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getAllSeries($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getAllSeries()
 	{
-		$endpoint = "series?search=$search&start=$start";
+		$endpoint = "series";
 
 		return array_map(function($item) {
 			return $item->series;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
 
 	/**
@@ -45,54 +43,48 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 
-		$response = $this->getResult("sponsors/$id");
+		$response = $this->getResponse("sponsors/$id");
 
 		return $response[0]->sponsors;
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getSponsors($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSponsors()
 	{
-		$endpoint = "sponsors?search=$search&start=$start";
+		$endpoint = "sponsors";
 
 		return array_map(function($item) {
 			return $item->sponsors;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getConferences($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getConferences()
 	{
-		$endpoint = "conferences?search=$search&start=$start";
+		$endpoint = "conferences";
 
 		return array_map(function($item) {
 			return $item->conferences;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getStories($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getStories()
 	{
-		$endpoint = "audiobooks?story=1&search=$search&start=$start";
+		$endpoint = "audiobooks?story=1";
 
 		return array_map(function($item) {
 			return $item->audiobooks;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
 
 	/**
@@ -104,7 +96,7 @@ class AvorgApi
 	 */
 	public function getBibleChapters($bibleId, $bookId, $testamentId)
 	{
-		return (array) $this->getResult(
+		return (array) $this->getResponse(
 			"audiobibles/books/$bookId?volume=$bibleId&testament=$testamentId"
 		);
 	}
@@ -116,17 +108,16 @@ class AvorgApi
 	 */
 	public function getBibleBooks($bible_id)
 	{
-		return (array) $this->getResult("audiobibles/$bible_id");
+		return (array) $this->getResponse("audiobibles/$bible_id");
 	}
 
-    /**
-     * @param null $search
-     * @return array
-     * @throws Exception
-     */
-	public function getBibles($search = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBibles()
 	{
-		return (array) $this->getResult("audiobibles");
+		return (array) $this->getResponse("audiobibles");
 	}
 
 	/**
@@ -138,24 +129,22 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 
-		$response = $this->getResult("topics/$id");
+		$response = $this->getResponse("topics/$id");
 
 		return $response[0]->topics;
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getTopics($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTopics()
 	{
-		$endpoint = "topics?search=$search&start=$start";
+		$endpoint = "topics";
 
 		return array_map(function ($item) {
 			return $item->topics;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
 
 	/**
@@ -167,35 +156,31 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 
-		$response = $this->getResult("audiobooks/$id");
+		$response = $this->getResponse("audiobooks/$id");
 
 		return $response[0]->audiobooks;
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getBooks($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getBooks()
 	{
-		$endpoint = "audiobooks?search=$search&start=$start";
+		$endpoint = "audiobooks";
 
 		return array_map(function ($item) {
 			return $item->audiobooks;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array|object
-     * @throws Exception
-     */
-	public function getPlaylists($search = null, $start = null)
+	/**
+	 * @return array|object
+	 * @throws Exception
+	 */
+	public function getPlaylists()
 	{
-		return $this->getResult("playlist?search=$search&start=$start");
+		return $this->getResponse("playlist");
 	}
 
 	/**
@@ -207,7 +192,7 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 
-		return $this->getResult("playlist/$id");
+		return $this->getResponse("playlist/$id");
 	}
 
 	/**
@@ -219,24 +204,23 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 
-		$response = $this->getResult("presenters/{$id}");
+		$response = $this->getResponse("presenters/{$id}");
 
 		return $response[0]->presenters;
 	}
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return mixed
-     * @throws Exception
-     */
-	public function getPresenters($search = null, $start = null)
+	/**
+	 * @param null $search
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function getPresenters($search = null)
 	{
-		$endpoint = "presenters?search=$search&start=$start";
+		$endpoint = "presenters?search=$search&all=true";
 
 		return array_map(function ($item) {
 			return $item->presenters;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
 
 	/**
@@ -248,7 +232,7 @@ class AvorgApi
 	{
 		if (!is_numeric($id)) return false;
 
-		$response = $this->getResult("recordings/{$id}");
+		$response = $this->getResponse("recordings/{$id}");
 
 		return $response[0]->recordings;
 	}
@@ -344,18 +328,8 @@ class AvorgApi
 	{
 		return array_map(function ($entry) {
 			return $entry->recordings;
-		}, $this->getResult($endpoint));
+		}, $this->getResponse($endpoint));
 	}
-
-    /**
-     * @param $endpoint
-     * @return mixed
-     * @throws Exception
-     */
-    public function getResult($endpoint)
-    {
-        return $this->getResponse($endpoint)->result;
-    }
 
 	/**
 	 * @param $endpoint
@@ -372,10 +346,8 @@ class AvorgApi
 		if (!$this->context) $this->context = $this->createContext();
 
 		if ($response = @file_get_contents(
-			"https://api2.audioverse.org/$endpoint",
-            false, $this->context)
-        ) {
-			return json_decode($response);
+			"https://api2.audioverse.org/$endpoint", false, $this->context)) {
+			return json_decode($response)->result;
 		} else {
 			throw new Exception("Failed to get response from url $endpoint");
 		}

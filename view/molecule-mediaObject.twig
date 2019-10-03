@@ -5,16 +5,10 @@
 	titleUrl : optional, string
 	title : string
 	description : optional, string
-	truncate : bool
 #}
 
-{% set truncate = (truncate is defined) ? truncate : true %}
-{% set descriptionLength = 200 %}
-
 <div class="avorg-molecule-mediaObject {{ classes }}">
-	{% if image %}
 	<img class="avorg-molecule-mediaObject__image" src="{{ image }}" alt="{{ imageAlt }}">
-	{% endif %}
 
 	<div class="avorg-molecule-mediaObject__text">
 		{% if titleUrl %}<a href="{{ titleUrl }}">{% endif %}
@@ -23,12 +17,7 @@
 
 		{% if description %}
 			<div class="avorg-molecule-mediaObject__description">
-				{% if truncate %}
-					{% set ellipsis = (description|length > descriptionLength) ? '...' : '' %}
-					{{ description|slice(0,descriptionLength) }}{{ ellipsis }}
-				{% else %}
-					{{ description }}
-				{% endif %}
+				{{ description }}
 			</div>
 		{% endif %}
 	</div>

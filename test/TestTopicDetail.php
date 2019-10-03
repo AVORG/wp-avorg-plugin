@@ -14,7 +14,7 @@ final class TestTopicDetail extends Avorg\TestCase
 		"post_type" => "page"
 	), true);
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 

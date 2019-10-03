@@ -1,6 +1,6 @@
 <?php
 
-use Avorg\DataObject\Topic;
+use Avorg\Topic;
 
 final class TestTopic extends Avorg\TestCase
 {

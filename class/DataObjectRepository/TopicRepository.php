@@ -14,15 +14,13 @@ class TopicRepository extends DataObjectRepository
 {
 	protected $dataObjectClass = "Avorg\\DataObject\\Topic";
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getDataObjects($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTopics()
 	{
-		$rawTopics = $this->api->getTopics($search, $start);
+		$rawTopics = $this->api->getTopics();
 
 		return $this->makeDataObjects($rawTopics);
 	}

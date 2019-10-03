@@ -5,7 +5,7 @@ final class TestEndpointFactory extends Avorg\TestCase
 	/** @var \Avorg\EndpointFactory $endpointFactory */
 	protected $endpointFactory;
 
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 

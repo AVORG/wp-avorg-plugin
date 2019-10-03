@@ -7,7 +7,7 @@ final class TestRenderer extends Avorg\TestCase
 	/** @var Renderer $renderer */
 	protected $renderer;
 	
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 		

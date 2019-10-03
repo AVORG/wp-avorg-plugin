@@ -7,7 +7,7 @@ final class TestPlaylistDetail extends Avorg\TestCase
 	/** @var Detail $page */
 	protected $page;
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 
