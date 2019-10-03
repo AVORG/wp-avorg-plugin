@@ -61,7 +61,7 @@ class RouteFactory
         $languages = $this->languageFactory->getLanguages();
 
         return array_map(function (Language $language) use ($pageId) {
-            return $this->getPageRoute($pageId, $language->getBaseRoute());
+            return $this->buildPageRoute($pageId, $language->getBaseRoute());
         }, $languages);
     }
 
@@ -82,13 +82,15 @@ class RouteFactory
         if (!array_key_exists($class, $this->routeFormats)) return null;
 
         $isEndpointClass = strstr($class, "\\Endpoint\\") !== False;
-        $endpoint = $isEndpointClass
+        $routable = $isEndpointClass
             ? $this->endpointFactory->getEndpointByClass($class)
             : $this->pageFactory->getPage($class);
-        $routeId = $endpoint->getRouteId();
+        $routeId = $routable->getRouteId();
+        $format = $this->routeFormats[$class];
 
-        return $isEndpointClass ? $this->getEndpointRoute($routeId, $this->routeFormats[$class])
-            : $this->getPageRoute($routeId, $this->routeFormats[$class]);
+        return $isEndpointClass
+            ? $this->buildEndpointRoute($routeId, $format)
+            : $this->buildPageRoute($routeId, $format);
     }
 
     /**
@@ -103,23 +105,35 @@ class RouteFactory
         return array_intersect_key($this->routeFormats, array_flip($endpointKeys));
     }
 
-	private function getEndpointRoute($routeId, $routeFormat)
+    /**
+     * @param $routeId
+     * @param $routeFormat
+     * @return EndpointRoute
+     * @throws ReflectionException
+     */
+    private function buildEndpointRoute($routeId, $routeFormat)
 	{
-		/** @var EndpointRoute $route */
-		$route = $this->factory->make("Avorg\\Route\\EndpointRoute");
-
-		return $route->setId($routeId)->setFormat($routeFormat);
+	    return $this->factory
+            ->make("Avorg\\Route\\EndpointRoute")
+            ->setId($routeId)
+            ->setFormat($routeFormat);
 	}
 
-    private function getPageRoute($routeId, $routeFormat)
+    /**
+     * @param $routeId
+     * @param $routeFormat
+     * @return PageRoute
+     * @throws ReflectionException
+     */
+    private function buildPageRoute($routeId, $routeFormat)
     {
-        /** @var PageRoute $route */
-        $route = $this->factory->make("Avorg\\Route\\PageRoute");
-
-        return $route->setId($routeId)->setFormat($routeFormat);
+        return $this->factory
+            ->make("Avorg\\Route\\PageRoute")
+            ->setId($routeId)
+            ->setFormat($routeFormat);
     }
 
-    public function loadRouteFormats(): void
+    private function loadRouteFormats(): void
     {
         $this->routeFormats = array_reduce(file(AVORG_BASE_PATH . "/routes.csv"), function ($carry, $line) {
             $row = str_getcsv($line);
