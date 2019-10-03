@@ -2,7 +2,7 @@
 
 final class TestBibleBook extends Avorg\TestCase
 {
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 

@@ -13,19 +13,33 @@ class PageFactory
 	/** @var Factory $factory */
 	private $factory;
 
-	/** @var ScanningFactory $scanningFactory */
-	private $scanningFactory;
+	/** @var Filesystem $filesystem */
+	private $filesystem;
 
-	public function __construct(Factory $factory, ScanningFactory $scanningFactory)
+	public function __construct(Factory $factory, Filesystem $filesystem)
 	{
 		$this->factory = $factory;
-		$this->scanningFactory = $scanningFactory;
+		$this->filesystem = $filesystem;
 	}
 
 	public function registerCallbacks()
     {
-        $this->scanningFactory->registerCallbacks("class/Page");
+        $pages = $this->getPages();
+        array_walk($pages, function (Page $page) {
+            $page->registerCallbacks();
+        });
     }
+
+	/**
+	 * @return array
+	 */
+	public function getPages()
+	{
+		return array_map(
+			[$this, "getPage"],
+			(array) $this->filesystem->getClassesRecursively("class/Page")
+		);
+	}
 
 	/**
 	 * @param $class

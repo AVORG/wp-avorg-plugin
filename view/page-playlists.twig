@@ -1,5 +1,12 @@
 <div class="avorg-page-playlists">
-	{% include "molecule-ajaxList.twig" with {
-		"endpoint": "/wp-json/avorg/v1/playlists"
-	} only %}
+	<ul>
+		{% for playlist in avorg.playlists %}
+			<li>
+				{% include "molecule-mediaObject.twig" with {
+					title: playlist.title,
+					titleUrl: playlist.url
+				} only %}
+			</li>
+		{% endfor %}
+	</ul>
 </div>

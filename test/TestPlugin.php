@@ -7,7 +7,7 @@ final class TestPlugin extends Avorg\TestCase
 	/** @var Plugin $plugin */
 	protected $plugin;
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 
@@ -196,55 +196,52 @@ final class TestPlugin extends Avorg\TestCase
 				"saveIdentifierMetaBox"
 			],
 			[
+				'enqueue_block_editor_assets',
+				'BlockLoader',
+				'enqueueBlockEditorAssets'
+			],
+			[
 				"admin_menu",
 				'AdminPanel',
 				'register'
 			],
+			[
+				'enqueue_block_assets',
+				'BlockLoader',
+				'enqueueBlockFrontendAssets'
+			],
             [
-                'init',
-                'Block\\RelatedSermons',
-                'init'
-            ],
-            [
-                'init',
-                'Block\\Placeholder',
-                'init'
+                'rest_api_init',
+                'RestController\\PlaceholderContent',
+                'registerRoutes'
             ]
 		];
 	}
 
-    /**
-     * @dataProvider scriptPathProvider
-     * @param $path
-     * @param array $options
-     */
+	/**
+	 * @dataProvider scriptPathProvider
+	 * @param $path
+	 * @param bool $shouldRegister
+	 * @param bool $isRelative
+	 * @param string $action
+	 */
 	public function testRegistersScripts(
 		$path,
-		$options = []
+		$shouldRegister = true,
+		$isRelative = false,
+		$action = "wp_enqueue_scripts"
 	)
 	{
-	    $shouldRegister = $this->arrSafe('should_register', $options, true);
-	    $isRelative = $this->arrSafe('is_relative', $options, false);
-	    $action = $this->arrSafe('action', $options, "wp_enqueue_scripts");
-	    $deps = $this->arrSafe('deps', $options, null);
-	    $in_footer = $options['in_footer'] ?? false;
-
-        $fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
-
-        $defaultHandle = "Avorg_Script_" . sha1($fullPath);
-        $handle = $this->arrSafe("handle", $options, $defaultHandle);
-
 		$this->plugin->registerCallbacks();
 
 		$this->mockWordPress->runActions($action);
 
+		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
+
 		$args = [
 			"wp_enqueue_script",
-			$handle,
-			$fullPath,
-            $deps,
-            null,
-            $in_footer
+			"Avorg_Script_" . sha1($fullPath),
+			$fullPath
 		];
 
 		if ($shouldRegister) {
@@ -259,22 +256,8 @@ final class TestPlugin extends Avorg\TestCase
 		return [
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
-			"don't init playlist.js on other pages" => ["script/playlist.js", [
-			    'should_register' => false,
-                'is_relative' => true
-            ]],
-            "frontend" => ["dist/frontend.js", [
-                'is_relative' => true,
-                'handle' => 'Avorg_Script_Frontend',
-                'in_footer' => true,
-                'deps' => ['wp-element']
-            ]],
-            "editor" => ["dist/editor.js", [
-                'is_relative' => true,
-                'action' => 'enqueue_block_editor_assets',
-                'deps' => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n'],
-                'handle' => 'Avorg_Script_Editor'
-            ]],
+			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
+			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
 		];
 	}
 

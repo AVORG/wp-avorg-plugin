@@ -7,7 +7,6 @@ use Avorg\DataObjectRepository\BookRepository;
 use Avorg\DataObjectRepository\ConferenceRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 
@@ -25,19 +24,18 @@ class Listing extends Page
 	public function __construct(
 		ConferenceRepository $conferenceRepository,
 		Renderer $renderer,
-		Router $router,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->conferenceRepository = $conferenceRepository;
 	}
 
-	protected function getPageData()
+	protected function getData()
 	{
 		return [
-			"conferences" => $this->conferenceRepository->getDataObjects()
+			"conferences" => $this->conferenceRepository->getConferences()
 		];
 	}
 

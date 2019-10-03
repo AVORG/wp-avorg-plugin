@@ -30,7 +30,7 @@ class AdminPanel
 			"AVORG",
 			"manage_options",
 			"avorg",
-			[$this, "render"]
+			array($this, "render")
 		);
 	}
 	

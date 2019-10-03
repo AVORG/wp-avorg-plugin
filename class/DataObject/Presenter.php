@@ -4,7 +4,6 @@ namespace Avorg\DataObject;
 
 use Avorg\DataObject;
 use Avorg\DataObjectRepository\PresentationRepository;
-use Avorg\Renderer;
 use Avorg\Router;
 use function defined;
 
@@ -12,34 +11,25 @@ if (!defined('ABSPATH')) exit;
 
 class Presenter extends DataObject
 {
-	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
+	/** @var PresentationRepository $recordingRepository */
+	private $recordingRepository;
 
 	protected $detailClass = "Avorg\Page\Presenter\Detail";
 
 	public function __construct(
-		PresentationRepository $presentationRepository,
-		Renderer $renderer,
+		PresentationRepository $recordingRepository,
 		Router $router
 	)
 	{
-		parent::__construct($renderer, $router);
+		parent::__construct($router);
 
-		$this->presentationRepository = $presentationRepository;
+		$this->recordingRepository = $recordingRepository;
 		$this->router = $router;
 	}
 
-	protected function getDataArray()
-    {
-        return array_merge(parent::getDataArray(), [
-            "nameReversed" => $this->getNameReversed(),
-            "title" => $this->getNameReversed()
-        ]);
-    }
-
-    public function getRecordings()
+	public function getRecordings()
 	{
-		return $this->presentationRepository->getPresenterPresentations($this->getId());
+		return $this->recordingRepository->getPresenterPresentations($this->getId());
 	}
 
 	public function getName()

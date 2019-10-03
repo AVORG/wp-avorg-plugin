@@ -12,11 +12,8 @@ class Script
 	private $wp;
 
 	private $actions = [];
-	private $handle;
-	private $path;
-	private $deps = [];
-	private $inFooter = false;
 	private $data = [];
+	private $path;
 
 	public function __construct(WordPress $wp)
 	{
@@ -50,53 +47,27 @@ class Script
 		return $this;
 	}
 
-    /**
-     * @throws Exception
-     */
-    public function registerCallbacks()
+	public function registerCallbacks()
 	{
-        if (! $this->actions) {
-            throw new Exception("No actions set for script $this->path");
-        }
-
-        array_walk($this->actions, function($action) {
-           $this->wp->add_action($action, [$this, "enqueue"]);
-        });
+		$this->wp->add_action("wp_enqueue_scripts", [$this, "enqueue"]);
+		$this->wp->add_action("admin_enqueue_scripts", [$this, "enqueue"]);
 	}
 
-    /**
-     * @throws Exception
-     */
-    public function enqueue()
+	public function enqueue()
 	{
-		if (!$this->path) {
-            throw new Exception("Failed to enqueue script. Path not set.");
-        }
+		if (!$this->path) throw new Exception("Failed to enqueue script. Path not set.");
 
-		$handle = $this->getHandle();
+		$id = $this->getScriptId();
 
-		$this->wp->wp_enqueue_script(
-		    $handle,
-            $this->path,
-            $this->deps,
-            null,
-            $this->inFooter
-        );
-
-		$this->wp->wp_localize_script(
-		    $handle,
-            "avorg",
-            $this->getLocalizeData()
-        );
+		$this->wp->wp_enqueue_script($id, $this->path);
+		$this->wp->wp_localize_script($id, "avorg", $this->getLocalizeData());
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getHandle()
+	private function getScriptId()
 	{
-	    if ($this->handle) return $this->handle;
-
 		$class = get_class($this);
 
 		return str_replace("\\", "_", $class) . "_" . sha1($this->path);
@@ -118,32 +89,10 @@ class Script
 	 */
 	private function getNonces()
 	{
-		return [];
+		return array_reduce($this->actions, function ($carry, AjaxAction $action) {
+			return array_merge($carry, [
+				$action->getSimpleIdentifier() => $action->getNonce()
+			]);
+		}, []);
 	}
-
-    public function setDeps(...$deps)
-    {
-        $this->deps = $deps;
-        return $this;
-    }
-
-    /**
-     * @param mixed $handle
-     * @return Script
-     */
-    public function setHandle($handle)
-    {
-        $this->handle = $handle;
-        return $this;
-    }
-
-    /**
-     * @param bool $inFooter
-     * @return Script
-     */
-    public function setInFooter(bool $inFooter): Script
-    {
-        $this->inFooter = $inFooter;
-        return $this;
-    }
 }

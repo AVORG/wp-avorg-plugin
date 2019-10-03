@@ -14,15 +14,13 @@ class SponsorRepository extends DataObjectRepository
 {
 	protected $dataObjectClass = "Avorg\\DataObject\\Sponsor";
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getDataObjects($search = null, $start = null)
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getSponsors()
 	{
-		$rawObjects = $this->api->getSponsors($search, $start);
+		$rawObjects = $this->api->getSponsors();
 
 		return $this->makeDataObjects($rawObjects);
 	}

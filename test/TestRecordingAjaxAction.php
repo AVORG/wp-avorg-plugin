@@ -7,7 +7,7 @@ final class TestRecordingAjaxAction extends Avorg\TestCase
 	/** @var Recording $action */
 	protected $action;
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 

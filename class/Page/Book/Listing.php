@@ -6,7 +6,6 @@ namespace Avorg\Page\Book;
 use Avorg\DataObjectRepository\BookRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 
@@ -21,22 +20,17 @@ class Listing extends Page
 	protected $defaultPageContent = "Books";
 	protected $twigTemplate = "page-books.twig";
 
-	public function __construct(
-	    BookRepository $bibleRepository,
-        Renderer $renderer,
-        Router $router,
-        WordPress $wp
-    )
+	public function __construct(BookRepository $bibleRepository, Renderer $renderer, WordPress $wp)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->bookRepository = $bibleRepository;
 	}
 
-	protected function getPageData()
+	protected function getData()
 	{
 		return [
-			"books" => $this->bookRepository->getDataObjects()
+			"books" => $this->bookRepository->getBooks()
 		];
 	}
 

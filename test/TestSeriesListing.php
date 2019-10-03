@@ -11,7 +11,7 @@ final class TestSeriesListing extends Avorg\TestCase
 	/**
 	 * @throws ReflectionException
 	 */
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 

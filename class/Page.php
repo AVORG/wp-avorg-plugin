@@ -12,9 +12,6 @@ abstract class Page implements iRoutable
 	/** @var Renderer $renderer */
 	protected $renderer;
 
-	/** @var Router $router */
-	protected $router;
-
 	/** @var WordPress $wp */
 	protected $wp;
 
@@ -22,13 +19,12 @@ abstract class Page implements iRoutable
 	protected $defaultPageContent;
 	protected $defaultPageTitle;
 	protected $twigTemplate;
-	protected $data;
+	protected $routeFormat;
 
 
-	public function __construct(Renderer $renderer, Router $router, WordPress $wp)
+	public function __construct(Renderer $renderer, WordPress $wp)
 	{
 		$this->renderer = $renderer;
-		$this->router = $router;
 		$this->wp = $wp;
 
 		$this->setPageIdOptionName();
@@ -44,6 +40,8 @@ abstract class Page implements iRoutable
 			$this->set404($query);
 		}
 	}
+
+	abstract protected function getData();
 
 	public function filterTitle($title)
 	{
@@ -157,10 +155,4 @@ abstract class Page implements iRoutable
 	{
 		return $this->wp->get_query_var("entity_id");
 	}
-
-    private function getData() {
-        return $this->data ?? $this->data = $this->getPageData();
-    }
-
-    abstract protected function getPageData();
 }

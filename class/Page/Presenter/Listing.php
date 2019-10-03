@@ -5,9 +5,7 @@ namespace Avorg\Page\Presenter;
 use Avorg\DataObjectRepository\PresenterRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
-use Exception;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -21,32 +19,23 @@ class Listing extends Page
 	protected $defaultPageContent = "Presenters";
 	protected $twigTemplate = "page-presenters.twig";
 
-	public function __construct(
-	    PresenterRepository $presenterRepository,
-        Renderer $renderer,
-        Router $router,
-        WordPress $wp
-    )
+	public function __construct(PresenterRepository $presenterRepository, Renderer $renderer, WordPress $wp)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->presenterRepository = $presenterRepository;
 	}
 
-    /**
-     * @return array
-     * @throws Exception
-     */
-    protected function getPageData()
+	protected function getData()
 	{
-		$letter = $this->wp->get_query_var("page") ?: 'A';
+		$letter = $this->wp->get_query_var("letter");
 
 		return [
-			"presenters" => $this->presenterRepository->getDataObjects($letter),
-        ];
+			"presenters" => $this->presenterRepository->getPresenters($letter)
+		];
 	}
 
-    protected function getTitle()
+	protected function getTitle()
 	{
 		// TODO: Implement getEntityTitle() method.
 	}

@@ -7,7 +7,6 @@ use Avorg\DataObject;
 use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
 use Exception;
 
@@ -29,11 +28,10 @@ class Detail extends Page
 		AvorgApi $avorgApi,
 		PresentationRepository $recordingRepository,
 		Renderer $renderer,
-		Router $router,
 		WordPress $wordPress
 	)
     {
-        parent::__construct($renderer, $router, $wordPress);
+        parent::__construct($renderer, $wordPress);
 
         $this->avorgApi = $avorgApi;
         $this->recordingRepository = $recordingRepository;
@@ -43,7 +41,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getPageData()
+	protected function getData()
 	{
 		return ["recordings" => [$this->getEntity()]];
 	}

@@ -7,7 +7,6 @@ use Avorg\DataObject;
 use Avorg\DataObjectRepository\StoryRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -25,12 +24,11 @@ class Detail extends Page
 
 	public function __construct(
 		Renderer $renderer,
-		Router $router,
 		StoryRepository $storyRepository,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		return $this->storyRepository = $storyRepository;
 	}
@@ -39,7 +37,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getPageData()
+	protected function getData()
 	{
 		return [
 			"story" => $this->getEntity()

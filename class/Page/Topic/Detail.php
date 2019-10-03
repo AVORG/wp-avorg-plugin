@@ -6,9 +6,7 @@ use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\DataObjectRepository\TopicRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
-use Exception;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -31,12 +29,11 @@ class Detail extends Page
 	public function __construct(
 		PresentationRepository $presenterRepository,
 		Renderer $renderer,
-		Router $router,
 		TopicRepository $topicRepository,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->recordingRepository = $presenterRepository;
 		$this->topicRepository = $topicRepository;
@@ -45,9 +42,9 @@ class Detail extends Page
 
 	/**
 	 * @return array
-	 * @throws Exception
+	 * @throws \Exception
 	 */
-	protected function getPageData()
+	protected function getData()
 	{
 		$topicId = $this->wp->get_query_var( "entity_id");
 

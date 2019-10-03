@@ -7,7 +7,7 @@ final class TestBookDetail extends Avorg\TestCase
 	/** @var Detail $page */
 	private $page;
 
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 

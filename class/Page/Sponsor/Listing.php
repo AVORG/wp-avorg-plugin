@@ -6,7 +6,6 @@ namespace Avorg\Page\Sponsor;
 use Avorg\DataObjectRepository\SponsorRepository;
 use Avorg\Page;
 use Avorg\Renderer;
-use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 
@@ -23,20 +22,19 @@ class Listing extends Page
 
 	public function __construct(
 		Renderer $renderer,
-		Router $router,
 		SponsorRepository $seriesRepository,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $router, $wp);
+		parent::__construct($renderer, $wp);
 
 		$this->sponsorRepository = $seriesRepository;
 	}
 
-	protected function getPageData()
+	protected function getData()
 	{
 		return [
-			"sponsors" => $this->sponsorRepository->getDataObjects()
+			"sponsors" => $this->sponsorRepository->getSponsors()
 		];
 	}
 

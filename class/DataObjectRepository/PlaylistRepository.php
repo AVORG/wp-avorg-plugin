@@ -12,15 +12,12 @@ class PlaylistRepository extends DataObjectRepository
 {
 	protected $dataObjectClass = "Avorg\\DataObject\\Playlist";
 
-    /**
-     * @param null $search
-     * @param null $start
-     * @return array
-     * @throws Exception
-     */
-	public function getDataObjects($search = null, $start = null)
+	/**
+	 * @throws Exception
+	 */
+	public function getPlaylists()
 	{
-		$rawObjects = $this->api->getPlaylists($search, $start);
+		$rawObjects = $this->api->getPlaylists();
 
 		return $this->makeDataObjects($rawObjects);
 	}

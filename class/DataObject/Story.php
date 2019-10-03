@@ -5,7 +5,6 @@ namespace Avorg\DataObject;
 
 use Avorg\DataObject;
 use Avorg\DataObjectRepository\PresentationRepository;
-use Avorg\Renderer;
 use Avorg\Router;
 use Exception;
 
@@ -13,20 +12,16 @@ if (!defined('ABSPATH')) exit;
 
 class Story extends DataObject
 {
-	/** @var PresentationRepository $presentationRepository */
-	private $presentationRepository;
+	/** @var PresentationRepository $recordingRepository */
+	private $recordingRepository;
 
 	protected $detailClass = "Avorg\\Page\\Story\\Detail";
 
-	public function __construct(
-	    PresentationRepository $presentationRepository,
-        Renderer $renderer,
-        Router $router
-    )
+	public function __construct(PresentationRepository $recordingRepository, Router $router)
 	{
-		parent::__construct($renderer, $router);
+		parent::__construct($router);
 
-		$this->presentationRepository = $presentationRepository;
+		$this->recordingRepository = $recordingRepository;
 	}
 
 	public function toArray()
@@ -48,6 +43,6 @@ class Story extends DataObject
 	 */
 	public function getRecordings()
 	{
-		return $this->presentationRepository->getBookPresentations($this->data->id);
+		return $this->recordingRepository->getBookPresentations($this->data->id);
 	}
 }

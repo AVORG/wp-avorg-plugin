@@ -7,7 +7,7 @@ final class TestTopicListing extends Avorg\TestCase
 	/** @var Avorg\Page\Topic\Listing $topicListing */
 	private $topicListing;
 
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 

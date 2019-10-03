@@ -5,7 +5,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/php:7.3.9-node-browsers
+      - image: circleci/php:7.1-browsers
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -15,18 +15,30 @@ jobs:
     working_directory: ~/wp-avorg-plugin
 
     steps:
+      # Install NPM
+      - run: curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+      - run: sudo apt-get install -y nodejs
+
       - checkout
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v6-composer-{{ checksum "composer.lock" }}
+            - v2-composer-{{ checksum "composer.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v6-composer-
+            - v2-composer-
+
+      - restore_cache:
+          keys:
+            - v1-npm-{{ checksum "package-lock.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-npm-
 
       - run:
           name: Install dependencies
-          command: composer install --no-dev --no-interaction
+          command: |
+            composer install -n
+            npm install
 
       - run:
           name: Compress build
@@ -41,7 +53,6 @@ jobs:
           name: Upload build to surge.sh
           command: |
             echo "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
-            npm install surge
             ./node_modules/.bin/surge --project /build --domain "wp-avorg-plugin-${CIRCLE_BRANCH}.surge.sh"
           filters:
             branches:
@@ -52,21 +63,24 @@ jobs:
       - save_cache:
           paths:
             - ./vendor
-          key: v6-composer-{{ checksum "composer.lock" }}
+          key: v2-composer-{{ checksum "composer.lock" }}
+
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v1-npm-{{ checksum "package-lock.json" }}
 
       - run:
-          name: PHPUnit
           command: |
-            curl -L -o ~/phpunit https://phar.phpunit.de/phpunit-8.phar
-            chmod +x ~/phpunit
-            mkdir -p ~/phpunit_results
-            ~/phpunit --log-junit ~/phpunit_results/junit.xml
+            mkdir -p ~/phpunit
+            vendor/phpunit/phpunit/phpunit --log-junit ~/phpunit/junit.xml
+          when: always
 
       - store_test_results:
-          path: ~/phpunit_results
+          path: ~/phpunit
 
       - store_artifacts:
-          path: ~/phpunit_results
+          path: ~/phpunit
 workflow:
   my-github-release:
     jobs:

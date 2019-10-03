@@ -11,7 +11,7 @@ final class TestConferenceDetail extends Avorg\TestCase
 	/**
 	 * @throws ReflectionException
 	 */
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 

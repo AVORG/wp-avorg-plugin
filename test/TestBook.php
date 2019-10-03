@@ -2,7 +2,7 @@
 
 final class TestBook extends Avorg\TestCase
 {
-	public function setUp(): void
+	public function setUp()
 	{
 		parent::setUp();
 	}

@@ -32,11 +32,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	protected $textDomain = "wp-avorg-plugin";
 	
-	protected function setUp(): void
+	protected function setUp()
 	{
 		$_SERVER["HTTP_HOST"] = "localhost:8080";
 
-		$this->factory = new Factory();
+		$this->factory = new Factory(__NAMESPACE__);
 
 		$this->factory->injectObjects(
 			$this->mockAvorgApi = new StubAvorgApi($this),
@@ -46,11 +46,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 			$this->mockWordPress = new StubWordPress($this, $this->factory)
 		);
 	}
-
-    protected function assertToArrayKeyValue(DataObject $object, $key, $value)
-    {
-        $this->assertEquals($value, $object->toArray()[$key]);
-    }
 
 	protected function assertTwigGlobalMatchesCallback(Page $page, callable $callback)
 	{
@@ -165,10 +160,5 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
     	if ($array == []) return new stdClass();
 
         return json_decode(json_encode($array), FALSE);
-    }
-
-    protected function arrSafe($key, $array, $default = Null)
-    {
-        return array_key_exists($key, $array) ? $array[$key] : $default;
     }
 }

@@ -10,16 +10,44 @@ if (!defined('ABSPATH')) exit;
 
 class RestControllerFactory
 {
-    /** @var ScanningFactory $scanningFactory */
-    private $scanningFactory;
+    /** @var Factory $factory */
+    private $factory;
 
-    public function __construct(ScanningFactory $scanningFactory)
+    /** @var Filesystem $filesystem */
+    private $filesystem;
+
+    public function __construct(Factory $factory, Filesystem $filesystem)
     {
-        $this->scanningFactory = $scanningFactory;
+        $this->factory = $factory;
+        $this->filesystem = $filesystem;
     }
 
     public function registerCallbacks()
     {
-        $this->scanningFactory->registerCallbacks("class/RestController");
+        $controllers = $this->getControllers();
+        array_walk($controllers, function (RestController $controller) {
+            $controller->registerCallbacks();
+        });
+    }
+
+    /**
+     * @return array
+     */
+    private function getControllers()
+    {
+        return array_map(
+            [$this, "getController"],
+            (array) $this->filesystem->getClassesRecursively("class/RestController")
+        );
+    }
+
+    /**
+     * @param $class
+     * @return mixed
+     * @throws ReflectionException
+     */
+    private function getController($class)
+    {
+        return $this->factory->secure($class);
     }
 }

@@ -1,17 +1,15 @@
 <?php
 
-use Avorg\Script;
-
 final class TestScript extends Avorg\TestCase
 {
-	/** @var Script $script */
+	/** @var \Avorg\Script $script */
 	protected $script;
 
-	protected function setUp(): void
+	protected function setUp()
 	{
 		parent::setUp();
 
-		$this->script = $this->factory->make("Avorg\\Script");
+		$this->script = $this->factory->obtain("Avorg\\Script");
 	}
 
 	public function testTheScript()
@@ -23,17 +21,12 @@ final class TestScript extends Avorg\TestCase
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_script",
 			"Avorg_Script_" . sha1("//the_path"),
-			"//the_path",
-            [],
-            null,
-            false
+			"//the_path"
 		);
 	}
 
 	public function testRegistersCallback()
 	{
-	    $this->script->setActions('wp_enqueue_scripts');
-
 		$this->script->registerCallbacks();
 
 		$this->mockWordPress->assertMethodCalledWith(
@@ -43,11 +36,48 @@ final class TestScript extends Avorg\TestCase
 		);
 	}
 
+	public function testAddsNonce()
+	{
+		$this->script->setPath("the_path");
+		$this->script->setActions($this->factory->obtain("Avorg\\AjaxAction\\Recording"));
+
+		$this->script->enqueue();
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"wp_create_nonce",
+			"Avorg_AjaxAction_Recording"
+		);
+	}
+
 	public function testThrowsExceptionIfNoPath()
 	{
 		$this->expectException(Exception::class);
 
 		$this->script->enqueue();
+	}
+
+	public function testLocalizesScriptWithNonces()
+	{
+		$this->mockWordPress
+			->setReturnValue("wp_create_nonce", "the_nonce")
+			->setReturnValue("admin_url", "ajax_url");
+
+		$this->script
+			->setPath("//the_path")
+			->setActions($this->factory->obtain("Avorg\\AjaxAction\\Recording"))
+			->enqueue();
+
+		$this->mockWordPress->assertMethodCalledWith(
+			"wp_localize_script",
+			"Avorg_Script_" . sha1("//the_path"),
+			"avorg",
+			[
+				"nonces" => [
+					"recording" => "the_nonce"
+				],
+				"ajax_url" => "ajax_url"
+			]
+		);
 	}
 
 	public function testGetsAdminAjaxUrl()

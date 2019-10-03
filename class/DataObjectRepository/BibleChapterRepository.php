@@ -27,9 +27,4 @@ class BibleChapterRepository extends DataObjectRepository
 
 		return $this->makeDataObjects($rawObjects);
 	}
-
-    public function getDataObjects($search = null, $start = null)
-    {
-        // TODO: Implement getDataObjects() method.
-    }
 }
