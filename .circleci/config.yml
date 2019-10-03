@@ -49,6 +49,12 @@ jobs:
                 - master
                 - dev
 
+      - run:
+          name: Deploy build to staging server
+          command: |
+            curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+            php wp-cli.phar --info
+
       - save_cache:
           paths:
             - ./vendor
