@@ -61,6 +61,8 @@ jobs:
           fingerprints:
             - "da:93:9d:ad:27:17:f0:93:58:5b:a9:fa:51:45:7e:a9"
 
+      - checkout
+
       - attach_workspace:
           at: /tmp/workspace
 
