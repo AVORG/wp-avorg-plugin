@@ -16,10 +16,15 @@ final class TestLoginPage extends Avorg\TestCase
         $this->page = $this->factory->make("Avorg\\Page\\Login");
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testExists()
     {
+        $_POST = [
+            "email" => "email",
+            "password" => "pass"
+        ];
+
+        $this->page->addUi('');
+
+        $this->mockAvorgApi->assertMethodCalledWith("logIn", "email", "pass");
     }
 }

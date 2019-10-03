@@ -10,8 +10,6 @@ use ReflectionException;
 use stdClass;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
-	/* Mock Objects */
-	
 	/** @var AvorgApi|StubAvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
 

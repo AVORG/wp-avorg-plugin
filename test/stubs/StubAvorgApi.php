@@ -11,6 +11,11 @@ class StubAvorgApi extends AvorgApi
 
     use Stub;
 
+    public function logIn($email, $password)
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
     public function getOneSeries($id)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());

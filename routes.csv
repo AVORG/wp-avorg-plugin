@@ -24,4 +24,5 @@
 "Avorg\Endpoint\RssEndpoint\Trending","{ language }/podcasts/trending","Trending sermons RSS feed"
 "Avorg\Endpoint\RssEndpoint\Topic","{ language }/topics/podcast/{ entity_id:[0-9]+ }[/{ slug }]","Topic sermons RSS feed"
 "Avorg\Endpoint\RssEndpoint\Sponsor","{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]","Sponsor sermons RSS feed"
-"Avorg\Endpoint\Presentations","api/presentation[/{ entity_id:[^\d]+ }]","Presentations API endpoint"
+"Avorg\Endpoint\Presentations","api/presentation[/{ entity_id:[^\d]+ }]","Presentations API endpoint",
+"Avorg\Page\Login","{ language }/login","Login Page"

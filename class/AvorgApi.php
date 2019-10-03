@@ -10,9 +10,28 @@ if (!defined('ABSPATH')) exit;
 
 class AvorgApi
 {
-	private $context;
+	private $getContext;
 
-	public function getOneSeries($id)
+    /**
+     * @param $email
+     * @param $password
+     * @return mixed
+     * @throws Exception
+     */
+    public function logIn($email, $password)
+    {
+        return $this->postResponse("auth/login", [
+            'email' => $email,
+            'password' => $password
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     * @throws Exception
+     */
+    public function getOneSeries($id)
 	{
 		if (!is_numeric($id)) return false;
 
@@ -357,6 +376,39 @@ class AvorgApi
         return $this->getResponse($endpoint)->result;
     }
 
+    /**
+     * @param $endpoint
+     * @param array $data
+     * @return mixed
+     * @throws Exception
+     */
+    private function postResponse($endpoint, $data = [])
+    {
+        $this->testGuard();
+
+        $apiUser = get_option("avorgApiUser");
+        $apiPass = get_option("avorgApiPass");
+        $auth = "Authorization: Basic " . base64_encode("$apiUser:$apiPass");
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n$auth\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data)
+            ]
+        ];
+        $context = stream_context_create($options);
+
+        if ($response = @file_get_contents(
+            "https://api2.audioverse.org/$endpoint",
+            false, $context
+        )) {
+            return json_decode($response);
+        } else {
+            var_dump($response);
+//            throw new Exception("Failed to get response from url $endpoint");
+        }
+    }
+
 	/**
 	 * @param $endpoint
 	 * @return object|array
@@ -364,16 +416,13 @@ class AvorgApi
 	 */
 	private function getResponse($endpoint)
 	{
-		if (defined('AVORG_TESTS_RUNNING') && AVORG_TESTS_RUNNING)
-		{
-			throw new Exception("Unmocked API method called");
-		}
+		$this->testGuard();
 
-		if (!$this->context) $this->context = $this->createContext();
+		if (!$this->getContext) $this->getContext = $this->createGetContext();
 
 		if ($response = @file_get_contents(
 			"https://api2.audioverse.org/$endpoint",
-            false, $this->context)
+            false, $this->getContext)
         ) {
 			return json_decode($response);
 		} else {
@@ -381,7 +430,18 @@ class AvorgApi
 		}
 	}
 
-	private function createContext()
+    /**
+     * @throws Exception
+     */
+    private function testGuard()
+    {
+        if (defined('AVORG_TESTS_RUNNING') && AVORG_TESTS_RUNNING)
+        {
+            throw new Exception("Unmocked API method called");
+        }
+    }
+
+	private function createGetContext()
 	{
 		$apiUser = get_option("avorgApiUser");
 		$apiPass = get_option("avorgApiPass");
