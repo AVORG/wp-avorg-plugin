@@ -26,38 +26,9 @@ If you edit the Composer auto-load rules, you'll need to run `composer dump-auto
 
 On MacOS install using [these scripts](https://php-osx.liip.ch/), then add /usr/local/php5/bin to your path.
 
-## Shortcodes
+## Routes
 
-### Content Bits Shortcode
-
-The content bits shortcode is included in a page or post with the following code:
-
-```
-[avorg-bits id=identifierString]
-```
-
-Identifiers could be `mediaSidebar`, `homeFooter`, `smallAds`, or any other string that makes sense as a way to 
-tie the shortcode instance to a collection of content bits. The identifier may be unique, but it doesn't need to be.
-
-Once you've placed the shortcode in a page or post, you'll need to create one or more pieces of content in the Content
-Bits page in the admin interface that specify the previously-used id in the "Identifier" meta box.
-
-- If there are no pieces of content that are associated with the used identifier, the shortcode will output nothing.
-- If there is one or more piece of content associated with the identifier, one will be chosen at random to be displayed.
-- If there is a piece of content associated with the identifier and also associated with one or more media IDs, a
-  content bits shortcode using that identifier on the page for one of those media items will display one of the pieces
-  of content explicitly associated with both that media item's ID and the shortcode identifier.
-
-### List Shortcode
-
-Place the following usages in the content of a page or a post to retrieve a list of recent, featured, or popular 
-recordings.
-
-Usage                        | Result
------------------------------|--------------------------------
-`[avorg-list]`               | List of recent recordings
-`[avorg-list list=featured]` | List of featured recordings
-`[avorg-list list=popular]`  | List of popular recordings
+Routes are defined and documented in [the routes.csv file](routes.csv).
 
 ## API
 
