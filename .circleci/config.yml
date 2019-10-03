@@ -57,7 +57,6 @@ jobs:
           name: Deploy build to staging server
           command: |
             curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-            mkdir ~/.ssh
             touch ~/.ssh/known_hosts
             for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
             php wp-cli.phar --ssh=audiove9@146.66.103.140:18765/home/audiove9/public_html/dev/ plugin list
