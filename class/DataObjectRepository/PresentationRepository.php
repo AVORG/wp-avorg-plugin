@@ -129,7 +129,8 @@ class PresentationRepository extends DataObjectRepository
 	public function getPlaylistPresentations($playlistId)
 	{
 		$apiResponse = (object)$this->api->getPlaylist($playlistId);
-		$recordings = property_exists($apiResponse, 'recordings') ? $apiResponse : [];
+		$recordings = property_exists($apiResponse, 'recordings')
+            ? $apiResponse->recordings : [];
 
 		return array_map(function ($recording) {
 			return $this->makeDataObject($recording);
@@ -155,4 +156,8 @@ class PresentationRepository extends DataObjectRepository
 		return $this->makeDataObjects($rawObjects);
 	}
 
+    public function getDataObjects($search = null, $start = null)
+    {
+        // TODO: Implement getDataObjects() method.
+    }
 }

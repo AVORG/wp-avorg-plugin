@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "module": "system",
-    "target": "ES5",
+    "module": "commonjs", // was system
+    "target": "ES5", // was ES5
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "component",
+    "outDir": "./dist/", // was component
     "sourceMap": true,
     "allowJs": false,
-    "lib": ["es2015", "es2017", "dom"]
+    "lib": ["es2015", "es2017", "dom"],
+    "jsx": "react",
+    "jsxFactory": "wp.element.createElement",
+    "types": ["react"]
   },
   "include": [
     "component/**/*"

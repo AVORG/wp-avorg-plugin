@@ -5,7 +5,7 @@ final class TestLocalization extends Avorg\TestCase
 	/** @var \Avorg\Localization $localization */
 	protected $localization;
 	
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 		

@@ -11,7 +11,7 @@ final class TestStoryListing extends Avorg\TestCase
 	/**
 	 * @throws ReflectionException
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

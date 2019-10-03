@@ -9,6 +9,7 @@ use Avorg\DataObjectRepository\PresentationRepository;
 use Avorg\Page;
 use Avorg\DataObject\Recording;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\ScriptFactory;
 use Avorg\WordPress;
 use function defined;
@@ -31,17 +32,18 @@ class Detail extends Page
 	public function __construct(
 		PlaylistRepository $playlistRepository,
 		Renderer $renderer,
+		Router $router,
 		ScriptFactory $scriptFactory,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->playlistRepository = $playlistRepository;
 		$this->scriptFactory = $scriptFactory;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"recordings" => $this->getEntity()->getPresentations()

@@ -8,7 +8,7 @@ final class TestRssLatest extends Avorg\TestCase
 	/** @var Latest $endpoint */
 	protected $endpoint;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

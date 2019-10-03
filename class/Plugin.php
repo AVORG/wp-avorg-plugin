@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use Avorg\Block\RelatedSermons;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -20,7 +21,7 @@ class Plugin
 	public function __construct(
 		AdminPanel $adminPanel,
 		AjaxActionFactory $ajaxActionFactory,
-		BlockLoader $blockRepository,
+		BlockFactory $blockFactory,
 		ContentBits $contentBits,
 		Localization $localization,
 		PageFactory $pageFactory,

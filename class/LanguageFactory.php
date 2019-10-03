@@ -3,6 +3,7 @@
 namespace Avorg;
 
 use natlib\Factory;
+use ReflectionException;
 
 class LanguageFactory {
 	/** @var Factory $factory */
@@ -46,11 +47,12 @@ class LanguageFactory {
 		return $this->getLanguageByPropertyValue("wpLanguageCode", $code);
 	}
 
-	/**
-	 * @param $name
-	 * @param $value
-	 * @return Language|null
-	 */
+    /**
+     * @param $name
+     * @param $value
+     * @return Language|null
+     * @throws ReflectionException
+     */
 	private function getLanguageByPropertyValue($name, $value)
 	{
 		$languageConfig = $this->getLanguageConfigByPropertyValue($name, $value);
@@ -72,12 +74,17 @@ class LanguageFactory {
 		return reset($filteredLanguages);
 	}
 
-	private function buildLanguage($languageConfig)
+    /**
+     * @param $languageConfig
+     * @return Language|null
+     * @throws ReflectionException
+     */
+    private function buildLanguage($languageConfig)
 	{
 		if (!$languageConfig) return null;
 
 		/** @var Language $language */
-		$language = $this->factory->obtain("Avorg\\Language");
+		$language = $this->factory->make("Avorg\\Language");
 
 		$language->setBaseRoute($languageConfig["baseRoute"]);
 		$language->setUrlFragments($languageConfig["urlFragments"]);

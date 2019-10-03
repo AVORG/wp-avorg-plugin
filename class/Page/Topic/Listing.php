@@ -6,6 +6,7 @@ namespace Avorg\Page\Topic;
 use Avorg\DataObjectRepository\TopicRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 
@@ -20,17 +21,22 @@ class Listing extends Page
 	protected $defaultPageContent = "Topics";
 	protected $twigTemplate = "page-topics.twig";
 
-	public function __construct(Renderer $renderer, TopicRepository $topicRepository, WordPress $wp)
+	public function __construct(
+	    Renderer $renderer,
+        Router $router,
+        TopicRepository $topicRepository,
+        WordPress $wp
+    )
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->topicRepository = $topicRepository;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
-			"topics" => $this->topicRepository->getTopics()
+			"topics" => $this->topicRepository->getDataObjects()
 		];
 	}
 

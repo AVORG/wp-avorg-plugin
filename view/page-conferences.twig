@@ -1,15 +1,5 @@
 <div class="avorg-page-conferences">
-	<ul>
-		{% for conference in avorg.conferences %}
-			<li>
-				{% include "molecule-mediaObject.twig" with {
-					image: conference.photo256,
-					imageAlt: conference.title,
-					title: conference.title,
-					titleUrl: conference.url,
-					description: conference.sponsorTitle
-				} only %}
-			</li>
-		{% endfor %}
-	</ul>
+	{% include "molecule-ajaxList.twig" with {
+		"endpoint": "/wp-json/avorg/v1/conferences"
+	} only %}
 </div>

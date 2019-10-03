@@ -4,6 +4,7 @@ namespace Avorg\DataObject;
 
 use Avorg\DataObject;
 use Avorg\DataObjectRepository\BibleBookRepository;
+use Avorg\Renderer;
 use Avorg\Router;
 use function defined;
 use Exception;
@@ -17,9 +18,13 @@ class Bible extends DataObject
 
 	protected $detailClass = "Avorg\Page\Bible\Detail";
 
-	public function __construct(BibleBookRepository $bibleBookRepository, Router $router)
+	public function __construct(
+	    BibleBookRepository $bibleBookRepository,
+        Renderer $renderer,
+        Router $router
+    )
 	{
-		parent::__construct($router);
+		parent::__construct($renderer, $router);
 
 		$this->bibleBookRepository = $bibleBookRepository;
 	}
