@@ -386,9 +386,10 @@ class AvorgApi
     {
         $this->testGuard();
 
-        $apiUser = get_option("avorgApiUser");
-        $apiPass = get_option("avorgApiPass");
-        $auth = "Authorization: Basic " . base64_encode("$apiUser:$apiPass");
+//        var_dump($data);
+
+        $apiKey = get_option("avorgApiKey");
+        $auth = "Authorization: Bearer $apiKey";
         $options = [
             'http' => [
                 'header' => "Content-type: application/x-www-form-urlencoded\r\n$auth\r\n",
@@ -397,15 +398,20 @@ class AvorgApi
             ]
         ];
         $context = stream_context_create($options);
+        $url = "https://api.audioverse.org/$endpoint";
 
-        if ($response = @file_get_contents(
-            "https://api2.audioverse.org/$endpoint",
+//        var_dump($options);
+//        var_dump($context);
+//        var_dump($url);
+
+        if ($response = file_get_contents(
+            $url,
             false, $context
         )) {
             return json_decode($response);
         } else {
-            var_dump($response);
-//            throw new Exception("Failed to get response from url $endpoint");
+//            var_dump($response);
+            throw new Exception("Failed to get response from url $endpoint");
         }
     }
 

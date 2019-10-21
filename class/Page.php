@@ -36,13 +36,13 @@ abstract class Page implements iRoutable
 
 	public function throw404($query)
 	{
-//		if (!$this->isThisPage()) return;
-//
-//		try {
-//			$this->getData();
-//		} catch (Exception $e) {
-//			$this->set404($query);
-//		}
+		if (!$this->isThisPage()) return;
+
+		try {
+			$this->getData();
+		} catch (Exception $e) {
+			$this->set404($query);
+		}
 	}
 
 	public function filterTitle($title)

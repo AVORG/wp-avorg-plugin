@@ -41,6 +41,6 @@ class Login extends Page
 
         $result = $this->api->logIn($_POST['email'], $_POST['password']);
 
-        var_dump($result);die;
+//        var_dump($result);
     }
 }
