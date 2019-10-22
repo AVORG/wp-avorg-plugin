@@ -191,8 +191,7 @@ final class TestPlugin extends Avorg\TestCase
 			[
 				"init",
 				"Plugin",
-				"init",
-                1
+				"init"
 			],
 			[
 				"save_post",
@@ -343,7 +342,9 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testInitsSession()
     {
-        $this->plugin->init();
+        $this->plugin->registerCallbacks();
+
+        $this->mockWordPress->runActions('init');
 
         $this->mockPhp->assertMethodCalled('initSession');
     }

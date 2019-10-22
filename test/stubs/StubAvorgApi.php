@@ -81,6 +81,11 @@ class StubAvorgApi extends AvorgApi
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
+    public function getPlaylistsByUser($userId, $sessionToken)
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
     public function getPlaylists($search = NULL, $start = null)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());

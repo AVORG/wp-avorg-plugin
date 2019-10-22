@@ -31,4 +31,9 @@ class PlaylistRepository extends DataObjectRepository
 
 		return $this->makeDataObject($rawObject);
 	}
+
+    public function getPlaylistsByUser($userId, $sessionToken)
+    {
+        $this->api->getPlaylistsByUser($userId, $sessionToken);
+    }
 }

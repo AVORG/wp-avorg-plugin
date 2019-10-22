@@ -20,7 +20,7 @@ class AvorgApi
      */
     public function logIn($email, $password)
     {
-        return $this->postResponse("auth/login", [
+        return $this->postResponseNew("auth/login", [
             'email' => $email,
             'password' => $password
         ])->data;
@@ -217,6 +217,11 @@ class AvorgApi
 		return $this->getResult("playlist?search=$search&start=$start");
 	}
 
+	public function getPlaylistsByUser($userId, $sessionToken)
+    {
+        return $this->getResult("playlist?userId=$userId&sessionToken=$sessionToken");
+    }
+
 	/**
 	 * @param $id
 	 * @return array|bool|object
@@ -373,7 +378,7 @@ class AvorgApi
      */
     public function getResult($endpoint)
     {
-        return $this->getResponse($endpoint)->result;
+        return $this->getResponseOld($endpoint)->result;
     }
 
     /**
@@ -382,11 +387,9 @@ class AvorgApi
      * @return mixed
      * @throws Exception
      */
-    private function postResponse($endpoint, $data = [])
+    private function postResponseNew($endpoint, $data = [])
     {
         $this->testGuard();
-
-//        var_dump($data);
 
         $apiKey = get_option("avorgApiKey");
         $auth = "Authorization: Bearer $apiKey";
@@ -400,17 +403,12 @@ class AvorgApi
         $context = stream_context_create($options);
         $url = "https://api.audioverse.org/$endpoint";
 
-//        var_dump($options);
-//        var_dump($context);
-//        var_dump($url);
-
         if ($response = file_get_contents(
             $url,
             false, $context
         )) {
             return json_decode($response);
         } else {
-//            var_dump($response);
             throw new Exception("Failed to get response from url $endpoint");
         }
     }
@@ -420,7 +418,7 @@ class AvorgApi
 	 * @return object|array
 	 * @throws Exception
 	 */
-	private function getResponse($endpoint)
+	private function getResponseOld($endpoint)
 	{
 		$this->testGuard();
 
