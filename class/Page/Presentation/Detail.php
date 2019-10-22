@@ -22,7 +22,6 @@ class Detail extends Page
     protected $recordingRepository;
 
     protected $defaultPageTitle = "Media Detail";
-    protected $defaultPageContent = "Media Detail";
     protected $twigTemplate = "page-presentation.twig";
 
     public function __construct(

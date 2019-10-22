@@ -1,5 +1,7 @@
 <?php
 
+use Avorg\Page\Playlist\UserPlaylists;
+
 final class TestUserPlaylistsPage extends Avorg\TestCase
 {
     /** @var UserPlaylists $page */
@@ -17,22 +19,19 @@ final class TestUserPlaylistsPage extends Avorg\TestCase
         $this->page = $this->factory->make("Avorg\\Page\\Playlist\\UserPlaylists");
     }
 
-    public function testExists()
+    public function testRendersCorrectView()
     {
-        $_SESSION = [
-            'userId' => 'the_id',
-            'sessionToken' => 'the_token'
-        ];
-
         $this->page->addUi('');
 
-        $this->mockAvorgApi->assertMethodCalledWith('getPlaylistsByUser', 'the_id', 'the_token');
+        $this->mockTwig->assertTwigTemplateRendered('page-userPlaylists.twig');
     }
 
-    public function testRendersViewWithPlaylists()
+    public function testUsesDefaultTitle()
     {
-        
+        $this->mockWordPress->setReturnValue("get_option", false);
 
-        $this->page->addUi('');
+        $this->page->createPage();
+
+        $this->mockWordPress->assertPageCreated('Your Playlists');
     }
 }

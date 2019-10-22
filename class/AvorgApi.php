@@ -217,9 +217,9 @@ class AvorgApi
 		return $this->getResult("playlist?search=$search&start=$start");
 	}
 
-	public function getPlaylistsByUser($userId, $sessionToken)
+	public function getPlaylistsByUser($userId, $sessionToken, $search = null, $start = null)
     {
-        return $this->getResult("playlist?userId=$userId&sessionToken=$sessionToken");
+        return $this->getResult("playlist?userId=$userId&sessionToken=$sessionToken&search=$search&start=$start");
     }
 
 	/**

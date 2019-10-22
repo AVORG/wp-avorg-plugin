@@ -20,7 +20,6 @@ class Detail extends Page
 	private $storyRepository;
 
 	protected $defaultPageTitle = "Story";
-	protected $defaultPageContent = "Story";
 	protected $twigTemplate = "page-story.twig";
 
 	public function __construct(

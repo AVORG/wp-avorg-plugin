@@ -18,7 +18,6 @@ class Listing extends Page
 	private $bibleRepository;
 
 	protected $defaultPageTitle = "Bibles";
-	protected $defaultPageContent = "Bibles";
 	protected $twigTemplate = "page-bibles.twig";
 
 	public function __construct(

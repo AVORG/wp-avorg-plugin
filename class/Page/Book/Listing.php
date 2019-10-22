@@ -18,7 +18,6 @@ class Listing extends Page
 	private $bookRepository;
 
 	protected $defaultPageTitle = "Books";
-	protected $defaultPageContent = "Books";
 	protected $twigTemplate = "page-books.twig";
 
 	public function __construct(

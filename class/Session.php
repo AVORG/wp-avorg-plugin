@@ -37,6 +37,10 @@ class Session {
 
     public function loadData($data)
     {
-        $_SESSION = array_merge($_SESSION, $data ?? []);
+        if (is_object($data)) {
+            $data = json_decode(json_encode($data), true);
+        }
+
+        $_SESSION = array_merge($_SESSION ?? [], $data ?? []);
     }
 }

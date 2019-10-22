@@ -19,7 +19,6 @@ class Listing extends Page
 	private $storyRepository;
 
 	protected $defaultPageTitle = "Stories";
-	protected $defaultPageContent = "Stories";
 	protected $twigTemplate = "page-stories.twig";
 
 	public function __construct(

@@ -64,10 +64,9 @@ class StubWordPress extends WordPress
 		]);
 	}
 
-	public function assertPageCreated($content, $title)
+	public function assertPageCreated($title)
 	{
 		$this->assertMethodCalledWith("wp_insert_post", array(
-			"post_content" => $content,
 			"post_title" => $title,
 			"post_status" => "publish",
 			"post_type" => "page"

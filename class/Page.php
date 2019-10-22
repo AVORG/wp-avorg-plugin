@@ -19,7 +19,6 @@ abstract class Page implements iRoutable
 	protected $wp;
 
 	private $pageIdOptionName;
-	protected $defaultPageContent;
 	protected $defaultPageTitle;
 	protected $twigTemplate;
 	protected $data;
@@ -108,7 +107,6 @@ abstract class Page implements iRoutable
 	private function doCreatePage()
 	{
 		$id = $this->wp->wp_insert_post([
-			"post_content" => $this->defaultPageContent,
 			"post_title" => $this->defaultPageTitle,
 			"post_status" => "publish",
 			"post_type" => "page"

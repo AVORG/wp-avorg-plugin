@@ -20,7 +20,6 @@ class Detail extends Page
 	private $seriesRepository;
 
 	protected $defaultPageTitle = "Series Detail";
-	protected $defaultPageContent = "Series Detail";
 	protected $twigTemplate = "page-seriesDetail.twig";
 
 	public function __construct(

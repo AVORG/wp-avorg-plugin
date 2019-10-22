@@ -15,7 +15,6 @@ if (!defined('ABSPATH')) exit;
 class Login extends Page
 {
     protected $defaultPageTitle = "Login";
-    protected $defaultPageContent = "Login";
     protected $twigTemplate = "page-login.twig";
 
     /** @var AvorgApi $api */

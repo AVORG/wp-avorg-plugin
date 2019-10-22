@@ -19,7 +19,6 @@ class Listing extends Page
 	private $conferenceRepository;
 
 	protected $defaultPageTitle = "Conferences";
-	protected $defaultPageContent = "Conferences";
 	protected $twigTemplate = "page-conferences.twig";
 
 	public function __construct(

@@ -19,7 +19,6 @@ class Detail extends Page
 	private $bookRepository;
 
 	protected $defaultPageTitle = "Book";
-	protected $defaultPageContent = "Book";
 	protected $twigTemplate = "page-book.twig";
 
 	public function __construct(

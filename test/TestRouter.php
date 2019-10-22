@@ -168,6 +168,10 @@ final class TestRouter extends Avorg\TestCase
             [
                 "/english/login",
                 "index.php?page_id=LOGIN_PAGE_ID&language=english"
+            ],
+            [
+                "/english/account/playlists",
+                "index.php?page_id=PLAYLIST_USERPLAYLISTS_PAGE_ID&language=english"
             ]
 		];
 	}

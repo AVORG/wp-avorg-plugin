@@ -1,0 +1,5 @@
+<div class="avorg-page-userPlaylists">
+    {% include "molecule-ajaxList.twig" with {
+        "endpoint": "/wp-json/avorg/v1/user/playlists"
+    } only %}
+</div>

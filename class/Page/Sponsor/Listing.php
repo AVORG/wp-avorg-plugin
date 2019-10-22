@@ -18,7 +18,6 @@ class Listing extends Page
 	private $sponsorRepository;
 
 	protected $defaultPageTitle = "Sponsors";
-	protected $defaultPageContent = "Sponsors";
 	protected $twigTemplate = "page-sponsors.twig";
 
 	public function __construct(

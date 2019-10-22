@@ -21,7 +21,6 @@ class Detail extends Page
 	private $conferenceRepository;
 
 	protected $defaultPageTitle = "Conference";
-	protected $defaultPageContent = "Conference";
 	protected $twigTemplate = "page-conference.twig";
 
 	public function __construct(

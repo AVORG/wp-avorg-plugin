@@ -21,7 +21,6 @@ class Detail extends Page
 	private $bibleRepository;
 
 	protected $defaultPageTitle = "Bible";
-	protected $defaultPageContent = "Bible";
 	protected $twigTemplate = "page-bible.twig";
 
 	public function __construct(

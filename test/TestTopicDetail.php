@@ -8,7 +8,6 @@ final class TestTopicDetail extends Avorg\TestCase
 	protected $topicPage;
 
 	private $topicPageInsertCall = array("wp_insert_post", array(
-		"post_content" => "Topic Detail",
 		"post_title" => "Topic Detail",
 		"post_status" => "publish",
 		"post_type" => "page"

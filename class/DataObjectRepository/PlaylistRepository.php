@@ -3,8 +3,10 @@
 namespace Avorg\DataObjectRepository;
 
 
+use Avorg\DataObject;
 use Avorg\DataObjectRepository;
 use Exception;
+use ReflectionException;
 
 if (!defined('ABSPATH')) exit;
 
@@ -25,15 +27,29 @@ class PlaylistRepository extends DataObjectRepository
 		return $this->makeDataObjects($rawObjects);
 	}
 
-	public function getPlaylist($playlistId)
+    /**
+     * @param $playlistId
+     * @return DataObject
+     * @throws ReflectionException
+     */
+    public function getPlaylist($playlistId)
 	{
 		$rawObject = $this->api->getPlaylist($playlistId);
 
 		return $this->makeDataObject($rawObject);
 	}
 
-    public function getPlaylistsByUser($userId, $sessionToken)
+    /**
+     * @param $userId
+     * @param $sessionToken
+     * @param null $search
+     * @param null $start
+     * @return array
+     */
+    public function getPlaylistsByUser($userId, $sessionToken, $search = null, $start = null)
     {
-        $this->api->getPlaylistsByUser($userId, $sessionToken);
+        $rawObjects = $this->api->getPlaylistsByUser($userId, $sessionToken, $search, $start);
+
+        return $this->makeDataObjects($rawObjects);
     }
 }

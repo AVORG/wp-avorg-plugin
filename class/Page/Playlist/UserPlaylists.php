@@ -16,9 +16,8 @@ if (!defined('ABSPATH')) exit;
 
 class UserPlaylists extends Page
 {
-    protected $defaultPageTitle = "Playlists";
-    protected $defaultPageContent = "Playlists";
-    protected $twigTemplate = "page-playlists.twig";
+    protected $defaultPageTitle = "Your Playlists";
+    protected $twigTemplate = "page-userPlaylists.twig";
 
     /** @var PlaylistRepository $playlistRepository */
     private $playlistRepository;
@@ -40,21 +39,13 @@ class UserPlaylists extends Page
         $this->session = $session;
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function getPageData()
-    {
-        $userId = $this->session->userId;
-        $sessionToken = $this->session->sessionToken;
-
-        return [
-            "playlists" => $this->playlistRepository->getPlaylistsByUser($userId, $sessionToken)
-        ];
-    }
-
     protected function getTitle()
     {
         // TODO: Implement getEntityTitle() method.
+    }
+
+    protected function getPageData()
+    {
+        // TODO: Implement getPageData() method.
     }
 }
