@@ -37,7 +37,9 @@ class TwigGlobal
 		$this->wp = $wordPress;
 
 		$this->data["query"] = $this->wp->get_all_query_vars();
-	}
+
+        $this->addSessionData();
+    }
 
 	public function __get($name)
 	{
@@ -121,5 +123,16 @@ class TwigGlobal
     public function getData()
     {
         return $this->data;
+    }
+
+    private function addSessionData(): void
+    {
+        if (!key_exists('user', $_SESSION)) return;
+        if (!is_object($_SESSION['user'])) return;
+        if (!property_exists($_SESSION['user'], 'email')) return;
+
+        $this->data["session"] = [
+            "email" => $_SESSION['user']->email
+        ];
     }
 }

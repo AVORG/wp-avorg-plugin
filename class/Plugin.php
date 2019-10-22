@@ -9,6 +9,9 @@ if (!defined('ABSPATH')) exit;
 
 class Plugin
 {
+    /** @var Php $php */
+    private $php;
+
 	/** @var Renderer $renderer */
 	private $renderer;
 
@@ -25,6 +28,7 @@ class Plugin
 		ContentBits $contentBits,
 		Localization $localization,
 		PageFactory $pageFactory,
+		Php $php,
 		Pwa $pwa,
 		Renderer $renderer,
 		RestControllerFactory $restControllerFactory,
@@ -33,6 +37,7 @@ class Plugin
 		WordPress $WordPress
 	)
 	{
+	    $this->php = $php;
 		$this->renderer = $renderer;
 		$this->wp = $WordPress;
 
@@ -42,7 +47,7 @@ class Plugin
 	public function registerCallbacks()
 	{
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
-		$this->wp->add_action("init", [$this, "enqueueStyles"]);
+		$this->wp->add_action("init", [$this, "init"], 1);
 
 		$this->registerDependencyCallbacks();
 	}
@@ -94,8 +99,9 @@ class Plugin
 		$this->renderer->renderNotice("error", $message, $url);
 	}
 
-	public function enqueueStyles()
+	public function init()
 	{
+	    $this->php->initSession();
 		$this->enqueuePluginStyles();
 		$this->enqueueVideoJsStyles();
 	}

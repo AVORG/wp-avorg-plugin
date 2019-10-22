@@ -27,4 +27,18 @@ final class TestLoginPage extends Avorg\TestCase
 
         $this->mockAvorgApi->assertMethodCalledWith("logIn", "email", "pass");
     }
+
+    public function testSavesUserToSessionData()
+    {
+        $_POST = [
+            "email" => "email",
+            "password" => "pass"
+        ];
+
+        $this->mockAvorgApi->setReturnValue('logIn', 'user_data');
+
+        $this->page->addUi('');
+
+        $this->assertEquals('user_data', $_SESSION['user']);
+    }
 }

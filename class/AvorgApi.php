@@ -23,7 +23,7 @@ class AvorgApi
         return $this->postResponse("auth/login", [
             'email' => $email,
             'password' => $password
-        ]);
+        ])->data;
     }
 
     /**

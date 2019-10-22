@@ -17,14 +17,14 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueueScripts()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalled("wp_enqueue_style");
 	}
 
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -35,7 +35,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueuesEditorStyles()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -46,7 +46,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueuesVideoJsStyles()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -140,21 +140,24 @@ final class TestPlugin extends Avorg\TestCase
 		return array_combine($pages, $data);
 	}
 
-	/**
-	 * @param $action
-	 * @param $callbackClass
-	 * @param $callbackMethod
-	 * @throws ReflectionException
-	 * @dataProvider actionCallbackProvider
-	 */
-	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod)
+    /**
+     * @param $action
+     * @param $callbackClass
+     * @param $callbackMethod
+     * @param bool $priority
+     * @throws ReflectionException
+     * @dataProvider actionCallbackProvider
+     */
+	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod, $priority=False)
 	{
 		$this->plugin->registerCallbacks();
 
-		$this->mockWordPress->assertActionAdded($action, [
-			$this->factory->secure("Avorg\\$callbackClass"),
-			$callbackMethod
-		]);
+        $callable = [
+            $this->factory->secure("Avorg\\$callbackClass"),
+            $callbackMethod
+        ];
+
+        $this->mockWordPress->assertActionAdded($action, $callable, $priority);
 	}
 
 	public function actionCallbackProvider()
@@ -188,7 +191,8 @@ final class TestPlugin extends Avorg\TestCase
 			[
 				"init",
 				"Plugin",
-				"enqueueStyles"
+				"init",
+                1
 			],
 			[
 				"save_post",
@@ -336,4 +340,11 @@ final class TestPlugin extends Avorg\TestCase
 
 		$this->mockTwig->assertErrorNotRenderedWithMessage("AVORG Warning: PWA plugin not active!");
 	}
+
+	public function testInitsSession()
+    {
+        $this->plugin->init();
+
+        $this->mockPhp->assertMethodCalled('initSession');
+    }
 }
