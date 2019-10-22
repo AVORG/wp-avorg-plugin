@@ -134,17 +134,18 @@ class StubWordPress extends WordPress
 		);
 	}
 
-	/**
-	 * @param $tag
-	 * @param $callable
-	 */
-	public function assertActionAdded($tag, $callable)
+    /**
+     * @param $tag
+     * @param $callable
+     * @param bool $priority
+     */
+	public function assertActionAdded($tag, $callable, $priority=False)
 	{
-		$this->assertMethodCalledWith(
-			"add_action",
-			$tag,
-			$callable
-		);
+	    if ($priority) {
+            $this->assertMethodCalledWith("add_action", $tag, $callable, $priority);
+        } else {
+            $this->assertMethodCalledWith("add_action", $tag, $callable);
+        }
 	}
 
 	public function runActions(...$actions)

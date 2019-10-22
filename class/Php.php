@@ -37,4 +37,11 @@ class Php {
 
         return ($num === 1) ? $items[0] : $items;
     }
+
+    public function initSession()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+    }
 }

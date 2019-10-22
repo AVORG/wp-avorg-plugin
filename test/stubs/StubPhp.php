@@ -33,4 +33,9 @@ class StubPhp extends Php
 	{
 		return $this->handleCall(__FUNCTION__, func_get_args());
 	}
+
+	public function initSession()
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
 }
