@@ -92,13 +92,9 @@ namespace AvorgMoleculeAjaxList {
 
             const url = `${this.props.endpoint}?start=${this.state.page * 25}&search=${this.state.search}`;
 
-            console.log(url);
-
             fetch(url)
                 .then(res => res.json())
                 .then((data) => {
-                    console.log('api data', data);
-
                     this.setState((prev) => ({
                         entries: prev.entries.concat(data),
                         isLoading: false,

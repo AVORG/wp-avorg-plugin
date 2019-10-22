@@ -187,11 +187,9 @@ var AvorgMoleculeAjaxList;
                 isLoading: true
             }); });
             var url = this.props.endpoint + "?start=" + this.state.page * 25 + "&search=" + this.state.search;
-            console.log(url);
             fetch(url)
                 .then(function (res) { return res.json(); })
                 .then(function (data) {
-                console.log('api data', data);
                 _this.setState(function (prev) { return ({
                     entries: prev.entries.concat(data),
                     isLoading: false,
