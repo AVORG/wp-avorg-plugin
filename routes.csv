@@ -25,5 +25,5 @@
 "Avorg\Endpoint\RssEndpoint\Topic","{ language }/topics/podcast/{ entity_id:[0-9]+ }[/{ slug }]","Topic sermons RSS feed"
 "Avorg\Endpoint\RssEndpoint\Sponsor","{ language }/sponsors/podcast/{ entity_id:[0-9]+ }/latest[/{ slug }]","Sponsor sermons RSS feed"
 "Avorg\Endpoint\Presentations","api/presentation[/{ entity_id:[^\d]+ }]","Presentations API endpoint",
-"Avorg\Page\Login","{ language }/login","Login Page",
+"Avorg\Page\Login","{ language }/account","Login Page",
 "Avorg\Page\Playlist\UserPlaylists","{ language }/account/playlists","User playlists page"
