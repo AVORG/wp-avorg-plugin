@@ -81,6 +81,11 @@ class StubAvorgApi extends AvorgApi
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
+    public function getPlaylistsByUser($userId, $sessionToken, $search = NULL, $start = null)
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
     public function getPlaylists($search = NULL, $start = null)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());
@@ -176,6 +181,7 @@ class StubAvorgApi extends AvorgApi
     public function loadPlaylists(...$dataArrays)
     {
         $this->setDataObjectsReturnValue("getPlaylists", $dataArrays);
+        $this->setDataObjectsReturnValue("getPlaylistsByUser", $dataArrays);
     }
 
     public function loadPlaylist($dataArray)

@@ -35,10 +35,10 @@ final class TestLoginPage extends Avorg\TestCase
             "password" => "pass"
         ];
 
-        $this->mockAvorgApi->setReturnValue('logIn', 'user_data');
+        $this->mockAvorgApi->setReturnValue('logIn', ['user_data']);
 
         $this->page->addUi('');
 
-        $this->assertEquals('user_data', $_SESSION['user']);
+        $this->assertEquals(['user_data'], $_SESSION);
     }
 }

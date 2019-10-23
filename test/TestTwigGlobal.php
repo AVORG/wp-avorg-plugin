@@ -194,9 +194,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 
     public function testIncludesSessionData()
     {
-        $_SESSION['user'] = $this->arrayToObject([
-            'email' => 'test@test.com'
-        ]);
+        $_SESSION['email'] = 'test@test.com';
 
         $global = $this->makeTwigGlobal();
 

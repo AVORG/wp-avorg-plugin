@@ -19,7 +19,6 @@ class Listing extends Page
 	private $seriesRepository;
 
 	protected $defaultPageTitle = "Series";
-	protected $defaultPageContent = "Series List";
 	protected $twigTemplate = "page-seriesList.twig";
 
 	public function __construct(

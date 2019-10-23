@@ -19,7 +19,6 @@ class Listing extends Page
 	private $playlistRepository;
 
 	protected $defaultPageTitle = "Playlists";
-	protected $defaultPageContent = "Playlists";
 	protected $twigTemplate = "page-playlists.twig";
 
 	public function __construct(

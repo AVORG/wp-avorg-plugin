@@ -32,7 +32,7 @@ final class TestPageFactory extends Avorg\TestCase
 		}), "PageFactory did not return pages");
 	}
 
-	public function testPagesHaveDefaultTitleAndContent()
+	public function testPagesHaveDefaultTitle()
 	{
 		$this->assertPagesExist();
 
@@ -47,7 +47,7 @@ final class TestPageFactory extends Avorg\TestCase
 		$this->mockWordPress->assertNoCallsMatch("wp_insert_post", function($call) {
 			$postArray = $call[0];
 
-			return empty($postArray["post_content"]) || empty($postArray["post_title"]);
+			return empty($postArray["post_title"]);
 		});
 	}
 

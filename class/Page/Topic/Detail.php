@@ -25,7 +25,6 @@ class Detail extends Page
 	protected $wp;
 
 	protected $defaultPageTitle = "Topic Detail";
-	protected $defaultPageContent = "Topic Detail";
 	protected $twigTemplate = "page-topic.twig";
 
 	public function __construct(

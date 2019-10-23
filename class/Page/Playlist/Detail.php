@@ -26,7 +26,6 @@ class Detail extends Page
 	private $scriptFactory;
 
 	protected $defaultPageTitle = "Playlist Detail";
-	protected $defaultPageContent = "Playlist Detail";
 	protected $twigTemplate = "page-playlist.twig";
 
 	public function __construct(

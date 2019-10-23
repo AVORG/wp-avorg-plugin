@@ -18,6 +18,9 @@ class TwigGlobal
 
 	/** @var ScriptFactory $scriptFactory */
 	private $scriptFactory;
+
+	/** @var Session $session */
+	private $session;
 	
 	/** @var WordPress $wp */
 	private $wp;
@@ -28,12 +31,14 @@ class TwigGlobal
 		Localization $localization,
 		Router $router,
 		ScriptFactory $scriptFactory,
+		Session $session,
 		WordPress $wordPress
 	)
 	{
 		$this->localization = $localization;
 		$this->router = $router;
 		$this->scriptFactory = $scriptFactory;
+		$this->session = $session;
 		$this->wp = $wordPress;
 
 		$this->data["query"] = $this->wp->get_all_query_vars();
@@ -127,12 +132,8 @@ class TwigGlobal
 
     private function addSessionData(): void
     {
-        if (!key_exists('user', $_SESSION)) return;
-        if (!is_object($_SESSION['user'])) return;
-        if (!property_exists($_SESSION['user'], 'email')) return;
-
         $this->data["session"] = [
-            "email" => $_SESSION['user']->email
+            "email" => $this->session->email
         ];
     }
 }

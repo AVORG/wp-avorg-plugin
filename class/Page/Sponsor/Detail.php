@@ -20,7 +20,6 @@ class Detail extends Page
 	private $sponsorRepository;
 
 	protected $defaultPageTitle = "Sponsor";
-	protected $defaultPageContent = "Sponsor";
 	protected $twigTemplate = "page-sponsor.twig";
 
 	public function __construct(

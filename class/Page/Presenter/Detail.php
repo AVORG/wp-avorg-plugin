@@ -20,7 +20,6 @@ class Detail extends Page
 	protected $presenterRepository;
 
 	protected $defaultPageTitle = "Presenter Detail";
-	protected $defaultPageContent = "Presenter Detail";
 	protected $twigTemplate = "page-presenter.twig";
 
 	public function __construct(

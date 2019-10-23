@@ -77,7 +77,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->createPage();
 
-		$this->mockWordPress->assertPageCreated("Media Detail", "Media Detail");
+		$this->mockWordPress->assertPageCreated("Media Detail");
 	}
 	
 	public function testChecksPostStatus()
@@ -329,7 +329,7 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$this->mediaPage->createPage();
 
-		$this->mockWordPress->assertPageCreated("Media Detail", "Media Detail");
+		$this->mockWordPress->assertPageCreated("Media Detail");
 	}
 
 	public function testDoesNotInsertPageTwice()

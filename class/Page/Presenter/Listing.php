@@ -18,7 +18,6 @@ class Listing extends Page
 	private $presenterRepository;
 
 	protected $defaultPageTitle = "Presenters";
-	protected $defaultPageContent = "Presenters";
 	protected $twigTemplate = "page-presenters.twig";
 
 	public function __construct(
