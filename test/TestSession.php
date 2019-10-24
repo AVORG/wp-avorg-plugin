@@ -32,4 +32,24 @@ final class TestSession extends Avorg\TestCase
 
         $this->assertEquals('value', $this->session->test);
     }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testMagicGetWithNullSession()
+    {
+        $_SESSION = null;
+
+        $this->session->userId;
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testMagicGetWithNoSession()
+    {
+        unset($_SESSION);
+
+        $this->session->userId;
+    }
 }

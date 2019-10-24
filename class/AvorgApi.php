@@ -63,10 +63,40 @@ class AvorgApi
         ]);
     }
 
-//    public function deleteFavorite($favoriteId, $userId, $sessionToken)
-//    {
-//        $this->postResponseOld()
-//    }
+    /**
+     * @param $userId
+     * @param $sessionToken
+     * @throws Exception
+     */
+    public function getFavorites($userId, $sessionToken)
+    {
+        /* TODO: Stop passing userId && sessionToken via query string */
+        $this->getOld("favorite", [
+            "userId" => $userId,
+            "sessionToken" => $sessionToken,
+        ]);
+    }
+
+    public function unFavorite($catalogId, $userId, $sessionToken, $catalog = 'recording')
+    {
+
+    }
+
+    /**
+     * @param $favoriteId
+     * @param $userId
+     * @param $sessionToken
+     * @throws Exception
+     */
+    public function deleteFavorite($favoriteId, $userId, $sessionToken)
+    {
+        /* TODO: Stop passing userId && sessionToken via query string */
+        $this->deleteOld('favorite', [
+            "id[]" => $favoriteId,
+            "userId" => $userId,
+            "sessionToken" => $sessionToken
+        ]);
+    }
 
     /**
      * @param $id
@@ -463,6 +493,19 @@ class AvorgApi
      * @return mixed
      * @throws Exception
      */
+    private function deleteOld(string $endpoint, array $data = [])
+    {
+        return $this->handle($this->oldApiClient, 'DELETE', $endpoint, [
+            'query' => $data
+        ]);
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $data
+     * @return mixed
+     * @throws Exception
+     */
     private function postNew(string $endpoint, array $data = [])
     {
         return $this->handle($this->newApiClient, 'POST', $endpoint, [
@@ -478,7 +521,12 @@ class AvorgApi
      * @return mixed
      * @throws Exception
      */
-    private function handle(Client $client, string $method, string $endpoint, array $options = [])
+    private function handle(
+        Client $client,
+        string $method,
+        string $endpoint,
+        array $options = []
+    )
     {
         if (defined('AVORG_TESTS_RUNNING') && AVORG_TESTS_RUNNING) {
             throw new Exception("Unmocked API method called");

@@ -6,7 +6,8 @@ namespace Avorg;
  * @property mixed|null userId
  * @property mixed|null sessionToken
  */
-class Session {
+class Session
+{
     /** @var Php $php */
     private $php;
 
@@ -26,7 +27,9 @@ class Session {
 
     public function __isset($name)
     {
-        return array_key_exists($name, $_SESSION);
+        return isset($_SESSION)
+            && is_array($_SESSION)
+            && array_key_exists($name, $_SESSION);
     }
 
     public function registerCallbacks()
@@ -37,6 +40,8 @@ class Session {
     public function init()
     {
         $this->php->initSession();
+
+        var_dump($this->userId, $this->sessionToken);
     }
 
     public function loadData($data)
