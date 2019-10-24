@@ -1,3 +1,4 @@
+import "./block/fav"
 import "./block/list"
 import "./block/placeholder"
 import "./block/relatedSermons"

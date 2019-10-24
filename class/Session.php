@@ -2,6 +2,10 @@
 
 namespace Avorg;
 
+/**
+ * @property mixed|null userId
+ * @property mixed|null sessionToken
+ */
 class Session {
     /** @var Php $php */
     private $php;

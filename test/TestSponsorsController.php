@@ -1,10 +1,10 @@
 <?php
 
-use Avorg\RestController\DataObjects\Series;
+use Avorg\RestController\DataObjects\Sponsors;
 
 final class TestSponsorsController extends Avorg\TestCase
 {
-    /** @var Series $controller */
+    /** @var Sponsors $controller */
     protected $controller;
 
     private $controllerName = "Sponsors";

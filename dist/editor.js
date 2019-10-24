@@ -86,6 +86,27 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./component/block/fav/index.tsx":
+/*!***************************************!*\
+  !*** ./component/block/fav/index.tsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var AvorgBlockFav;
+(function (AvorgBlockFav) {
+    window.wp.blocks.registerBlockType('avorg/block-fav', {
+        title: 'Favorite Toggle',
+        icon: 'star-half',
+        category: 'widgets',
+        edit: function (props) { return wp.element.createElement("div", { className: props.className }, "Favorite Toggle"); },
+        save: function () { return null; }
+    });
+})(AvorgBlockFav || (AvorgBlockFav = {}));
+
+
+/***/ }),
+
 /***/ "./component/block/list/index.tsx":
 /*!****************************************!*\
   !*** ./component/block/list/index.tsx ***!
@@ -263,6 +284,7 @@ var AvorgBlockRss;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(/*! ./block/fav */ "./component/block/fav/index.tsx");
 __webpack_require__(/*! ./block/list */ "./component/block/list/index.tsx");
 __webpack_require__(/*! ./block/placeholder */ "./component/block/placeholder/index.tsx");
 __webpack_require__(/*! ./block/relatedSermons */ "./component/block/relatedSermons/index.tsx");
