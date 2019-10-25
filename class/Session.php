@@ -41,7 +41,7 @@ class Session
     {
         $this->php->initSession();
 
-        var_dump($this->userId, $this->sessionToken);
+//        var_dump($this->userId, $this->sessionToken);
     }
 
     public function loadData($data)

@@ -3,9 +3,17 @@ namespace AvorgBlockFav {
         title: 'Favorite Toggle',
         icon: 'star-half',
         category: 'widgets',
-        edit: (props: any) => <div className={props.className}>Favorite Toggle Backend</div>,
+        edit: (props: any) => {
+            return <div className={props.className}>
+                <span className="dashicons dashicons-star-empty" title={'Add to favorites'} />
+                <span className="dashicons dashicons-star-filled" title={'Remove from favorites'} />
+            </div>
+        },
         save: (props: any) => {
-            return <div className={props.className}>Favorite Toggle Frontend</div>
+            return <div className={props.className}>
+                <span className="dashicons dashicons-star-empty" title={'Add to favorites'} />
+                <span className="dashicons dashicons-star-filled" title={'Remove from favorites'} />
+            </div>
         }
     });
 }

@@ -99,8 +99,16 @@ var AvorgBlockFav;
         title: 'Favorite Toggle',
         icon: 'star-half',
         category: 'widgets',
-        edit: function (props) { return wp.element.createElement("div", { className: props.className }, "Favorite Toggle"); },
-        save: function () { return null; }
+        edit: function (props) {
+            return wp.element.createElement("div", { className: props.className },
+                wp.element.createElement("span", { className: "dashicons dashicons-star-empty", title: 'Add to favorites' }),
+                wp.element.createElement("span", { className: "dashicons dashicons-star-filled", title: 'Remove from favorites' }));
+        },
+        save: function (props) {
+            return wp.element.createElement("div", { className: props.className },
+                wp.element.createElement("span", { className: "dashicons dashicons-star-empty", title: 'Add to favorites' }),
+                wp.element.createElement("span", { className: "dashicons dashicons-star-filled", title: 'Remove from favorites' }));
+        }
     });
 })(AvorgBlockFav || (AvorgBlockFav = {}));
 

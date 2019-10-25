@@ -92,7 +92,7 @@ class AvorgApi
     {
         /* TODO: Stop passing userId && sessionToken via query string */
         $this->deleteOld('favorite', [
-            "id[]" => $favoriteId,
+            "id[]" => $favoriteId, /* Not sure if this should be an array */
             "userId" => $userId,
             "sessionToken" => $sessionToken
         ]);

@@ -86,6 +86,23 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./component/block/fav/frontend.tsx":
+/*!******************************************!*\
+  !*** ./component/block/fav/frontend.tsx ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+console.log('fav frontend');
+var block = document.querySelector('.wp-block-avorg-block-fav');
+console.log(block);
+block.addEventListener('click', function () {
+    this.classList.toggle('faved');
+});
+
+
+/***/ }),
+
 /***/ "./component/frontend.ts":
 /*!*******************************!*\
   !*** ./component/frontend.ts ***!
@@ -96,6 +113,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(/*! ./block/fav/frontend */ "./component/block/fav/frontend.tsx");
 __webpack_require__(/*! ./molecule/ajaxList */ "./component/molecule/ajaxList/index.tsx");
 var text = "FRONTEND.TS BUNDLE";
 console.log(text);
