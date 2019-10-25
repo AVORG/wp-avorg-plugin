@@ -11,7 +11,7 @@ class PlaceholderIds extends RestController
 {
     protected $route = '/placeholder-ids';
 
-    public function getData($request = null)
+    public function handleGet($request = null)
     {
         return $this->wp->get_all_meta_values("avorgBitIdentifier");
     }

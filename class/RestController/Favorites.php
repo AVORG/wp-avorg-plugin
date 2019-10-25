@@ -30,12 +30,47 @@ class Favorites extends RestController
     }
 
     /**
-     * @param null $request
+     * @param array $request
+     * @return array|string
      * @throws Exception
      */
-    public function getData($request = null)
+    public function handleGet($request = [])
+    {
+        if (array_key_exists('presentationId', $request)) {
+            return $this->api->isFavorited(
+                $request['presentationId'],
+                $this->session->userId,
+                $this->session->sessionToken
+            );
+        }
+
+        return $this->api->getFavorites(
+            $this->session->userId,
+            $this->session->sessionToken
+        );
+    }
+
+    /**
+     * @param array $request
+     * @throws Exception
+     */
+    public function handlePost($request = [])
     {
         $this->api->addFavorite(
+            $request['presentationId'],
+            $this->session->userId,
+            $this->session->sessionToken
+        );
+    }
+
+    /**
+     * @param array $request
+     * @return string|void
+     * @throws Exception
+     */
+    public function handleDelete($request = [])
+    {
+        $this->api->unFavorite(
             $request['presentationId'],
             $this->session->userId,
             $this->session->sessionToken

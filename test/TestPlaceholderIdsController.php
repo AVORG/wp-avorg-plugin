@@ -18,21 +18,12 @@ final class TestPlaceholderIdsController extends Avorg\TestCase
     {
         $this->controller->registerRoutes();
 
-        $this->mockWordPress->assertMethodCalledWith(
-            'register_rest_route',
-            'avorg/v1',
-            '/placeholder-ids',
-            [
-                'methods' => 'GET',
-                'callback' => [$this->controller, 'getData'],
-                'args' => []
-            ]
-        );
+        $this->mockWordPress->assertRestRouteRegistered('/placeholder-ids');
     }
 
     public function testGetsIdentifiers()
     {
-        $this->controller->getData();
+        $this->controller->handleGet();
 
         $this->mockWordPress->assertMethodCalledWith("get_all_meta_values", "avorgBitIdentifier");
     }
@@ -41,7 +32,7 @@ final class TestPlaceholderIdsController extends Avorg\TestCase
     {
         $this->mockWordPress->setReturnValue("get_all_meta_values", "values");
 
-        $response = $this->controller->getData();
+        $response = $this->controller->handleGet();
 
         $this->assertEquals("values", $response);
     }

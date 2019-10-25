@@ -66,20 +66,98 @@ class AvorgApi
     /**
      * @param $userId
      * @param $sessionToken
+     * @return array
      * @throws Exception
      */
     public function getFavorites($userId, $sessionToken)
     {
         /* TODO: Stop passing userId && sessionToken via query string */
-        $this->getOld("favorite", [
-            "userId" => $userId,
-            "sessionToken" => $sessionToken,
-        ]);
+        $result = $this->getResult("favorite?userId=$userId&sessionToken=$sessionToken");
+
+        return [
+            'presenters' => $this->extractFavoritePresenters($result),
+            'recordings' => $this->extractFavoriteRecordings($result)
+        ];
     }
 
+    private function extractFavoritePresenters($result)
+    {
+        return $this->extractFavoriteEntities(
+            $result,
+            'presenter',
+            'presenters'
+        );
+    }
+
+    private function extractFavoriteRecordings($result)
+    {
+        return $this->extractFavoriteEntities(
+            $result,
+            'recording',
+            'recordings'
+        );
+    }
+
+    private function extractFavoriteEntities($result, $listKey, $itemKey)
+    {
+        if (!array_key_exists($listKey, $result)) return [];
+
+        $favoriteIds = array_keys(get_object_vars($result->$listKey));
+
+        return array_map(function($id) use($result, $listKey, $itemKey) {
+            $item = $result->$listKey[$id][0]->$itemKey;
+            $item->favoriteId = $id;
+
+            return $item;
+        }, $favoriteIds);
+    }
+
+    /**
+     * @param $catalogId
+     * @param $userId
+     * @param $sessionToken
+     * @param string $catalog
+     * @throws Exception
+     */
     public function unFavorite($catalogId, $userId, $sessionToken, $catalog = 'recording')
     {
+        $favorite = $this->findFavorite($catalogId, $userId, $sessionToken, $catalog);
 
+        $this->deleteFavorite($favorite->favoriteId, $userId, $sessionToken);
+    }
+
+    /**
+     * @param $catalogId
+     * @param $userId
+     * @param $sessionToken
+     * @param string $catalog
+     * @return bool
+     * @throws Exception
+     */
+    public function isFavorited($catalogId, $userId, $sessionToken, $catalog = 'recording')
+    {
+        $favorite = $this->findFavorite($catalogId, $userId, $sessionToken, $catalog);
+
+        return $favorite !== null;
+    }
+
+    /**
+     * @param $catalogId
+     * @param $userId
+     * @param $sessionToken
+     * @param $catalog
+     * @return mixed
+     * @throws Exception
+     */
+    private function findFavorite($catalogId, $userId, $sessionToken, $catalog)
+    {
+        $favorites = $this->getFavorites($userId, $sessionToken);
+
+        $matches = array_filter($favorites[$catalog], function ($item) use ($catalogId) {
+            return intval($item->id) === intval($catalogId);
+        });
+
+        return $matches ? $matches[0] : null;
     }
 
     /**
