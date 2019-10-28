@@ -2,6 +2,7 @@
 
 namespace Avorg;
 
+use WP_REST_Request;
 use function defined;
 use Exception;
 
@@ -59,22 +60,22 @@ abstract class RestController
         );
     }
 
-    public function handleGet($request = [])
+    public function handleGet(WP_REST_Request $request)
     {
         return 'GET handler unimplemented';
     }
 
-    public function handlePost($request = [])
+    public function handlePost(WP_REST_Request $request)
     {
         return 'POST handler unimplemented';
     }
 
-    public function handlePut($request = [])
+    public function handlePut(WP_REST_Request $request)
     {
         return 'PUT handler unimplemented';
     }
 
-    public function handleDelete($request = [])
+    public function handleDelete(WP_REST_Request $request)
     {
         return 'DELETE handler unimplemented';
     }

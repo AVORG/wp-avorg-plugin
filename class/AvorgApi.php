@@ -72,7 +72,10 @@ class AvorgApi
     public function getFavorites($userId, $sessionToken)
     {
         /* TODO: Stop passing userId && sessionToken via query string */
-        $result = $this->getResult("favorite?userId=$userId&sessionToken=$sessionToken");
+        $result = $this->getResult("favorite", [
+            'userId' => $userId,
+            'sessionToken' => $sessionToken
+        ]);
 
         return [
             'presenters' => $this->extractFavoritePresenters($result),
@@ -105,7 +108,7 @@ class AvorgApi
         $favoriteIds = array_keys(get_object_vars($result->$listKey));
 
         return array_map(function($id) use($result, $listKey, $itemKey) {
-            $item = $result->$listKey[$id][0]->$itemKey;
+            $item = $result->$listKey->$id[0]->$itemKey;
             $item->favoriteId = $id;
 
             return $item;
@@ -153,6 +156,8 @@ class AvorgApi
     {
         $favorites = $this->getFavorites($userId, $sessionToken);
 
+        if (!array_key_exists($catalog, $favorites)) return null;
+
         $matches = array_filter($favorites[$catalog], function ($item) use ($catalogId) {
             return intval($item->id) === intval($catalogId);
         });
@@ -198,11 +203,14 @@ class AvorgApi
      */
     public function getAllSeries($search = null, $start = null)
     {
-        $endpoint = "series?search=$search&start=$start";
+        $result = $this->getResult("series", [
+            'search' => $search,
+            'start' => $start
+        ]);
 
         return array_map(function ($item) {
             return $item->series;
-        }, $this->getResult($endpoint));
+        }, $result);
     }
 
     /**
@@ -227,11 +235,14 @@ class AvorgApi
      */
     public function getSponsors($search = null, $start = null)
     {
-        $endpoint = "sponsors?search=$search&start=$start";
+        $result = $this->getResult("sponsors", [
+            'search' => $search,
+            'start' => $start
+        ]);
 
         return array_map(function ($item) {
             return $item->sponsors;
-        }, $this->getResult($endpoint));
+        }, $result);
     }
 
     /**
@@ -242,11 +253,14 @@ class AvorgApi
      */
     public function getConferences($search = null, $start = null)
     {
-        $endpoint = "conferences?search=$search&start=$start";
+        $result = $this->getResult("conferences", [
+            'search' => $search,
+            'start' => $start
+        ]);
 
         return array_map(function ($item) {
             return $item->conferences;
-        }, $this->getResult($endpoint));
+        }, $result);
     }
 
     /**
@@ -257,11 +271,15 @@ class AvorgApi
      */
     public function getStories($search = null, $start = null)
     {
-        $endpoint = "audiobooks?story=1&search=$search&start=$start";
+        $result = $this->getResult("audiobooks", [
+            'story' => 1,
+            'search' => $search,
+            'start' => $start
+        ]);
 
         return array_map(function ($item) {
             return $item->audiobooks;
-        }, $this->getResult($endpoint));
+        }, $result);
     }
 
     /**
@@ -273,9 +291,10 @@ class AvorgApi
      */
     public function getBibleChapters($bibleId, $bookId, $testamentId)
     {
-        return (array)$this->getResult(
-            "audiobibles/books/$bookId?volume=$bibleId&testament=$testamentId"
-        );
+        return (array)$this->getResult("audiobibles/books/$bookId", [
+            'volume' => $bibleId,
+            'testament' => $testamentId
+        ]);
     }
 
     /**
@@ -320,11 +339,14 @@ class AvorgApi
      */
     public function getTopics($search = null, $start = null)
     {
-        $endpoint = "topics?search=$search&start=$start";
+        $result = $this->getResult("topics", [
+            'search' => $search,
+            'start' => $start
+        ]);
 
         return array_map(function ($item) {
             return $item->topics;
-        }, $this->getResult($endpoint));
+        }, $result);
     }
 
     /**
@@ -349,11 +371,14 @@ class AvorgApi
      */
     public function getBooks($search = null, $start = null)
     {
-        $endpoint = "audiobooks?search=$search&start=$start";
+        $result = $this->getResult("audiobooks", [
+            'search' => $search,
+            'start' => $start
+        ]);
 
         return array_map(function ($item) {
             return $item->audiobooks;
-        }, $this->getResult($endpoint));
+        }, $result);
     }
 
     /**
@@ -364,7 +389,10 @@ class AvorgApi
      */
     public function getPlaylists($search = null, $start = null)
     {
-        return $this->getResult("playlist?search=$search&start=$start");
+        return $this->getResult("playlist", [
+            'search' => $search,
+            'start' => $start
+        ]);
     }
 
     /**
@@ -377,7 +405,12 @@ class AvorgApi
      */
     public function getPlaylistsByUser($userId, $sessionToken, $search = null, $start = null)
     {
-        return $this->getResult("playlist?userId=$userId&sessionToken=$sessionToken&search=$search&start=$start");
+        return $this->getResult("playlist", [
+            'userId' => $userId,
+            'sessionToken' => $sessionToken,
+            'search' => $search,
+            'start' => $start
+        ]);
     }
 
     /**
@@ -414,11 +447,14 @@ class AvorgApi
      */
     public function getPresenters($search = null, $start = null)
     {
-        $endpoint = "presenters?search=$search&start=$start";
+        $result = $this->getResult("presenters", [
+            'search' => $search,
+            'start' => $start
+        ]);
 
         return array_map(function ($item) {
             return $item->presenters;
-        }, $this->getResult($endpoint));
+        }, $result);
     }
 
     /**
@@ -530,13 +566,14 @@ class AvorgApi
     }
 
     /**
-     * @param $endpoint
+     * @param string $endpoint
+     * @param array $data
      * @return mixed
      * @throws Exception
      */
-    private function getResult($endpoint)
+    private function getResult(string $endpoint, array $data = [])
     {
-        return $this->getOld($endpoint)->result;
+        return $this->getOld($endpoint, $data)->result;
     }
 
     /**

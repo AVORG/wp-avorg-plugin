@@ -22,9 +22,9 @@ final class TestFavoritesController extends Avorg\TestCase
 
     public function testAddFavorite()
     {
-        $this->controller->handlePost([
+        $this->controller->handlePost(new WP_REST_Request([
             'presentationId' => 'entity_id'
-        ]);
+        ]));
 
         $this->mockAvorgApi->assertMethodCalledWith(
             "addFavorite",
@@ -36,9 +36,9 @@ final class TestFavoritesController extends Avorg\TestCase
 
     public function testDeleteFavorite()
     {
-        $this->controller->handleDelete([
+        $this->controller->handleDelete(new WP_REST_Request([
             'presentationId' => 'entity_id'
-        ]);
+        ]));
 
         $this->mockAvorgApi->assertMethodCalledWith(
             "unFavorite",
@@ -50,7 +50,7 @@ final class TestFavoritesController extends Avorg\TestCase
 
     public function testGetGetsFavorites()
     {
-        $this->controller->handleGet();
+        $this->controller->handleGet(new WP_REST_Request());
 
         $this->mockAvorgApi->assertMethodCalledWith(
             'getFavorites',
@@ -63,14 +63,14 @@ final class TestFavoritesController extends Avorg\TestCase
     {
         $this->mockAvorgApi->setReturnValue('getFavorites', 'the_favorites');
 
-        $response = $this->controller->handleGet();
+        $response = $this->controller->handleGet(new WP_REST_Request());
 
         $this->assertEquals('the_favorites', $response);
     }
 
     public function testIsFavoritedCheck()
     {
-        $this->controller->handleGet(['presentationId' => 'the_id']);
+        $this->controller->handleGet(new WP_REST_Request(['presentationId' => 'the_id']));
 
         $this->mockAvorgApi->assertMethodCalledWith(
             'isFavorited',
@@ -84,7 +84,9 @@ final class TestFavoritesController extends Avorg\TestCase
     {
         $this->mockAvorgApi->setReturnValue('isFavorited', True);
 
-        $response = $this->controller->handleGet(['presentationId' => 'the_id']);
+        $request = new WP_REST_Request(['presentationId' => 'the_id']);
+
+        $response = $this->controller->handleGet($request);
 
         $this->assertTrue($response);
     }

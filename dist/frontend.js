@@ -95,10 +95,21 @@
 
 console.log('fav frontend');
 var block = document.querySelector('.wp-block-avorg-block-fav');
-console.log(block);
-block.addEventListener('click', function () {
-    this.classList.toggle('faved');
-});
+window.onload = function () {
+    console.log(block);
+    var id = window.avorg.query.entity_id, url = "/wp-json/avorg/v1/favorites?presentationId=" + id;
+    var was_favorited_on_load = null;
+    fetch(url)
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+        was_favorited_on_load = data;
+        console.log('update', was_favorited_on_load);
+    });
+    console.log(id, url, was_favorited_on_load);
+    block.addEventListener('click', function () {
+        this.classList.toggle('faved');
+    });
+};
 
 
 /***/ }),

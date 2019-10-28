@@ -58,7 +58,7 @@ final class TestRestController extends Avorg\TestCase
     public function testHandleGetMethod($httpMethod)
     {
         $phpMethod = 'handle' . ucfirst(strtolower($httpMethod));
-        $response = $this->controller->$phpMethod();
+        $response = $this->controller->$phpMethod(new WP_REST_Request());
 
         $this->assertEquals("$httpMethod handler unimplemented", $response);
     }

@@ -6,6 +6,7 @@ use Avorg\AvorgApi;
 use Avorg\RestController;
 use Avorg\Session;
 use Avorg\WordPress;
+use WP_REST_Request;
 use Exception;
 use function defined;
 
@@ -30,13 +31,13 @@ class Favorites extends RestController
     }
 
     /**
-     * @param array $request
-     * @return array|string
+     * @param WP_REST_Request $request
+     * @return array|boolean
      * @throws Exception
      */
-    public function handleGet($request = [])
+    public function handleGet(WP_REST_Request $request)
     {
-        if (array_key_exists('presentationId', $request)) {
+        if ($request['presentationId']) {
             return $this->api->isFavorited(
                 $request['presentationId'],
                 $this->session->userId,
@@ -51,10 +52,10 @@ class Favorites extends RestController
     }
 
     /**
-     * @param array $request
+     * @param WP_REST_Request $request
      * @throws Exception
      */
-    public function handlePost($request = [])
+    public function handlePost(WP_REST_Request $request)
     {
         $this->api->addFavorite(
             $request['presentationId'],
@@ -64,11 +65,11 @@ class Favorites extends RestController
     }
 
     /**
-     * @param array $request
+     * @param WP_REST_Request $request
      * @return string|void
      * @throws Exception
      */
-    public function handleDelete($request = [])
+    public function handleDelete(WP_REST_Request $request)
     {
         $this->api->unFavorite(
             $request['presentationId'],

@@ -9,6 +9,8 @@ use natlib\Factory;
 use ReflectionException;
 use stdClass;
 
+include_once 'stubs/WP_REST_Request.php';
+
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var AvorgApi|StubAvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
