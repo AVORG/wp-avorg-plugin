@@ -3,33 +3,20 @@
 namespace Avorg;
 
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 use function defined;
 use function get_option;
-use GuzzleHttp\Client;
 
 if (!defined('ABSPATH')) exit;
 
 class AvorgApi
 {
-    /** @var Client $newApiClient */
-    private $newApiClient;
+    /** @var Guzzle $guzzle */
+    private $guzzle;
 
-    /** @var Client $oldApiClient */
-    private $oldApiClient;
-
-    public function __construct()
+    public function __construct(Guzzle $guzzle)
     {
-        $this->newApiClient = new Client([
-            'base_uri' => 'https://api.audioverse.org/',
-            'headers' => ['Authorization' => 'Bearer ' . get_option("avorgApiKey")]
-        ]);
-
-        $this->oldApiClient = new Client([
-            'base_uri' => 'https://api2.audioverse.org/',
-            'auth' => [get_option("avorgApiUser"), get_option("avorgApiPass")]
-        ]);
+        $this->guzzle = $guzzle;
     }
 
     /**
@@ -78,8 +65,8 @@ class AvorgApi
         ]);
 
         return [
-            'presenters' => $this->extractFavoritePresenters($result),
-            'recordings' => $this->extractFavoriteRecordings($result)
+            'presenter' => $this->extractFavoritePresenters($result),
+            'recording' => $this->extractFavoriteRecordings($result)
         ];
     }
 
@@ -584,7 +571,7 @@ class AvorgApi
      */
     private function getOld(string $endpoint, array $data = [])
     {
-        return $this->handle($this->oldApiClient, 'GET', $endpoint, [
+        return $this->guzzle->handleOld('GET', $endpoint, [
             'query' => $data
         ]);
     }
@@ -597,7 +584,7 @@ class AvorgApi
      */
     private function postOld(string $endpoint, array $data = [])
     {
-        return $this->handle($this->oldApiClient, 'POST', $endpoint, [
+        return $this->guzzle->handleOld('POST', $endpoint, [
             'form_params' => $data
         ]);
     }
@@ -610,7 +597,7 @@ class AvorgApi
      */
     private function deleteOld(string $endpoint, array $data = [])
     {
-        return $this->handle($this->oldApiClient, 'DELETE', $endpoint, [
+        return $this->guzzle->handleOld('DELETE', $endpoint, [
             'query' => $data
         ]);
     }
@@ -623,36 +610,8 @@ class AvorgApi
      */
     private function postNew(string $endpoint, array $data = [])
     {
-        return $this->handle($this->newApiClient, 'POST', $endpoint, [
+        return $this->guzzle->handleNew('POST', $endpoint, [
             'form_params' => $data
         ]);
-    }
-
-    /**
-     * @param Client $client
-     * @param string $method
-     * @param string $endpoint
-     * @param array $options
-     * @return mixed
-     * @throws Exception
-     */
-    private function handle(
-        Client $client,
-        string $method,
-        string $endpoint,
-        array $options = []
-    )
-    {
-        if (defined('AVORG_TESTS_RUNNING') && AVORG_TESTS_RUNNING) {
-            throw new Exception("Unmocked API method called");
-        }
-
-        try {
-            $response = $client->request($method, $endpoint, $options);
-
-            return json_decode($response->getBody());
-        } catch (GuzzleException $e) {
-            throw new Exception("Failed to get response from url $endpoint");
-        }
     }
 }

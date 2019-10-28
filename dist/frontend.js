@@ -104,6 +104,9 @@ window.onload = function () {
         .then(function (data) {
         was_favorited_on_load = data;
         console.log('update', was_favorited_on_load);
+        if (was_favorited_on_load) {
+            block.classList.add('faved');
+        }
     });
     console.log(id, url, was_favorited_on_load);
     block.addEventListener('click', function () {
