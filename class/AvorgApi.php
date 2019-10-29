@@ -148,7 +148,7 @@ class AvorgApi
             return intval($item->id) === intval($catalogId);
         });
 
-        return $matches ? $matches[0] : null;
+        return empty($matches) ? null : reset($matches);
     }
 
     /**
@@ -161,8 +161,9 @@ class AvorgApi
     {
         /* TODO: Stop passing userId && sessionToken via query string */
         $this->deleteOld('favorite', [
-            "id[]" => $favoriteId, /* Not sure if this should be an array */
+            "id" => [$favoriteId],
             "userId" => $userId,
+            "clearAll" => 0,
             "sessionToken" => $sessionToken
         ]);
     }
