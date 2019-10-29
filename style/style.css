@@ -104,6 +104,23 @@
   list-style-type: none;
 }
 
+.wp-block-avorg-block-fav {
+  cursor: pointer;
+  display: table;
+}
+.wp-block-avorg-block-fav .dashicons-star-empty {
+  display: block;
+}
+.wp-block-avorg-block-fav .dashicons-star-filled {
+  display: none;
+}
+.wp-block-avorg-block-fav.faved .dashicons-star-empty {
+  display: none;
+}
+.wp-block-avorg-block-fav.faved .dashicons-star-filled {
+  display: block;
+}
+
 .avorg-page-bible li {
   list-style-type: none;
 }

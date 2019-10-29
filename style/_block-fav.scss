@@ -1,0 +1,18 @@
+.wp-block-avorg-block-fav {
+  cursor: pointer;
+  display: table;
+  .dashicons-star-empty {
+    display: block;
+  }
+  .dashicons-star-filled {
+    display: none;
+  }
+  &.faved {
+    .dashicons-star-empty {
+      display: none;
+    }
+    .dashicons-star-filled {
+      display: block;
+    }
+  }
+}

@@ -26,21 +26,21 @@ final class TestPlaylistsController extends Avorg\TestCase
 
     public function testGetsEntities()
     {
-        $this->controller->getData();
+        $this->controller->handleGet();
 
         $this->mockAvorgApi->assertMethodCalled("getPlaylists");
     }
 
     public function testUsesStartParam()
     {
-        $this->controller->getData(['start' => 25]);
+        $this->controller->handleGet(['start' => 25]);
 
         $this->mockAvorgApi->assertMethodCalledWith('getPlaylists', null, 25);
     }
 
     public function testUsesSearchParam()
     {
-        $this->controller->getData(['search' => 'term']);
+        $this->controller->handleGet(['search' => 'term']);
 
         $this->mockAvorgApi->assertMethodCalledWith('getPlaylists', 'term', null);
     }

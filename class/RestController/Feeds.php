@@ -23,7 +23,7 @@ class Feeds extends RestController
         $this->routeFactory = $routeFactory;
     }
 
-    public function getData($request = null)
+    public function handleGet($request = null)
     {
         $formats = $this->routeFactory->getEndpointRouteFormats();
 

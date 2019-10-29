@@ -16,6 +16,26 @@ class StubAvorgApi extends AvorgApi
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
+    public function getFavorites($userId, $sessionToken)
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
+    public function isFavorited($catalogId, $userId, $sessionToken, $catalog = 'recording')
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
+    public function addFavorite($catalogId, $userId, $sessionToken, $catalog = 'recording')
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
+    public function unFavorite($catalogId, $userId, $sessionToken, $catalog = 'recording')
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
     public function getOneSeries($id)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());

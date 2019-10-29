@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) exit;
 
 abstract class DataObjects extends RestController
 {
-    protected $args = [
+    protected $getArgs = [
         'search' => [
             'description' => 'Search term',
             'type' => 'string'
@@ -26,7 +26,7 @@ abstract class DataObjects extends RestController
     /** @var DataObjectRepository $repository */
     protected $repository;
 
-    public function getData($request = null)
+    public function handleGet($request = null)
     {
         $search = $request['search'] ?? null;
         $start = $request['start'] ?? null;

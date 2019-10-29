@@ -86,6 +86,37 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./component/block/fav/frontend.tsx":
+/*!******************************************!*\
+  !*** ./component/block/fav/frontend.tsx ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+console.log('fav frontend');
+var block = document.querySelector('.wp-block-avorg-block-fav');
+window.onload = function () {
+    console.log(block);
+    var id = window.avorg.query.entity_id, url = "/wp-json/avorg/v1/favorites?presentationId=" + id;
+    var was_favorited_on_load = null;
+    fetch(url)
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+        was_favorited_on_load = data;
+        console.log('update', was_favorited_on_load);
+        if (was_favorited_on_load) {
+            block.classList.add('faved');
+        }
+    });
+    console.log(id, url, was_favorited_on_load);
+    block.addEventListener('click', function () {
+        this.classList.toggle('faved');
+    });
+};
+
+
+/***/ }),
+
 /***/ "./component/frontend.ts":
 /*!*******************************!*\
   !*** ./component/frontend.ts ***!
@@ -96,6 +127,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(/*! ./block/fav/frontend */ "./component/block/fav/frontend.tsx");
 __webpack_require__(/*! ./molecule/ajaxList */ "./component/molecule/ajaxList/index.tsx");
 var text = "FRONTEND.TS BUNDLE";
 console.log(text);

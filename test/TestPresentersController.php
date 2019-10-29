@@ -26,21 +26,21 @@ final class TestPresentersController extends Avorg\TestCase
 
     public function testGetsEntities()
     {
-        $this->controller->getData();
+        $this->controller->handleGet();
 
         $this->mockAvorgApi->assertMethodCalled("getPresenters");
     }
 
     public function testReturnsEntities()
     {
-        $this->assertIsArray($this->controller->getData());
+        $this->assertIsArray($this->controller->handleGet());
     }
 
     public function testRegistersArguments()
     {
         $this->controller->registerRoutes();
 
-        $this->mockWordPress->assertRestRouteQueryVarsRegistered([
+        $this->mockWordPress->assertRestRouteQueryVarsRegistered('GET', [
             'search' => [
                 'description' => 'Search term',
                 'type' => 'string'
@@ -54,14 +54,14 @@ final class TestPresentersController extends Avorg\TestCase
 
     public function testUsesStartParam()
     {
-        $this->controller->getData(['start' => 25]);
+        $this->controller->handleGet(['start' => 25]);
 
         $this->mockAvorgApi->assertMethodCalledWith('getPresenters', null, 25);
     }
 
     public function testUsesSearchParam()
     {
-        $this->controller->getData(['search' => 'term']);
+        $this->controller->handleGet(['search' => 'term']);
 
         $this->mockAvorgApi->assertMethodCalledWith('getPresenters', 'term', null);
     }

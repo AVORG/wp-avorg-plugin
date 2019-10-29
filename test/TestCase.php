@@ -6,8 +6,11 @@ use Avorg\DataObject\BibleBook;
 use Avorg\DataObject\Book;
 use Avorg\DataObject\Recording;
 use natlib\Factory;
+use natlib\Stub;
 use ReflectionException;
 use stdClass;
+
+include_once 'stubs/WP_REST_Request.php';
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	/** @var AvorgApi|StubAvorgApi $mockAvorgApi */
@@ -15,6 +18,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 
 	/** @var Filesystem|StubFilesystem */
 	protected $mockFilesystem;
+
+	/** @var Guzzle|StubGuzzle $mockGuzzle */
+	protected $mockGuzzle;
 	
 	/** @var Php|StubPhp $mockPhp */
 	protected $mockPhp;
@@ -40,6 +46,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 		$this->factory->injectObjects(
 			$this->mockAvorgApi = new StubAvorgApi($this),
 			$this->mockFilesystem = new StubFilesystem($this),
+			$this->mockGuzzle = new StubGuzzle($this),
 			$this->mockPhp = new StubPhp($this),
 			$this->mockTwig = new StubTwig($this),
 			$this->mockWordPress = new StubWordPress($this, $this->factory)

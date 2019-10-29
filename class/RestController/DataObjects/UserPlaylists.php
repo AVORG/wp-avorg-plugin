@@ -25,7 +25,7 @@ class UserPlaylists extends RestController\DataObjects
         $this->session = $session;
     }
 
-    public function getData($request = null)
+    public function handleGet($request = null)
     {
         $userId = $this->session->userId;
         $sessionToken = $this->session->sessionToken;
