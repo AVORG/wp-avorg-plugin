@@ -26,26 +26,26 @@ final class TestConferencesController extends Avorg\TestCase
 
     public function testGetsEntities()
     {
-        $this->controller->handleGet();
+        $this->controller->handleGet(new WP_REST_Request());
 
         $this->mockAvorgApi->assertMethodCalled("getConferences");
     }
 
     public function testReturnsEntities()
     {
-        $this->assertIsArray($this->controller->handleGet());
+        $this->assertIsArray($this->controller->handleGet(new WP_REST_Request()));
     }
 
     public function testUsesStartParam()
     {
-        $this->controller->handleGet(['start' => 25]);
+        $this->controller->handleGet(new WP_REST_Request(['start' => 25]));
 
         $this->mockAvorgApi->assertMethodCalledWith('getConferences', null, 25);
     }
 
     public function testUsesSearchParam()
     {
-        $this->controller->handleGet(['search' => 'term']);
+        $this->controller->handleGet(new WP_REST_Request(['search' => 'term']));
 
         $this->mockAvorgApi->assertMethodCalledWith('getConferences', 'term', null);
     }

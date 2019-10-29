@@ -5,7 +5,6 @@ namespace Avorg;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use function defined;
-use function get_option;
 
 if (!defined('ABSPATH')) exit;
 

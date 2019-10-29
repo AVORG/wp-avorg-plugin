@@ -30,14 +30,14 @@ final class TestFeedsController extends Avorg\TestCase
 
     public function testReturnsRoutes()
     {
-        $data = $this->controller->handleGet();
+        $data = $this->controller->handleGet(new WP_REST_Request());
 
         $this->assertContains('Avorg\Endpoint\RssEndpoint\Speaker', $data);
     }
 
     public function testDoesNotReturnNonFeedRoutes()
     {
-        $data = $this->controller->handleGet();
+        $data = $this->controller->handleGet(new WP_REST_Request());
 
         $this->assertNotContains("Avorg\Endpoint\Recording", $data);
     }

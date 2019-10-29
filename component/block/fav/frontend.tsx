@@ -1,29 +1,39 @@
-console.log('fav frontend');
-
-const block = document.querySelector('.wp-block-avorg-block-fav');
-
 window.onload = () => {
-    console.log(block);
+    console.log('fav frontend');
 
-    const id = window.avorg.query.entity_id,
+    const blocks = document.querySelectorAll('.wp-block-avorg-block-fav'),
+        id = window.avorg.query.entity_id,
         url = `/wp-json/avorg/v1/favorites?presentationId=${id}`;
 
-    let was_favorited_on_load = null;
+    function setInitialState(was_favorited_on_load: boolean) {
+        if (was_favorited_on_load) {
+            blocks.forEach((el: Element) => {
+                el.classList.add('faved');
+                el.classList.remove('loading');
+            })
+        }
+    }
+
+    function handleClick(el: Element) {
+        if (el.classList.contains('faved')) {
+            el.classList.remove('faved');
+        } else {
+            el.classList.add('faved');
+        }
+    }
+
+    function setClickHandlers() {
+        blocks.forEach((el: Element) => {
+            el.addEventListener('click', () => handleClick(el));
+        });
+    }
 
     fetch(url)
         .then(res => res.json())
-        .then((data) => {
-            was_favorited_on_load = data;
+        .then((was_favorited_on_load) => {
             console.log('update', was_favorited_on_load);
-            if (was_favorited_on_load) {
-                block.classList.add('faved');
-            }
+            setInitialState(was_favorited_on_load);
+            setClickHandlers();
         });
-
-    console.log(id, url, was_favorited_on_load);
-
-    block.addEventListener('click', function() {
-        this.classList.toggle('faved');
-    });
 };
 

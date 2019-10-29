@@ -5,6 +5,7 @@ namespace Avorg\RestController;
 use Avorg\RestController;
 use Avorg\RouteFactory;
 use Avorg\WordPress;
+use WP_REST_Request;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -23,7 +24,7 @@ class Feeds extends RestController
         $this->routeFactory = $routeFactory;
     }
 
-    public function handleGet($request = null)
+    public function handleGet(WP_REST_Request $request)
     {
         $formats = $this->routeFactory->getEndpointRouteFormats();
 

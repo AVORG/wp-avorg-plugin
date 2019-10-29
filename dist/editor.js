@@ -100,12 +100,14 @@ var AvorgBlockFav;
         icon: 'star-half',
         category: 'widgets',
         edit: function (props) {
-            return wp.element.createElement("div", { className: props.className },
+            return wp.element.createElement("div", { className: props.className + ' loading' },
+                wp.element.createElement("span", { className: "dashicons dashicons-star-half", title: 'Loading...' }),
                 wp.element.createElement("span", { className: "dashicons dashicons-star-empty", title: 'Add to favorites' }),
                 wp.element.createElement("span", { className: "dashicons dashicons-star-filled", title: 'Remove from favorites' }));
         },
         save: function (props) {
-            return wp.element.createElement("div", { className: props.className },
+            return wp.element.createElement("div", { className: props.className + ' loading' },
+                wp.element.createElement("span", { className: "dashicons dashicons-star-half", title: 'Loading...' }),
                 wp.element.createElement("span", { className: "dashicons dashicons-star-empty", title: 'Add to favorites' }),
                 wp.element.createElement("span", { className: "dashicons dashicons-star-filled", title: 'Remove from favorites' }));
         }
