@@ -23,7 +23,7 @@ final class TestPlaceholderIdsController extends Avorg\TestCase
 
     public function testGetsIdentifiers()
     {
-        $this->controller->handleGet();
+        $this->controller->handleGet(new WP_REST_Request());
 
         $this->mockWordPress->assertMethodCalledWith("get_all_meta_values", "avorgBitIdentifier");
     }
@@ -32,7 +32,7 @@ final class TestPlaceholderIdsController extends Avorg\TestCase
     {
         $this->mockWordPress->setReturnValue("get_all_meta_values", "values");
 
-        $response = $this->controller->handleGet();
+        $response = $this->controller->handleGet(new WP_REST_Request());
 
         $this->assertEquals("values", $response);
     }

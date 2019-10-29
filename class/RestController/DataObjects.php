@@ -6,6 +6,7 @@ use Avorg\DataObjectRepository;
 use Avorg\DataObjectRepository\BookRepository;
 use Avorg\RestController;
 use Avorg\WordPress;
+use WP_REST_Request;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -26,7 +27,7 @@ abstract class DataObjects extends RestController
     /** @var DataObjectRepository $repository */
     protected $repository;
 
-    public function handleGet($request = null)
+    public function handleGet(WP_REST_Request $request)
     {
         $search = $request['search'] ?? null;
         $start = $request['start'] ?? null;

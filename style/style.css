@@ -108,10 +108,16 @@
   cursor: pointer;
   display: table;
 }
+.wp-block-avorg-block-fav .dashicons-star-half {
+  display: none;
+}
 .wp-block-avorg-block-fav .dashicons-star-empty {
   display: block;
 }
 .wp-block-avorg-block-fav .dashicons-star-filled {
+  display: none;
+}
+.wp-block-avorg-block-fav.faved .dashicons-star-half {
   display: none;
 }
 .wp-block-avorg-block-fav.faved .dashicons-star-empty {
@@ -119,6 +125,18 @@
 }
 .wp-block-avorg-block-fav.faved .dashicons-star-filled {
   display: block;
+}
+.wp-block-avorg-block-fav.loading {
+  opacity: 0.5;
+}
+.wp-block-avorg-block-fav.loading .dashicons-star-half {
+  display: block;
+}
+.wp-block-avorg-block-fav.loading .dashicons-star-empty {
+  display: none;
+}
+.wp-block-avorg-block-fav.loading .dashicons-star-filled {
+  display: none;
 }
 
 .avorg-page-bible li {
@@ -163,6 +181,10 @@
 
 .avorg-page-topics li {
   list-style-type: none;
+}
+
+.hello {
+  text-align: left;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,18 +1,27 @@
 .wp-block-avorg-block-fav {
-  cursor: pointer;
-  display: table;
-  .dashicons-star-empty {
-    display: block;
-  }
-  .dashicons-star-filled {
-    display: none;
-  }
-  &.faved {
+  @mixin setIcon($variant) {
+    .dashicons-star-half {
+      display: if($variant=='half', block, none);
+    }
     .dashicons-star-empty {
-      display: none;
+      display: if($variant=='empty', block, none);
     }
     .dashicons-star-filled {
-      display: block;
+      display: if($variant=='filled', block, none);
     }
+  }
+
+  cursor: pointer;
+  display: table;
+
+  @include setIcon('empty');
+
+  &.faved {
+    @include setIcon('filled');
+  }
+
+  &.loading {
+    opacity: .5;
+    @include setIcon('half');
   }
 }
