@@ -97,19 +97,35 @@ window.onload = function () {
     console.log('fav frontend');
     var blocks = document.querySelectorAll('.wp-block-avorg-block-fav'), id = window.avorg.query.entity_id, url = "/wp-json/avorg/v1/favorites?presentationId=" + id;
     function setInitialState(was_favorited_on_load) {
-        if (was_favorited_on_load) {
-            blocks.forEach(function (el) {
+        blocks.forEach(function (el) {
+            if (was_favorited_on_load) {
                 el.classList.add('faved');
-                el.classList.remove('loading');
-            });
-        }
+            }
+            else {
+                el.classList.remove('faved');
+            }
+            el.classList.remove('loading');
+        });
     }
     function handleClick(el) {
+        el.classList.add('loading');
         if (el.classList.contains('faved')) {
-            el.classList.remove('faved');
+            fetch(url, { method: 'DELETE' })
+                .then(function (res) { return res.json(); })
+                .then(function (res) {
+                console.log('fav deleted', res);
+                el.classList.remove('loading');
+                el.classList.remove('faved');
+            });
         }
         else {
-            el.classList.add('faved');
+            fetch(url, { method: 'POST' })
+                .then(function (res) { return res.json(); })
+                .then(function (res) {
+                console.log('fav created', res);
+                el.classList.remove('loading');
+                el.classList.add('faved');
+            });
         }
     }
     function setClickHandlers() {
