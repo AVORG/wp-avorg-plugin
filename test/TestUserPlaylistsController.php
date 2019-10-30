@@ -36,21 +36,21 @@ final class TestUserPlaylistsController extends Avorg\TestCase
 
     public function testGetsEntities()
     {
-        $this->controller->handleGet();
+        $this->controller->handleGet(new WP_REST_Request());
 
         $this->mockAvorgApi->assertMethodCalled($this->apiMethod);
     }
 
     public function testUsesStartParam()
     {
-        $this->controller->handleGet(['start' => 25]);
+        $this->controller->handleGet(new WP_REST_Request(['start' => 25]));
 
         $this->mockAvorgApi->assertMethodCalledWith($this->apiMethod, 'user_id', 'session_token', null, 25);
     }
 
     public function testUsesSearchParam()
     {
-        $this->controller->handleGet(['search' => 'term']);
+        $this->controller->handleGet(new WP_REST_Request(['search' => 'term']));
 
         $this->mockAvorgApi->assertMethodCalledWith($this->apiMethod, 'user_id', 'session_token', 'term', null);
     }

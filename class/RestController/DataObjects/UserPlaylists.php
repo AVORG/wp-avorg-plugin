@@ -6,6 +6,7 @@ use Avorg\DataObjectRepository\PlaylistRepository;
 use Avorg\RestController;
 use Avorg\Session;
 use Avorg\WordPress;
+use WP_REST_Request;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -25,7 +26,7 @@ class UserPlaylists extends RestController\DataObjects
         $this->session = $session;
     }
 
-    public function handleGet($request = null)
+    public function handleGet(WP_REST_Request $request)
     {
         $userId = $this->session->userId;
         $sessionToken = $this->session->sessionToken;
