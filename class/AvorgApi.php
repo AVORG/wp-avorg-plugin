@@ -33,6 +33,23 @@ class AvorgApi
     }
 
     /**
+     * @param $email
+     * @param $password
+     * @param $password2
+     * @param $language
+     * @throws Exception
+     */
+    public function register($email, $password, $password2, $language)
+    {
+        $this->postNew("auth/signup", [
+            'email' => $email,
+            'password' => $password,
+            'password_confirmation' => $password2,
+            'language' => $language
+        ]);
+    }
+
+    /**
      * @param $catalogId
      * @param $userId
      * @param $sessionToken
