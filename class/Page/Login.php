@@ -49,8 +49,12 @@ class Login extends Page
 
         if (!($email && $password)) return;
 
-        $sessionData = $this->api->logIn($_POST['email'], $_POST['password']);
+        $response = $this->api->logIn($_POST['email'], $_POST['password']);
 
-        $this->session->loadData($sessionData);
+        $this->session->loadData($response ?: []);
+
+        return [
+            'success' => $response !== False
+        ];
     }
 }
