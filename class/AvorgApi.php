@@ -26,10 +26,14 @@ class AvorgApi
      */
     public function logIn($email, $password)
     {
-        return $this->postNew("auth/login", [
-            'email' => $email,
-            'password' => $password
-        ])->data;
+        try {
+            return $this->postNew("auth/login", [
+                'email' => $email,
+                'password' => $password
+            ])->data;
+        } catch (Exception $e) {
+            return False;
+        }
     }
 
     /**
