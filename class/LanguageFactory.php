@@ -86,9 +86,11 @@ class LanguageFactory {
 		/** @var Language $language */
 		$language = $this->factory->make("Avorg\\Language");
 
-		$language->setBaseRoute($languageConfig["baseRoute"]);
-		$language->setUrlFragments($languageConfig["urlFragments"]);
-		$language->setLangCode($languageConfig["wpLanguageCode"]);
+		$language
+            ->setBaseRoute($languageConfig["baseRoute"])
+            ->setUrlFragments($languageConfig["urlFragments"])
+            ->setWpCode($languageConfig["wpLanguageCode"])
+            ->setDbCode($languageConfig["dbCode"]);
 
 		return $language;
 	}

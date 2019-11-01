@@ -18,6 +18,8 @@ final class TestRegisterPage extends Avorg\TestCase
 
     public function testExists()
     {
+        $_SERVER["REQUEST_URI"] = '/english/account/register';
+
         $_POST = [
             'email' => 'the_email',
             'password' => 'the_password',
@@ -27,7 +29,26 @@ final class TestRegisterPage extends Avorg\TestCase
         $this->page->addUi('');
 
         $this->mockAvorgApi->assertAnyCallMatches('register', function($call) {
-            return empty(array_diff(['the_email', 'the_password', 'the_password2'], $call));
+            return empty(array_diff(['the_email', 'the_password', 'the_password2', 'en'], $call));
         });
+    }
+
+    public function testSetsSuccessData()
+    {
+        $_SERVER["REQUEST_URI"] = '/english/account/register';
+
+        $_POST = [
+            'email' => 'the_email',
+            'password' => 'the_password',
+            'password2' => 'the_password2'
+        ];
+        
+        $this->mockAvorgApi->setReturnValue('register', False);
+
+        $this->page->addUi('');
+
+        $this->mockTwig->assertTwigTemplateRenderedWithData('page-register.twig', [
+            'success' => False
+        ]);
     }
 }

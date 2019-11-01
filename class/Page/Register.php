@@ -7,6 +7,7 @@ use Avorg\Page;
 use Avorg\Renderer;
 use Avorg\Router;
 use Avorg\WordPress;
+use Exception;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -36,11 +37,25 @@ class Register extends Page
         // TODO: Implement getTitle() method.
     }
 
+    /**
+     * @return array
+     */
     protected function getPageData()
     {
         if (!$this->isRequestValid()) return;
 
-        $this->api->register($_POST['email'], $_POST['password'], $_POST['password2'], '');
+        $lang = $this->router->getRequestLanguage();
+
+        $response = $this->api->register(
+            $_POST['email'],
+            $_POST['password'],
+            $_POST['password2'],
+            $lang->getDbCode()
+        );
+
+        return [
+            'success' => $response !== False
+        ];
     }
 
     /**

@@ -1,7 +1,16 @@
-<form class="avorg-page-register" method="post">
-    <input id="avorg-page-register__email" type="email" placeholder="Email" name="email"><br>
-    <input id="avorg-page-register__password" type="password" placeholder="Password" name="password"><br>
-    <input id="avorg-page-register__password2" type="password" placeholder="Confirm Password" name="password2"><br>
-{#    <label><input type="checkbox" name="newsletter"> Receive newsletter</label><br>#}
-    <input type="submit">
-</form>
+{% if avorg.success is same as(true) %}
+    <p>Success! Please check your email to complete your registration.</p>
+{% else %}
+    <form class="avorg-page-register" method="post">
+
+        {% if avorg.success is same as(false) %}
+            <p>Registration failed.</p>
+        {% endif %}
+
+        <input id="avorg-page-register__email" type="email" placeholder="Email" name="email"><br>
+        <input id="avorg-page-register__password" type="password" placeholder="Password" name="password" minlength="6"><br>
+        <input id="avorg-page-register__password2" type="password" placeholder="Confirm Password" name="password2" minlength="6"><br>
+        {#    <label><input type="checkbox" name="newsletter"> Receive newsletter</label><br>#}
+        <input type="submit">
+    </form>
+{% endif %}
