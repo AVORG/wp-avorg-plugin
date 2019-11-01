@@ -44,14 +44,14 @@ jobs:
           command: |
             curl -L -o ~/phpunit https://phar.phpunit.de/phpunit-8.phar
             chmod +x ~/phpunit
-            mkdir -p ~/phpunit_results
-            ~/phpunit --log-junit ~/phpunit_results/junit.xml
+            mkdir -p ~/test_results/phpunit
+            ~/phpunit --log-junit ~/test_results/phpunit/junit.xml
 
       - store_test_results:
-          path: ~/phpunit_results
+          path: ~/test_results/phpunit
 
       - store_artifacts:
-          path: ~/phpunit_results
+          path: ~/test_results/phpunit
   deploy:
     docker:
       - image: circleci/php:7.3.9-node-browsers

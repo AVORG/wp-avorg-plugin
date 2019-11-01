@@ -96,7 +96,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	{
 		$_SERVER["REQUEST_URI"] = "localhost:8080/espanol";
 
-		$result = $this->global->getLanguage()->getLangCode();
+		$result = $this->global->getLanguage()->getWpCode();
 
 		$this->assertEquals("es_ES", $result);
 	}

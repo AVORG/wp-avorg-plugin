@@ -41,6 +41,8 @@ class Session
     {
         $this->php->initSession();
 
+//        session_unset();
+
 //        var_dump($this->userId, $this->sessionToken);
     }
 

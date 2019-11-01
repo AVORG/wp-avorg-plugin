@@ -22,7 +22,6 @@ class AvorgApi
      * @param $email
      * @param $password
      * @return mixed
-     * @throws Exception
      */
     public function logIn($email, $password)
     {
@@ -31,6 +30,29 @@ class AvorgApi
                 'email' => $email,
                 'password' => $password
             ])->data;
+        } catch (Exception $e) {
+            return False;
+        }
+    }
+
+    /**
+     * @param $email
+     * @param $password
+     * @param $password2
+     * @param $language
+     * @return bool
+     */
+    public function register($email, $password, $password2, $language)
+    {
+        try {
+            $this->postNew("auth/signup", [
+                'email' => $email,
+                'password' => $password,
+                'password_confirmation' => $password2,
+                'language' => $language
+            ]);
+
+            return True;
         } catch (Exception $e) {
             return False;
         }

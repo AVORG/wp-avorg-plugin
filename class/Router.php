@@ -94,7 +94,7 @@ class Router
 	{
 		$language = $this->getRequestLanguage();
 
-		return ($language) ? $language->getLangCode() : $previous;
+		return ($language) ? $language->getWpCode() : $previous;
 	}
 
 	public function filterRedirect($redirectUrl)

@@ -16,6 +16,11 @@ class StubAvorgApi extends AvorgApi
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
+    public function register($email, $password, $password2, $language)
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
     public function getFavorites($userId, $sessionToken)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());

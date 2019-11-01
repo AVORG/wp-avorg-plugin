@@ -79,7 +79,7 @@ class Guzzle
 
             return json_decode($response->getBody());
         } catch (GuzzleException $e) {
-            throw new Exception("Failed to get response from url $endpoint");
+            throw new Exception("Failed to get response from url $endpoint: " . $e->getMessage());
         }
     }
 }
