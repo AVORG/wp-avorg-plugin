@@ -22,6 +22,6 @@
 
   &.loading {
     opacity: .5;
-    @include setIcon('half');
+    @include setIcon('empty');
   }
 }

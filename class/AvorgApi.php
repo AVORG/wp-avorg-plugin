@@ -68,16 +68,23 @@ class AvorgApi
      * @param $userId
      * @param $sessionToken
      * @param string $catalog
+     * @return bool
      * @throws Exception
      */
     public function addFavorite($catalogId, $userId, $sessionToken, $catalog = 'recording')
     {
-        $this->postOld("favorite", [
-            "userId" => $userId,
-            "sessionToken" => $sessionToken,
-            "catalogId" => $catalogId,
-            "catalog" => $catalog
-        ]);
+        try {
+            $this->postOld("favorite", [
+                "userId" => $userId,
+                "sessionToken" => $sessionToken,
+                "catalogId" => $catalogId,
+                "catalog" => $catalog
+            ]);
+
+            return True;
+        } catch (Exception $e) {
+            return False;
+        }
     }
 
     /**
@@ -137,13 +144,20 @@ class AvorgApi
      * @param $userId
      * @param $sessionToken
      * @param string $catalog
+     * @return bool
      * @throws Exception
      */
     public function unFavorite($catalogId, $userId, $sessionToken, $catalog = 'recording')
     {
-        $favorite = $this->findFavorite($catalogId, $userId, $sessionToken, $catalog);
+        try {
+            $favorite = $this->findFavorite($catalogId, $userId, $sessionToken, $catalog);
 
-        $this->deleteFavorite($favorite->favoriteId, $userId, $sessionToken);
+            $this->deleteFavorite($favorite->favoriteId, $userId, $sessionToken);
+
+            return True;
+        } catch (Exception $e) {
+            return False;
+        }
     }
 
     /**

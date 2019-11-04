@@ -90,4 +90,26 @@ final class TestFavoritesController extends Avorg\TestCase
 
         $this->assertTrue($response);
     }
+
+    public function testReturnsAddFavoriteSuccess()
+    {
+        $this->mockAvorgApi->setReturnValue('addFavorite', True);
+
+        $request = new WP_REST_Request(['presentationId' => 'the_id']);
+
+        $response = $this->controller->handlePost($request);
+
+        $this->assertTrue($response);
+    }
+
+    public function testReturnsUnFavoriteSuccess()
+    {
+        $this->mockAvorgApi->setReturnValue('unFavorite', True);
+
+        $request = new WP_REST_Request(['presentationId' => 'the_id']);
+
+        $response = $this->controller->handleDelete($request);
+
+        $this->assertTrue($response);
+    }
 }

@@ -17,24 +17,40 @@ window.onload = () => {
         );
     }
 
-    function handleClick(el: Element) {
-        el.classList.add('loading');
-        if (el.classList.contains('faved')) {
-            fetch(url, {method: 'DELETE'})
-                .then(res => res.json())
-                .then((res) => {
-                    console.log('fav deleted', res);
-                    el.classList.remove('loading');
-                    el.classList.remove('faved');
-                });
-        } else {
-            fetch(url, {method: 'POST'})
-                .then(res => res.json())
-                .then((res) => {
-                    console.log('fav created', res);
-                    el.classList.remove('loading');
+    function unFavorite(el: Element) {
+        el.classList.remove('faved');
+        fetch(url, {method: 'DELETE'})
+            .then(res => res.json())
+            .then((res) => {
+                console.log('fav deleted', res);
+                if (!res) {
                     el.classList.add('faved');
-                });
+                }
+            });
+    }
+
+    function addFavorite(el: Element) {
+        el.classList.add('faved');
+        fetch(url, {method: 'POST'})
+            .then(res => res.json())
+            .then((res) => {
+                console.log('fav created', res);
+                if (!res) {
+                    el.classList.remove('faved');
+                }
+            });
+    }
+
+    function handleClick(el: Element) {
+        if (!window.avorg.session.email) {
+            alert('Please log in before performing this action.');
+            return;
+        }
+
+        if (el.classList.contains('faved')) {
+            unFavorite(el);
+        } else {
+            addFavorite(el);
         }
     }
 
@@ -44,12 +60,16 @@ window.onload = () => {
         });
     }
 
-    fetch(url)
-        .then(res => res.json())
-        .then((was_favorited_on_load) => {
-            console.log('update', was_favorited_on_load);
-            setInitialState(was_favorited_on_load);
-            setClickHandlers();
-        });
+    setClickHandlers();
+
+    if (window.avorg.session.email) {
+        fetch(url)
+            .then(res => res.json())
+            .then((was_favorited_on_load) => {
+                console.log('update', was_favorited_on_load);
+                setInitialState(was_favorited_on_load);
+
+            });
+    }
 };
 

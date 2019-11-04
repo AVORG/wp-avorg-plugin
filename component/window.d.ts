@@ -9,6 +9,9 @@ interface Window {
     };
     avorg: {
         query: any;
+        session: {
+            email: string
+        }
     };
 }
 

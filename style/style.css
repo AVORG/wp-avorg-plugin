@@ -130,10 +130,10 @@
   opacity: 0.5;
 }
 .wp-block-avorg-block-fav.loading .dashicons-star-half {
-  display: block;
+  display: none;
 }
 .wp-block-avorg-block-fav.loading .dashicons-star-empty {
-  display: none;
+  display: block;
 }
 .wp-block-avorg-block-fav.loading .dashicons-star-filled {
   display: none;

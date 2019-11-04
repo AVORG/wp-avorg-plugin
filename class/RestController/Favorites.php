@@ -53,11 +53,12 @@ class Favorites extends RestController
 
     /**
      * @param WP_REST_Request $request
+     * @return bool
      * @throws Exception
      */
     public function handlePost(WP_REST_Request $request)
     {
-        $this->api->addFavorite(
+        return $this->api->addFavorite(
             $request['presentationId'],
             $this->session->userId,
             $this->session->sessionToken
@@ -71,7 +72,7 @@ class Favorites extends RestController
      */
     public function handleDelete(WP_REST_Request $request)
     {
-        $this->api->unFavorite(
+        return $this->api->unFavorite(
             $request['presentationId'],
             $this->session->userId,
             $this->session->sessionToken
