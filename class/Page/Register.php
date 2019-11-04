@@ -39,6 +39,7 @@ class Register extends Page
 
     /**
      * @return array
+     * @throws Exception
      */
     protected function getPageData()
     {
@@ -54,8 +55,18 @@ class Register extends Page
         );
 
         return [
-            'success' => $response !== False
+            'success' => $response === True,
+            'errors' => $this->getErrorMessages($response)
         ];
+    }
+
+    private function getErrorMessages($response)
+    {
+        if (!is_array($response)) return [];
+
+        return array_reduce($response, function($carry, $group) {
+            return array_merge($carry, $group);
+        }, []);
     }
 
     /**

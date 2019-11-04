@@ -40,22 +40,27 @@ class AvorgApi
      * @param $password
      * @param $password2
      * @param $language
-     * @return bool
+     * @return bool|array
+     * @throws Exception
      */
     public function register($email, $password, $password2, $language)
     {
-        try {
-            $this->postNew("auth/signup", [
+        $response = $this->postNew(
+            "auth/signup",
+            [
                 'email' => $email,
                 'password' => $password,
                 'password_confirmation' => $password2,
                 'language' => $language
-            ]);
+            ],
+            False
+        );
 
+        if ($response->status_code >= 200 && $response->status_code < 300) {
             return True;
-        } catch (Exception $e) {
-            return False;
         }
+
+        return get_object_vars($response->errors);
     }
 
     /**
@@ -119,7 +124,7 @@ class AvorgApi
 
         $favoriteIds = array_keys(get_object_vars($result->$listKey));
 
-        return array_map(function($id) use($result, $listKey, $itemKey) {
+        return array_map(function ($id) use ($result, $listKey, $itemKey) {
             $item = $result->$listKey->$id[0]->$itemKey;
             $item->favoriteId = $id;
 
@@ -631,13 +636,15 @@ class AvorgApi
     /**
      * @param string $endpoint
      * @param array $data
+     * @param bool $httpErrors
      * @return mixed
      * @throws Exception
      */
-    private function postNew(string $endpoint, array $data = [])
+    private function postNew(string $endpoint, array $data = [], bool $httpErrors = True)
     {
         return $this->guzzle->handleNew('POST', $endpoint, [
-            'form_params' => $data
+            'form_params' => $data,
+            'http_errors' => $httpErrors
         ]);
     }
 }

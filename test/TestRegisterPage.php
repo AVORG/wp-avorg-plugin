@@ -42,13 +42,55 @@ final class TestRegisterPage extends Avorg\TestCase
             'password' => 'the_password',
             'password2' => 'the_password2'
         ];
-        
-        $this->mockAvorgApi->setReturnValue('register', False);
+
+        $this->mockAvorgApi->setReturnValue('register', [
+            'error_category' => ['the_error']
+        ]);
 
         $this->page->addUi('');
 
         $this->mockTwig->assertTwigTemplateRenderedWithData('page-register.twig', [
             'success' => False
+        ]);
+    }
+
+    public function testIncludesErrorsInResponse()
+    {
+        $_SERVER["REQUEST_URI"] = '/english/account/register';
+
+        $_POST = [
+            'email' => 'the_email',
+            'password' => 'the_password',
+            'password2' => 'the_password2'
+        ];
+
+        $this->mockAvorgApi->setReturnValue('register', [
+            'error_category' => ['the_error']
+        ]);
+
+        $this->page->addUi('');
+
+        $this->mockTwig->assertTwigTemplateRenderedWithData('page-register.twig', [
+            'errors' => ['the_error']
+        ]);
+    }
+
+    public function testReturnsEmptyErrorListOnSuccess()
+    {
+        $_SERVER["REQUEST_URI"] = '/english/account/register';
+
+        $_POST = [
+            'email' => 'the_email',
+            'password' => 'the_password',
+            'password2' => 'the_password2'
+        ];
+
+        $this->mockAvorgApi->setReturnValue('register', True);
+
+        $this->page->addUi('');
+
+        $this->mockTwig->assertTwigTemplateRenderedWithData('page-register.twig', [
+            'errors' => []
         ]);
     }
 }

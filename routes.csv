@@ -27,4 +27,5 @@
 "Avorg\Endpoint\Presentations","api/presentation[/{ entity_id:[^\d]+ }]","Presentations API endpoint",
 "Avorg\Page\Login","{ language }/account","Login Page",
 "Avorg\Page\Playlist\UserPlaylists","{ language }/account/playlists","User playlists page",
-"Avorg\Page\Register","{ language }/account/register","Registration page"
+"Avorg\Page\Register","{ language }/account/register","Registration page",
+"Avorg\Page\Register","{ language }/registrar","Legacy registration route"

@@ -86,11 +86,11 @@ class RouteFactory
             ? $this->endpointFactory->getEndpointByClass($class)
             : $this->pageFactory->getPage($class);
         $routeId = $routable->getRouteId();
-        $format = $this->routeFormats[$class];
+        $firstFormat = $this->routeFormats[$class][0];
 
         return $isEndpointClass
-            ? $this->buildEndpointRoute($routeId, $format)
-            : $this->buildPageRoute($routeId, $format);
+            ? $this->buildEndpointRoute($routeId, $firstFormat)
+            : $this->buildPageRoute($routeId, $firstFormat);
     }
 
     /**
@@ -137,7 +137,16 @@ class RouteFactory
     {
         $this->routeFormats = array_reduce(file(AVORG_BASE_PATH . "/routes.csv"), function ($carry, $line) {
             $row = str_getcsv($line);
-            return array_merge($carry, [$row[0] => $row[1]]);
+            $classname = $row[0];
+            $format = $row[1];
+
+            if (!array_key_exists($classname, $carry)) {
+                $carry[$classname] = [];
+            }
+
+            $carry[$classname][] = $format;
+
+            return $carry;
         }, []);
     }
 }

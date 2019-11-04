@@ -5,6 +5,10 @@
 
         {% if avorg.success is same as(false) %}
             <p>Registration failed.</p>
+
+            {% for error in avorg.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
         {% endif %}
 
         <input id="avorg-page-register__email" type="email" placeholder="Email" name="email"><br>
