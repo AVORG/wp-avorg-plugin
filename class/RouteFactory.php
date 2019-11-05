@@ -67,9 +67,9 @@ class RouteFactory
 
     private function getStandardRoutes()
     {
-        return array_map(function($class) {
-            return $this->getRouteByClass($class);
-        }, array_keys($this->routeFormats));
+        return array_reduce(array_keys($this->routeFormats), function($carry, $class) {
+            return array_merge($carry, $this->getRoutesByClass($class));
+        }, []);
     }
 
     /**
@@ -77,20 +77,45 @@ class RouteFactory
      * @return Route|null
      * @throws ReflectionException
      */
-    public function getRouteByClass($class)
+    public function getDefaultRouteByClass($class)
     {
         if (!array_key_exists($class, $this->routeFormats)) return null;
 
+        $firstFormat = $this->routeFormats[$class][0];
+
+        return $this->buildRoute($class, $firstFormat);
+    }
+
+    /**
+     * @param $class
+     * @return array|null
+     */
+    private function getRoutesByClass($class)
+    {
+        if (!array_key_exists($class, $this->routeFormats)) return null;
+
+        return array_map(function($format) use($class) {
+            return $this->buildRoute($class, $format);
+        }, $this->routeFormats[$class]);
+    }
+
+    /**
+     * @param $class
+     * @param $format
+     * @return EndpointRoute|PageRoute
+     * @throws ReflectionException
+     */
+    private function buildRoute($class, $format)
+    {
         $isEndpointClass = strstr($class, "\\Endpoint\\") !== False;
         $routable = $isEndpointClass
             ? $this->endpointFactory->getEndpointByClass($class)
             : $this->pageFactory->getPage($class);
         $routeId = $routable->getRouteId();
-        $firstFormat = $this->routeFormats[$class][0];
 
         return $isEndpointClass
-            ? $this->buildEndpointRoute($routeId, $firstFormat)
-            : $this->buildPageRoute($routeId, $firstFormat);
+            ? $this->buildEndpointRoute($routeId, $format)
+            : $this->buildPageRoute($routeId, $format);
     }
 
     /**

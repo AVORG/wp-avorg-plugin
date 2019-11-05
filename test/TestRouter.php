@@ -176,7 +176,11 @@ final class TestRouter extends Avorg\TestCase
             [
                 "english/account/register",
                 "index.php?page_id=REGISTER_PAGE_ID&language=english"
-            ]
+            ],
+            [
+                "english/registrar",
+                "index.php?page_id=REGISTER_PAGE_ID&language=english"
+            ],
 		];
 	}
 

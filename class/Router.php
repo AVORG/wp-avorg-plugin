@@ -157,7 +157,7 @@ class Router
         }
 
         /** @var Route $route */
-        $route = $this->routeFactory->getRouteByClass($routableClass);
+        $route = $this->routeFactory->getDefaultRouteByClass($routableClass);
 
         if (!$route) return null;
 

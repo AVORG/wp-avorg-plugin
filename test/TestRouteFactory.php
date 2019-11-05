@@ -16,7 +16,7 @@ final class TestRouteFactory extends Avorg\TestCase
 
 	public function testGetRouteByClassReturnsPageRoute()
 	{
-		$route = $this->routeFactory->getRouteByClass("Avorg\Page\Presenter\Listing");
+		$route = $this->routeFactory->getDefaultRouteByClass("Avorg\Page\Presenter\Listing");
 
 		$this->assertInstanceOf("Avorg\\Route\\PageRoute", $route);
 	}
@@ -33,7 +33,7 @@ final class TestRouteFactory extends Avorg\TestCase
 
     public function testGetRouteByClassReturnsEndpointRoutes()
     {
-        $result = $this->routeFactory->getRouteByClass('Avorg\Endpoint\RssEndpoint\Latest');
+        $result = $this->routeFactory->getDefaultRouteByClass('Avorg\Endpoint\RssEndpoint\Latest');
 
         $this->assertInstanceOf("Avorg\\Route\\EndpointRoute", $result);
     }
