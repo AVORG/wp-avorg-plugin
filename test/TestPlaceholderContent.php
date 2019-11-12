@@ -1,36 +1,36 @@
 <?php
 
-use Avorg\ContentBits;
+use Avorg\PlaceholderContent;
 
-final class TestContentBits extends Avorg\TestCase
+final class TestPlaceholderContent extends Avorg\TestCase
 {
-	/** @var ContentBits $contentBits */
-	protected $contentBits;
+	/** @var PlaceholderContent $placeholderContent */
+	protected $placeholderContent;
 	
 	public function setUp(): void
 	{
 		parent::setUp();
 
-		$this->contentBits = $this->factory->secure("Avorg\\ContentBits");
+		$this->placeholderContent = $this->factory->secure("Avorg\\PlaceholderContent");
 	}
 	
 	public function testInitMethodRegistersPostType()
 	{
-		$this->contentBits->init();
+		$this->placeholderContent->init();
 		
 		$this->mockWordPress->assertMethodCalled("register_post_type");
 	}
 	
 	public function testInitRegistersTaxonomy()
 	{
-		$this->contentBits->init();
+		$this->placeholderContent->init();
 		
 		$this->mockWordPress->assertMethodCalled("register_taxonomy");
 	}
 	
 	public function testAddMetaBoxMethod()
 	{
-		$this->contentBits->addMetaBoxes();
+		$this->placeholderContent->addMetaBoxes();
 		
 		$this->mockWordPress->assertMethodCalled("add_meta_box");
 	}
@@ -39,7 +39,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("get_the_ID", 7);
 		
-		$this->contentBits->renderIdentifierMetaBox();
+		$this->placeholderContent->renderIdentifierMetaBox();
 		
 		$this->mockWordPress->assertMethodCalledWith( "get_post_meta", 7, "avorgBitIdentifier", true);
 	}
@@ -48,7 +48,7 @@ final class TestContentBits extends Avorg\TestCase
 	{
 		$this->mockWordPress->setReturnValue("get_post_meta", "saved_value");
 		
-		$this->contentBits->renderIdentifierMetaBox();
+		$this->placeholderContent->renderIdentifierMetaBox();
 		
 		$this->mockTwig->assertTwigTemplateRenderedWithData("molecule-identifierMetaBox.twig", ["savedIdentifier" => "saved_value"]);
 		
@@ -60,7 +60,7 @@ final class TestContentBits extends Avorg\TestCase
 		
 		$this->mockWordPress->setReturnValue("get_the_ID", 7);
 		
-		$this->contentBits->saveIdentifierMetaBox();
+		$this->placeholderContent->saveIdentifierMetaBox();
 		
 		$this->mockWordPress->assertMethodCalledWith(
 			"update_post_meta",
@@ -72,28 +72,28 @@ final class TestContentBits extends Avorg\TestCase
 	
 	public function testDoesntSaveIfValueNotPassed()
 	{
-		$this->contentBits->saveIdentifierMetaBox();
+		$this->placeholderContent->saveIdentifierMetaBox();
 
 		$this->mockWordPress->assertMethodNotCalled("update_post_meta");
 	}
 
 	public function testAddsTwoMetaBoxes()
 	{
-		$this->contentBits->addMetaBoxes();
+		$this->placeholderContent->addMetaBoxes();
 
 		$this->mockWordPress->assertCallCount("add_meta_box", 2);
 	}
 
 	public function testDocumentationMetaBoxRenderMethod()
 	{
-		$this->contentBits->renderDocumentationMetaBox();
+		$this->placeholderContent->renderDocumentationMetaBox();
 
 		$this->mockTwig->assertTwigTemplateRendered("molecule-contentBitsDocs.html");
 	}
 
 	public function testGetsIdentifiers()
 	{
-		$this->contentBits->renderIdentifierMetaBox();
+		$this->placeholderContent->renderIdentifierMetaBox();
 
 		$this->mockWordPress->assertMethodCalledWith("get_all_meta_values", "avorgBitIdentifier");
 	}
@@ -105,7 +105,7 @@ final class TestContentBits extends Avorg\TestCase
 			"identifier_2"
 		]);
 
-		$this->contentBits->renderIdentifierMetaBox();
+		$this->placeholderContent->renderIdentifierMetaBox();
 
 		$this->mockTwig->assertTwigTemplateRenderedWithData(
 			"molecule-identifierMetaBox.twig",
@@ -115,7 +115,7 @@ final class TestContentBits extends Avorg\TestCase
 
 	public function testExposesContentBitsToRestApi()
     {
-        $this->contentBits->init();
+        $this->placeholderContent->init();
 
         $this->mockWordPress->assertAnyCallMatches('register_post_type', function($call) {
             return $call[1]['show_in_rest'] === True;
@@ -124,16 +124,16 @@ final class TestContentBits extends Avorg\TestCase
 
     public function testRegistersMethodOnApiInit()
     {
-        $this->contentBits->registerCallbacks();
+        $this->placeholderContent->registerCallbacks();
 
         $this->mockWordPress->assertActionAdded(
-            'rest_api_init', [$this->contentBits, 'exposeIdentifierInApi']);
+            'rest_api_init', [$this->placeholderContent, 'exposeIdentifierInApi']);
     }
 
     public function testRegistersInitCallback()
     {
-        $this->contentBits->registerCallbacks();
+        $this->placeholderContent->registerCallbacks();
 
-        $this->mockWordPress->assertActionAdded('init', [$this->contentBits, 'init']);
+        $this->mockWordPress->assertActionAdded('init', [$this->placeholderContent, 'init']);
     }
 }
