@@ -4,7 +4,7 @@ namespace Avorg;
 
 if (!\defined('ABSPATH')) exit;
 
-class ContentBits
+class PlaceholderContent
 {
     /** @var Php $php */
     private $php;
@@ -39,10 +39,10 @@ class ContentBits
     private function addCustomPostType()
     {
         $labels = array(
-            'name' => 'Content Bits',
-            'singular_name' => 'Content Bit',
-            'menu_name' => 'Content Bits',
-            'name_admin_bar' => 'Content Bits',
+            'name' => 'Placeholder Content',
+            'singular_name' => 'Placeholder Item',
+            'menu_name' => 'Placeholder Content',
+            'name_admin_bar' => 'Placeholder Content',
             'archives' => 'Item Archives',
             'attributes' => 'Item Attributes',
             'parent_item_colon' => 'Parent Item:',
@@ -69,7 +69,7 @@ class ContentBits
         );
 
         $args = array(
-            'label' => 'Content Bit',
+            'label' => 'Placeholder Item',
             'description' => 'Pieces of content that can be pulled in using a shortcode',
             'labels' => $labels,
             'supports' => array('title', 'editor', 'revisions', 'custom-fields'),
@@ -79,7 +79,7 @@ class ContentBits
             'show_ui' => true,
             'show_in_menu' => true,
             'menu_position' => 20,
-            'menu_icon' => 'dashicons-screenoptions',
+            'menu_icon' => 'dashicons-location',
             'show_in_admin_bar' => true,
             'show_in_nav_menus' => true,
             'can_export' => true,

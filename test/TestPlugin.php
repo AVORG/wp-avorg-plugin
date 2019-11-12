@@ -185,7 +185,7 @@ final class TestPlugin extends Avorg\TestCase
 			],
 			[
 				"add_meta_boxes",
-				"ContentBits",
+				"PlaceholderContent",
 				"addMetaBoxes"
 			],
 			[
@@ -195,7 +195,7 @@ final class TestPlugin extends Avorg\TestCase
 			],
 			[
 				"save_post",
-				"ContentBits",
+				"PlaceholderContent",
 				"saveIdentifierMetaBox"
 			],
 			[
