@@ -1,3 +1,5 @@
+import "./molecule/mediaIdMetaBox"
+
 import "./block/fav"
 import "./block/list"
 import "./block/placeholder"

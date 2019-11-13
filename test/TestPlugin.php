@@ -276,7 +276,8 @@ final class TestPlugin extends Avorg\TestCase
                 'is_relative' => true,
                 'action' => 'enqueue_block_editor_assets',
                 'deps' => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n'],
-                'handle' => 'Avorg_Script_Editor'
+                'handle' => 'Avorg_Script_Editor',
+                'in_footer' => true,
             ]],
 		];
 	}
