@@ -4,8 +4,9 @@ namespace Avorg;
 
 use natlib\Factory;
 use ReflectionException;
+use function defined;
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 class ScriptFactory
 {
@@ -37,6 +38,7 @@ class ScriptFactory
             ],
             "dist/editor.js" => [
                 "handle" => "Avorg_Script_Editor",
+                "in_footer" => true,
                 "actions" => ["enqueue_block_editor_assets"],
                 "deps" => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n']
             ]
@@ -44,9 +46,7 @@ class ScriptFactory
         $paths = array_keys($pathOptions);
 
         return array_map(function($path) use($pathOptions) {
-            $options = $pathOptions[$path];
-
-            return $this->getScript($path, $options);
+            return $this->getScript($path, $pathOptions[$path]);
         }, $paths);
     }
 
@@ -57,9 +57,9 @@ class ScriptFactory
      * @throws ReflectionException
      */
     public function getScript($path, $options = []) {
-        $handle = $this->arrSafe("handle", $options, null);
-	    $actions = $this->arrSafe("actions", $options, ["wp_enqueue_scripts"]);
-	    $deps = $this->arrSafe("deps", $options, []);
+        $handle = $options["handle"] ?? null;
+	    $actions = $options["actions"] ?? ["wp_enqueue_scripts"];
+	    $deps = $options["deps"] ?? [];
 	    $inFooter = $options['in_footer'] ?? false;
 
 		return $this->factory
@@ -70,9 +70,4 @@ class ScriptFactory
             ->setDeps(...$deps)
             ->setInFooter($inFooter);
 	}
-
-    private function arrSafe($key, $array, $default = Null)
-    {
-        return array_key_exists($key, $array) ? $array[$key] : $default;
-    }
 }

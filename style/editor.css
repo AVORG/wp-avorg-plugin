@@ -1,17 +1,38 @@
+.avorg-molecule-mediaIdMetaBox .avorg-molecule-mediaIdMetaBox__inputGroup {
+  display: flex;
+  align-items: center;
+}
+.avorg-molecule-mediaIdMetaBox .avorg-molecule-mediaIdMetaBox__inputGroup input {
+  margin-right: 4px;
+}
+.avorg-molecule-mediaIdMetaBox li {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 -14px;
+  padding: 4px 14px;
+}
+.avorg-molecule-mediaIdMetaBox li:nth-child(even) {
+  background-color: #eee;
+}
+
 .avorg-molecule-mediaObject {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem; }
-  .avorg-molecule-mediaObject .avorg-molecule-mediaObject__image {
-    border-radius: 100%;
-    width: 3.5rem;
-    height: 3.5rem;
-    object-fit: cover;
-    box-shadow: -2px 3px 0.5em rgba(0, 0, 0, 0.15); }
-  .avorg-molecule-mediaObject .avorg-molecule-mediaObject__text {
-    margin-left: 1rem; }
-  .avorg-molecule-mediaObject .avorg-molecule-mediaObject__title {
-    color: #242426;
-    margin-bottom: 0; }
+  margin-bottom: 1rem;
+}
+.avorg-molecule-mediaObject .avorg-molecule-mediaObject__image {
+  border-radius: 100%;
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+  box-shadow: -2px 3px 0.5em rgba(0, 0, 0, 0.15);
+}
+.avorg-molecule-mediaObject .avorg-molecule-mediaObject__text {
+  margin-left: 1rem;
+}
+.avorg-molecule-mediaObject .avorg-molecule-mediaObject__title {
+  color: #242426;
+  margin-bottom: 0;
+}
 
 /*# sourceMappingURL=editor.css.map */

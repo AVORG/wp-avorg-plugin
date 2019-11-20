@@ -44,6 +44,7 @@ if (!defined('ABSPATH')) exit;
  * @method register_block_type(string|WP_Block_Type $name, array $args = array())
  * @method register_rest_field(string|array $object_type, string $attribute, array $args = array())
  * @method register_rest_route(string $namespace, string $route, array $args = array(), bool $override = false)
+ * @method admin_url(string $path = '', string $scheme = 'admin')
  */
 class WordPress
 {

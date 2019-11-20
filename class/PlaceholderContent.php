@@ -25,7 +25,7 @@ class PlaceholderContent
     public function registerCallbacks()
     {
         $this->wp->add_action("add_meta_boxes", [$this, "addMetaBoxes"]);
-        $this->wp->add_action("save_post", [$this, "saveIdentifierMetaBox"]);
+        $this->wp->add_action("save_post", [$this, "savePost"]);
         $this->wp->add_action("rest_api_init", [$this, 'exposeIdentifierInApi']);
         $this->wp->add_action("init", [$this, "init"]);
     }
@@ -33,7 +33,6 @@ class PlaceholderContent
     public function init()
     {
         $this->addCustomPostType();
-        $this->addMediaIdTaxonomy();
     }
 
     private function addCustomPostType()
@@ -105,50 +104,29 @@ class PlaceholderContent
         ]);
     }
 
-    private function addMediaIdTaxonomy()
-    {
-        $labels = array(
-            'name' => 'Media IDs',
-            'singular_name' => 'Media ID',
-            'menu_name' => 'Media IDs',
-            'all_items' => 'All Items',
-            'parent_item' => 'Parent Item',
-            'parent_item_colon' => 'Parent Item:',
-            'new_item_name' => 'New Item Name',
-            'add_new_item' => 'Add New Item',
-            'edit_item' => 'Edit Item',
-            'update_item' => 'Update Item',
-            'view_item' => 'View Item',
-            'separate_items_with_commas' => 'Separate items with commas',
-            'add_or_remove_items' => 'Add or remove items',
-            'choose_from_most_used' => 'Choose from the most used',
-            'popular_items' => 'Popular Items',
-            'search_items' => 'Search Items',
-            'not_found' => 'Not Found',
-            'no_terms' => 'No items',
-            'items_list' => 'Items list',
-            'items_list_navigation' => 'Items list navigation',
-        );
-
-        $args = array(
-            'labels' => $labels,
-            'hierarchical' => false,
-            'public' => true,
-            'show_ui' => true,
-            'show_admin_column' => true,
-            'show_in_nav_menus' => true,
-            'show_tagcloud' => true,
-            'show_in_rest' => true,
-            'rewrite' => false,
-        );
-
-        $this->wp->register_taxonomy("avorgMediaIds", array('avorg-content-bits'), $args);
-    }
-
     public function addMetaBoxes()
     {
+        $this->addMediaIdMetaBox();
         $this->addIdentifierMetaBox();
         $this->addDocumentationMetaBox();
+    }
+
+    private function addMediaIdMetaBox()
+    {
+        $args = [
+            'avorg_placeholderContent_mediaIds',
+            'Media IDs',
+            [$this, "renderMediaIdMetaBox"],
+            'avorg-content-bits',
+            'side'
+        ];
+
+        $this->wp->add_meta_box(...$args);
+    }
+
+    public function renderMediaIdMetaBox()
+    {
+        $this->twig->render("molecule-mediaIdMetaBox.twig");
     }
 
     private function addDocumentationMetaBox()
@@ -193,7 +171,13 @@ class PlaceholderContent
         ]);
     }
 
-    public function saveIdentifierMetaBox()
+    public function savePost()
+    {
+        $this->saveIdentifier();
+        $this->saveMediaIds();
+    }
+
+    private function saveIdentifier(): void
     {
         if (!isset($_POST["avorgBitIdentifier"])) return;
 
@@ -202,6 +186,18 @@ class PlaceholderContent
             $postId,
             "avorgBitIdentifier",
             $_POST["avorgBitIdentifier"]
+        );
+    }
+
+    private function saveMediaIds(): void
+    {
+        if (!isset($_POST["avorgMediaIds"])) return;
+
+        $postId = $this->wp->get_the_ID();
+        $this->wp->update_post_meta(
+            $postId,
+            "avorgMediaIds",
+            json_decode($_POST["avorgMediaIds"])
         );
     }
 }
