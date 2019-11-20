@@ -1,0 +1,21 @@
+.avorg-molecule-mediaIdMetaBox {
+  .avorg-molecule-mediaIdMetaBox__inputGroup {
+    display: flex;
+    align-items: center;
+
+    input {
+      margin-right: 4px;
+    }
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 -14px;
+    padding: 4px 14px;
+
+    &:nth-child(even) {
+      background-color: #eee;
+    }
+  }
+}

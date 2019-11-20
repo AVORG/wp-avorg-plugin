@@ -196,7 +196,7 @@ final class TestPlugin extends Avorg\TestCase
 			[
 				"save_post",
 				"PlaceholderContent",
-				"saveIdentifierMetaBox"
+				"savePost"
 			],
 			[
 				"admin_menu",

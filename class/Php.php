@@ -27,10 +27,12 @@ class Php {
         }
 
         if (count($array) <= $num) {
-            return ($num === 1) ? $array[0] : $array;
+            return ($num === 1) ? reset($array) : $array;
         }
 
-        $keys = array_rand($array, $num);
+        $rand = array_rand($array, $num);
+        $keys = is_array($rand) ? $rand : [$rand];
+
         $items = array_map(function($key) use($array) {
             return $array[$key];
         }, $keys);

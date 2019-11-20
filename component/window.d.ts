@@ -8,10 +8,11 @@ interface Window {
         components: any,
     };
     avorg: {
-        query: any;
+        query: any,
         session: {
             email: string
-        }
+        },
+        post_id: number
     };
 }
 

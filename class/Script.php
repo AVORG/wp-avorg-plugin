@@ -109,7 +109,9 @@ class Script
 	{
 		return array_merge([
 			"nonces" => $this->getNonces(),
-			"ajax_url" => $this->wp->admin_url("admin-ajax.php")
+			"ajax_url" => $this->wp->admin_url("admin-ajax.php"),
+            "query" => $this->wp->get_all_query_vars(),
+            "post_id" => (int) $this->wp->get_the_ID()
 		], $this->data);
 	}
 

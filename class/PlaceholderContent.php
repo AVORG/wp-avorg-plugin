@@ -25,7 +25,7 @@ class PlaceholderContent
     public function registerCallbacks()
     {
         $this->wp->add_action("add_meta_boxes", [$this, "addMetaBoxes"]);
-        $this->wp->add_action("save_post", [$this, "saveIdentifierMetaBox"]);
+        $this->wp->add_action("save_post", [$this, "savePost"]);
         $this->wp->add_action("rest_api_init", [$this, 'exposeIdentifierInApi']);
         $this->wp->add_action("init", [$this, "init"]);
     }
@@ -171,7 +171,13 @@ class PlaceholderContent
         ]);
     }
 
-    public function saveIdentifierMetaBox()
+    public function savePost()
+    {
+        $this->saveIdentifier();
+        $this->saveMediaIds();
+    }
+
+    private function saveIdentifier(): void
     {
         if (!isset($_POST["avorgBitIdentifier"])) return;
 
@@ -180,6 +186,18 @@ class PlaceholderContent
             $postId,
             "avorgBitIdentifier",
             $_POST["avorgBitIdentifier"]
+        );
+    }
+
+    private function saveMediaIds(): void
+    {
+        if (!isset($_POST["avorgMediaIds"])) return;
+
+        $postId = $this->wp->get_the_ID();
+        $this->wp->update_post_meta(
+            $postId,
+            "avorgMediaIds",
+            json_decode($_POST["avorgMediaIds"])
         );
     }
 }

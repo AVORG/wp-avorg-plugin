@@ -53,7 +53,7 @@ final class TestPlaceholderContent extends Avorg\TestCase
 
         $this->mockWordPress->setReturnValue("get_the_ID", 7);
 
-        $this->placeholderContent->saveIdentifierMetaBox();
+        $this->placeholderContent->savePost();
 
         $this->mockWordPress->assertMethodCalledWith(
             "update_post_meta",
@@ -65,7 +65,7 @@ final class TestPlaceholderContent extends Avorg\TestCase
 
     public function testDoesntSaveIfValueNotPassed()
     {
-        $this->placeholderContent->saveIdentifierMetaBox();
+        $this->placeholderContent->savePost();
 
         $this->mockWordPress->assertMethodNotCalled("update_post_meta");
     }
@@ -148,6 +148,22 @@ final class TestPlaceholderContent extends Avorg\TestCase
             [$this->placeholderContent, 'renderMediaIdMetaBox'],
             'avorg-content-bits',
             'side'
+        );
+    }
+
+    public function testSavesMediaIds()
+    {
+        $_POST["avorgMediaIds"] = "[3]";
+
+        $this->mockWordPress->setReturnValue("get_the_ID", 7);
+
+        $this->placeholderContent->savePost();
+
+        $this->mockWordPress->assertMethodCalledWith(
+            "update_post_meta",
+            7,
+            "avorgMediaIds",
+            [3]
         );
     }
 }

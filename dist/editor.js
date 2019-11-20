@@ -337,11 +337,27 @@ var AvorgMoleculeMediaIdMetaBox;
         function Box() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.state = {
-                newId: null,
+                newId: '',
                 ids: []
             };
+            _this.makeEntry = function (id) {
+                return wp.element.createElement("li", { "data-id": id, key: id.toString() },
+                    wp.element.createElement("a", { href: "/english/sermons/recordings/" + id, target: '_blank' }, id),
+                    wp.element.createElement("a", { onClick: function (e) { return _this.removeId(id); }, href: "#", className: "dashicons dashicons-trash" }));
+            };
+            _this.removeId = function (id) {
+                _this.setState(function (prev) { return ({
+                    ids: prev.ids.filter(function (id_) { return id_ !== id; })
+                }); });
+            };
             _this.handleAdd = function (e) {
-                console.log(_this.state.newId);
+                _this.setState(function (prev) {
+                    var int = parseInt(_this.state.newId);
+                    if (!isNaN(int)) {
+                        prev.ids.push(int);
+                    }
+                    return prev;
+                });
             };
             _this.handleNewIdChange = function (e) {
                 var el = e.target;
@@ -353,25 +369,29 @@ var AvorgMoleculeMediaIdMetaBox;
             return _this;
         }
         Box.prototype.componentDidMount = function () {
-            var hiddenInput = document.querySelector('.avorg-molecule-mediaIdMetaBox__hiddenInput');
-            this.setState({ ids: JSON.parse(hiddenInput.value) });
-        };
-        Box.prototype.makeEntry = function (id) {
-            return wp.element.createElement("li", { "data-id": id, key: id.toString() },
-                wp.element.createElement("a", { href: "/english/sermons/recordings/" + id, target: '_blank' }, id),
-                wp.element.createElement("a", { href: "#", className: "dashicons dashicons-trash" }));
+            var _this = this;
+            fetch('/wp-json/avorg/v1/placeholder-content/' + window.avorg.post_id)
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                _this.setState({
+                    ids: data.media_ids || []
+                });
+            });
         };
         Box.prototype.render = function () {
             return wp.element.createElement("div", null,
-                wp.element.createElement("input", { className: "avorg-molecule-mediaIdMetaBox__hiddenInput", type: "hidden", name: "avorgIds", value: '[1,2,20690]' }),
-                wp.element.createElement("input", { onChange: this.handleNewIdChange, value: this.state.newId, type: "text", name: "avorgNewId", id: "avorgNewId", placeholder: "ID" }),
-                wp.element.createElement("button", { onClick: this.handleAdd }, "Add"),
+                wp.element.createElement("input", { className: "avorg-molecule-mediaIdMetaBox__hiddenInput", type: "hidden", name: "avorgMediaIds", value: JSON.stringify(this.state.ids) }),
+                wp.element.createElement("div", { className: "avorg-molecule-mediaIdMetaBox__inputGroup" },
+                    wp.element.createElement("input", { onChange: this.handleNewIdChange, value: this.state.newId, type: "text", name: "avorgNewId", id: "avorgNewId", placeholder: "ID" }),
+                    wp.element.createElement("button", { onClick: this.handleAdd, className: 'button button-primary' }, "Add")),
                 wp.element.createElement("ul", null, this.state.ids.map(this.makeEntry)));
         };
         return Box;
     }(React.Component));
     var frame = document.querySelector('.avorg-molecule-mediaIdMetaBox');
-    wp.element.render(wp.element.createElement(Box, null), frame);
+    if (frame) {
+        wp.element.render(wp.element.createElement(Box, null), frame);
+    }
 })(AvorgMoleculeMediaIdMetaBox || (AvorgMoleculeMediaIdMetaBox = {}));
 
 

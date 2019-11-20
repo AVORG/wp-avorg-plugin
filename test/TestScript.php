@@ -58,4 +58,30 @@ final class TestScript extends Avorg\TestCase
 
 		$this->mockWordPress->assertMethodCalledWith("admin_url", "admin-ajax.php");
 	}
+
+    public function testIncludesQueryData()
+    {
+        $this->mockWordPress->setReturnValue('get_all_query_vars', 'query_vars');
+
+        $this->script->setPath("the_path");
+
+        $this->script->enqueue();
+
+        $this->mockWordPress->assertAnyCallMatches('wp_localize_script', function($call) {
+            return $call[2]['query'] === 'query_vars';
+        });
+    }
+
+    public function testIncludesPostId()
+    {
+        $this->mockWordPress->setReturnValue('get_the_ID', '7');
+
+        $this->script->setPath("the_path");
+
+        $this->script->enqueue();
+
+        $this->mockWordPress->assertAnyCallMatches('wp_localize_script', function($call) {
+            return $call[2]['post_id'] === 7;
+        });
+    }
 }
