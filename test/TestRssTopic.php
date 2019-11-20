@@ -6,10 +6,10 @@ use Avorg\Endpoint\RssEndpoint\Topic;
 
 final class TestRssTopic extends Avorg\TestCase
 {
-	/** @var RssTopic $endpoint */
+	/** @var Topic $endpoint */
 	protected $endpoint;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

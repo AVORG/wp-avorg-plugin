@@ -4,6 +4,7 @@ namespace Avorg\DataObjectRepository;
 
 use Avorg\DataObject;
 use Avorg\DataObjectRepository;
+use natlib\Stub;
 use function defined;
 use Exception;
 
@@ -27,15 +28,17 @@ class PresenterRepository extends DataObjectRepository
 		return $this->makeDataObject($rawPresenter);
 	}
 
-	/**
-	 * @param null $search
-	 * @return array
-	 * @throws Exception
-	 */
-	public function getPresenters($search = null)
+    /**
+     * @param null $search
+     * @param null $start
+     * @return array
+     * @throws Exception
+     */
+	public function getDataObjects($search = null, $start = null)
 	{
-		$rawPresenters = $this->api->getPresenters($search) ?: [];
 
-		return $this->makeDataObjects($rawPresenters);
+		$rawPresenters = $this->api->getPresenters($search, $start) ?: [];
+
+        return $this->makeDataObjects($rawPresenters);
 	}
 }

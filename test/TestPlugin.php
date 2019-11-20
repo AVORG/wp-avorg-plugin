@@ -7,7 +7,7 @@ final class TestPlugin extends Avorg\TestCase
 	/** @var Plugin $plugin */
 	protected $plugin;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -17,14 +17,14 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueueScripts()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalled("wp_enqueue_style");
 	}
 
 	public function testEnqueueScriptsUsesPathWhenEnqueuingStyle()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -35,7 +35,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueuesEditorStyles()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -46,7 +46,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testEnqueuesVideoJsStyles()
 	{
-		$this->plugin->enqueueStyles();
+		$this->plugin->init();
 
 		$this->mockWordPress->assertMethodCalledWith(
 			"wp_enqueue_style",
@@ -140,21 +140,24 @@ final class TestPlugin extends Avorg\TestCase
 		return array_combine($pages, $data);
 	}
 
-	/**
-	 * @param $action
-	 * @param $callbackClass
-	 * @param $callbackMethod
-	 * @throws ReflectionException
-	 * @dataProvider actionCallbackProvider
-	 */
-	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod)
+    /**
+     * @param $action
+     * @param $callbackClass
+     * @param $callbackMethod
+     * @param bool $priority
+     * @throws ReflectionException
+     * @dataProvider actionCallbackProvider
+     */
+	public function testActionCallbacksRegistered($action, $callbackClass, $callbackMethod, $priority=False)
 	{
 		$this->plugin->registerCallbacks();
 
-		$this->mockWordPress->assertActionAdded($action, [
-			$this->factory->secure("Avorg\\$callbackClass"),
-			$callbackMethod
-		]);
+        $callable = [
+            $this->factory->secure("Avorg\\$callbackClass"),
+            $callbackMethod
+        ];
+
+        $this->mockWordPress->assertActionAdded($action, $callable, $priority);
 	}
 
 	public function actionCallbackProvider()
@@ -182,66 +185,69 @@ final class TestPlugin extends Avorg\TestCase
 			],
 			[
 				"add_meta_boxes",
-				"ContentBits",
+				"PlaceholderContent",
 				"addMetaBoxes"
 			],
 			[
 				"init",
 				"Plugin",
-				"enqueueStyles"
+				"init"
 			],
 			[
 				"save_post",
-				"ContentBits",
-				"saveIdentifierMetaBox"
-			],
-			[
-				'enqueue_block_editor_assets',
-				'BlockLoader',
-				'enqueueBlockEditorAssets'
+				"PlaceholderContent",
+				"savePost"
 			],
 			[
 				"admin_menu",
 				'AdminPanel',
 				'register'
 			],
-			[
-				'enqueue_block_assets',
-				'BlockLoader',
-				'enqueueBlockFrontendAssets'
-			],
             [
-                'rest_api_init',
-                'RestController\\PlaceholderContent',
-                'registerRoutes'
+                'init',
+                'Block\\RelatedSermons',
+                'init'
+            ],
+            [
+                'init',
+                'Block\\Placeholder',
+                'init'
             ]
 		];
 	}
 
-	/**
-	 * @dataProvider scriptPathProvider
-	 * @param $path
-	 * @param bool $shouldRegister
-	 * @param bool $isRelative
-	 * @param string $action
-	 */
+    /**
+     * @dataProvider scriptPathProvider
+     * @param $path
+     * @param array $options
+     */
 	public function testRegistersScripts(
 		$path,
-		$shouldRegister = true,
-		$isRelative = false,
-		$action = "wp_enqueue_scripts"
+		$options = []
 	)
 	{
+	    $shouldRegister = $this->arrSafe('should_register', $options, true);
+	    $isRelative = $this->arrSafe('is_relative', $options, false);
+	    $action = $this->arrSafe('action', $options, "wp_enqueue_scripts");
+	    $deps = $this->arrSafe('deps', $options, null);
+	    $in_footer = $options['in_footer'] ?? false;
+
+        $fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
+
+        $defaultHandle = "Avorg_Script_" . sha1($fullPath);
+        $handle = $this->arrSafe("handle", $options, $defaultHandle);
+
 		$this->plugin->registerCallbacks();
 
 		$this->mockWordPress->runActions($action);
 
-		$fullPath = $isRelative ? "AVORG_BASE_URL/$path" : $path;
-
 		$args = [
 			"wp_enqueue_script",
-			"Avorg_Script_" . sha1($fullPath),
-			$fullPath
+			$handle,
+			$fullPath,
+            $deps,
+            null,
+            $in_footer
 		];
 
 		if ($shouldRegister) {
@@ -256,8 +262,23 @@ final class TestPlugin extends Avorg\TestCase
 		return [
 			"video js" => ["//vjs.zencdn.net/7.0/video.min.js"],
 			"video js hls" => ["https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.min.js"],
-			"don't init playlist.js on other pages" => ["script/playlist.js", false, true],
-			"polyfill.io" => ["https://polyfill.io/v3/polyfill.min.js?features=default"]
+			"don't init playlist.js on other pages" => ["script/playlist.js", [
+			    'should_register' => false,
+                'is_relative' => true
+            ]],
+            "frontend" => ["dist/frontend.js", [
+                'is_relative' => true,
+                'handle' => 'Avorg_Script_Frontend',
+                'in_footer' => true,
+                'deps' => ['wp-element']
+            ]],
+            "editor" => ["dist/editor.js", [
+                'is_relative' => true,
+                'action' => 'enqueue_block_editor_assets',
+                'deps' => ['wp-element', 'wp-blocks', 'wp-components', 'wp-i18n'],
+                'handle' => 'Avorg_Script_Editor',
+                'in_footer' => true,
+            ]],
 		];
 	}
 
@@ -319,4 +340,13 @@ final class TestPlugin extends Avorg\TestCase
 
 		$this->mockTwig->assertErrorNotRenderedWithMessage("AVORG Warning: PWA plugin not active!");
 	}
+
+	public function testInitsSession()
+    {
+        $this->plugin->registerCallbacks();
+
+        $this->mockWordPress->runActions('init');
+
+        $this->mockPhp->assertMethodCalled('initSession');
+    }
 }

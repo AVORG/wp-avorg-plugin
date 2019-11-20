@@ -1,42 +1,43 @@
 <?php
 
 use Avorg\DataObjectRepository\PresenterRepository;
+use natlib\Factory;
 
 final class TestPresenterRepository extends Avorg\TestCase
 {
-	/** @var PresenterRepository $presenterRepository */
-	private $presenterRepository;
+    /** @var PresenterRepository $presenterRepository */
+    private $presenterRepository;
 
-	protected function setUp()
-	{
-		parent::setUp();
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-		$this->presenterRepository = $this->factory->secure("Avorg\\DataObjectRepository\\PresenterRepository");
-	}
+        $this->presenterRepository = $this->factory->secure("Avorg\\DataObjectRepository\\PresenterRepository");
+    }
 
-	/**
-	 * @throws Exception
-	 */
-	public function testGetPresenter()
-	{
-		$this->presenterRepository->getPresenter(5);
+    /**
+     * @throws Exception
+     */
+    public function testGetPresenter()
+    {
+        $this->presenterRepository->getPresenter(5);
 
-		$this->mockAvorgApi->assertMethodCalledWith("getPresenter", 5);
-	}
+        $this->mockAvorgApi->assertMethodCalledWith("getPresenter", 5);
+    }
 
-	public function testReturnsPresenter()
-	{
-		$this->mockAvorgApi->setReturnValue("getPresenter", new stdClass());
+    public function testReturnsPresenter()
+    {
+        $this->mockAvorgApi->setReturnValue("getPresenter", new stdClass());
 
-		$result = $this->presenterRepository->getPresenter(5);
+        $result = $this->presenterRepository->getPresenter(5);
 
-		$this->assertInstanceOf("Avorg\\DataObject\\Presenter", $result);
-	}
+        $this->assertInstanceOf("Avorg\\DataObject\\Presenter", $result);
+    }
 
-	public function testReturnsNullIfNoPresenter()
-	{
-		$result = $this->presenterRepository->getPresenter(5);
+    public function testReturnsNullIfNoPresenter()
+    {
+        $result = $this->presenterRepository->getPresenter(5);
 
-		$this->assertNull($result);
-	}
+        $this->assertNull($result);
+    }
 }

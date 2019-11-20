@@ -7,7 +7,7 @@ final class TestPlaylistDetail extends Avorg\TestCase
 	/** @var Detail $page */
 	protected $page;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -36,10 +36,7 @@ final class TestPlaylistDetail extends Avorg\TestCase
 
 		$this->page->createPage();
 
-		$this->mockWordPress->assertPageCreated(
-			"Playlist Detail",
-			"Playlist Detail"
-		);
+		$this->mockWordPress->assertPageCreated("Playlist Detail");
 	}
 
 	public function testPassesTitleThrough()

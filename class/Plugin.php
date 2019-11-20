@@ -2,12 +2,16 @@
 
 namespace Avorg;
 
+use Avorg\Block\RelatedSermons;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
 
 class Plugin
 {
+    /** @var Php $php */
+    private $php;
+
 	/** @var Renderer $renderer */
 	private $renderer;
 
@@ -18,18 +22,19 @@ class Plugin
 	private $dependencies;
 	
 	public function __construct(
-		AdminPanel $adminPanel,
-		AjaxActionFactory $ajaxActionFactory,
-		BlockLoader $blockRepository,
-		ContentBits $contentBits,
-		Localization $localization,
-		PageFactory $pageFactory,
-		Pwa $pwa,
-		Renderer $renderer,
-		RestControllerFactory $restControllerFactory,
-		Router $router,
-		ScriptFactory $scriptFactory,
-		WordPress $WordPress
+        AdminPanel $adminPanel,
+        AjaxActionFactory $ajaxActionFactory,
+        BlockFactory $blockFactory,
+        PlaceholderContent $contentBits,
+        Localization $localization,
+        PageFactory $pageFactory,
+        Pwa $pwa,
+        Renderer $renderer,
+        RestControllerFactory $restControllerFactory,
+        Router $router,
+        Session $session,
+        ScriptFactory $scriptFactory,
+        WordPress $WordPress
 	)
 	{
 		$this->renderer = $renderer;
@@ -41,7 +46,7 @@ class Plugin
 	public function registerCallbacks()
 	{
 		$this->wp->add_action("admin_notices", [$this, "renderAdminNotices"]);
-		$this->wp->add_action("init", [$this, "enqueueStyles"]);
+		$this->wp->add_action("init", [$this, "init"]);
 
 		$this->registerDependencyCallbacks();
 	}
@@ -93,7 +98,7 @@ class Plugin
 		$this->renderer->renderNotice("error", $message, $url);
 	}
 
-	public function enqueueStyles()
+	public function init()
 	{
 		$this->enqueuePluginStyles();
 		$this->enqueueVideoJsStyles();

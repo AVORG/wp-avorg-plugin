@@ -6,17 +6,21 @@ use Avorg\DataObject\BibleBook;
 use Avorg\DataObject\Book;
 use Avorg\DataObject\Recording;
 use natlib\Factory;
+use natlib\Stub;
 use ReflectionException;
 use stdClass;
 
+include_once 'stubs/WP_REST_Request.php';
+
 abstract class TestCase extends \PHPUnit\Framework\TestCase {
-	/* Mock Objects */
-	
 	/** @var AvorgApi|StubAvorgApi $mockAvorgApi */
 	protected $mockAvorgApi;
 
 	/** @var Filesystem|StubFilesystem */
 	protected $mockFilesystem;
+
+	/** @var Guzzle|StubGuzzle $mockGuzzle */
+	protected $mockGuzzle;
 	
 	/** @var Php|StubPhp $mockPhp */
 	protected $mockPhp;
@@ -32,20 +36,27 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
 	
 	protected $textDomain = "wp-avorg-plugin";
 	
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$_SERVER["HTTP_HOST"] = "localhost:8080";
+		$_SESSION = [];
 
-		$this->factory = new Factory(__NAMESPACE__);
+		$this->factory = new Factory();
 
 		$this->factory->injectObjects(
 			$this->mockAvorgApi = new StubAvorgApi($this),
 			$this->mockFilesystem = new StubFilesystem($this),
+			$this->mockGuzzle = new StubGuzzle($this),
 			$this->mockPhp = new StubPhp($this),
 			$this->mockTwig = new StubTwig($this),
 			$this->mockWordPress = new StubWordPress($this, $this->factory)
 		);
 	}
+
+    protected function assertToArrayKeyValue(DataObject $object, $key, $value)
+    {
+        $this->assertEquals($value, $object->toArray()[$key]);
+    }
 
 	protected function assertTwigGlobalMatchesCallback(Page $page, callable $callback)
 	{
@@ -160,5 +171,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase {
     	if ($array == []) return new stdClass();
 
         return json_decode(json_encode($array), FALSE);
+    }
+
+    protected function arrSafe($key, $array, $default = Null)
+    {
+        return array_key_exists($key, $array) ? $array[$key] : $default;
     }
 }

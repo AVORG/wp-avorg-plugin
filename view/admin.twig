@@ -1,16 +1,17 @@
 <h1>AVORG</h1>
 
-{% if _POST["reactivate"] %}
-	{% include "molecule-noticeSuccess.twig" with { message: "Plugin reactivated" } only %}
-{% endif %}
-
 {% if _POST["save-api-credentials"] %}
 	{% include "molecule-noticeSuccess.twig" with { message: "API credentials saved" } only %}
 {% endif %}
 
 <form method="post">
 	<h3>API Credentials</h3>
-	<input type="text" required name="api-user" autocomplete="username" placeholder="User" value="{{ avorg.apiUser }}" />
-	<input type="password" required name="api-pass" autocomplete="current-password" placeholder="Password" value="{{ avorg.apiPass }}" />
+	<input type="text" required name="api-user" autocomplete="username" placeholder="User" 
+		   value="{{ avorg.apiUser }}" />
+	<input type="password" required name="api-pass" autocomplete="current-password" 
+		   placeholder="Password (Old API)" value="{{ avorg.apiPass }}" />
+	<br>
+	<textarea required name="api-key" placeholder="Key (New API)" rows="10" cols="70">{{ avorg.apiKey }}</textarea>
+	<br>
 	<input type="submit" name="save-api-credentials" value="Save credentials" />
 </form>

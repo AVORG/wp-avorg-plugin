@@ -6,6 +6,7 @@ namespace Avorg\Page\Playlist;
 use Avorg\DataObjectRepository\PlaylistRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -18,16 +19,16 @@ class Listing extends Page
 	private $playlistRepository;
 
 	protected $defaultPageTitle = "Playlists";
-	protected $defaultPageContent = "Playlists";
 	protected $twigTemplate = "page-playlists.twig";
 
 	public function __construct(
 		PlaylistRepository $playlistRepository,
 		Renderer $renderer,
+		Router $router,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->playlistRepository = $playlistRepository;
 	}
@@ -35,10 +36,10 @@ class Listing extends Page
 	/**
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
-			"playlists" => $this->playlistRepository->getPlaylists()
+			"playlists" => $this->playlistRepository->getDataObjects()
 		];
 	}
 

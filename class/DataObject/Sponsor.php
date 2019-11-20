@@ -5,26 +5,38 @@ namespace Avorg\DataObject;
 
 use Avorg\DataObject;
 use Avorg\DataObjectRepository\PresentationRepository;
+use Avorg\Renderer;
 use Avorg\Router;
 
 if (!defined('ABSPATH')) exit;
 
 class Sponsor extends DataObject
 {
-	/** @var PresentationRepository $recordingRepository */
-	private $recordingRepository;
+	/** @var PresentationRepository $presentationRepository */
+	private $presentationRepository;
 
 	protected $detailClass = "Avorg\Page\Sponsor\Detail";
 
-	public function __construct(PresentationRepository $recordingRepository, Router $router)
+	public function __construct(
+	    PresentationRepository $presentationRepository,
+        Renderer $renderer,
+        Router $router
+    )
 	{
-		parent::__construct($router);
+		parent::__construct($renderer, $router);
 
-		$this->recordingRepository = $recordingRepository;
+		$this->presentationRepository = $presentationRepository;
 	}
+
+    protected function getDataArray()
+    {
+        return array_merge(parent::getDataArray(), [
+            "secondLine" => $this->description,
+        ]);
+    }
 
 	public function getRecordings()
 	{
-		return $this->recordingRepository->getSponsorPresentations($this->getId());
+		return $this->presentationRepository->getSponsorPresentations($this->getId());
 	}
 }

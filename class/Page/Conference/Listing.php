@@ -7,6 +7,7 @@ use Avorg\DataObjectRepository\BookRepository;
 use Avorg\DataObjectRepository\ConferenceRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 
@@ -18,24 +19,24 @@ class Listing extends Page
 	private $conferenceRepository;
 
 	protected $defaultPageTitle = "Conferences";
-	protected $defaultPageContent = "Conferences";
 	protected $twigTemplate = "page-conferences.twig";
 
 	public function __construct(
 		ConferenceRepository $conferenceRepository,
 		Renderer $renderer,
+		Router $router,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->conferenceRepository = $conferenceRepository;
 	}
 
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
-			"conferences" => $this->conferenceRepository->getConferences()
+			"conferences" => $this->conferenceRepository->getDataObjects()
 		];
 	}
 

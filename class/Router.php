@@ -94,7 +94,7 @@ class Router
 	{
 		$language = $this->getRequestLanguage();
 
-		return ($language) ? $language->getLangCode() : $previous;
+		return ($language) ? $language->getWpCode() : $previous;
 	}
 
 	public function filterRedirect($redirectUrl)
@@ -133,24 +133,44 @@ class Router
         return parse_url($url, PHP_URL_PATH);
 	}
 
-	public function buildUrl($routableClass, $variables = [])
+    /**
+     * @param $routableClass
+     * @param array $variables
+     * @return string
+     * @throws Exception
+     */
+    public function buildUrl($routableClass, $variables = [])
 	{
-		if (!class_exists($routableClass)) {
-			throw new Exception("Class $routableClass does not exist.");
-		}
-
-		/** @var Route $route */
-		$route = $this->routeFactory->getRouteByClass($routableClass);
-		$locale = $this->wp->get_locale() ?: "en_US";
-		$language = $this->languageFactory->getLanguageByWpLangCode($locale);
-		$vars = array_merge([
-			"language" => $language->getBaseRoute()
-		], $variables);
-		$path = $route->getPath($vars);
-		$translatedPath = $language->translatePath($path);
-
-		return $this->getBaseUrl() . "/$translatedPath";
+		return $this->getBaseUrl() . $this->buildPath($routableClass, $variables);
 	}
+
+    /**
+     * @param $routableClass
+     * @param array $variables
+     * @return string
+     * @throws Exception
+     */
+    public function buildPath($routableClass, $variables = [])
+    {
+        if (!class_exists($routableClass)) {
+            throw new Exception("Class $routableClass does not exist.");
+        }
+
+        /** @var Route $route */
+        $route = $this->routeFactory->getDefaultRouteByClass($routableClass);
+
+        if (!$route) return null;
+
+        $locale = $this->wp->get_locale() ?: "en_US";
+        $language = $this->languageFactory->getLanguageByWpLangCode($locale);
+        $vars = array_merge([
+            "language" => $language->getBaseRoute()
+        ], $variables);
+        $path = $route->getPath($vars);
+        $translatedPath =  $language->translatePath($path);
+
+        return "/$translatedPath";
+    }
 
 	public function formatStringForUrl($string)
 	{

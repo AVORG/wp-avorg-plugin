@@ -7,7 +7,7 @@ final class TestRecordingEndpoint extends Avorg\TestCase
 	/** @var Recording $endpoint */
 	protected $endpoint;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

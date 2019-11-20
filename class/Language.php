@@ -4,7 +4,8 @@ namespace Avorg;
 
 class Language {
 	private $baseRoute;
-	private $langCode;
+	private $wpCode;
+	private $dbCode;
 	private $urlFragments;
 
 	/**
@@ -40,7 +41,25 @@ class Language {
 		return implode("/", $translatedFragments);
 	}
 
-	private function translateUrlFragment($fragment)
+    /**
+     * @param mixed $dbCode
+     * @return Language
+     */
+    public function setDbCode($dbCode)
+    {
+        $this->dbCode = $dbCode;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDbCode()
+    {
+        return $this->dbCode;
+    }
+
+    private function translateUrlFragment($fragment)
 	{
 		return key_exists($fragment, $this->urlFragments) ? $this->urlFragments[$fragment] : $fragment;
 	}
@@ -50,14 +69,14 @@ class Language {
 		return $this->baseRoute;
 	}
 
-	public function getLangCode()
+	public function getWpCode()
 	{
-		return $this->langCode;
+		return $this->wpCode;
 	}
 
-	public function setLangCode($langCode)
+	public function setWpCode($langCode)
 	{
-		$this->langCode = $langCode;
+		$this->wpCode = $langCode;
 		return $this;
 	}
 }

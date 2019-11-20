@@ -10,15 +10,19 @@ if (!defined('ABSPATH')) exit;
 
 abstract class DataObject implements JsonSerializable
 {
+    /** @var Renderer $renderer */
+    private $renderer;
+
 	/** @var Router $router */
 	protected $router;
 
 	protected $data;
-
 	protected $detailClass;
+	protected $entryTemplate;
 
-	public function __construct(Router $router)
+	public function __construct(Renderer $renderer, Router $router)
 	{
+	    $this->renderer = $renderer;
 		$this->router = $router;
 	}
 
@@ -60,8 +64,19 @@ abstract class DataObject implements JsonSerializable
 
 	public function toArray()
 	{
-		return (array) $this->data;
+        return array_merge($this->getDataArray(), [
+            "url" => $this->getUrl(),
+        ]);
 	}
+
+    /**
+     * Extending classes should override this function.
+     * @return array
+     */
+    protected function getDataArray()
+    {
+        return (array)$this->data;
+    }
 
 	/**
 	 * @return string|null

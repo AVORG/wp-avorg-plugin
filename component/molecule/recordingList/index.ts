@@ -1,4 +1,4 @@
-import molecule_mediaObject from "../mediaObject/index.js";
+import molecule_mediaObject from "../mediaObject";
 
 interface Recording {
     id: number;

@@ -64,10 +64,9 @@ class StubWordPress extends WordPress
 		]);
 	}
 
-	public function assertPageCreated($content, $title)
+	public function assertPageCreated($title)
 	{
 		$this->assertMethodCalledWith("wp_insert_post", array(
-			"post_content" => $content,
 			"post_title" => $title,
 			"post_status" => "publish",
 			"post_type" => "page"
@@ -105,6 +104,24 @@ class StubWordPress extends WordPress
 		return $prefix . $slashToUnderscore;
 	}
 
+	public function assertRestRouteRegistered($route)
+    {
+        $this->assertAnyCallMatches('register_rest_route', function($call) use($route) {
+            return $call[1] === $route;
+        }, "Failed asserting that route '$route' was registered");
+    }
+
+    public function assertRestRouteQueryVarsRegistered($method, $vars)
+    {
+        $this->assertAnyCallMatches("register_rest_route", function ($call) use($method, $vars) {
+            $methodOpts = array_filter($call[2], function($optSet) use($method) {
+                return $optSet['methods'] === $method;
+            })[0];
+
+            return $methodOpts['args'] === $vars;
+        });
+    }
+
 	/**
 	 * @param $tag
 	 * @param $callable
@@ -118,17 +135,18 @@ class StubWordPress extends WordPress
 		);
 	}
 
-	/**
-	 * @param $tag
-	 * @param $callable
-	 */
-	public function assertActionAdded($tag, $callable)
+    /**
+     * @param $tag
+     * @param $callable
+     * @param bool $priority
+     */
+	public function assertActionAdded($tag, $callable, $priority=False)
 	{
-		$this->assertMethodCalledWith(
-			"add_action",
-			$tag,
-			$callable
-		);
+	    if ($priority) {
+            $this->assertMethodCalledWith("add_action", $tag, $callable, $priority);
+        } else {
+            $this->assertMethodCalledWith("add_action", $tag, $callable);
+        }
 	}
 
 	public function runActions(...$actions)

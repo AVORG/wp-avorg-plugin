@@ -1,7 +1,1 @@
-{
-"version": 3,
-"mappings": "AAAA,2BAA4B;EAC1B,OAAO,EAAE,IAAI;EACb,WAAW,EAAE,MAAM;EACnB,aAAa,EAAE,IAAI;EAEnB,8DAAmC;IACjC,aAAa,EAAE,IAAI;IACnB,KAAK,EAAE,MAAM;IACb,MAAM,EAAE,MAAM;IACd,UAAU,EAAE,KAAK;IACjB,UAAU,EAAE,kCAA6B;EAG3C,6DAAkC;IAChC,WAAW,EAAE,IAAI;EAGnB,8DAAmC;IACjC,KAAK,EAAE,OAAO;IACd,aAAa,EAAE,CAAC",
-"sources": ["_molecule-mediaObject.scss"],
-"names": [],
-"file": "editor.css"
-}
+{"version":3,"sourceRoot":"","sources":["_molecule-mediaIdMetaBox.scss","_molecule-mediaObject.scss"],"names":[],"mappings":"AACE;EACE;EACA;;AAEA;EACE;;AAIJ;EACE;EACA;EACA;EACA;;AAEA;EACE;;;ACjBN;EACE;EACA;EACA;;AAEA;EACE;EACA;EACA;EACA;EACA;;AAGF;EACE;;AAGF;EACE;EACA","file":"editor.css"}

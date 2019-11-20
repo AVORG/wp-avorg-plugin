@@ -5,13 +5,14 @@ final class TestAdminPanel extends Avorg\TestCase
 	private $saveApiCredentialsPost = array(
 		"api-user" => "user",
 		"api-pass" => "pass",
+		"api-key" => "key",
 		"save-api-credentials" => "Save credentials"
 	);
 	
 	/** @var \Avorg\AdminPanel $adminPanel */
 	protected $adminPanel;
 	
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		
@@ -20,13 +21,21 @@ final class TestAdminPanel extends Avorg\TestCase
 	
 	public function testRendersPage()
 	{
-		$this->mockWordPress->setReturnValues( "get_option", "username", "password" );
+        $this->mockWordPress->setMappedReturnValues('get_option', [
+            ['avorgApiUser', 'the_username'],
+            ['avorgApiPass', 'the_password'],
+            ['avorgApiKey', 'the_key']
+        ]);
 		
 		$this->adminPanel->render();
 		
 		$this->mockTwig->assertTwigTemplateRenderedWithData(
 			"admin.twig",
-			["apiUser" => "username", "apiPass" => "password"]
+			[
+			    "apiUser" => "the_username",
+                "apiPass" => "the_password",
+                "apiKey" => "the_key"
+            ]
 		);
 	}
 	
@@ -60,6 +69,16 @@ final class TestAdminPanel extends Avorg\TestCase
 		$this->mockWordPress->assertMethodCalledWith(
 			"update_option", "avorgApiPass", "pass");
 	}
+
+    public function testSetsApiKey()
+    {
+        $_POST = $this->saveApiCredentialsPost;
+
+        $this->adminPanel->render();
+
+        $this->mockWordPress->assertMethodCalledWith(
+            "update_option", "avorgApiKey", "key");
+    }
 	
 	public function testGetsApiUser()
 	{
@@ -76,4 +95,12 @@ final class TestAdminPanel extends Avorg\TestCase
 		$this->mockWordPress->assertMethodCalledWith(
 			"get_option", "avorgApiPass");
 	}
+
+	public function testGetsApiKey()
+    {
+        $this->adminPanel->render();
+
+        $this->mockWordPress->assertMethodCalledWith(
+            "get_option", "avorgApiKey");
+    }
 }

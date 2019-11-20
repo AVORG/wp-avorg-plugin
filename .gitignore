@@ -4,3 +4,4 @@
 /logs/*.log
 /style/.sass-cache
 /node_modules
+.phpunit.result.cache

@@ -15,7 +15,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$haystack = $this->makePlayerUiHaystack();
 		
-		$this->assertContains("playerUI", $haystack);
+		$this->assertStringContainsString("playerUI", $haystack);
 	}
 	
 	private function makePlayerUiHaystack()
@@ -29,7 +29,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$avorgApi = new AvorgApi_exceptions();
 
-		$factory = new Factory("Avorg");
+		$factory = new Factory();
 
 		$factory->injectObjects(
 			$avorgApi,
@@ -41,7 +41,7 @@ final class TestMediaPage extends Avorg\TestCase
 		return $factory->secure("Avorg\\Page\\Presentation\\Detail");
 	}
 	
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -77,7 +77,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$this->mediaPage->createPage();
 
-		$this->mockWordPress->assertPageCreated("Media Detail", "Media Detail");
+		$this->mockWordPress->assertPageCreated("Media Detail");
 	}
 	
 	public function testChecksPostStatus()
@@ -110,7 +110,7 @@ final class TestMediaPage extends Avorg\TestCase
 	{
 		$haystack = $this->mediaPage->addUi("content");
 		
-		$this->assertContains("content", $haystack);
+		$this->assertStringContainsString("content", $haystack);
 	}
 	
 	public function testUsesTwig()
@@ -128,7 +128,7 @@ final class TestMediaPage extends Avorg\TestCase
 		
 		$haystack = $this->makePlayerUiHaystack();
 		
-		$this->assertNotContains("playerUI", $haystack);
+		$this->assertStringNotContainsString("playerUI", $haystack);
 	}
 	
 	public function testPassesRecordingToTwig()
@@ -329,7 +329,7 @@ final class TestMediaPage extends Avorg\TestCase
 
 		$this->mediaPage->createPage();
 
-		$this->mockWordPress->assertPageCreated("Media Detail", "Media Detail");
+		$this->mockWordPress->assertPageCreated("Media Detail");
 	}
 
 	public function testDoesNotInsertPageTwice()

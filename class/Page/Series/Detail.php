@@ -7,6 +7,7 @@ use Avorg\DataObject;
 use Avorg\DataObjectRepository\SeriesRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use ReflectionException;
@@ -19,16 +20,16 @@ class Detail extends Page
 	private $seriesRepository;
 
 	protected $defaultPageTitle = "Series Detail";
-	protected $defaultPageContent = "Series Detail";
 	protected $twigTemplate = "page-seriesDetail.twig";
 
 	public function __construct(
 		Renderer $renderer,
+		Router $router,
 		SeriesRepository $seriesRepository,
 		WordPress $wp
 	)
 	{
-		parent::__construct($renderer, $wp);
+		parent::__construct($renderer, $router, $wp);
 
 		$this->seriesRepository = $seriesRepository;
 	}
@@ -37,7 +38,7 @@ class Detail extends Page
 	 * @return array
 	 * @throws ReflectionException
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		return [
 			"series" => $this->getEntity()

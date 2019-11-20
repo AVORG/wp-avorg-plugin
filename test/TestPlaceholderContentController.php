@@ -7,109 +7,55 @@ final class TestPlaceholderContentController extends Avorg\TestCase
     /** @var PlaceholderContent $controller */
     protected $controller;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->controller = $this->factory->secure("Avorg\\RestController\\PlaceholderContent");
     }
 
-    public function testRegistersCallbacks()
-    {
-        $this->controller->registerCallbacks();
-
-        $this->mockWordPress->assertActionAdded('rest_api_init', [$this->controller, 'registerRoutes']);
-    }
-
-    public function testRegisterRoutes()
+    public function testExists()
     {
         $this->controller->registerRoutes();
 
+        /* TODO: Change to /placeholder-content/7; extract media ids on front-end */
+        $this->mockWordPress->assertRestRouteRegistered('/placeholder-content/(?P<id>\d+)');
+    }
+
+    public function testGetsMediaIds()
+    {
+        $this->controller->handleGet(new WP_REST_Request([
+            'id' => 7
+        ]));
+
         $this->mockWordPress->assertMethodCalledWith(
-            'register_rest_route',
-            'avorg/v1',
-            '/placeholder-content/(?P<id>[\w]+)(?:/(?P<media_id>[\d]+))?',
-            [
-                'methods' => 'GET',
-                'callback' => [$this->controller, 'getItem'],
-                'args' => [
-                    'media_id' => null
-                ]
-            ]
+            "get_post_meta",
+            7,
+            "avorgMediaIds",
+            true
         );
     }
 
-    public function testGetItem()
+    public function testReturnsData()
     {
-        $this->controller->getItem([
-            'id' => 'identifier',
-            'media_id' => 'media_id'
-        ]);
+        $this->mockWordPress->setReturnValue("get_post_meta", "values");
 
-        $this->mockWordPress->assertMethodCalledWith('get_posts', [
-            'posts_per_page' => -1,
-            'post_type' => 'avorg-content-bits',
-            'meta_query' => [
-                [
-                    'key' => 'avorgBitIdentifier',
-                    'value' => 'identifier'
-                ]
-            ],
-            'tax_query' => [
-                [
-                    'taxonomy' => 'avorgMediaIds',
-                    'field' => 'slug',
-                    'terms' => 'media_id'
-                ]
-            ]
-        ]);
+        $response = $this->controller->handleGet(new WP_REST_Request([
+            'id' => 7
+        ]));
+
+        $this->assertEquals([
+            'id' => 7,
+            'media_ids' => "values"
+        ], $response);
     }
 
-    public function testGetItemGetsUnassociatedItemsIfNoAssociatedItems()
+    public function testCoercesIntegerId()
     {
-        $this->controller->getItem([
-            'id' => 'identifier',
-            'media_id' => 'media_id'
-        ]);
+        $response = $this->controller->handleGet(new WP_REST_Request([
+            'id' => '7'
+        ]));
 
-        $this->mockWordPress->assertMethodCalledWith('get_posts', [
-            'posts_per_page' => -1,
-            'post_type' => 'avorg-content-bits',
-            'meta_query' => [
-                [
-                    'key' => 'avorgBitIdentifier',
-                    'value' => 'identifier'
-                ]
-            ]
-        ]);
-    }
-
-    public function testReturnsPost()
-    {
-        $post = $this->arrayToObject([
-            'post_content' => 'the_content'
-        ]);
-
-        $this->mockWordPress->setReturnValue('get_posts', [$post]);
-        $this->mockPhp->setReturnValue('array_rand', 0);
-
-        $result = $this->controller->getItem([
-            'id' => 'identifier',
-            'media_id' => 'media_id'
-        ]);
-
-        $this->assertEquals([$post], $result);
-    }
-
-    public function testDoesNotAttemptSelectionWhenNoPosts()
-    {
-        $this->mockWordPress->setReturnValue('get_posts', []);
-
-        $this->controller->getItem([
-            'id' => 'identifier',
-            'media_id' => 'media_id'
-        ]);
-
-        $this->mockPhp->assertMethodNotCalled('array_rand');
+        $this->assertTrue($response['id'] === 7);
     }
 }

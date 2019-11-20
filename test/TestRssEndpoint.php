@@ -10,7 +10,7 @@ final class TestRssEndpoint extends Avorg\TestCase
 	/**
 	 * @throws ReflectionException
 	 */
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

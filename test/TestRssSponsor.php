@@ -6,10 +6,10 @@ use Avorg\Endpoint\RssEndpoint\Sponsor;
 
 final class TestRssSponsor extends Avorg\TestCase
 {
-	/** @var RssSponsor $endpoint */
+	/** @var Sponsor $endpoint */
 	protected $endpoint;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

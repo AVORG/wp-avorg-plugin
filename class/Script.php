@@ -12,8 +12,11 @@ class Script
 	private $wp;
 
 	private $actions = [];
-	private $data = [];
+	private $handle;
 	private $path;
+	private $deps = [];
+	private $inFooter = false;
+	private $data = [];
 
 	public function __construct(WordPress $wp)
 	{
@@ -47,27 +50,53 @@ class Script
 		return $this;
 	}
 
-	public function registerCallbacks()
+    /**
+     * @throws Exception
+     */
+    public function registerCallbacks()
 	{
-		$this->wp->add_action("wp_enqueue_scripts", [$this, "enqueue"]);
-		$this->wp->add_action("admin_enqueue_scripts", [$this, "enqueue"]);
+        if (! $this->actions) {
+            throw new Exception("No actions set for script $this->path");
+        }
+
+        array_walk($this->actions, function($action) {
+           $this->wp->add_action($action, [$this, "enqueue"]);
+        });
 	}
 
-	public function enqueue()
+    /**
+     * @throws Exception
+     */
+    public function enqueue()
 	{
-		if (!$this->path) throw new Exception("Failed to enqueue script. Path not set.");
+		if (!$this->path) {
+            throw new Exception("Failed to enqueue script. Path not set.");
+        }
 
-		$id = $this->getScriptId();
+		$handle = $this->getHandle();
 
-		$this->wp->wp_enqueue_script($id, $this->path);
-		$this->wp->wp_localize_script($id, "avorg", $this->getLocalizeData());
+		$this->wp->wp_enqueue_script(
+		    $handle,
+            $this->path,
+            $this->deps,
+            null,
+            $this->inFooter
+        );
+
+		$this->wp->wp_localize_script(
+		    $handle,
+            "avorg",
+            $this->getLocalizeData()
+        );
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getScriptId()
+	private function getHandle()
 	{
+	    if ($this->handle) return $this->handle;
+
 		$class = get_class($this);
 
 		return str_replace("\\", "_", $class) . "_" . sha1($this->path);
@@ -80,7 +109,9 @@ class Script
 	{
 		return array_merge([
 			"nonces" => $this->getNonces(),
-			"ajax_url" => $this->wp->admin_url("admin-ajax.php")
+			"ajax_url" => $this->wp->admin_url("admin-ajax.php"),
+            "query" => $this->wp->get_all_query_vars(),
+            "post_id" => (int) $this->wp->get_the_ID()
 		], $this->data);
 	}
 
@@ -89,10 +120,32 @@ class Script
 	 */
 	private function getNonces()
 	{
-		return array_reduce($this->actions, function ($carry, AjaxAction $action) {
-			return array_merge($carry, [
-				$action->getSimpleIdentifier() => $action->getNonce()
-			]);
-		}, []);
+		return [];
 	}
+
+    public function setDeps(...$deps)
+    {
+        $this->deps = $deps;
+        return $this;
+    }
+
+    /**
+     * @param mixed $handle
+     * @return Script
+     */
+    public function setHandle($handle)
+    {
+        $this->handle = $handle;
+        return $this;
+    }
+
+    /**
+     * @param bool $inFooter
+     * @return Script
+     */
+    public function setInFooter(bool $inFooter): Script
+    {
+        $this->inFooter = $inFooter;
+        return $this;
+    }
 }

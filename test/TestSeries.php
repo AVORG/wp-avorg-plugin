@@ -7,13 +7,14 @@ final class TestSeries extends Avorg\TestCase
 	/** @var Series $series */
 	private $series;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
 		$this->series = $this->makeSeries([
 			"title" => "ECYC 2011 Plenary Meetings",
 			"id" => "431",
+            "conference" => "GYC 2016: When All Has Been Heard"
 		]);
 	}
 
@@ -41,4 +42,21 @@ final class TestSeries extends Avorg\TestCase
 
 		$this->assertInstanceOf("Avorg\\DataObject\\Recording", $recording);
 	}
+
+    public function testIncludesSecondLine()
+    {
+        $this->assertToArrayKeyValue($this->series, "secondLine",
+            "GYC 2016: When All Has Been Heard");
+    }
+
+    public function testDefaultsToSponsorForSecondLine()
+    {
+        $series = $this->makeSeries([
+            "conference" => '',
+            "sponsor" => "the_sponsor"
+        ]);
+
+        $this->assertToArrayKeyValue($series, "secondLine",
+            "the_sponsor");
+    }
 }

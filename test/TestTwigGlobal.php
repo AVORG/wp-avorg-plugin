@@ -8,12 +8,21 @@ final class TestTwigGlobal extends Avorg\TestCase
 	/** @var TwigGlobal $global */
 	private $global;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$this->global = $this->factory->obtain("Avorg\\TwigGlobal");
+		$this->global = $this->makeTwigGlobal();
 	}
+
+    /**
+     * @return TwigGlobal
+     * @throws ReflectionException
+     */
+    private function makeTwigGlobal(): TwigGlobal
+    {
+        return $this->factory->make("Avorg\\TwigGlobal");
+    }
 
 	public function test__Function()
 	{
@@ -87,7 +96,7 @@ final class TestTwigGlobal extends Avorg\TestCase
 	{
 		$_SERVER["REQUEST_URI"] = "localhost:8080/espanol";
 
-		$result = $this->global->getLanguage()->getLangCode();
+		$result = $this->global->getLanguage()->getWpCode();
 
 		$this->assertEquals("es_ES", $result);
 	}
@@ -166,4 +175,29 @@ final class TestTwigGlobal extends Avorg\TestCase
 			return $call[2][0]['title'] === "A Call to Medical Evangelism";
 		});
 	}
+
+	public function testGetsQueryVars()
+    {
+        $this->makeTwigGlobal();
+
+        $this->mockWordPress->assertMethodCalled("get_all_query_vars");
+    }
+
+    public function testIncludesQueryVarsInData()
+    {
+        $this->mockWordPress->setReturnValue("get_all_query_vars", "vars");
+
+        $global = $this->makeTwigGlobal();
+
+        $this->assertEquals("vars", $global->query);
+    }
+
+    public function testIncludesSessionData()
+    {
+        $_SESSION['email'] = 'test@test.com';
+
+        $global = $this->makeTwigGlobal();
+
+        $this->assertEquals('test@test.com', $global->session['email']);
+    }
 }

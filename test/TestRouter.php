@@ -7,7 +7,7 @@ final class TestRouter extends Avorg\TestCase
 	/** @var Router $router */
 	protected $router;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 
@@ -164,7 +164,23 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"english/audiobibles/books/ENGKJV/O/Josh/1",
 				"index.php?page_id=BIBLEBOOK_DETAIL_PAGE_ID&language=english&bible_id=ENGKJV&testament_id=O&book_id=Josh&drama=1"
-			]
+			],
+            [
+                "/english/account",
+                "index.php?page_id=LOGIN_PAGE_ID&language=english"
+            ],
+            [
+                "/english/account/playlists",
+                "index.php?page_id=PLAYLIST_USERPLAYLISTS_PAGE_ID&language=english"
+            ],
+            [
+                "english/account/register",
+                "index.php?page_id=REGISTER_PAGE_ID&language=english"
+            ],
+            [
+                "english/registrar",
+                "index.php?page_id=REGISTER_PAGE_ID&language=english"
+            ],
 		];
 	}
 
@@ -216,10 +232,6 @@ final class TestRouter extends Avorg\TestCase
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Sponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
 			],
 			[
-				"/api/presentation/related/10",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_RelatedSermons&entity_id=10"
-			],
-			[
 				"/api/presentation/featured",
 				"endpoint.php?endpoint_id=Avorg_Endpoint_Presentations&entity_id=featured"
 			]
@@ -235,7 +247,7 @@ final class TestRouter extends Avorg\TestCase
 		$addRewriteCalls = $this->mockWordPress->getCalls("add_rewrite_rule");
 		$redirect = $addRewriteCalls[0][1];
 
-		$this->assertContains("page_id=3", $redirect);
+		$this->assertStringContainsString("page_id=3", $redirect);
 	}
 
 	public function testSetLocaleFunctionExists()
@@ -348,7 +360,7 @@ final class TestRouter extends Avorg\TestCase
 		$this->mockWordPress->setReturnValue("get_locale", "es_ES");
 
 		$result = $this->router->buildUrl("Avorg\Page\Presenter\Listing", [
-			"letter" => "D"
+			"page" => "D"
 		]);
 
 		$this->assertStringEndsWith("espanol/sermones/presenters/D", $result);

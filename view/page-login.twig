@@ -1,0 +1,12 @@
+{% if avorg.session.email %}
+    <p>Logged in as {{ avorg.session.email }}</p>
+{% else %}
+    <form class="avorg-page-login" method="post">
+        {% if avorg.success is same as(false) %}
+            <p>Login failed. Please check your username and password.</p>
+        {% endif %}
+        <input id="avorg-page-login__email" type="email" placeholder="Email" name="email">
+        <input id="avorg-page-login__password" type="password" placeholder="Password" name="password">
+        <input type="submit">
+    </form>
+{% endif %}

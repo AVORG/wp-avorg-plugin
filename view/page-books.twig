@@ -7,7 +7,7 @@
 					imageAlt: "presenter",
 					title: book.title,
 					titleUrl: book.url,
-					description: book.summary
+					description: book.summary|striptags
 				} only %}
 			</li>
 		{% endfor %}

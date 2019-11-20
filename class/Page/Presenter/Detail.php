@@ -7,6 +7,7 @@ use Avorg\DataObject\Presenter;
 use Avorg\DataObjectRepository\PresenterRepository;
 use Avorg\Page;
 use Avorg\Renderer;
+use Avorg\Router;
 use Avorg\WordPress;
 use function defined;
 use Exception;
@@ -19,16 +20,16 @@ class Detail extends Page
 	protected $presenterRepository;
 
 	protected $defaultPageTitle = "Presenter Detail";
-	protected $defaultPageContent = "Presenter Detail";
 	protected $twigTemplate = "page-presenter.twig";
 
 	public function __construct(
 		PresenterRepository $presenterRepository,
 		Renderer $renderer,
+		Router $router,
 		WordPress $wordPress
 	)
 	{
-		parent::__construct($renderer, $wordPress);
+		parent::__construct($renderer, $router, $wordPress);
 
 		$this->presenterRepository = $presenterRepository;
 	}
@@ -36,7 +37,7 @@ class Detail extends Page
 	/**
 	 * @throws Exception
 	 */
-	protected function getData()
+	protected function getPageData()
 	{
 		$presenter = $this->getEntity();
 
