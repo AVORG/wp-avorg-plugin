@@ -98,7 +98,7 @@ var AvorgBlockFav;
     window.wp.blocks.registerBlockType('avorg/block-fav', {
         title: 'Favorite Toggle',
         icon: 'star-half',
-        category: 'widgets',
+        category: 'avorg',
         edit: function (props) {
             return wp.element.createElement("div", { className: props.className + ' loading' },
                 wp.element.createElement("span", { className: "dashicons dashicons-star-half", title: 'Loading...' }),
@@ -129,7 +129,7 @@ var AvorgBlockList;
     window.wp.blocks.registerBlockType('avorg/block-list', {
         title: 'Recordings List',
         icon: 'playlist-audio',
-        category: 'widgets',
+        category: 'avorg',
         attributes: {
             type: {
                 type: 'string',
@@ -175,7 +175,7 @@ var AvorgPlaceholder;
     window.wp.blocks.registerBlockType('avorg/block-placeholder', {
         title: 'Placeholder',
         icon: 'location',
-        category: 'widgets',
+        category: 'avorg',
         attributes: {
             id: {
                 type: 'string'
@@ -218,7 +218,7 @@ var AvorgRelatedSermons;
     window.wp.blocks.registerBlockType('avorg/block-relatedsermons', {
         title: 'Related Sermons',
         icon: 'excerpt-view',
-        category: 'widgets',
+        category: 'avorg',
         edit: function (props) {
             return wp.element.createElement("p", { className: props.className }, "Related Sermons");
         },
@@ -245,7 +245,7 @@ var AvorgBlockRss;
     window.wp.blocks.registerBlockType('avorg/block-rss', {
         title: 'RSS Link',
         icon: 'rss',
-        category: 'widgets',
+        category: 'avorg',
         attributes: {
             feeds: {
                 type: 'object',

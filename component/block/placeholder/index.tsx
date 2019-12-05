@@ -4,7 +4,7 @@ namespace AvorgPlaceholder {
     window.wp.blocks.registerBlockType('avorg/block-placeholder', {
         title: 'Placeholder',
         icon: 'location',
-        category: 'widgets',
+        category: 'avorg',
         attributes: {
             id: {
                 type: 'string'

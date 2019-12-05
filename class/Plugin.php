@@ -9,9 +9,6 @@ if (!defined('ABSPATH')) exit;
 
 class Plugin
 {
-    /** @var Php $php */
-    private $php;
-
 	/** @var Renderer $renderer */
 	private $renderer;
 

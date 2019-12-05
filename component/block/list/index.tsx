@@ -2,7 +2,7 @@ namespace AvorgBlockList {
     window.wp.blocks.registerBlockType('avorg/block-list', {
         title: 'Recordings List',
         icon: 'playlist-audio',
-        category: 'widgets',
+        category: 'avorg',
         attributes: {
             type: {
                 type: 'string',

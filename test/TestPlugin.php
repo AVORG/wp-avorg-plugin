@@ -349,4 +349,19 @@ final class TestPlugin extends Avorg\TestCase
 
         $this->mockPhp->assertMethodCalled('initSession');
     }
+
+    public function testFiltersBlockCategories()
+    {
+        $this->plugin->registerCallbacks();
+
+        $result = $this->mockWordPress->runFilter('block_categories', ['existing']);
+
+        $this->assertContains([
+            'existing',
+            [
+                'slug' => 'avorg',
+                'title' => 'AudioVerse'
+            ]
+        ], $result);
+    }
 }
