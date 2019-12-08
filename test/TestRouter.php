@@ -212,10 +212,6 @@ final class TestRouter extends Avorg\TestCase
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Speaker&language=english&entity_id=134&slug=david-shin.xml"
 			],
 			[
-				"api/presentation/123",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_Recording&entity_id=123"
-			],
-			[
 				"english/podcasts/latest",
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Latest&language=english"
 			],
@@ -230,10 +226,6 @@ final class TestRouter extends Avorg\TestCase
 			[
 				"/english/sponsors/podcast/49/latest/a-loud-and-clear-call-ministries.xml",
 				"endpoint.php?endpoint_id=Avorg_Endpoint_RssEndpoint_Sponsor&language=english&entity_id=49&slug=a-loud-and-clear-call-ministries.xml"
-			],
-			[
-				"/api/presentation/featured",
-				"endpoint.php?endpoint_id=Avorg_Endpoint_Presentations&entity_id=featured"
 			]
 		];
 	}
