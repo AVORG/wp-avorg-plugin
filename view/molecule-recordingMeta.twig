@@ -3,7 +3,7 @@
         <ul class="avorg-molecule-recordingMeta__presenters">
             {% for presenter in recording.presenters %}
                 <li>
-                    <a href="#">{{ presenter.name.first }} {{ presenter.name.last }} {{ presenter.name.suffix }}</a>
+                    <a href="{{ presenter.url }}">{{ presenter.name }}</a>
                 </li>
             {% endfor %}
         </ul>

@@ -80,10 +80,9 @@ const Playlist = {
 
     listItemTemplate: function (recording) {
         const imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
-        const imageAlt = recording.presenters[0] ?
-            `${recording.presenters[0].name.first} ${recording.presenters[0].name.last} ${recording.presenters[0].name.suffix}` : null;
+        const imageAlt = recording.presenters[0] ? recording.presenters[0].name : null;
         const image = imageUrl ? `<img class="avorg-molecule-mediaObject__image" src="${imageUrl}" alt="${imageAlt}" />` : '';
-        const presenters = recording.presenters.map((presenter) => `${presenter.name.first} ${presenter.name.last} ${presenter.name.suffix}`).join(", ")
+        const presenters = recording.presenters.map((presenter) => presenter.name).join(", ")
 
         return `
 <li data-id="${recording.id}" class="avorg-molecule-mediaObject">

@@ -44,7 +44,7 @@ final class TestPresentationRepository extends Avorg\TestCase
 
         $result = $this->repository->getPresentations();
 
-        $this->assertEquals("photo_url", $result[0]->getPresenters()[0]["photo"]);
+        $this->assertEquals("photo_url", $result[0]->getPresenters()[0]->photo);
     }
 
     public function testLoadsRecordingsWithRecordingUrl()

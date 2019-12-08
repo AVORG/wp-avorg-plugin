@@ -33,7 +33,9 @@ class Presenter extends DataObject
     {
         return array_merge(parent::getDataArray(), [
             "nameReversed" => $this->getNameReversed(),
-            "title" => $this->getNameReversed()
+            "title" => $this->getNameReversed(),
+            "photo" => $this->getPhoto(),
+            "name" => $this->getName()
         ]);
     }
 
@@ -42,13 +44,18 @@ class Presenter extends DataObject
 		return $this->presentationRepository->getPresenterPresentations($this->getId());
 	}
 
+	public function getPhoto()
+    {
+        return $this->data->photo256 ?? null;
+    }
+
 	public function getName()
 	{
-		return trim(implode(" ", [
-			$this->__get("givenName"),
-			$this->__get("surname"),
-			$this->__get("suffix"),
-		]));
+		return trim(implode(" ", array_filter([
+            $this->__get("givenName"),
+            $this->__get("surname"),
+            $this->__get("suffix"),
+        ])));
 	}
 
 	public function getNameReversed()
