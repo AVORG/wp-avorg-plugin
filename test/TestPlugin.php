@@ -64,7 +64,7 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testErrorNoticePostedWhenPermalinksTurnedOff()
 	{
-		$this->mockWordPress->setReturnValue("call", false);
+		$this->mockWordPress->setReturnValue("get_option", false);
 
 		$this->plugin->renderAdminNotices();
 
@@ -88,6 +88,8 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testGetsAvorgApiPass()
 	{
+        $this->mockWordPress->setReturnValue("get_option", true);
+
 		$this->plugin->renderAdminNotices();
 
 		$this->mockWordPress->assertMethodCalledWith("get_option", "avorgApiPass");
@@ -95,21 +97,21 @@ final class TestPlugin extends Avorg\TestCase
 
 	public function testErrorNoticePostedWhenNoAvorgApiUser()
 	{
-		$this->mockWordPress->setReturnValue("call", false);
+        $this->mockWordPress->setReturnValue("get_option", false);
 
 		$this->plugin->renderAdminNotices();
 
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API username!",
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API credentials!",
 			"/wp-admin/admin.php?page=avorg");
 	}
 
 	public function testErrorNoticePostedWhenNoAvorgApiPass()
 	{
-		$this->mockWordPress->setReturnValue("call", false);
+        $this->mockWordPress->setReturnValue("get_option", false);
 
 		$this->plugin->renderAdminNotices();
 
-		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API password!",
+		$this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API credentials!",
 			"/wp-admin/admin.php?page=avorg");
 	}
 
@@ -363,5 +365,21 @@ final class TestPlugin extends Avorg\TestCase
                 'title' => 'AudioVerse'
             ]
         ], $result);
+    }
+
+    public function testOnlyOutputsOneApiCredentialsError()
+    {
+        $this->mockWordPress->setReturnValue("get_option", false);
+
+        $this->plugin->renderAdminNotices();
+
+        $this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API credentials!",
+            "/wp-admin/admin.php?page=avorg");
+
+        $this->mockTwig->assertTwigTemplateRenderCount("molecule-notice.twig", 1, [
+            'type' => 'error',
+            'message' => "AVORG Warning: Missing API credentials!",
+            'url' => "/wp-admin/admin.php?page=avorg"
+        ]);
     }
 }
