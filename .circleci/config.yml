@@ -18,7 +18,9 @@ jobs:
 
       - run:
           name: Install dependencies
-          command: composer install --no-dev --no-interaction
+          command: |
+            composer install --no-dev --no-interaction
+            composer update narthur/natlib
 
       - run:
           name: Compress build
