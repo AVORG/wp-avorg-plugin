@@ -36,9 +36,17 @@ class PresenterRepository extends DataObjectRepository
      */
 	public function getDataObjects($search = null, $start = null)
 	{
-
 		$rawPresenters = $this->api->getPresenters($search, $start) ?: [];
 
+        return $this->makePresenters($rawPresenters);
+    }
+
+    /**
+     * @param array $rawPresenters
+     * @return array
+     */
+    public function makePresenters(array $rawPresenters): array
+    {
         return $this->makeDataObjects($rawPresenters);
-	}
+    }
 }

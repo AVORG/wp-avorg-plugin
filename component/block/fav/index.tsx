@@ -2,7 +2,7 @@ namespace AvorgBlockFav {
     window.wp.blocks.registerBlockType('avorg/block-fav', {
         title: 'Favorite Toggle',
         icon: 'star-half',
-        category: 'widgets',
+        category: 'avorg',
         edit: (props: any) => {
             return <div className={props.className + ' loading'}>
                 <span className="dashicons dashicons-star-half" title={'Loading...'} />

@@ -1,6 +1,5 @@
 <?php
 
-use Avorg\DataObject;
 use Avorg\DataObject\Presenter;
 
 final class TestPresenter extends Avorg\TestCase

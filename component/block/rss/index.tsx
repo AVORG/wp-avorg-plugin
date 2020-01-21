@@ -6,7 +6,7 @@ namespace AvorgBlockRss {
     window.wp.blocks.registerBlockType('avorg/block-rss', {
         title: 'RSS Link',
         icon: 'rss',
-        category: 'widgets',
+        category: 'avorg',
         attributes: {
             feeds: {
                 type: 'object',

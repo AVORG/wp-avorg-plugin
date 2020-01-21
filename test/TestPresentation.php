@@ -5,30 +5,6 @@ final class TestPresentation extends Avorg\TestCase
 	/**
 	 * @throws ReflectionException
 	 */
-	public function testIncludesPresenterName()
-	{
-		$recording = $this->makePresentation([
-			"presenters" => [
-				[
-					"givenName" => "first_name",
-					"surname" => "last_name",
-					"suffix" => "suffix"
-				]
-			]
-		]);
-
-		$expected = [
-			"first" => "first_name",
-			"last" => "last_name",
-			"suffix" => "suffix"
-		];
-
-		$this->assertEquals($expected, $recording->getPresenters()[0]["name"]);
-	}
-
-	/**
-	 * @throws ReflectionException
-	 */
 	public function testIncludesTitle()
 	{
 		$recording = $this->makePresentation([
@@ -363,11 +339,7 @@ final class TestPresentation extends Avorg\TestCase
         $presenter = $object['presenters'][0];
 
         $this->assertEquals($presenter['photo'], 'photo_url');
-        $this->assertEquals($presenter['name'], [
-            "first" => "first_name",
-            "last" => "last_name",
-            "suffix" => "suffix"
-        ]);
+        $this->assertEquals($presenter['name'], 'first_name last_name suffix');
     }
 
 	public function testGetPresenterString()
@@ -405,18 +377,20 @@ final class TestPresentation extends Avorg\TestCase
 		$this->assertTrue(method_exists($recording, "jsonSerialize"));
 	}
 
-	public function testMagicGetUsesGetters()
-	{
-		$recording = $this->makePresentation([
-			"presenters" => [
-				[
-					"givenName" => "first_name",
-					"surname" => "last_name",
-					"suffix" => "suffix"
-				]
-			]
-		]);
+	public function testGetPresentersReturnsPresenterObjects()
+    {
+        $recording = $this->makePresentation([
+            "presenters" => [
+                [
+                    "givenName" => "first_name",
+                    "surname" => "last_name",
+                    "suffix" => "suffix"
+                ]
+            ]
+        ]);
 
-		$this->assertEquals('first_name', $recording->presenters[0]['name']['first']);
-	}
+        $presenters = $recording->getPresenters();
+
+        $this->assertInstanceOf('Avorg\\DataObject\\Presenter', $presenters[0]);
+    }
 }

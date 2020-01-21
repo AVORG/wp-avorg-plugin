@@ -6,11 +6,7 @@ interface Recording {
     url: string;
     presenters: {
         photo: string;
-        name: {
-            first: string;
-            last: string;
-            suffix: string;
-        };
+        name: string;
     }[];
     presentersString: string;
     videoFiles: {}[];
@@ -18,8 +14,7 @@ interface Recording {
 
 const itemTemplate = function (recording: Recording) {
     const imageUrl = recording.presenters[0] ? recording.presenters[0].photo : null;
-    const imageAlt = recording.presenters[0] ?
-        `${recording.presenters[0].name.first} ${recording.presenters[0].name.last} ${recording.presenters[0].name.suffix}` : null;
+    const imageAlt = recording.presenters[0] ? recording.presenters[0].name : null;
 
     return molecule_mediaObject(
         recording.title,

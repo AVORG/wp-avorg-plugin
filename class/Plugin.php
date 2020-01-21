@@ -9,9 +9,6 @@ if (!defined('ABSPATH')) exit;
 
 class Plugin
 {
-    /** @var Php $php */
-    private $php;
-
 	/** @var Renderer $renderer */
 	private $renderer;
 
@@ -65,18 +62,14 @@ class Plugin
 		$this->wp->settings_errors();
 
 		$this->outputUnsetOptionError(
-		    "permalink_structure",
+		    ["permalink_structure"],
             "AVORG Warning: Permalinks turned off!",
 			"/wp-admin/options-permalink.php"
         );
+
 		$this->outputUnsetOptionError(
-		    "avorgApiUser",
-            "AVORG Warning: Missing API username!",
-			"/wp-admin/admin.php?page=avorg"
-        );
-		$this->outputUnsetOptionError(
-		    "avorgApiPass",
-            "AVORG Warning: Missing API password!",
+		    ["avorgApiUser", "avorgApiPass"],
+            "AVORG Warning: Missing API credentials!",
 			"/wp-admin/admin.php?page=avorg"
         );
 
@@ -87,13 +80,17 @@ class Plugin
 	}
 
 	/**
-	 * @param $optionName
+	 * @param $optionNames
 	 * @param $message
 	 * @param null $url
 	 */
-	private function outputUnsetOptionError($optionName, $message, $url = null)
+	private function outputUnsetOptionError($optionNames, $message, $url = null)
 	{
-		if ($this->wp->get_option($optionName)) return;
+		$areOptionsSet = array_reduce($optionNames, function($carry, $name) {
+		    return ($carry === False) ? $carry : $this->wp->get_option($name) !== false;
+        }, True);
+
+		if ($areOptionsSet) return;
 
 		$this->renderer->renderNotice("error", $message, $url);
 	}

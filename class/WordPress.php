@@ -45,38 +45,41 @@ if (!defined('ABSPATH')) exit;
  * @method register_rest_field(string|array $object_type, string $attribute, array $args = array())
  * @method register_rest_route(string $namespace, string $route, array $args = array(), bool $override = false)
  * @method admin_url(string $path = '', string $scheme = 'admin')
+ * @method delete_option(string $option)
  */
 class WordPress
 {
-	public function __call($function, $arguments)
-	{
-		$result = call_user_func_array($function, $arguments);
+    public function __call($function, $arguments)
+    {
+        $result = call_user_func_array($function, $arguments);
 
-		if (\is_wp_error($result) && WP_DEBUG) {
-			die($result->get_error_message());
-		}
+        if (\is_wp_error($result) && WP_DEBUG) {
+            die($result->get_error_message());
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	public function get_all_meta_values($key)
-	{
-		global $wpdb;
+    public function get_all_meta_values($key)
+    {
+        global $wpdb;
 
-		$safeKey = $this->sanitize_key($key);
+        $safeKey = $this->sanitize_key($key);
 
-		$result = $wpdb->get_results(
-			"SELECT $wpdb->postmeta.meta_value 
+        $result = $wpdb->get_results(
+            "SELECT $wpdb->postmeta.meta_value 
     FROM $wpdb->posts, $wpdb->postmeta
     WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id AND meta_key = '$safeKey'"
-		);
+        );
 
-		return array_unique(array_map(function($row) { return $row->meta_value; }, $result));
-	}
+        return array_unique(array_map(function ($row) {
+            return $row->meta_value;
+        }, $result));
+    }
 
-	public function get_all_query_vars()
-	{
-		global $wp_query;
-		return $wp_query->query_vars;
-	}
+    public function get_all_query_vars()
+    {
+        global $wp_query;
+        return $wp_query->query_vars;
+    }
 }

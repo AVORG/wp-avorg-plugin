@@ -81,6 +81,13 @@ class StubTwig extends Twig
 		$this->assertTwigTemplateRenderedWithDataMatching($template, function() { return true; });
 	}
 
+	public function assertTwigTemplateRenderCount($template, $count, $data)
+    {
+        $this->assertMatchingCallCount("render", $count, function($call) use($template, $data) {
+            return $this->doesCallDataMatch($call, $template, [$this, "doesDataObjectIncludeData"], [$data]);
+        });
+    }
+
 	public function assertTwigTemplateRenderedWithData($template, $data)
 	{
 		$this->assertTwigTemplateRenderedWithDataMatching($template, [$this, "doesDataObjectIncludeData"], $data);

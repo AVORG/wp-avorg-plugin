@@ -3,7 +3,11 @@
 namespace Avorg\DataObject\Recording;
 
 use Avorg\DataObject;
+use Avorg\DataObject\Presenter;
+use Avorg\DataObjectRepository\PresenterRepository;
 use Avorg\MediaFile;
+use Avorg\Renderer;
+use Avorg\Router;
 use function defined;
 
 if (!defined('ABSPATH')) exit;
@@ -12,12 +16,22 @@ class Presentation extends DataObject\Recording
 {
 	protected $detailClass = "Avorg\Page\Presentation\Detail";
 
+	/** @var PresenterRepository $presenterRepository */
+    private $presenterRepository;
+
+    public function __construct(PresenterRepository $presenterRepository, Renderer $renderer, Router $router)
+    {
+        parent::__construct($renderer, $router);
+
+        $this->presenterRepository = $presenterRepository;
+    }
+
 	public function toArray()
 	{
 		return array_merge(parent::toArray(), [
 			"logUrl" => $this->getLogUrl(),
 			"datePublished" => $this->getDatePublished(),
-			"presenters" => $this->getPresenters(),
+			"presenters" => $this->presentersToArray(),
 			"presentersString" => $this->getPresentersString(),
 			"image" => $this->getImage(),
 			"description" => $this->getDescription(),
@@ -25,6 +39,13 @@ class Presentation extends DataObject\Recording
 			"videoFiles" => $this->convertMediaFilesToArrays($this->getVideoFiles()),
 		]);
 	}
+
+	private function presentersToArray()
+    {
+        return array_map(function(Presenter $presenter) {
+            return $presenter->toArray();
+        }, $this->getPresenters());
+    }
 
 	public function getLogUrl()
 	{
@@ -39,6 +60,8 @@ class Presentation extends DataObject\Recording
 
 	public function getPresenters()
 	{
+	    return $this->presenterRepository->makePresenters($this->data->presenters ?? []);
+
 		$apiPresenters = (isset($this->data->presenters)) ? $this->data->presenters : [];
 
 		return array_map(function($presenter) {
@@ -56,9 +79,8 @@ class Presentation extends DataObject\Recording
 	public function getPresentersString()
 	{
 		$presenters = $this->getPresenters();
-		$presenterFragments = array_map(function ($presenter) {
-			$pieces = array_filter($presenter["name"]);
-			return implode(" ", $pieces);
+		$presenterFragments = array_map(function (Presenter $presenter) {
+			return $presenter->getName();
 		}, $presenters);
 
 		return implode(", ", $presenterFragments);
@@ -71,34 +93,18 @@ class Presentation extends DataObject\Recording
 
 	public function getDescription()
 	{
-		$presenterNames = array_map(function ($presenter) {
-			return implode(" ", [
-				$presenter["name"]["first"],
-				$presenter["name"]["last"],
-				$presenter["name"]["suffix"],
-			]);
-		}, $this->getPresenters());
-
 		$rawDescription = property_exists($this->data, 'description') ? $this->data->description : null;
 
-		return trim( $rawDescription . " Presenters: " . implode(", ", $presenterNames));
+		return trim( $rawDescription . " Presenters: " . $this->getPresentersString());
 	}
 
 	public function getImage()
 	{
 		if (!$this->data) return null;
 
-		$presenters = $this->getPresenters();
-		$recordingHasImage = property_exists($this->data, "photo86") && $this->data->photo86;
-		$presenterHasImage = $presenters && array_key_exists("photo", $presenters[0]);
-
-		if ($recordingHasImage) {
-			return $this->data->photo86;
-		} elseif ($presenterHasImage) {
-			return $presenters[0]["photo"];
-		} else {
-			return AVORG_LOGO_URL;
-		}
+		return $this->data->photo86 ??
+            $this->getPresenters()[0]->photo256 ??
+            AVORG_LOGO_URL;
 	}
 
 	/**

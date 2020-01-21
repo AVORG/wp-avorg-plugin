@@ -176,9 +176,8 @@ class Router
 	{
 		$stringLowerCase = strtolower($string);
 		$stringNoPunctuation = preg_replace("/[^\w ]/", "", $stringLowerCase);
-		$stringHyphenated = str_replace(" ", "-", $stringNoPunctuation);
 
-		return $stringHyphenated;
+        return str_replace(" ", "-", $stringNoPunctuation);
 	}
 
 	/**

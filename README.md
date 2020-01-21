@@ -13,6 +13,11 @@
 
 If you edit the Composer auto-load rules, you'll need to run `composer dump-autoload` to make them go into effect.
 
+Run `composer update narthur/natlib` to update Composer's commit reference to the natlib dependency. CircleCI will do 
+this while running tests, but the updated reference won't be persisted back to the repository.
+
+CircleCI automatically deploys `dev` branch builds to [http://dev.audioverse.org/](http://dev.audioverse.org/)
+
 ### Production
 
 0. [Open CircleCI](https://circleci.com/gh/avorg/wp-avorg-plugin) and select the latest build
