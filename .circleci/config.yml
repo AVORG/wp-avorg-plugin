@@ -89,7 +89,10 @@ jobs:
 
     steps:
       - run: sudo npm install -g @lhci/cli@0.3.x
-      - run: lhci collect --numberOfRuns=5 --url=http://dev.audioverse.org/
+      - run: lhci collect --url=http://dev.audioverse.org/
+      - run: lhci upload --target=temporary-public-storage
+      - store_artifacts:
+          path: .lighthouseci
 workflows:
   version: 2
   build:
