@@ -83,6 +83,13 @@ jobs:
             curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
             php wp-cli.phar --ssh=audiove9@146.66.103.140:18765/home/audiove9/public_html/dev/ plugin install wp-avorg-plugin.zip --activate --force
             ssh -p 18765 audiove9@146.66.103.140 'rm /home/audiove9/public_html/dev/wp-avorg-plugin.zip'
+  performance:
+    docker:
+      - image: circleci/php:7.3.9-node-browsers
+
+    steps:
+      - run: sudo npm install -g @lhci/cli@0.3.x
+      - run: lhci collect --numberOfRuns=5 --url=http://dev.audioverse.org/
 workflows:
   version: 2
   build:
@@ -91,6 +98,14 @@ workflows:
       - deploy:
           requires:
             - test
+          filters:
+            branches:
+              only:
+                - master
+                - dev
+      - performance:
+          requires:
+            - deploy
           filters:
             branches:
               only:
