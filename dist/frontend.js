@@ -237,7 +237,21 @@ var AvorgMoleculeAjaxList;
         };
         AjaxList.prototype.onKeyDown = function (e) {
             var _this = this;
-            var target = e.target;
+            var target = e.target, ignore = [
+                'Control',
+                'Shift',
+                'Tab',
+                'Escape',
+                'ArrowRight',
+                'ArrowLeft',
+                'ArrowUp',
+                'ArrowDown',
+                'CapsLock',
+                'Alt',
+                'Meta'
+            ], shouldIgnoreStroke = ignore.indexOf(e.key) != -1;
+            if (shouldIgnoreStroke)
+                return;
             clearTimeout(this.state.searchTimeout);
             this.setState({
                 searchTimeout: setTimeout(function () {

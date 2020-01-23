@@ -61,7 +61,23 @@ namespace AvorgMoleculeAjaxList {
         }
 
         onKeyDown(e: React.KeyboardEvent) {
-            const target = e.target as HTMLInputElement;
+            const target = e.target as HTMLInputElement,
+                ignore = [
+                    'Control',
+                    'Shift',
+                    'Tab',
+                    'Escape',
+                    'ArrowRight',
+                    'ArrowLeft',
+                    'ArrowUp',
+                    'ArrowDown',
+                    'CapsLock',
+                    'Alt',
+                    'Meta'
+                ],
+                shouldIgnoreStroke = ignore.indexOf(e.key) != -1;
+
+            if (shouldIgnoreStroke) return;
 
             clearTimeout(this.state.searchTimeout);
 
