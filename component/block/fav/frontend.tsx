@@ -1,6 +1,4 @@
 window.onload = () => {
-    console.log('fav frontend');
-
     const blocks = document.querySelectorAll('.wp-block-avorg-block-fav'),
         id = window.avorg.query.entity_id,
         url = `/wp-json/avorg/v1/favorites?presentationId=${id}`;
@@ -42,7 +40,7 @@ window.onload = () => {
     }
 
     function handleClick(el: Element) {
-        if (!window.avorg.session.email) {
+        if (!window.avorg.session) {
             alert('Please log in before performing this action.');
             return;
         }
@@ -62,13 +60,12 @@ window.onload = () => {
 
     setClickHandlers();
 
-    if (window.avorg.session.email) {
+    if (window.avorg.session) {
         fetch(url)
             .then(res => res.json())
             .then((was_favorited_on_load) => {
                 console.log('update', was_favorited_on_load);
                 setInitialState(was_favorited_on_load);
-
             });
     }
 };
