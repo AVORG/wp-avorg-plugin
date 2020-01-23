@@ -93,8 +93,8 @@ jobs:
           lhci collect
           --url=http://dev.audioverse.org/
           --url=http://dev.audioverse.org/english/sermons/presenters
-          --url=http://dev.audioverse.org/english/sermons/presenters/970/david-wright.html
-          --url=http://dev.audioverse.org/english/sermons/recordings/21204/facetime.html
+          --url=http://dev.audioverse.org/english/sermons/presenters/970
+          --url=http://dev.audioverse.org/english/sermons/recordings/21204
       - run: lhci upload --target=temporary-public-storage
       - store_artifacts:
           path: .lighthouseci
