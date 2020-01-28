@@ -1,4 +1,28 @@
 <div class="avorg-page-search">
-    <p>The search page</p>
+    {% set tabs = ['conferences', 'presenters'] %}
+
+    {% for tab in tabs %}
+        <input class="tab-control" type="radio" name="tabs" id="{{ tab }}"{% if loop.first %} checked{% endif %}>
+    {% endfor %}
+
     <p>Query: {{ avorg.query }}</p>
+
+    <ul class="tabs">
+        {% for tab in tabs %}
+            <li><label for="{{ tab }}">{{ tab }}</label></li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-contents">
+        {% for tab in tabs %}
+            <div class="tab-content {{ tab }}">
+                <h3>{{ tab }}</h3>
+
+                {% include "molecule-ajaxList.twig" with {
+                    "endpoint": "/wp-json/avorg/v1/" ~ tab,
+                    "search": avorg.query
+                } only %}
+            </div>
+        {% endfor %}
+    </div>
 </div>

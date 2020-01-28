@@ -167,6 +167,34 @@
   list-style-type: none;
 }
 
+.avorg-page-search .tab-control, .avorg-page-search .tab-content {
+  display: none;
+}
+.avorg-page-search .tabs {
+  padding-left: 0;
+}
+.avorg-page-search .tabs li {
+  display: inline-block;
+  margin-right: 0.2em;
+}
+.avorg-page-search .tabs label {
+  padding: 0.5em;
+  cursor: pointer;
+  color: blue;
+  border: 1px solid blue;
+}
+.avorg-page-search .tab-control:nth-child(1):checked ~ .tabs li:nth-child(1) label,
+.avorg-page-search .tab-control:nth-child(2):checked ~ .tabs li:nth-child(2) label,
+.avorg-page-search .tab-control:nth-child(3):checked ~ .tabs li:nth-child(3) label {
+  background-color: blue;
+  color: white;
+}
+.avorg-page-search .tab-control:nth-child(1):checked ~ .tab-contents .tab-content:nth-child(1),
+.avorg-page-search .tab-control:nth-child(2):checked ~ .tab-contents .tab-content:nth-child(2),
+.avorg-page-search .tab-control:nth-child(3):checked ~ .tab-contents .tab-content:nth-child(3) {
+  display: block;
+}
+
 .avorg-page-seriesList li {
   list-style-type: none;
 }
