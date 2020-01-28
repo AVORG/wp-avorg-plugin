@@ -40,6 +40,7 @@ window.onload = () => {
     }
 
     function handleClick(el: Element) {
+        // TODO: Fix this check
         if (!window.avorg.session) {
             alert('Please log in before performing this action.');
             return;
@@ -60,6 +61,7 @@ window.onload = () => {
 
     setClickHandlers();
 
+    // TODO: Fix this check
     if (window.avorg.session) {
         fetch(url)
             .then(res => res.json())

@@ -26,4 +26,5 @@
 "Avorg\Page\Login","{ language }/account","Login Page",
 "Avorg\Page\Playlist\UserPlaylists","{ language }/account/playlists","User playlists page",
 "Avorg\Page\Register","{ language }/account/register","Registration page",
-"Avorg\Page\Register","{ language }/registrar","Legacy registration route"
+"Avorg\Page\Register","{ language }/registrar","Legacy registration route",
+"Avorg\Page\Search","{ language }/search","Search page"
