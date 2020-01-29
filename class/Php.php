@@ -46,4 +46,9 @@ class Php {
             session_start();
         }
     }
+
+    public function unsetSession()
+    {
+        session_unset();
+    }
 }

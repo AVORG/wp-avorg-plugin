@@ -1,5 +1,7 @@
 {% if avorg.session.email %}
     <p>Logged in as {{ avorg.session.email }}</p>
+
+    <a href="/english/account/logout">Log out</a>
 {% else %}
     <form class="avorg-page-login" method="post">
         {% if avorg.success is same as(false) %}
