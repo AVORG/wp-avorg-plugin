@@ -13,7 +13,8 @@ namespace AvorgMoleculeAjaxList {
 
     interface AjaxListProps {
         endpoint: string,
-        search: string
+        search: string,
+        hideSearchBox: boolean,
     }
 
     interface AjaxListState {
@@ -112,12 +113,15 @@ namespace AvorgMoleculeAjaxList {
         render() {
             return (
                 <div ref={this.wrapperRef}>
-                    <input
-                        type="text"
-                        placeholder={'Search'}
-                        value={this.state.search}
-                        onChange={this.setSearch}
-                    />
+                    {
+                        this.props.hideSearchBox ? '' : <input
+                            type="text"
+                            placeholder={'Search'}
+                            value={this.state.search}
+                            onChange={this.setSearch}
+                        />
+                    }
+
                     <ul className={this.state.isLoading ? "loading" : ""}>
                         {this.state.entries.map(
                             (entry: DataObject, i: number) =>
@@ -143,8 +147,13 @@ namespace AvorgMoleculeAjaxList {
 
     components.forEach((el) => {
         const endpoint = el.getAttribute('data-endpoint'),
-            search = el.getAttribute('data-search');
+            search = el.getAttribute('data-search'),
+            hideSearchBox = el.hasAttribute('data-hideSearchBox');
 
-        window.wp.element.render(<AjaxList endpoint={endpoint} search={search} />, el);
+        window.wp.element.render(<AjaxList
+            endpoint={endpoint}
+            search={search}
+            hideSearchBox={hideSearchBox}
+        />, el);
     });
 }

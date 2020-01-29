@@ -1,3 +1,9 @@
+.avorg-molecule-ajaxList ul {
+  padding-left: 0;
+}
+.avorg-molecule-ajaxList li {
+  list-style-type: none;
+}
 .avorg-molecule-ajaxList .loading {
   position: relative;
   min-height: 300px;

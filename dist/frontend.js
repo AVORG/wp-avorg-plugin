@@ -276,7 +276,7 @@ var AvorgMoleculeAjaxList;
         };
         AjaxList.prototype.render = function () {
             return (wp.element.createElement("div", { ref: this.wrapperRef },
-                wp.element.createElement("input", { type: "text", placeholder: 'Search', value: this.state.search, onChange: this.setSearch }),
+                this.props.hideSearchBox ? '' : wp.element.createElement("input", { type: "text", placeholder: 'Search', value: this.state.search, onChange: this.setSearch }),
                 wp.element.createElement("ul", { className: this.state.isLoading ? "loading" : "" }, this.state.entries.map(function (entry, i) {
                     return wp.element.createElement("li", { key: i }, mediaObject_1.default(entry.title, entry.url, entry.secondLine, entry.photo256, entry.title));
                 }))));
@@ -285,8 +285,8 @@ var AvorgMoleculeAjaxList;
     }(React.Component));
     var components = document.querySelectorAll('.avorg-molecule-ajaxList');
     components.forEach(function (el) {
-        var endpoint = el.getAttribute('data-endpoint'), search = el.getAttribute('data-search');
-        window.wp.element.render(wp.element.createElement(AjaxList, { endpoint: endpoint, search: search }), el);
+        var endpoint = el.getAttribute('data-endpoint'), search = el.getAttribute('data-search'), hideSearchBox = el.hasAttribute('data-hideSearchBox');
+        window.wp.element.render(wp.element.createElement(AjaxList, { endpoint: endpoint, search: search, hideSearchBox: hideSearchBox }), el);
     });
 })(AvorgMoleculeAjaxList || (AvorgMoleculeAjaxList = {}));
 

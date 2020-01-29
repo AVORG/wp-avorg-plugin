@@ -5,7 +5,7 @@
         <input class="tab-control" type="radio" name="tabs" id="{{ tab }}"{% if loop.first %} checked{% endif %}>
     {% endfor %}
 
-    <p>Query: {{ avorg.query }}</p>
+    <p>Search: {{ avorg.query }}</p>
 
     <ul class="tabs">
         {% for tab in tabs %}
@@ -16,11 +16,10 @@
     <div class="tab-contents">
         {% for tab in tabs %}
             <div class="tab-content {{ tab }}">
-                <h3>{{ tab }}</h3>
-
                 {% include "molecule-ajaxList.twig" with {
                     "endpoint": "/wp-json/avorg/v1/" ~ tab,
-                    "search": avorg.query
+                    "search": avorg.query,
+                    "hideSearchBox": true
                 } only %}
             </div>
         {% endfor %}
