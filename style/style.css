@@ -6,7 +6,7 @@
 }
 .avorg-molecule-ajaxList .loading {
   position: relative;
-  min-height: 300px;
+  min-height: 30vh;
 }
 .avorg-molecule-ajaxList .loading:before {
   content: "";
