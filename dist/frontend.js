@@ -169,8 +169,9 @@ window.onload = function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(/*! ./block/fav/frontend */ "./component/block/fav/frontend.tsx");
 __webpack_require__(/*! ./molecule/ajaxList */ "./component/molecule/ajaxList/index.tsx");
+__webpack_require__(/*! ./molecule/search */ "./component/molecule/search/index.tsx");
+__webpack_require__(/*! ./block/fav/frontend */ "./component/block/fav/frontend.tsx");
 var text = "FRONTEND.TS BUNDLE";
 console.log(text);
 
@@ -324,6 +325,30 @@ var molecule_mediaObject = function (title, titleUrl, secondLine, imgUrl, imgAlt
             secondLine ? wp.element.createElement("div", { className: "avorg-molecule-mediaObject__description" }, prepareSecondLine(secondLine)) : ''));
 };
 exports.default = molecule_mediaObject;
+
+
+/***/ }),
+
+/***/ "./component/molecule/search/index.tsx":
+/*!*********************************************!*\
+  !*** ./component/molecule/search/index.tsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var AvorgMoleculeSearch;
+(function (AvorgMoleculeSearch) {
+    function Search() {
+        var _a = wp.element.useState(''), query = _a[0], setQuery = _a[1];
+        return wp.element.createElement("form", { action: "/" + window.avorg.query.language + "/search", method: 'GET' },
+            wp.element.createElement("input", { name: 'q', type: "text", placeholder: 'Search', value: query, onChange: function (e) { return setQuery(e.target.value); } }),
+            wp.element.createElement("input", { type: "submit", value: 'Go' }));
+    }
+    var components = document.querySelectorAll('.avorg-molecule-search');
+    components.forEach(function (el) {
+        window.wp.element.render(wp.element.createElement(Search, null), el);
+    });
+})(AvorgMoleculeSearch || (AvorgMoleculeSearch = {}));
 
 
 /***/ }),

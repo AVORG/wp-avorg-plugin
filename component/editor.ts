@@ -1,4 +1,5 @@
 import "./molecule/mediaIdMetaBox"
+import "./molecule/search"
 
 import "./block/fav"
 import "./block/list"
