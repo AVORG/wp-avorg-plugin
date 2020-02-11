@@ -18,6 +18,11 @@ class StubDatabase extends Database
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
+    public function incrementOrCreateWeight($entityId, $title, $type, $url)
+    {
+        return $this->handleCall(__FUNCTION__, func_get_args());
+    }
+
     public function incrementWeight($url, $title)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());
@@ -38,12 +43,12 @@ class StubDatabase extends Database
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
-    public function searchWeightRows($term)
+    public function searchWeights($term)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());
     }
 
-    public function insertWeightRow($url, $title, $category)
+    public function insertWeightRow($entityId, $title, $type, $url)
     {
         return $this->handleCall(__FUNCTION__, func_get_args());
     }

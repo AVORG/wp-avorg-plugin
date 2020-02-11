@@ -67,8 +67,8 @@ class Presenter extends DataObject
 		return $suffix ? "$last $suffix, $first" : "$last, $first";
 	}
 
-	protected function getSlug()
-	{
-		return $this->router->formatStringForUrl($this->getName()) . ".html";
-	}
+	public function getTitle()
+    {
+        return $this->getName();
+    }
 }

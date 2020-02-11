@@ -40,4 +40,24 @@ final class TestPresenterRepository extends Avorg\TestCase
 
         $this->assertNull($result);
     }
+
+    public function testUpdatesWeights()
+    {
+        $this->mockAvorgApi->loadPresenter([
+            "id" => 5,
+            "givenName" => "first",
+            "surname" => "last",
+            "suffix" => "suffix",
+        ]);
+
+        $this->presenterRepository->getPresenter(5);
+
+        $this->mockDatabase->assertMethodCalledWith(
+            'incrementOrCreateWeight',
+            5,
+            'first last suffix',
+            'Presenter',
+            'http://localhost:8080/english/sermons/presenters/5/first-last-suffix.html'
+        );
+    }
 }
