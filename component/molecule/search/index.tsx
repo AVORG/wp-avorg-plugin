@@ -1,10 +1,6 @@
 namespace AvorgMoleculeSearch {
     function Search() {
-        const endpoints = [
-                "/wp-json/avorg/v1/presenters",
-                "/wp-json/avorg/v1/conferences",
-            ],
-            [query, setQuery] = wp.element.useState(''),
+        const [query, setQuery] = wp.element.useState(''),
             [suggestions, setSuggestions] = wp.element.useState([]),
             [searchTimeout, setSearchTimeout] = wp.element.useState();
 
@@ -22,13 +18,9 @@ namespace AvorgMoleculeSearch {
 
         function loadSuggestions(input: string)
         {
-            endpoints.forEach((endpoint) => {
-                const url = `${endpoint}?search=${input}`;
-                console.log(url);
-                fetch(url)
-                    .then(res => res.json())
-                    .then((data) => setSuggestions((prev: []) => [...prev, ...data]))
-            })
+            fetch(`/wp-json/avorg/v1/suggestions?term=${input}`)
+                .then(res => res.json())
+                .then((data) => setSuggestions(data));
         }
 
         return <form action={`/${window.avorg.query.language}/search`} method={'GET'}>
@@ -42,7 +34,7 @@ namespace AvorgMoleculeSearch {
             <input type="submit" value={'Go'}/>
             <ul>
                 {suggestions.map((item: any, i: number) => <li key={i}>
-                    <a href={item.url}>{item.name || item.title}</a>
+                    <a href={item.url} data-relevance={item.relevance} data-weight={item.weight}>{item.title} [{item.type}]</a>
                 </li>)}
             </ul>
         </form>
