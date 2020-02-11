@@ -405,13 +405,41 @@ var AvorgMoleculeMediaIdMetaBox;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var AvorgMoleculeSearch;
 (function (AvorgMoleculeSearch) {
     function Search() {
-        var _a = wp.element.useState(''), query = _a[0], setQuery = _a[1];
+        var endpoints = [
+            "/wp-json/avorg/v1/presenters",
+            "/wp-json/avorg/v1/conferences",
+        ], _a = wp.element.useState(''), query = _a[0], setQuery = _a[1], _b = wp.element.useState([]), suggestions = _b[0], setSuggestions = _b[1], _c = wp.element.useState(), searchTimeout = _c[0], setSearchTimeout = _c[1];
+        console.log({ 'suggestions': suggestions });
+        function onQueryChange(e) {
+            setQuery(e.target.value);
+            clearTimeout(searchTimeout);
+            setSuggestions([]);
+            setSearchTimeout(setTimeout(loadSuggestions, 200, e.target.value));
+        }
+        function loadSuggestions(input) {
+            endpoints.forEach(function (endpoint) {
+                var url = endpoint + "?search=" + input;
+                console.log(url);
+                fetch(url)
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) { return setSuggestions(function (prev) { return __spreadArrays(prev, data); }); });
+            });
+        }
         return wp.element.createElement("form", { action: "/" + window.avorg.query.language + "/search", method: 'GET' },
-            wp.element.createElement("input", { name: 'q', type: "text", placeholder: 'Search', value: query, onChange: function (e) { return setQuery(e.target.value); } }),
-            wp.element.createElement("input", { type: "submit", value: 'Go' }));
+            wp.element.createElement("input", { name: 'q', type: "text", placeholder: 'Search', value: query, onChange: onQueryChange }),
+            wp.element.createElement("input", { type: "submit", value: 'Go' }),
+            wp.element.createElement("ul", null, suggestions.map(function (item, i) { return wp.element.createElement("li", { key: i },
+                wp.element.createElement("a", { href: item.url }, item.name || item.title)); })));
     }
     var components = document.querySelectorAll('.avorg-molecule-search');
     components.forEach(function (el) {
