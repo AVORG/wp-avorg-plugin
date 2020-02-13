@@ -46,6 +46,7 @@ if (!defined('ABSPATH')) exit;
  * @method register_rest_route(string $namespace, string $route, array $args = array(), bool $override = false)
  * @method admin_url(string $path = '', string $scheme = 'admin')
  * @method delete_option(string $option)
+ * @method add_query_var(string $qv)
  */
 class WordPress
 {

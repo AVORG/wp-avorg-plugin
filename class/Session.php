@@ -40,10 +40,11 @@ class Session
     public function init()
     {
         $this->php->initSession();
+    }
 
-//        session_unset();
-
-//        var_dump($this->userId, $this->sessionToken);
+    public function unsetSession()
+    {
+        $this->php->unsetSession();
     }
 
     public function loadData($data)

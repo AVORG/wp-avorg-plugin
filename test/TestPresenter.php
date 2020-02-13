@@ -88,4 +88,9 @@ final class TestPresenter extends Avorg\TestCase
     {
         $this->assertToArrayKeyValue($this->presenter, 'title', "last suffix, first");
     }
+
+    public function testGetTitleReturnsName()
+    {
+        $this->assertEquals("first last suffix", $this->presenter->getTitle());
+    }
 }

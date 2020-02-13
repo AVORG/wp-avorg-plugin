@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) exit;
 
 class Guzzle
 {
+    private $callCount = 0;
+
     /** @var Client $newApiClient */
     private $newApiClient;
 
@@ -73,6 +75,9 @@ class Guzzle
         if (defined('AVORG_TESTS_RUNNING') && AVORG_TESTS_RUNNING) {
             throw new Exception("Unmocked API method called");
         }
+
+        $this->callCount++;
+        Logger::log("API call count: {$this->callCount} (Last call: $method $endpoint)");
 
         try {
             $response = $client->request($method, $endpoint, $options);

@@ -1,5 +1,7 @@
 {#
 	endpoint : string, relative or absolute url, ex. '/wp-json/avorg/v1/presenters'
+	search : string, optional, initial query
+	hideSearchBox : bool, optional
 #}
 
-<div class="avorg-molecule-ajaxList" data-endpoint="{{ endpoint }}"></div>
+<div class="avorg-molecule-ajaxList" data-endpoint="{{ endpoint }}" data-search="{{ search }}"{% if hideSearchBox %}data-hideSearchBox{% endif %}></div>

@@ -123,7 +123,9 @@ class Router
 	 */
 	public function getFullRequestUri()
 	{
-		return $this->getBaseUrl() . $this->getRequestPath();
+		return $this->getBaseUrl()
+            . $this->getRequestPath()
+            . $this->getQueryString();
 	}
 
 	public function getRequestPath()
@@ -132,6 +134,15 @@ class Router
 
         return parse_url($url, PHP_URL_PATH);
 	}
+
+	public function getQueryString()
+    {
+        if (! array_key_exists('QUERY_STRING', $_SERVER)) {
+            return null;
+        }
+
+        return  '?' . $_SERVER['QUERY_STRING'];
+    }
 
     /**
      * @param $routableClass

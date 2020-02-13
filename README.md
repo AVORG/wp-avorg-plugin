@@ -47,17 +47,18 @@ Endpoint                                                            | Descriptio
 All the following endpoints should support `search` and `start` GET query parameters for search and
 pagination functionality.
 
-Endpoint                                                            | Description
---------------------------------------------------------------------|------------------------------------
-`/wp-json/avorg/v1/books`                                           |
-`/wp-json/avorg/v1/conferences`                                     |
-`/wp-json/avorg/v1/playlists`                                       |
-`/wp-json/avorg/v1/presenters`                                      |
-`/wp-json/avorg/v1/series`                                          |
-`/wp-json/avorg/v1/sponsors`                                        |
-`/wp-json/avorg/v1/stories`                                         |
-`/wp-json/avorg/v1/topics`                                          |
-`/wp-json/avorg/v1/user/playlists`                                  |
+Endpoint                                   | Description
+-------------------------------------------|------------------------------------
+`/wp-json/avorg/v1/books`                  |
+`/wp-json/avorg/v1/conferences`            |
+`/wp-json/avorg/v1/playlists`              |
+`/wp-json/avorg/v1/presenters`             |
+`/wp-json/avorg/v1/series`                 |
+`/wp-json/avorg/v1/sponsors`               |
+`/wp-json/avorg/v1/stories`                |
+`/wp-json/avorg/v1/topics`                 |
+`/wp-json/avorg/v1/user/playlists`         |
+`/wp-json/avorg/v1/suggestions`            |
 
 
 ## Testing

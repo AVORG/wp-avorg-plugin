@@ -18,7 +18,6 @@ abstract class DataObject implements JsonSerializable
 
 	protected $data;
 	protected $detailClass;
-	protected $entryTemplate;
 
 	public function __construct(Renderer $renderer, Router $router)
 	{
@@ -97,7 +96,12 @@ abstract class DataObject implements JsonSerializable
 		return property_exists($this->data, 'id') ? intval($this->data->id) : null;
 	}
 
-	protected function getSlug() {
-		return $this->router->formatStringForUrl($this->title) . ".html";
+	private function getSlug() {
+		return $this->router->formatStringForUrl($this->getTitle()) . ".html";
 	}
+
+	public function getTitle()
+    {
+        return $this->data->title ?? null;
+    }
 }

@@ -12,7 +12,9 @@ namespace AvorgMoleculeAjaxList {
     }
 
     interface AjaxListProps {
-        endpoint: string
+        endpoint: string,
+        search: string,
+        hideSearchBox: boolean,
     }
 
     interface AjaxListState {
@@ -25,6 +27,7 @@ namespace AvorgMoleculeAjaxList {
     }
 
     class AjaxList extends React.Component<AjaxListProps, AjaxListState> {
+
         wrapperRef: RefObject<HTMLDivElement>;
 
         constructor(props: AjaxListProps) {
@@ -36,12 +39,12 @@ namespace AvorgMoleculeAjaxList {
                 page: 0,
                 resultsExhausted: false,
                 searchTimeout: null,
-                search: ''
+                search: this.props.search
             };
 
             this.wrapperRef = React.createRef();
 
-            this.onKeyDown = this.onKeyDown.bind(this);
+            this.setSearch = this.setSearch.bind(this);
         }
 
         componentDidMount(): void {
@@ -60,21 +63,18 @@ namespace AvorgMoleculeAjaxList {
                 && this.isEndVisible();
         }
 
-        onKeyDown(e: React.KeyboardEvent) {
+        setSearch(e: any) {
             const target = e.target as HTMLInputElement;
 
             clearTimeout(this.state.searchTimeout);
 
             this.setState({
+                search: target.value,
                 searchTimeout: setTimeout(() => {
-                    this.setState({
-                        search: target.value
-                    });
-
                     this.resetEntries();
                     this.loadEntries();
                 }, 1200)
-            });
+            } as AjaxListState);
         }
 
         resetEntries() {
@@ -82,7 +82,7 @@ namespace AvorgMoleculeAjaxList {
                 entries: [],
                 page: 0,
                 resultsExhausted: false
-            })
+            } as AjaxListState)
         }
 
         loadEntries() {
@@ -113,11 +113,15 @@ namespace AvorgMoleculeAjaxList {
         render() {
             return (
                 <div ref={this.wrapperRef}>
-                    <input
-                        type="text"
-                        placeholder={'Search'}
-                        onKeyDown={this.onKeyDown}
-                    />
+                    {
+                        this.props.hideSearchBox ? '' : <input
+                            type="text"
+                            placeholder={'Search'}
+                            value={this.state.search}
+                            onChange={this.setSearch}
+                        />
+                    }
+
                     <ul className={this.state.isLoading ? "loading" : ""}>
                         {this.state.entries.map(
                             (entry: DataObject, i: number) =>
@@ -142,8 +146,14 @@ namespace AvorgMoleculeAjaxList {
     const components = document.querySelectorAll('.avorg-molecule-ajaxList');
 
     components.forEach((el) => {
-        const endpoint = el.getAttribute('data-endpoint');
+        const endpoint = el.getAttribute('data-endpoint'),
+            search = el.getAttribute('data-search'),
+            hideSearchBox = el.hasAttribute('data-hideSearchBox');
 
-        window.wp.element.render(<AjaxList endpoint={endpoint} />, el);
+        window.wp.element.render(<AjaxList
+            endpoint={endpoint}
+            search={search}
+            hideSearchBox={hideSearchBox}
+        />, el);
     });
 }

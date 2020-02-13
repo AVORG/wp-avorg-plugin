@@ -382,4 +382,24 @@ final class TestPlugin extends Avorg\TestCase
             'url' => "/wp-admin/admin.php?page=avorg"
         ]);
     }
+
+    public function testRegistersActivationCallback()
+    {
+        $this->plugin->registerCallbacks();
+
+        $this->mockWordPress->assertMethodCalledWith(
+            "register_activation_hook",
+            AVORG_PLUGIN_FILE,
+            [$this->plugin, "activate"]
+        );
+    }
+
+    public function testInitsDbOnActivate()
+    {
+        $this->plugin->registerCallbacks();
+
+        $this->mockWordPress->runActivationHook();
+
+        $this->mockDatabase->assertMethodCalled("updateDatabase");
+    }
 }
