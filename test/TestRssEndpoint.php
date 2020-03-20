@@ -49,4 +49,18 @@ final class TestRssEndpoint extends Avorg\TestCase
 			"image" => AVORG_LOGO_URL
 		]);
 	}
+
+	public function testOverridesHostname()
+    {
+        $snapshot = $_SERVER['HTTP_HOST'];
+
+        $this->mockTwig->setReturnCallback('render', function() {
+            return $_SERVER['HTTP_HOST'];
+        });
+
+        $out = $this->rssEndpoint->getOutput();
+
+        $this->assertEquals('audioverse.org', $out);
+        $this->assertEquals($snapshot, $_SERVER['HTTP_HOST']);
+    }
 }

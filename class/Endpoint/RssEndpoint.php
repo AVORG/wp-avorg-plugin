@@ -46,12 +46,20 @@ abstract class RssEndpoint extends Endpoint
 	{
 		$this->php->header('Content-Type: application/rss+xml; charset=utf-8');
 
-		return $this->renderer->render("page-feed.twig", [
-			"recordings" => $this->prepareRecordings(),
-			"title" => $this->getTitle(),
-			"subtitle" => $this->getSubtitle(),
-			"image" => $this->getImage() ?: AVORG_LOGO_URL
-		], TRUE ) ?: "";
+		/* TODO: Remove $_SERVER manipulations once codebase is deployed to production */
+		$snapshot = $_SERVER['HTTP_HOST'];
+        $_SERVER['HTTP_HOST'] = 'audioverse.org';
+
+        $output = $this->renderer->render("page-feed.twig", [
+            "recordings" => $this->prepareRecordings(),
+            "title" => $this->getTitle(),
+            "subtitle" => $this->getSubtitle(),
+            "image" => $this->getImage() ?: AVORG_LOGO_URL
+        ], TRUE) ?: "";
+
+        $_SERVER['HTTP_HOST'] = $snapshot;
+
+        return $output;
 	}
 
 	private function prepareRecordings()
