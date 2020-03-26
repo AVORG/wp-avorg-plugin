@@ -58,4 +58,48 @@ final class TestAvorgApi extends Avorg\TestCase
 
         $this->assertTrue($isFavorited);
     }
+
+    public function testSavesTransient()
+    {
+        $this->mockGuzzle->setReturnValue(
+            'handleOld',
+            (object) ['result' => 'the_result']
+        );
+
+        $this->api->getBibleBooks('the_id');
+
+        $this->mockWordPress->assertMethodCalledWith(
+            "set_transient",
+            md5(json_encode(["audiobibles/the_id", []])),
+            'the_result',
+            24 * 60 * 60
+        );
+    }
+
+    public function testGetsTransient()
+    {
+        $this->mockGuzzle->setReturnValue(
+            'handleOld',
+            (object) ['result' => 'the_result']
+        );
+
+        $this->api->getBibleBooks('the_id');
+
+        $this->mockWordPress->assertMethodCalledWith(
+            "get_transient",
+            md5(json_encode(["audiobibles/the_id", []]))
+        );
+    }
+
+    public function testReturnsTransient()
+    {
+        $this->mockWordPress->setReturnValue(
+            'get_transient',
+            (object) ['cached_result']
+        );
+
+        $result = $this->api->getBibleBooks('the_id');
+
+        $this->assertEquals(['cached_result'], $result);
+    }
 }

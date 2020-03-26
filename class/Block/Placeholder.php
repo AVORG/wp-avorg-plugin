@@ -55,7 +55,8 @@ class Placeholder extends Block
     private function getAssociatedPosts($posts, $mediaId)
     {
         return array_filter($posts, function($post) use($mediaId) {
-            var_dump($post->avorgMediaIds);
+            if (!$post->avorgMediaIds) return False;
+
             return in_array($mediaId, $post->avorgMediaIds);
         });
     }

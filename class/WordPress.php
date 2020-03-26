@@ -47,6 +47,8 @@ if (!defined('ABSPATH')) exit;
  * @method admin_url(string $path = '', string $scheme = 'admin')
  * @method delete_option(string $option)
  * @method add_query_var(string $qv)
+ * @method set_transient( string $transient, mixed $value, int $expiration )
+ * @method get_transient( string $transient )
  */
 class WordPress
 {

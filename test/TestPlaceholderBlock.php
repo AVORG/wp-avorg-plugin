@@ -141,4 +141,16 @@ final class TestPlaceholderBlock extends Avorg\TestCase
         $this->mockPhp->assertMethodCalledWith("arrayRand", []);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testPostWithStringInsteadOfArray()
+    {
+        $this->mockWordPress->setReturnValue("get_posts", [
+            $this->makePost('')
+        ]);
+
+        $this->block->render([], '');
+    }
+
 }

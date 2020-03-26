@@ -367,22 +367,6 @@ final class TestPlugin extends Avorg\TestCase
         ], $result);
     }
 
-    public function testOnlyOutputsOneApiCredentialsError()
-    {
-        $this->mockWordPress->setReturnValue("get_option", false);
-
-        $this->plugin->renderAdminNotices();
-
-        $this->mockTwig->assertErrorRenderedWithMessage("AVORG Warning: Missing API credentials!",
-            "/wp-admin/admin.php?page=avorg");
-
-        $this->mockTwig->assertTwigTemplateRenderCount("molecule-notice.twig", 1, [
-            'type' => 'error',
-            'message' => "AVORG Warning: Missing API credentials!",
-            'url' => "/wp-admin/admin.php?page=avorg"
-        ]);
-    }
-
     public function testRegistersActivationCallback()
     {
         $this->plugin->registerCallbacks();

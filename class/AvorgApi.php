@@ -13,9 +13,13 @@ class AvorgApi
     /** @var Guzzle $guzzle */
     private $guzzle;
 
-    public function __construct(Guzzle $guzzle)
+    /** @var WordPress $wp */
+    private $wp;
+
+    public function __construct(Guzzle $guzzle, WordPress $wordPress)
     {
         $this->guzzle = $guzzle;
+        $this->wp = $wordPress;
     }
 
     /**
@@ -437,6 +441,8 @@ class AvorgApi
      */
     public function getPlaylistsByUser($userId, $sessionToken, $search = null, $start = null)
     {
+        /* TODO: Cache may need to be busted if later functionality is added for modifying user playlists */
+
         return $this->getResult("playlist", [
             'userId' => $userId,
             'sessionToken' => $sessionToken,
@@ -605,7 +611,33 @@ class AvorgApi
      */
     private function getResult(string $endpoint, array $data = [])
     {
-        return $this->getOld($endpoint, $data)->result;
+        return $this->getCachedResponseData(function($endpoint, $data) {
+            return $this->getOld($endpoint, $data)->result;
+        }, $endpoint, $data);
+    }
+
+    /**
+     * @param callable $fallback
+     * @param string $endpoint
+     * @param array $data
+     * @return mixed
+     */
+    private function getCachedResponseData(
+        callable $fallback,
+        string $endpoint,
+        array $data = []
+    )
+    {
+        $key = md5(json_encode([$endpoint, $data]));
+        $cached_result = $this->wp->get_transient($key);
+
+        if ($cached_result) return $cached_result;
+
+        $result = call_user_func($fallback, $endpoint, $data);
+
+        $this->wp->set_transient($key, $result, 24*60*60);
+
+        return $result;
     }
 
     /**
