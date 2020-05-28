@@ -26,3 +26,5 @@ include_once(AVORG_BASE_PATH . "/vendor/autoload.php");
 
 $factory = new Factory();
 $factory->secure("Avorg\\Plugin")->registerCallbacks();
+
+//phpinfo();
